@@ -1,3 +1,2 @@
 #labels Featured
-  # [StartPage How can I connect OPS to a certain network interface?]
-  # Is there support for ADA?
+support for ADA?
