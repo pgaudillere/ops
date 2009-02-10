@@ -1,7 +1,0 @@
-Samples
-
- Java Samples
-
- C++ Samples
-
- C# Samples
