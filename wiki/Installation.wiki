@@ -1,4 +1,4 @@
-=OPS – Installation Guide (Windows XP)=
+=OPS – Installation (Windows XP)=
 
  # ==Set up your environment==
    Make sure you have a Java SE Development Kit (JDK, version 5 or higher) installed on
