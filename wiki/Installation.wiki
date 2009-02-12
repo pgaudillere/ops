@@ -16,5 +16,5 @@
  # ==Unpack OPS==
    Unpack "OPS_version.number.zip" into a directory on your system where you can keep it.
    Verify the installation by starting "IDLCompiler". Click File->Open Project..., browse
-   to OPS_HOME/Samples/SampleProject/SampleProject.prj. Hit compile and verify you get 
+   to OPS_HOME/Samples/!SampleProject/!SampleProject.prj. Hit compile and verify you get 
    no errors.
