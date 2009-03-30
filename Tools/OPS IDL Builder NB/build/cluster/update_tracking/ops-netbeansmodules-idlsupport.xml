@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="ops.netbeansmodules.idlsupport">
+    <module_version install_time="1238416858002" last="true" origin="installer" specification_version="1.0">
+        <file crc="4026994540" name="config/Modules/ops-netbeansmodules-idlsupport.xml"/>
+        <file crc="298057703" name="modules/ops-netbeansmodules-idlsupport.jar"/>
+    </module_version>
+</module>
