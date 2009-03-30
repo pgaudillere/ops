@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module codename="ops.idl.parsing">
+    <module_version install_time="1237993270789" last="true" origin="installer" specification_version="1.0">
+        <file crc="1584836508" name="config/Modules/ops-idl-parsing.xml"/>
+        <file crc="2434217898" name="modules/ext/IDLParser.jar"/>
+        <file crc="1120922158" name="modules/ops-idl-parsing.jar"/>
+    </module_version>
+</module>
