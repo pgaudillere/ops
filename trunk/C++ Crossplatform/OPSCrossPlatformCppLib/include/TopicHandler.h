@@ -29,7 +29,8 @@
 #include "Topic.h"
 #include "ByteBuffer.h"
 #include "OPSArchiverIn.h"
-#include "MulticastReceiver.h"
+#include "Participant.h"
+#include "Receiver.h"
 #include "OPSMessage.h"
 #include "Notifier.h"
 #include "Listener.h"
@@ -53,7 +54,7 @@ namespace ops
 		///Destructor
 		virtual ~TopicHandler()
 		{
-
+			delete receiver;
 		}
 
 	protected:
@@ -100,16 +101,16 @@ namespace ops
 		static std::map<std::string, TopicHandler*> instances;
 		
 		///Constructor is private, use static getTopicHandler(Topic)
-		TopicHandler(Topic<> top) :
-			receiver(top.GetDomainAddress(), top.GetPort())
+		TopicHandler(Topic<> top) 
 		{
-			receiver.addListener(this);
+			receiver = Receiver::create(top.GetDomainAddress(), top.GetPort());
+			receiver->addListener(this);
 			
 		}
 
 		///The receiver used for this topic. 
 		///TODO: make independent of implemntation through factory. Transport::getTransport(Topic t), see java implementation.
-		MulticastReceiver receiver;
+		Receiver* receiver;
 
 		///Preallocated bytebuffer for receiving data
 		char bytes[Participant::MESSAGE_MAX_SIZE];

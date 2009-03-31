@@ -154,11 +154,27 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\..\source\BoostDeadlineTimerImpl.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\BoostIOServiceImpl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\ByteBuffer.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\source\DataNotifier.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\DeadlineTimer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\IOService.cpp"
 				>
 			</File>
 			<File
@@ -190,6 +206,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Receiver.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\SerializableCompositeFactory.cpp"
 				>
 			</File>
@@ -203,10 +223,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\TopicHandler.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\TopicInterface.cpp"
 				>
 			</File>
 			<File
@@ -236,14 +252,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\include\AckData.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\AckDataHelper.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\ArchiverIn.h"
 				>
 			</File>
@@ -268,14 +276,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\DataHeader.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\DataHeaderHelper.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\DataListener.h"
 				>
 			</File>
@@ -288,6 +288,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\DeadlineTimer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Deserializable.h"
 				>
 			</File>
@@ -296,11 +300,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\HeartBeat.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\HeartBeatHelper.h"
+				RelativePath="..\..\..\include\IOService.h"
 				>
 			</File>
 			<File
@@ -336,10 +336,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\OPSConstants.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\OPSMessage.h"
 				>
 			</File>
@@ -372,19 +368,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\SendDiscoveryModule.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\Sender.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\SendTransport.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\SendTransportSettings.h"
 				>
 			</File>
 			<File
@@ -425,18 +413,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TopicHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TopicInterface.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TopicInterfaceData.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\TopicInterfaceDataHelper.h"
 				>
 			</File>
 			<File
