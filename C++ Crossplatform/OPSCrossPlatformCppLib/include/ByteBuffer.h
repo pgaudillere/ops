@@ -25,7 +25,6 @@
 #define ops_ByteBufferH
 #include <string>
 #include <vector>
-#include "Heartbeat.h"
 #include "OPSObject.h"
 //#include "Manager.h"
 

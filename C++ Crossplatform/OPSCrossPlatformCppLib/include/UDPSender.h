@@ -34,13 +34,12 @@
 #include "Sender.h"
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
-#include "HeartBeat.h"
 #include "Notifier.h"
 
 namespace ops
 {
     ///A sender implementation that dispatches messages over ip based UDP.
-    class UDPSender : Sender, Notifier<const HeartBeat&>
+    class UDPSender : Sender//, Notifier<const HeartBeat&>
     {
     public:
         ///Costructs a new UDPSender an binds its underlying socket to local host

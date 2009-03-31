@@ -2,9 +2,6 @@
 * 
 * Copyright (C) 2006-2009 Anton Gravestam.
 *
-* This notice apply to all source files, *.cpp, *.h, *.java, and *.cs in this directory 
-* and all its subdirectories if nothing else is explicitly stated within the source file itself.
-*
 * This file is part of OPS (Open Publish Subscribe).
 *
 * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
@@ -25,18 +22,17 @@
 #define ops_ReceiverH
 
 #include <string>
+#include "Notifier.h"
 
 
 namespace ops
 {
-	class Receiver
+	class Receiver : public Notifier<char*>
 	{
 	public:
-		virtual int receive(char* buf, int size) = 0;
-		virtual bool sendReply(char* buf, int size) = 0;
-		virtual int getPort() = 0;
-		virtual std::string getAddress() = 0;
 		virtual ~Receiver(){}
+
+		static Receiver* create(std::string ip, int bindPort);
 		
 	};
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module codename="ops.compilerlib">
-    <module_version install_time="1237993270461" last="true" origin="installer" specification_version="1.0">
+    <module_version install_time="1238530825625" last="true" origin="installer" specification_version="1.0">
         <file crc="3274680663" name="config/Modules/ops-compilerlib.xml"/>
         <file crc="3000724953" name="modules/ext/OPSCompilerLib.jar"/>
-        <file crc="1357065389" name="modules/ops-compilerlib.jar"/>
+        <file crc="1352995507" name="modules/ops-compilerlib.jar"/>
     </module_version>
 </module>

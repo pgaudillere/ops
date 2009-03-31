@@ -26,7 +26,7 @@
 
 #include <string>
 #include "Participant.h"
-#include "Notifier.h"
+#include "Receiver.h"
 #include "boost/bind.hpp"
 #include "ByteBuffer.h"
 
@@ -34,7 +34,7 @@ namespace ops
 {
 	using boost::asio::ip::udp;
 
-	class MulticastReceiver : public Notifier<char*>
+	class MulticastReceiver : public Receiver
 	{
 	public:
 		MulticastReceiver(std::string mcAddress, int bindPort)
