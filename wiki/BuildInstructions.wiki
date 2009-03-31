@@ -1,0 +1,22 @@
+#summary This page describe how you checkout and build OPS for C++ on Windows XP
+
+= Build Instructions =
+
+ # ==Checkout==
+   Checkout OPS to a directory of your choice e.g. "C:\OPS", see Source tab.
+ # ==Installing Boost==
+   Download pre-built binaries for boost 1.38 from http://www.boostpro.com
+    * Under "Select Default Variants" in the installer choose the build versions of boost you need (depends on how you want to build and link OPS). If you dont know, select all.
+    * Under "Choose Components", select at least the following (make sure you only select components for the compiler versions you need):
+      # Boost header files
+      # Boost DateTime
+      # Boost Filesystem
+      # Boost Regex
+      # Boost System
+      # Boost Thread
+    Hit next, and choose for example "C:\Program Files\boost\boost_1_38" and start installation.
+ # ==Build OPS Core==
+   Open 
+    "C++ Crossplatform\OPSCrossPlatformCppLib\Visual C++\OPSCrossPlatformCppSolution\OPSCrossPlatformCppSolution.sln" 
+   with Visual Studio. If you didn't install boost to "C:\Program Files\boost\boost_1_38" you need to repoint your include and library directories.
+  Build the solution and verify it compiles alright (you will have some warnings).
