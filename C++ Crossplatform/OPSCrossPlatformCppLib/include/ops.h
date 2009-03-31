@@ -27,3 +27,4 @@
 #include "KeyFilterQoSPolicy.h"
 #include "DeadlineMissedListener.h"
 #include "Participant.h"
+#include "OPSObjectFactory.h"
