@@ -1,0 +1,91 @@
+//Auto generated OPS-code. DO NOT MODIFY!
+
+#ifndef testall_ChildData_h
+#define testall_ChildData_h
+
+#include "OPSObject.h"
+#include "ArchiverInOut.h"
+#include <string>
+#include <vector>
+
+#include "BaseData.h"
+#include "TestData.h"
+#include "TestData.h"
+
+
+//Nested namespaces opener.
+namespace testall {
+
+
+class ChildData :
+	public BaseData
+{
+public:
+	
+	bool bo;
+	char b;
+	int i;
+	__int64 l;
+	float f;
+	double d;
+	std::string s;
+	TestData* test2;
+	std::vector<bool> bos;
+	std::vector<char> bs;
+	std::vector<int> is;
+	std::vector<__int64> ls;
+	std::vector<float> fs;
+	std::vector<double> ds;
+	std::vector<std::string> ss;
+	std::vector<TestData*> test2s;
+
+
+    ChildData()
+        : BaseData()
+		,bo(false)
+		,b(0)
+		,i(0)
+		,l(0)
+		,f(0)
+		,d(0)
+
+    {
+        OPSObject::appendType(std::string("testall.ChildData"));
+		test2 = new TestData();
+
+
+    }
+    virtual ~ChildData(void)
+    {
+		delete test2;
+
+    }
+    void serialize(ops::ArchiverInOut* archive)
+    {
+		BaseData::serialize(archive);
+		bo = archive->inout(std::string("bo"), bo);
+		b = archive->inout(std::string("b"), b);
+		i = archive->inout(std::string("i"), i);
+		l = archive->inout(std::string("l"), l);
+		f = archive->inout(std::string("f"), f);
+		d = archive->inout(std::string("d"), d);
+		s = archive->inout(std::string("s"), s);
+		test2 = (TestData*) archive->inout(std::string("test2"), test2);
+		archive->inout(std::string("bos"), bos);
+		archive->inout(std::string("bs"), bs);
+		archive->inout(std::string("is"), is);
+		archive->inout(std::string("ls"), ls);
+		archive->inout(std::string("fs"), fs);
+		archive->inout(std::string("ds"), ds);
+		archive->inout(std::string("ss"), ss);
+		archive->inout<TestData*>(std::string("test2s"), test2s);
+
+    }
+    
+};
+
+//Close nested namespace
+}
+
+
+#endif

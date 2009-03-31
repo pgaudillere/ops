@@ -1,0 +1,24 @@
+package testall;
+
+//Dummy data extending BaseData and add fields of all available types
+//including aggregating a third data type TestData
+class ChildData extends BaseData
+{
+    boolean bo;
+    byte b;
+    int i;
+    long l;
+    float f;
+    double d;
+    string s;
+    TestData test2;
+
+    boolean[] bos;
+    byte[] bs;
+    int[] is;
+    long[] ls;
+    float[] fs;
+    double[] ds;
+    string[] ss;
+    TestData[] test2s;
+}
