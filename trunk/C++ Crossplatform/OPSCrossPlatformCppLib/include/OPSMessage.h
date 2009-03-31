@@ -47,6 +47,7 @@ public:
 	~OPSMessage()
 	{
 		//TODO: should this delete data???
+		delete data;
 	}
 
 private:

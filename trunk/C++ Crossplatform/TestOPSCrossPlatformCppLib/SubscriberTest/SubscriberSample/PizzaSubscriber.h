@@ -29,6 +29,8 @@ public:
 		ops::Topic<ExtraAllt> topic("PizzaTopic", 6777, "pizza.PizzaData", "236.7.8.44");
 
 		sub = new ExtraAlltSubscriber(topic);
+		sub->setDeadlineQoS(1);
+		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 
 
 		//Add this DataListener to the subscriber to get notification when new data
