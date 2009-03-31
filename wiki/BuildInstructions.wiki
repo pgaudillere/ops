@@ -1,4 +1,4 @@
-#summary This page describe how you checkout and build OPS for C++ on Windows XP
+#summary This page describes how you checkout and build OPS for C++ on Windows XP
 
 = Build Instructions =
 
