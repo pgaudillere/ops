@@ -1,0 +1,7 @@
+package testall;
+
+class TestData
+{
+    string text;
+    double value;
+}

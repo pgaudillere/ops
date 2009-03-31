@@ -1,0 +1,7 @@
+package testall;
+
+class BaseData
+{
+    string baseText;
+
+}
