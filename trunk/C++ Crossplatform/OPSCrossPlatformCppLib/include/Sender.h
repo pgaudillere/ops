@@ -2,9 +2,6 @@
 * 
 * Copyright (C) 2006-2009 Anton Gravestam.
 *
-* This notice apply to all source files, *.cpp, *.h, *.java, and *.cs in this directory 
-* and all its subdirectories if nothing else is explicitly stated within the source file itself.
-*
 * This file is part of OPS (Open Publish Subscribe).
 *
 * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
@@ -46,6 +43,8 @@ namespace ops
 		virtual int receiveReply(char* buf, int size) = 0;
         virtual int getPort() = 0;
         virtual std::string getAddress() = 0;
+
+		//static Sender* create();
 
         virtual ~Sender()
         {

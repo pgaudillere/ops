@@ -27,8 +27,10 @@
 #include <string>
 #include "Participant.h"
 #include "Receiver.h"
+#include <boost/asio.hpp>
 #include "boost/bind.hpp"
 #include "ByteBuffer.h"
+#include "BoostIOServiceImpl.h"
 
 namespace ops
 {
@@ -39,7 +41,7 @@ namespace ops
 	public:
 		MulticastReceiver(std::string mcAddress, int bindPort)
 		{
-			boost::asio::io_service* ioService = Participant::getIOService();
+			boost::asio::io_service* ioService = ((BoostIOServiceImpl*)Participant::getIOService())->boostIOService;
 			udp::resolver resolver(*ioService);
 			udp::resolver::query query(boost::asio::ip::host_name(),"");
 			udp::resolver::iterator it=resolver.resolve(query);

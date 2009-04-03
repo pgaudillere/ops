@@ -2,9 +2,6 @@
 * 
 * Copyright (C) 2006-2009 Anton Gravestam.
 *
-* This notice apply to all source files, *.cpp, *.h, *.java, and *.cs in this directory 
-* and all its subdirectories if nothing else is explicitly stated within the source file itself.
-*
 * This file is part of OPS (Open Publish Subscribe).
 *
 * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
@@ -24,10 +21,13 @@
 #ifndef ops_ThreadH
 #define ops_ThreadH
 
-#include <boost/thread/thread.hpp>
+//Forward declaration
+namespace boost{class thread;}
 
 namespace ops
 {
+	
+
 	///Abstract Thread class for other classes that wishes to be "Active".
     class Thread
     {

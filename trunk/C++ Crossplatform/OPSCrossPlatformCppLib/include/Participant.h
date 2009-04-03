@@ -24,9 +24,9 @@
 #ifndef ops_ParticipantH
 #define	ops_ParticipantH
 
-#include <boost/asio.hpp>
 #include <string>
-#include "SingleThreadPool.h"
+//#include "SingleThreadPool.h"
+#include "IOService.h"
 
 
 namespace ops
@@ -35,7 +35,7 @@ class Participant
 {
 public:
 	const static int MESSAGE_MAX_SIZE = 65000;
-	static ThreadPool* getReceiveThreadPool()
+	/*static ThreadPool* getReceiveThreadPool()
 	{
 		static SingleThreadPool* receiveThreadPool = NULL;
 		
@@ -47,7 +47,7 @@ public:
 		}
 
 		return receiveThreadPool;
-	}
+	}*/
 
 	static Participant* getParticipant()
 	{
@@ -59,12 +59,12 @@ public:
 		return theParticipant;
 	}
 
-	static boost::asio::io_service* getIOService()
+	static IOService* getIOService()
 	{
-		static boost::asio::io_service* ioService = NULL;
+		static IOService* ioService = NULL;
 		if(ioService == NULL)
 		{
-			ioService = new boost::asio::io_service();	
+			ioService = IOService::getInstance();	
 		}
 		return ioService;
 	}
