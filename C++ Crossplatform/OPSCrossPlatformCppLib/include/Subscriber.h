@@ -36,13 +36,14 @@
 #include "Listener.h"
 #include "OPSMessage.h"
 #include "TopicHandler.h"
-#include <boost/asio.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
+#include "DeadlineTimer.h"
+//#include <boost/asio.hpp>
+//#include <boost/date_time/posix_time/posix_time.hpp>
 
 namespace ops
 {
 
-class Subscriber : public DataNotifier, public Lockable, public Listener<OPSMessage*>
+class Subscriber : public DataNotifier, public Lockable, public Listener<OPSMessage*>, public Listener<int>
 {
 
 public:
@@ -83,8 +84,10 @@ public:
         hasUnreadData = false;
         return data;
     }
-
+	//Message listener callback
 	void onNewEvent(Notifier<OPSMessage*>* sender, OPSMessage* message);
+	//Deadline listener callback
+	void onNewEvent(Notifier<int>* sender, int message);
     
 
 protected:
@@ -124,7 +127,7 @@ private:
 
 	void registerForDeadlineTimeouts();
 	void cancelDeadlineTimeouts();
-	void asynchHandleDeadlineTimeout(const boost::system::error_code& e);
+	//void asynchHandleDeadlineTimeout(const boost::system::error_code& e);
 
     bool deadlineMissed;
     void setDeadlineMissed(bool deadlineMissed);
@@ -132,8 +135,8 @@ private:
 
 	__int64 currentPulicationID ;
 
-	boost::asio::deadline_timer deadlineTimer;
-	
+	//boost::asio::deadline_timer deadlineTimer;
+	DeadlineTimer* deadlineTimer;
 
 
 };

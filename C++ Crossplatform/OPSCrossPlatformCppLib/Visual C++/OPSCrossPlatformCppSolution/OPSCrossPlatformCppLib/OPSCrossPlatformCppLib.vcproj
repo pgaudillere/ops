@@ -182,6 +182,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\MulticastReceiver.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\OPSArchiverIn.cpp"
 				>
 			</File>
@@ -227,6 +231,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\UDPReceiver.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\UDPReceiver.h"
 				>
 			</File>
 			<File
@@ -316,10 +324,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\MulticastReceiver.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\Notifier.h"
 				>
 			</File>
@@ -404,23 +408,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TimeHelper.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\Topic.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\TopicHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\Transaction.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\UDPReceiver.h"
 				>
 			</File>
 			<File

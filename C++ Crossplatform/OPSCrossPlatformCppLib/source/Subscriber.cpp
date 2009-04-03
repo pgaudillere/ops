@@ -11,10 +11,10 @@ namespace ops
         timeBaseMinSeparationTime(0),
         threadPolicy(SHARED_THREAD),
         deadlineMissed(false),
-		firstDataReceived(false),
-		deadlineTimer(*Participant::getIOService())		
+		firstDataReceived(false)//,
+		//deadlineTimer(*Participant::getIOService())		
     {
-
+		deadlineTimer = DeadlineTimer::create();
         filterQoSPolicyMutex = CreateMutex(NULL, false, NULL);
         newDataEvent = CreateEvent(NULL, true, false, NULL);
 		timeLastData = TimeHelper::currentTimeMillis();
@@ -192,44 +192,50 @@ namespace ops
 
 	void Subscriber::registerForDeadlineTimeouts()
 	{
+		deadlineTimer->addListener(this);
 		//boost::asio::deadline_timer t(Participant::getIOService(), boost::posix_time::milliseconds(deadlineTimeout));
 		//deadlineTimer.cancel();
 
 		/*if(deadlineTimer.expires_from_now(boost::posix_time::milliseconds(deadlineTimeout)) > 0)
 		{*/
-		deadlineTimer.async_wait(boost::bind(&Subscriber::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
+		//deadlineTimer.async_wait(boost::bind(&Subscriber::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
 		//}
 		
 	}
 	void Subscriber::cancelDeadlineTimeouts()
 	{
-		if(deadlineTimer.expires_from_now(boost::posix_time::milliseconds(deadlineTimeout)) > 0)
-		{
-			//deadlineTimer.async_wait(boost::bind(&Subscriber::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
-		}
-		else
-		{
-			/*boost::asio::deadline_timer newTimer(*Participant::getIOService());
-			deadlineTimer = newTimer;
-			deadlineTimer.expires_from_now(boost::posix_time::milliseconds(deadlineTimeout));*/
-		}
+		deadlineTimer->start(deadlineTimeout);
+		//if(deadlineTimer.expires_from_now(boost::posix_time::milliseconds(deadlineTimeout)) > 0)
+		//{
+		//	//deadlineTimer.async_wait(boost::bind(&Subscriber::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
+		//}
+		//else
+		//{
+		//	/*boost::asio::deadline_timer newTimer(*Participant::getIOService());
+		//	deadlineTimer = newTimer;
+		//	deadlineTimer.expires_from_now(boost::posix_time::milliseconds(deadlineTimeout));*/
+		//}
 		
 	}
-	void Subscriber::asynchHandleDeadlineTimeout(const boost::system::error_code& e)
+	//void Subscriber::asynchHandleDeadlineTimeout(const boost::system::error_code& e)
+	//{
+	//	if (e != boost::asio::error::operation_aborted)
+	//	{
+	//		// Timer was not cancelled, take necessary action.
+	//		deadlineMissedEvent.notifyDeadlineMissed();
+
+	//		cancelDeadlineTimeouts();
+	//		registerForDeadlineTimeouts();
+	//	}
+	//	
+	//	//t.reset();
+	//	
+	//}
+	void Subscriber::onNewEvent(Notifier<int>* sender, int message)
 	{
-		if (e != boost::asio::error::operation_aborted)
-		{
-			// Timer was not cancelled, take necessary action.
-			deadlineMissedEvent.notifyDeadlineMissed();
-
-			cancelDeadlineTimeouts();
-			registerForDeadlineTimeouts();
-		}
-		
-		//t.reset();
-		
+		deadlineMissedEvent.notifyDeadlineMissed();
+		cancelDeadlineTimeouts();
 	}
-
 
 
 }

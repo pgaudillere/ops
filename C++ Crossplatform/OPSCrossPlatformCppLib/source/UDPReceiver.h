@@ -2,9 +2,6 @@
 * 
 * Copyright (C) 2006-2009 Anton Gravestam.
 *
-* This notice apply to all source files, *.cpp, *.h, *.java, and *.cs in this directory 
-* and all its subdirectories if nothing else is explicitly stated within the source file itself.
-*
 * This file is part of OPS (Open Publish Subscribe).
 *
 * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
@@ -20,14 +17,6 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
-
-//==============================================================================
-// Class UDPReciever
-//
-// Description:
-// Class used to recieve UDP messages from a certain port.
-//
-//==============================================================================
 
 #ifndef ops_UDPReceiverH
 #define ops_UDPReceiverH

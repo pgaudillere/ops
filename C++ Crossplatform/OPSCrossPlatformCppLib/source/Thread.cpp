@@ -2,7 +2,7 @@
 
 
 #include "Thread.h"
-
+#include <boost/thread.hpp>
 namespace ops
 {
 	Thread::Thread() : started(false)

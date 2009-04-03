@@ -21,8 +21,10 @@
 #define ops_BoostDeadlineTimerImpl_h
 
 #include <boost/asio.hpp>
+#include <boost/bind.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include "Participant.h"
+#include "BoostIOServiceImpl.h"
 
 namespace ops
 {
@@ -33,7 +35,7 @@ namespace ops
 	public:
 		BoostDeadlineTimerImpl() 
 			: isStarted(false),
-			  deadlineTimer(*Participant::getIOService())
+			deadlineTimer(*((BoostIOServiceImpl*)Participant::getIOService())->boostIOService)
 		{
 
 		}
