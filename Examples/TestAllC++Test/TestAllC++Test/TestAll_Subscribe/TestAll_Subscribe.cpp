@@ -10,28 +10,37 @@ class Main : ops::DataListener, ops::DeadlineMissedListener
 {
 	//Use a member subscriber so we can use it from onNewData, see below.
 	testall::ChildDataSubscriber* sub;
+
+	//
+	int packagesLost;
+	int lastPacket;
 public:
-	Main()
+	Main(): packagesLost(0), lastPacket(-1)
 	{
 		using namespace testall;
 		using namespace ops;
 
 		//Create a topic. NOTE, this is a temporary solution to get topics before OPS4 is completely released.
-		ops::Topic<ChildData> topic("ChildTopic", 6777, "testall.ChildData", "236.7.8.44");
+		ops::Topic<ChildData> topic("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
-		sub->setDeadlineQoS(1000);
+		//sub->setDeadlineQoS(1000);
 		sub->addDataListener(this);
-		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
+		//sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->start();
 	}
 	///Override from ops::DataListener, called whenever new data arrives.
 	void onNewData(ops::DataNotifier* subscriber)
 	{
-		testall::ChildData data;
-		sub->getData(&data);
-		std::cout << data.baseText << " " << data.s << " " << data.i << std::endl;
+		testall::ChildData* data;
+		data = (testall::ChildData*)sub->getDataReference();
+		if(data->i != (lastPacket + 1))
+		{
+			packagesLost++;
+		}
+		lastPacket = data->i;
+		std::cout << data->baseText << " " << data->fs[499000] << " " << data->i << " Lost: " << packagesLost << std::endl;
 	}
 	///Override from ops::DeadlineMissedListener, called if no new data has arrived within deadlineQoS.
 	void onDeadlineMissed(ops::DeadlineMissedEvent* evt)

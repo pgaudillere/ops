@@ -117,6 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\TestAll\Generated\C++&quot;;&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\include&quot;;&quot;C:\Program Files\boost\boost_1_38&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -135,7 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="OPSCrossPlatformCppLib.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\boost\boost_1_38\lib&quot;;&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\Visual C++\OPSCrossPlatformCppSolution\Release&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
