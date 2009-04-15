@@ -246,13 +246,13 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
 
     private CharSequence getConstructorHead(IDLClass idlClass)
     {
-        String ret = "";
+        String ret = tab(2) + "";
 
         for (IDLField field : idlClass.getFields())
         {
             if(field.getType().equals("boolean"))
             {
-                ret += tab(2) + "," + field.getName() + "(false)" + endl();
+                ret += ", " + field.getName() + "(false)";
             }
             else if(field.getType().equals("string") || field.isArray() || field.isIdlType())
             {
@@ -261,7 +261,7 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
             else
             {
                 //Numeric
-                ret += tab(2) + "," + field.getName() + "(0)" + endl();
+                ret += ", " + field.getName() + "(0)";
             }
 
         }
@@ -402,9 +402,16 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         String ret = "";
         for (IDLField field : idlClass.getFields())
         {
-            if(field.isIdlType() && !field.isArray())
+            if(field.isIdlType())
             {
-                ret += tab(2) + "delete " + field.getName() + ";" + endl(); 
+                if(!field.isArray())
+                {
+                    ret += tab(2) + "delete " + field.getName() + ";" + endl();
+                }
+                else
+                {
+                    ret += tab(2) + "for(unsigned int __i = 0; __i < " + field.getName() + ".size(); __i++){ if(" + field.getName() + "[__i]) delete " + field.getName() + "[__i];}" +  endl();
+                }
             }
         }
         return ret;
@@ -466,7 +473,7 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
             }
             else
             {
-                ret += tab(2) + field.getName() + " = archive->inout(std::string(\"" + field.getName() + "\"), " + field.getName() + ");" + endl();
+                ret += tab(2) + "archive->inout(std::string(\"" + field.getName() + "\"), " + field.getName() + ");" + endl();
             }
 
         }
