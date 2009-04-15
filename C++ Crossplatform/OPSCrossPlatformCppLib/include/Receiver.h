@@ -33,6 +33,9 @@ namespace ops
 		virtual ~Receiver(){}
 
 		static Receiver* create(std::string ip, int bindPort);
+		//void setReceiveBuffer(char* bytes, int bufSize);
+		virtual void asynchWait(char* bytes, int size) = 0;
+
 		
 	};
 }

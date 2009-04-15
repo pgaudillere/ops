@@ -86,11 +86,8 @@
     #define TRUE 1
 #endif /* TRUE */
 
-namespace ops
-{
-	namespace xml
+	namespace opsXML
 	{
-
 /// Enumeration for XML parse errors.
 typedef enum XMLError
 {
@@ -643,6 +640,6 @@ private:
 
 #undef XMLDLLENTRY
 
-}
+
 }
 #endif

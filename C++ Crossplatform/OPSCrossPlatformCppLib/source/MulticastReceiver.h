@@ -39,7 +39,7 @@ namespace ops
 	class MulticastReceiver : public Receiver
 	{
 	public:
-		MulticastReceiver(std::string mcAddress, int bindPort)
+		MulticastReceiver(std::string mcAddress, int bindPort): max_length(65535)
 		{
 			boost::asio::io_service* ioService = ((BoostIOServiceImpl*)Participant::getIOService())->boostIOService;
 			udp::resolver resolver(*ioService);
@@ -54,8 +54,8 @@ namespace ops
 
 
 			sock->open(localEndpoint->protocol());
-			/*boost::asio::socket_base::receive_buffer_size option(1048576);
-			sock->set_option(option);*/
+			boost::asio::socket_base::receive_buffer_size option(4000000);
+			sock->set_option(option);
 
 
 			sock->set_option(boost::asio::ip::udp::socket::reuse_address(true));
@@ -69,6 +69,14 @@ namespace ops
 			ipaddress = mcAddress;
 			port = sock->local_endpoint().port();
 
+			
+
+		}
+
+		void asynchWait(char* bytes, int size)
+		{
+			data  = bytes;
+			max_length = size;
 			sock->async_receive(
 				boost::asio::buffer(data, max_length), 
 				boost::bind(&MulticastReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
@@ -96,14 +104,16 @@ namespace ops
 		void handleReadOK()
 		{
 			notifyNewEvent(data);
-			sock->async_receive(
+
+			/*sock->async_receive(
 				boost::asio::buffer(data, max_length), 
-				boost::bind(&MulticastReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+				boost::bind(&MulticastReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));*/
 
 		}
 		void handleReadError()
 		{
 			//notifyNewEvent(data);
+			printf("___________handleReadError__________\n");
 			sock->async_receive(
 				boost::asio::buffer(data, max_length), 
 				boost::bind(&MulticastReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
@@ -164,8 +174,8 @@ namespace ops
 		boost::asio::ip::udp::endpoint lastEndpoint;
 		boost::asio::io_service* ioService;
 
-		enum { max_length = 65535 };
-		char data[max_length];
+		int max_length; //enum { max_length = 65535 };
+		char* data;//[max_length];
 
 
 	};

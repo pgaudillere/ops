@@ -21,18 +21,24 @@
 #ifndef XMLArchiverOutH
 #define XMLArchiverOutH
 
-#include "ArchiverOut.h"
+#include "ArchiverInOut.h"
+#include <vector>
+#include <string>
 #include <iostream>
+#include "OPSObject.h"
 
 
 namespace ops
 {
+	using namespace std;
+
 //Pure virtual interface.
-	class XMLArchiverOut : public ArchiverOut
+	class XMLArchiverOut : public ArchiverInOut
 {
 	std::ostream& os;
 	int currentTabDepth;
 	const static int tabSize = 3; 
+	std::string topNode;
 private:
 	std::string tab()
 	{
@@ -42,65 +48,192 @@ private:
 		return ret;
 	}
 public:
-	XMLArchiverOut(std::ostream& os_): os(os_),currentTabDepth(0)
+	XMLArchiverOut(std::ostream& os_, std::string topNode_): os(os_),currentTabDepth(0), topNode(topNode_)
 	{
+		os << tab() << "<" << topNode << ">" << endl;
+		currentTabDepth++;
+	}
+	void close()
+	{
+		currentTabDepth--;
+		os << tab() << "</" << topNode << ">" << endl;
+	}
+	virtual	void inout(std::string& name, bool& value)
+	{
+		if(value)
+		{
+			os << tab() << "<" << name << ">" << "true" << "</" << name << ">\n";
+		}
+		else
+		{
+			os << tab() << "<" << name << ">" << "false" << "</" << name << ">\n";
+		}
+	}
+	virtual void inout(std::string& name, char& value)
+	{
+		os << tab() << "<" << name << ">" << (int)value << "</" << name << ">\n";
+	}
+    virtual void inout(std::string& name, int& value)
+	{
+		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
+	}
+    virtual void inout(std::string& name, short& value)
+	{
+		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
+	}
+    virtual void inout(std::string& name, __int64& value)
+	{
+		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
+	}
+    virtual void inout(std::string& name, float& value)
+	{
+		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
+	}
+    virtual void inout(std::string& name, double& value)
+	{
+		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
+	}
+	virtual void inout(std::string& name, std::string& value)
+	{
+		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
+	}
+
+	virtual Serializable* inout(std::string& name, Serializable* value, int element)
+	{
+		OPSObject* opsO = dynamic_cast<OPSObject*>(value);
+
+		if(opsO != NULL)
+		{
+			os << tab() << "<" << "element" << " type = \"" << opsO->getTypeString() << "\" >"  << "\n";
+			currentTabDepth++;
+			value->serialize(this);
+			currentTabDepth--;
+			os << tab() << "</" << "element" << ">"  << "\n";
+		}
+		return value;
+
+	}
+
+    virtual Serializable* inout(std::string& name, Serializable* value)
+	{
+		OPSObject* opsO = dynamic_cast<OPSObject*>(value);
+
+		if(opsO != NULL)
+		{
+			os << tab() << "<" << name << " type = \"" << opsO->getTypeString() << "\" >"  << "\n";
+			currentTabDepth++;
+			value->serialize(this);
+			currentTabDepth--;
+			os << tab() << "</" << name << ">"  << "\n";
+		}
+		return value;
+
+	}
+
+	virtual void inout(std::string& name, std::vector<bool>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			bool e = value[i];
+			inout(std::string("element"), e);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+	virtual void inout(std::string& name, std::vector<char>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			inout(std::string("element"), value[i]);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+    virtual void inout(std::string& name, std::vector<int>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			inout(std::string("element"), value[i]);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+    virtual void inout(std::string& name, std::vector<short>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			inout(std::string("element"), value[i]);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+    virtual void inout(std::string& name, std::vector<__int64>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			inout(std::string("element"), value[i]);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+    virtual void inout(std::string& name, std::vector<float>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			inout(std::string("element"), value[i]);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+    virtual void inout(std::string& name, std::vector<double>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			inout(std::string("element"), value[i]);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+	virtual void inout(std::string& name, std::vector<std::string>& value)
+	{
+		os << tab() << "<" << name << ">" << endl;
+		for(unsigned int i = 0; i < value.size(); i++)
+		{
+			currentTabDepth++;
+			inout(std::string("element"), value[i]);
+			currentTabDepth--;
+		}
+		os << tab() << "</" << name << ">" << endl;
+	}
+
+	int beginList(std::string& name, int size)
+	{
+		//buf->WriteInt(size);
+		os << tab() << "<" << name << ">" << endl;
+		currentTabDepth++;
+		return size;
+	}
+	void endList(std::string& name)
+	{
+		currentTabDepth--;
+		os << tab() << "</" << name << ">" << endl;
 		
 	}
 
-	virtual void put(std::string& name, Serializable* v)
-	{
-		
-		os << tab() << "<" << name << ">"  << "\n";
-		currentTabDepth++;
-		v->serialize(this);
-		currentTabDepth--;
-		os << tab() << "</" << name << ">"  << "\n";
-		
-	}
-    virtual void put(std::string& name, std::string v)
-	{
-		os << tab() << "<" << name << ">" << v << "</" << name << ">\n";
-	}
-    virtual void put(std::string& name, char v) 
-	{
-		os << tab() << "<" << name << ">" << v << "</" << name << ">\n";
-	}
-    virtual void put(std::string& name, double v)
-	{
-		os << tab() << "<" << name << ">" << v << "</" << name << ">\n";
-	}
-    virtual void put(std::string& name, float v)
-	{
-		os << tab() << "<" << name << ">" << v << "</" << name << ">\n";
-	}
-    virtual void put(std::string& name, int v) 
-	{
-		os << tab() << "<" << name << ">" << v << "</" << name << ">\n";
-	}
-    virtual void put(std::string& name, long v)
-	{
-		os << tab() << "<" << name << ">" << v << "</" << name << ">\n";
-	}
-    virtual void put(std::string& name, short v)
-	{
-		os << tab() << "<" << name << ">" << v << "</" << name << ">\n";
-	}
-	virtual void putStartList(std::string& name, int size)
-	{
-		os << tab() << "<" << name << ">"  << "\n";
-		currentTabDepth++;
-	}
-	virtual void putElement(std::string& listName, Serializable* v)
-	{
-
-	}
-	virtual void putEndList(std::string& listName)
-	{
-		currentTabDepth--;
-		os << tab() << "</" << listName << ">"  << "\n";
-	}
-	//template <class ElementType>
-	//virtual void put(std::string name, std::vector<ElementType> collection) = 0;
 };
 
 }

@@ -48,6 +48,8 @@
  *
  ****************************************************************************
  */
+#define _XMLPARSER_NO_MESSAGEBOX_
+
 #ifndef _CRT_SECURE_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE
 #endif
@@ -68,9 +70,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-namespace ops{
 
-namespace xml{
+
+namespace opsXML{
 
 XMLCSTR XMLNode::getVersion() { return _CXML("v2.38"); }
 void freeXMLString(XMLSTR t){if(t)free(t);}
@@ -2799,5 +2801,5 @@ unsigned char *XMLParserBase64Tool::decode(XMLCSTR data, int *outlen, XMLError *
     return (unsigned char*)buf;
 }
 
-}
+
 }

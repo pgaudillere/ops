@@ -62,6 +62,7 @@ namespace ops
 		virtual void serialize(ArchiverInOut* archive);
         
     public:
+		//static void deleteObjectVector(OPSObject* start);
         OPSObject();
         virtual ~OPSObject();
         

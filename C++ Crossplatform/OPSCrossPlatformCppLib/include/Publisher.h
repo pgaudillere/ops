@@ -25,9 +25,12 @@
 #include "OPSMessage.h"
 #include "OPSArchiverOut.h"
 #include "Topic.h"
-#include "UDPSender.h"
+#include "Sender.h"
 #include "Participant.h"
+#include "TimeHelper.h"
 #include <string>
+#include "MemoryMap.h"
+
 //#include "DataHeaderHelper.h"
 
 namespace ops
@@ -36,15 +39,17 @@ class Publisher
 {
 public:
 
-	Publisher(Topic<> t): topic(t),name(""), key(""),priority(0), currentPublicationID(0)
+	Publisher(Topic<> t): topic(t),name(""), key(""),priority(0), currentPublicationID(0), memMap(Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
 	{
-		bytes = new char[Participant::MESSAGE_MAX_SIZE];		
+		udpSender = Sender::create();
+		//bytes = new char[Participant::PACKET_MAX_SIZE];		
 		message.setPublisherName(name);
 		message.setTopicName(topic.GetName());
 	}
     virtual ~Publisher()
 	{
-		delete bytes;
+		delete udpSender;
+		//delete bytes;
 	}
 
     Topic<> getTopic()
@@ -77,21 +82,34 @@ public:
 protected:
 	void write(OPSObject* data)
 	{
-		ByteBuffer buf(bytes); 
+		//ByteBuffer buf(bytes, Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE); 
+		
+		ByteBuffer buf(&memMap);
+		
 		message.setData(data);
 
 		message.setPublicationID(currentPublicationID);
 
-		buf.writeProtocol();
-		buf.WriteString("");
-		buf.WriteInt(1);
-		buf.WriteInt(0);
+		//buf.writeProtocol();
+		//buf.WriteString("");
+		//buf.WriteInt(1);
+		//buf.WriteInt(0);
+		buf.writeNewSegment();
 
 		OPSArchiverOut archive(&buf);
 
 		message = *((OPSMessage*)(archive.inout(std::string("message"), &message)));
 
-		udpSender.sendTo(buf.GetBuffer(), buf.GetSize(), topic.GetDomainAddress(), topic.GetPort());
+		buf.finish();
+
+		for(int i = 0; i < buf.getNrOfSegments(); i++)
+		{
+			int segSize = buf.getSegmentSize(i);
+			udpSender->sendTo(buf.getSegment(i), segSize, topic.GetDomainAddress(), topic.GetPort());
+			//TimeHelper::sleep(0);
+		}
+		
+		//udpSender->sendTo(bytes, buf.GetSize(), topic.GetDomainAddress(), topic.GetPort());
 				
 
 		IncCurrentPublicationID();
@@ -109,9 +127,11 @@ protected:
 private:
 
 
-	char* bytes;
+	//char bytes[Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE][Participant::PACKET_MAX_SIZE];
 
-	UDPSender udpSender;
+	MemoryMap memMap;
+
+	Sender* udpSender;
 
 	OPSMessage message;
  

@@ -44,41 +44,57 @@ public:
 	~OPSArchiverIn()
 	{}
 
-	bool inout(std::string& name, bool value)
+	void inout(std::string& name, bool& value)
 	{
-		return buf->ReadChar() > 0;
+		value = buf->ReadChar() > 0;
 	}
-	char inout(std::string& name, char value)
+	void inout(std::string& name, char& value)
 	{
-		return buf->ReadChar();
+		value = buf->ReadChar();
 	}
-    int inout(std::string& name, int value)
+    void inout(std::string& name, int& value)
 	{
-		return buf->ReadInt();
+		value = buf->ReadInt();
 	}
-    short inout(std::string& name, short value)
+    void inout(std::string& name, short& value)
 	{
 		//Not implemented
-		return value;
+		value = value;
 	}
-    __int64	inout(std::string& name, __int64 value)
+    void inout(std::string& name, __int64& value)
 	{
-		return buf->ReadLong();
+		value = buf->ReadLong();
 	}
-    float inout(std::string& name, float value)
+    void inout(std::string& name, float& value)
 	{
-		return buf->ReadFloat();
+		value = buf->ReadFloat();
 	}
-    double inout(std::string& name, double value)
+    void inout(std::string& name, double& value)
 	{
-		return buf->ReadDouble();
+		value = buf->ReadDouble();
 	}
-	std::string inout(std::string& name, std::string value)
+	void inout(std::string& name, std::string& value)
 	{
-		return buf->ReadString();
+		value = buf->ReadString();
+	}
+	Serializable* inout(std::string& name, Serializable* value, int element)
+	{
+		std::string types = buf->ReadString();
+		Serializable* newSer = factory->create(types);
+        if(newSer != NULL)
+        {
+            newSer->serialize(this);
+        }
+
+		return newSer;
 	}
     Serializable* inout(std::string& name, Serializable* value)
 	{
+		
+		if(value != NULL)//Either we do this or we initiialize object to NULL in generated code.
+		{
+			delete value;
+		}
 		std::string types = buf->ReadString();
 		Serializable* newSer = factory->create(types);
         if(newSer != NULL)

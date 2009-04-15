@@ -2,9 +2,6 @@
 * 
 * Copyright (C) 2006-2009 Anton Gravestam.
 *
-* This notice apply to all source files, *.cpp, *.h, *.java, and *.cs in this directory 
-* and all its subdirectories if nothing else is explicitly stated within the source file itself.
-*
 * This file is part of OPS (Open Publish Subscribe).
 *
 * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
@@ -43,49 +40,52 @@ public:
 	{
 
 	}
-	bool inout(std::string& name, bool value)
+	void inout(std::string& name, bool& value)
 	{
-		buf->WriteChar(value ? 1 : 0);
-		return value;
+		char ch = 0;
+		value ? ch = 1 : ch = 0;
+		buf->WriteChar(ch);
 	}
-	char inout(std::string& name, char value)
+	void inout(std::string& name, char& value)
 	{
 		buf->WriteChar(value);
-		return value;
 	}
-    int inout(std::string& name, int value)
+    void inout(std::string& name, int& value)
 	{
 		buf->WriteInt(value);
-		return value;
 	}
-    short inout(std::string& name, short value)
+    void inout(std::string& name, short& value)
 	{
 		//Not implemented
-		return value;
+		//return value;
 	}
-    __int64	inout(std::string& name, __int64 value)
+    void inout(std::string& name, __int64& value)
 	{
 		buf->WriteLong(value);
-		return value;
 	}
-    float inout(std::string& name, float value)
+    void inout(std::string& name, float& value)
 	{
 		buf->WriteFloat(value);
-		return value;
 	}
-    double inout(std::string& name, double value)
+    void inout(std::string& name, double& value)
 	{
 		buf->WriteDouble(value);
-		return value;
 	}
-	std::string inout(std::string& name, std::string value)
+	void inout(std::string& name, std::string& value)
 	{
 		buf->WriteString(value);
+	}
+	Serializable* inout(std::string& name, Serializable* value, int element)
+	{
+		std::string typeS = ((OPSObject*)value)->getTypeString();
+		buf->WriteString(typeS);
+		value->serialize(this);
 		return value;
 	}
     Serializable* inout(std::string& name, Serializable* value)
 	{
-		buf->WriteString(((OPSObject*)value)->getTypeString());
+		std::string typeS = ((OPSObject*)value)->getTypeString();
+		buf->WriteString(typeS);
 		value->serialize(this);
 		return value;
 	}

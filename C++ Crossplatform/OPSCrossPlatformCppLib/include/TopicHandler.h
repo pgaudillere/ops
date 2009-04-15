@@ -63,35 +63,68 @@ namespace ops
 		void onNewEvent(Notifier<char*>* sender, char* bytes)
 		{
 			//Deserialize data
-			ByteBuffer buf(bytes);
+			//ByteBuffer tBuf(bytes, Participant::PACKET_MAX_SIZE);
+
+			//Create a temporay map and buf to peek data before putting it in to memMap
+			MemoryMap tMap(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
+			ByteBuffer tBuf(&tMap);
+
+			//Things are starting to look OK, we need deep copying or other delete strategy.
+			//Next thing is to increase message size considerable....
 
 			//Check protocol
-			if(buf.checkProtocol())
+			if(tBuf.checkProtocol())
 			{
 
 				//Read of message ID and fragmentation info, this is ignored so far.
-				std::string messageID = buf.ReadString();
-				int nrOfFragments = buf.ReadInt();
-				int currentFragment = buf.ReadInt();
-				
-				//Read of the actual OPSMessage
-				OPSArchiverIn archiver(&buf);
+				//std::string messageID = tBuf.ReadString();
+				int nrOfFragments = tBuf.ReadInt();
+				int currentFragment = tBuf.ReadInt();
 
-				OPSMessage* message = NULL;
-				message = dynamic_cast<OPSMessage*>(archiver.inout(std::string("message"), message));
-				if(message)
+				if(currentFragment != expectedSegment)
+				{//For testing only...
+					std::cout << "________________________Segment ERROR_____________________________" << std::endl;
+					expectedSegment = 0;
+					receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
+					return;
+				}
+	
+				if(currentFragment == (nrOfFragments - 1))
 				{
-					//Send it to Subscribers
-					notifyNewEvent(message);
+					expectedSegment = 0;
+					ByteBuffer buf(&memMap);
+					
+					buf.checkProtocol();
+					int i1 = buf.ReadInt();
+					int i2 = buf.ReadInt();
+
+					//Read of the actual OPSMessage
+					OPSArchiverIn archiver(&buf);
+
+					OPSMessage* message = NULL;
+					message = dynamic_cast<OPSMessage*>(archiver.inout(std::string("message"), message));
+					if(message)
+					{
+						//Send it to Subscribers
+						notifyNewEvent(message);
+						delete message;
+					}
+					else
+					{
+						//Inform participant that invalid data is on the network.
+						printf("_____________Factory_ERROR___________\n");
+					}
 				}
 				else
 				{
-					//Inform participant that invalid data is on the network.
+					expectedSegment ++;
 				}
+				receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 			}
 			else
 			{
 				//Inform participant that invalid data is on the network.
+				std::cout << "________________________Protocol ERROR_____________________________" << std::endl;
 			}
 			
 		}
@@ -102,9 +135,12 @@ namespace ops
 		
 		///Constructor is private, use static getTopicHandler(Topic)
 		TopicHandler(Topic<> top) 
+			: expectedSegment(0),
+			  memMap(Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
 		{
 			receiver = Receiver::create(top.GetDomainAddress(), top.GetPort());
 			receiver->addListener(this);
+			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 			
 		}
 
@@ -113,7 +149,13 @@ namespace ops
 		Receiver* receiver;
 
 		///Preallocated bytebuffer for receiving data
-		char bytes[Participant::MESSAGE_MAX_SIZE];
+		
+		//const static int DATA_ALLOCATION_SIZE = 2000000;
+		//char bytes[DATA_ALLOCATION_SIZE];
+		MemoryMap memMap;
+		
+		int expectedSegment;
+
 
 	};
 

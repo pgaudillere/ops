@@ -43,11 +43,12 @@ public:
 		publicationID(0)
 	{
 		OPSObject::appendType(std::string("ops.protocol.OPSMessage"));
+		data = NULL;
 	}
-	~OPSMessage()
+	virtual ~OPSMessage()
 	{
 		//TODO: should this delete data???
-		delete data;
+		if(data) delete data;
 	}
 
 private:
@@ -102,13 +103,13 @@ public:
 	{
 		OPSObject::serialize(archive);
 
-		messageType = archive->inout(std::string("messageType"), messageType);
-        publisherPriority = archive->inout(std::string("publisherPriority"), publisherPriority);
-        publicationID = archive->inout(std::string("publicationID"), publicationID);
-        publisherName = archive->inout(std::string("publisherName"), publisherName);
-        topicName = archive->inout(std::string("topicName"), topicName);
-        topLevelKey = archive->inout(std::string("topLevelKey"), topLevelKey);
-        address = archive->inout(std::string("address"), address);
+		archive->inout(std::string("messageType"), messageType);
+        archive->inout(std::string("publisherPriority"), publisherPriority);
+        archive->inout(std::string("publicationID"), publicationID);
+        archive->inout(std::string("publisherName"), publisherName);
+        archive->inout(std::string("topicName"), topicName);
+        archive->inout(std::string("topLevelKey"), topLevelKey);
+        archive->inout(std::string("address"), address);
         data = (OPSObject*) archive->inout(std::string("data"), data);
 		
 	}

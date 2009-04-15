@@ -24,9 +24,10 @@
 #include <string>
 #include "OPSObject.h"
 
+
 namespace ops
 {   template<class DataType = OPSObject>
-    class Topic
+	class Topic : public OPSObject
     {
     private:
         std::string name;
@@ -37,12 +38,38 @@ namespace ops
 		std::string typeID;
         std::string domainAddress;
 		std::string localInterface;
+		bool reliable;
+		int messageMaxSize;
+		__int64 deadline;
+		__int64 minSeparation;
         
         Topic(std::string namee, int portt, std::string typeIDd, std::string domainAddresss)
-        :name(namee), port(portt), typeID(typeIDd), domainAddress(domainAddresss)
+			: name(namee), 
+			  port(portt), 
+			  typeID(typeIDd), 
+			  domainAddress(domainAddresss),
+			  reliable(false),
+			  messageMaxSize(64000),
+			  deadline(0x0fffffffffffffff),
+			  minSeparation(0)
         {
+			appendType(std::string("Topic"));
 
         }
+		Topic()
+			: name(""), 
+			  port(0), 
+			  typeID(""), 
+			  domainAddress(""),
+			  reliable(false),
+			  messageMaxSize(64000),
+			  deadline(0x0fffffffffffffff),
+			  minSeparation(0)
+        {
+			appendType(std::string("Topic"));
+
+        }
+
         
         std::string GetName()
         {
@@ -60,6 +87,16 @@ namespace ops
         {
             return port;
         }
+	private:
+		void serialize(ArchiverInOut* archiver)
+		{
+			OPSObject::serialize(archiver);
+			archiver->inout(std::string("name"), name);
+			archiver->inout(std::string("dataType"), typeID);
+			archiver->inout(std::string("port"), port);		
+			archiver->inout(std::string("address"), domainAddress);
+			archiver->inout(std::string("sampleMaxSize"), messageMaxSize);
+		}
         
         
     };
