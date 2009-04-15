@@ -17,8 +17,10 @@ namespace ops
         localEndpoint = new boost::asio::ip::udp::endpoint(udp::v4(), 0);
         socket = new boost::asio::ip::udp::socket(io_service, localEndpoint->protocol());
 
-		/*boost::asio::socket_base::non_blocking_io command(true);
-		socket->io_control(command);*/
+		boost::asio::socket_base::send_buffer_size option(16000000);
+		socket->set_option(option);
+		boost::asio::socket_base::non_blocking_io command(true);
+		socket->io_control(command);
 
 		
     }

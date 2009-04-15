@@ -18,44 +18,34 @@
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/* 
- * File:   Transport.h
- * Author: Anton Gravestam
- *
- * Created on den 22 oktober 2008, 20:01
- */
+#ifndef ops_TimeHelperH
+#define	ops_TimeHelperH
 
-#ifndef ops_SenderH
-#define	ops_SenderH
-
-#include "ByteBuffer.h"
 #include <string>
+
 
 namespace ops
 {
-    ///Interface used to send data
+class TimeHelper
+{
 
-    class Sender
-    {
-    public:
+public:
+	///Returns the current time as a number of milliseconds since Epoch 1970-01-01.
+	static __int64 currentTimeMillis();
+	///Sleeps the given number of milliseconds (millis).
+    static void sleep(__int64 millis);
+	///Returns current system time as a string to be used as user output, file names etc...
+    static std::string getTimeToString();
+	///Returns the current time as a number of milliseconds since Epoch 1970-01-01.
+    static __int64 getEpochTime();
 
-        virtual bool sendTo(char* buf, int size, std::string address, int port) = 0;
-		virtual int receiveReply(char* buf, int size) = 0;
-        virtual int getPort() = 0;
-        virtual std::string getAddress() = 0;
-
-		static Sender* create();
-
-        virtual ~Sender()
-        {
-        }
-    private:
+    const static int infinite = 0x0fffffff; 
 
 
-    };
+private:
+
+
+};
+
 }
-
-
-
-#endif	/* _TRANSPORT_H */
-
+#endif

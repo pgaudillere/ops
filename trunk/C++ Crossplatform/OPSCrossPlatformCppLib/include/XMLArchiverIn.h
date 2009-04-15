@@ -21,25 +21,30 @@
 #ifndef XMLArchiverInH
 #define XMLArchiverInH
 
-#include "ArchiverIn.h"
+#include "ArchiverInOut.h"
+#include "OPSObjectFactory.h"
 #include <iostream>
 #include <sstream>
 #include "xml/xmlParser.h"
 
 namespace ops
 {
-//Pure virtual interface.
-class XMLArchiverIn : ArchiverIn 
+	using namespace std;
+///
+class XMLArchiverIn 
+	: ArchiverInOut 
 {
 private:
 	std::istream& is;
-	xml::XMLNode currentNode;
+	opsXML::XMLNode currentNode;
 	std::string xmlString;
 	std::string parseString;
 	std::stringstream ss;
 public:
-	XMLArchiverIn(std::istream& is_) : is(is_)
+	XMLArchiverIn(std::istream& is_, std::string topNode_) : is(is_)
 	{
+		factory = OPSObjectFactory::getInstance();
+
 		std::string tmp;
 		is >> tmp;
 		while(!is.eof())
@@ -47,57 +52,386 @@ public:
 			xmlString += tmp + " ";
 			is >> tmp;			
 		}
-		currentNode = xml::XMLNode::parseString(xmlString.c_str());
+		currentNode = opsXML::XMLNode::parseString(xmlString.c_str(), topNode_.c_str());
 		int i = currentNode.nChildNode();
 		
 	}
-
-	virtual char getByte(std::string name)
+	~XMLArchiverIn()
 	{
-		parseString = std::string(currentNode.getChildNode(name.c_str()).getText(0));
-		ss.str(parseString);
+		//currentNode.
+	}
 
+	virtual	void inout(std::string& name, bool& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			string s(currentNode.getChildNode(name.c_str()).getText());
+			if(s.compare("true")==0) value = true;
+			if(s.compare("false")==0) value = false;
+			if(s.compare("TRUE")==0) value = true;
+			if(s.compare("FALSE")==0) value = false;
+			if(s.compare("true")==0) value = true;
+			if(s.compare("false")==0) value = false;
+			if(s.compare("True")==0) value = true;
+			if(s.compare("False")==0) value = false;
+		}
+
+	}
+	virtual void inout(std::string& name, char& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			string s(currentNode.getChildNode(name.c_str()).getText());
+			stringstream ss(s);
+
+			int inVal;
+			ss >> inVal;
+			value = inVal;
+		}
+		
+	}
+    virtual void inout(std::string& name, int& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			string s(currentNode.getChildNode(name.c_str()).getText());
+			stringstream ss(s);
+
+			int inVal;
+			ss >> inVal;
+			value = inVal;
+		}
+
+	}
+    virtual void inout(std::string& name, short& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			string s(currentNode.getChildNode(name.c_str()).getText());
+			stringstream ss(s);
+
+			int inVal;
+			ss >> inVal;
+			value = inVal;
+		}
+
+	}
+    virtual void inout(std::string& name, __int64& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			string s(currentNode.getChildNode(name.c_str()).getText());
+			stringstream ss(s);
+
+			__int64 inVal;
+			ss >> inVal;
+			value = inVal;
+		}
+	}
+    virtual void inout(std::string& name, float& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			string s(currentNode.getChildNode(name.c_str()).getText());
+			stringstream ss(s);
+
+			float inVal;
+			ss >> inVal;
+			value = inVal;
+		}
+
+	}
+    virtual void inout(std::string& name, double& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			string s(currentNode.getChildNode(name.c_str()).getText());
+			stringstream ss(s);
+
+			double inVal;
+			ss >> inVal;
+			value = inVal;
+		}
+
+
+	}
+	virtual void inout(std::string& name, std::string& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			if(currentNode.getChildNode(name.c_str()).getText() != NULL)
+			{
+				string s(currentNode.getChildNode(name.c_str()).getText());
+				value = s;
+			}
+			else
+			{
+				value = "";
+			}
+		}
+	}
+
+	virtual Serializable* inout(std::string& name, Serializable* value, int element)
+	{
+		opsXML::XMLNode tempNode = currentNode;
+		currentNode = currentNode.getChildNode(name.c_str()).getChildNode("element", element);
+		string types(currentNode.getAttribute("type"));
+		Serializable* newSer = factory->create(types);
+        if(newSer != NULL)
+        {
+            newSer->serialize(this);
+			
+        }
+
+		currentNode = tempNode;//;currentNode.getParentNode();
+
+		return newSer;
+
+	}
+
+    virtual Serializable* inout(std::string& name, Serializable* value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+			string types(currentNode.getAttribute("type"));
+			Serializable* newSer = factory->create(types);
+			if(newSer != NULL)
+			{
+				newSer->serialize(this);
+				
+			}
+
+			currentNode = tempNode;//;currentNode.getParentNode();
+
+			return newSer;
+		}
+		return value;
+
+	}
+
+	virtual void inout(std::string& name, std::vector<bool>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, false);
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				if(s.compare("true")==0) value[i] = true;
+				if(s.compare("false")==0) value[i] = false;
+				if(s.compare("TRUE")==0) value[i] = true;
+				if(s.compare("FALSE")==0) value[i] = false;
+				if(s.compare("true")==0) value[i] = true;
+				if(s.compare("false")==0) value[i] = false;
+				if(s.compare("True")==0) value[i] = true;
+				if(s.compare("False")==0) value[i] = false;
+			}	
+
+			currentNode = tempNode;
+		}
+
+
+
+	}
+	virtual void inout(std::string& name, std::vector<char>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, 0);
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				stringstream ss(s);
+
+				int inVal;
+				ss >> inVal;
+				value[i] = inVal;
+			}	
+
+			currentNode = tempNode;
+		}
+
+	}
+    virtual void inout(std::string& name, std::vector<int>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, 0);
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				stringstream ss(s);
+
+				int inVal;
+				ss >> inVal;
+				value[i] = inVal;
+			}	
+
+			currentNode = tempNode;
+		}
+
+	}
+    virtual void inout(std::string& name, std::vector<short>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, 0);
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				stringstream ss(s);
+
+				int inVal;
+				ss >> inVal;
+				value[i] = inVal;
+			}	
+
+			currentNode = tempNode;
+		}
+
+	}
+    virtual void inout(std::string& name, std::vector<__int64>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, 0);
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				stringstream ss(s);
+
+				int inVal;
+				ss >> inVal;
+				value[i] = inVal;
+			}	
+
+			currentNode = tempNode;
+		}
+	}
+    virtual void inout(std::string& name, std::vector<float>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, 0.0);
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				stringstream ss(s);
+
+				float inVal;
+				ss >> inVal;
+				value[i] = inVal;
+			}	
+
+			currentNode = tempNode;
+		}
+		
+
+	}
+    virtual void inout(std::string& name, std::vector<double>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, 0.0);
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				stringstream ss(s);
+
+				double inVal;
+				ss >> inVal;
+				value[i] = inVal;
+			}	
+
+			currentNode = tempNode;
+		}
+	}
+	virtual void inout(std::string& name, std::vector<std::string>& value)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			opsXML::XMLNode tempNode = currentNode;
+			currentNode = currentNode.getChildNode(name.c_str());
+
+			int size = currentNode.nChildNode("element");
+			value.reserve(size);
+			value.resize(size, "");
+			for(int i = 0; i < size; i++)
+			{
+				string s(currentNode.getChildNode("element").getText());
+				stringstream ss(s);
+
+				int inVal;
+				ss >> inVal;
+				value[i] = inVal;
+			}	
+
+			currentNode = tempNode;
+		}
+
+	}
+	
+	int beginList(std::string& name, int size)
+	{
+		if(!currentNode.getChildNode(name.c_str()).isEmpty())
+		{
+			return currentNode.getChildNode(name.c_str()).nChildNode("element");
+		}
 		return 0;
 	}
-    virtual int getInt(std::string name)
+	void endList(std::string& name)
 	{
-		return 1;
+		//Nothing to do in this implementation
 	}
-    virtual short getShort(std::string name) 
-	{
-		return 1;
-	}
-    virtual __int64 getLong(std::string name) 
-	{
-		return 1;
-	}
-    virtual float getFloat(std::string name) 
-	{
-		return 1;
-	}
-    virtual double getDouble(std::string name)
-	{
-		return 1;
-	}
-    virtual std::string getString(std::string name)
-	{
-		return "";
-	}
-    virtual void getDeserializable(std::string name, Deserializable* deserializable) 
-	{
-		currentNode = currentNode.getChildNode(name.c_str());
-		deserializable->deserialize(this);
-		currentNode = currentNode.getParentNode();
-		
-	}
-    virtual int getNrElements(std::string name) 
-	{
-		return 1;
-	}
-    virtual void getElement(std::string name, int i, Deserializable* d) 
-	{
-		
-	}  
+	private:
+		OPSObjectFactory* factory;
+
+
+ //   virtual void getDeserializable(std::string name, Deserializable* deserializable) 
+	//{
+	//	currentNode = currentNode.getChildNode(name.c_str());
+	//	deserializable->deserialize(this);
+	//	currentNode = currentNode.getParentNode();
+	//	
+	//}
+ //
 };
 }
 

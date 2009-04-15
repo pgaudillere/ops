@@ -36,7 +36,7 @@ public:
 	bool remove(SerializableFactory* o)
     {
 		std::vector<SerializableFactory*>::iterator it = childFactories.begin();
-		for(int i = 0; i < childFactories.size(); i++ )
+		for(unsigned int i = 0; i < childFactories.size(); i++ )
 		{
 			if(childFactories[i] == o)
 			{
@@ -57,7 +57,7 @@ public:
     {
         Serializable* obj = NULL;
 
-		for(int i = 0; i < childFactories.size(); i++ )
+		for(unsigned int i = 0; i < childFactories.size(); i++ )
 		{
 			obj = childFactories[i]->create(type);
 			if(obj != NULL)

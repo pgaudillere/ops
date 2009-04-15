@@ -32,7 +32,7 @@ namespace ops
 
 	void OPSObject::serialize(ArchiverInOut* archive)
 	{
-		key = archive->inout(std::string("key"), key);
+		archive->inout(std::string("key"), key);
 	}
 
     //int OPSObject::getPublicationID()

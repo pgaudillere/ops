@@ -1,12 +1,15 @@
 #include "OPSObjectFactory.h"
 
+#include "Topic.h"
+#include "XMLConfiguration.h"
+
 #include <boost/algorithm/string/split.hpp> 
 #include <boost/algorithm/string/Classification.hpp>
 
 namespace ops
 {
 
-class OPSMessageFactory : public SerializableFactory
+class BuiltInFactory : public SerializableFactory
 {
 
 public:
@@ -15,6 +18,14 @@ public:
         if(type == ("ops.protocol.OPSMessage"))
         {
             return new OPSMessage();
+        }
+		if(type == ("Topic"))
+        {
+            return new Topic<>();
+        }
+		if(type == ("XMLConfiguration"))
+        {
+            return new XMLConfiguration();
         }
         return NULL;
     }
@@ -63,7 +74,7 @@ public:
         if(instance == NULL)
         {
             instance = new OPSObjectFactoryImpl();
-            instance->add(new OPSMessageFactory());
+            instance->add(new BuiltInFactory());
         }
         return instance;
     }

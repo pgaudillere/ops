@@ -6,11 +6,78 @@ namespace ops
 {
     
     
-    ByteBuffer::ByteBuffer(char* buf)
+    ByteBuffer::ByteBuffer(MemoryMap* mMap)
+    {
+		index = 0;
+		memMap = mMap;
+		currentSegment = 0;
+		nextSegmentAt = memMap->getSegmentSize();
+		//writeNewSegment();
+		/*
+		index = 0;
+		buffer = new char*[1];
+        buffer[0] = buf;
+		segmentSize = bufSize;
+		nextSegmentAt = segmentSize;
+		nrOfSegments = 1; 
+		currentSegment = -1;
+
+		writeNewSegment();*/
+    }
+	
+	
+	int ByteBuffer::getNrOfSegments()
+	{
+		return currentSegment + 1;
+	}
+	int ByteBuffer::getSegmentSize(int i)
+	{
+		if(i < currentSegment)
+		{
+			return memMap->getSegmentSize();
+		}
+		else
+		{
+			//int bytesLeftInSegment = getSegmentSize() - index;
+			//int lastSegmentSize = memMap->getSegmentSize() - bytesLeftInSegment;
+			return index;
+		}
+	}
+	char* ByteBuffer::getSegment(int i)
+	{
+		return memMap->getSegment(i);
+	}
+
+	void ByteBuffer::finish()
+	{
+		int oldIndex = index;
+		int oldNextSegmentAt = nextSegmentAt;
+		nextSegmentAt = 0;
+		int nrSeg = getNrOfSegments();
+		for(int i = 0; i < nrSeg; i++)
+		{
+			index = 6;
+			currentSegment = i;
+			nextSegmentAt += memMap->getSegmentSize();
+			WriteInt(nrSeg);
+		}
+		index = oldIndex;
+		nextSegmentAt = oldNextSegmentAt;
+
+	}
+
+
+	/*ByteBuffer::ByteBuffer(char** buf, int nrSegs, int segSize)
     {
 		index = 0;
         buffer = buf;
-    }
+		segmentSize = segSize;
+		nextSegmentAt = segmentSize;
+		nrOfSegments = nrSegs; 
+		currentSegment = -1;
+
+		writeNewSegment();
+    }*/
     
     ByteBuffer::~ByteBuffer()
     {
@@ -19,13 +86,65 @@ namespace ops
     }
     void ByteBuffer::WriteChars(char* chars, int length)
     {
-        memcpy((void*)(buffer + index), chars, length);
-        index += length;
+		//int bytesLeftInSegment = nextSegmentAt - index;
+		int bytesLeftInSegment = memMap->getSegmentSize() - index;
+		if(bytesLeftInSegment >= length)
+		{
+			memcpy((void*)(memMap->getSegment(currentSegment) + index), chars, length);
+			index += length;
+		}
+		else
+		{
+			memcpy((void*)(memMap->getSegment(currentSegment) + index), chars, bytesLeftInSegment);
+			index += bytesLeftInSegment;
+			nextSegmentAt += memMap->getSegmentSize();
+			currentSegment++;
+			writeNewSegment();
+			WriteChars(chars + bytesLeftInSegment, length - bytesLeftInSegment);
+		}
+        
     }
+
+	void ByteBuffer::writeNewSegment()
+	{
+		index = 0;
+		writeProtocol();
+		int tInt = 0;
+		WriteInt(tInt);//memMap->getNrOfSegments());
+		WriteInt(currentSegment);
+
+	}
+	void ByteBuffer::readNewSegment()
+	{
+		index = 0;
+		nextSegmentAt += memMap->getSegmentSize();
+		//currentSegment++;
+		bool ok = checkProtocol();
+		int i1 = ReadInt();
+		int i2 = ReadInt();
+
+	}
+
     void ByteBuffer::ReadChars(char* chars, int length)
     {
-        memcpy((void*)chars, buffer + index, length);
-        index += length;
+        //int bytesLeftInSegment = nextSegmentAt - index;
+		int bytesLeftInSegment = memMap->getSegmentSize() - index;
+		if(bytesLeftInSegment >= length)
+		{
+			memcpy((void*)chars, memMap->getSegment(currentSegment) + index, length);
+			index += length;
+		}
+		else
+		{
+			memcpy((void*)chars, memMap->getSegment(currentSegment) + index, bytesLeftInSegment);
+			index += bytesLeftInSegment;
+			currentSegment++;
+			readNewSegment();
+			ReadChars(chars + bytesLeftInSegment, length - bytesLeftInSegment);
+		}
+		
+		//memcpy((void*)chars, buffer + index, length);
+        //index += length;
         
     }
     
@@ -46,58 +165,67 @@ namespace ops
         return index;
     }
     
-    void ByteBuffer::WriteFloat(float f)
+    void ByteBuffer::WriteFloat(float& f)
     {
 		#ifndef NETWORK_BYTE_ORDER
 			ByteSwap((unsigned char*)&f, 4); 
 		#endif
-        memcpy((void*)(buffer + index), &f, 4);
-        index += 4;
+        
+		WriteChars(((char*)&f), 4);
+		//memcpy((void*)(buffer + index), &f, 4);
+        //index += 4;
         
     }
-    void ByteBuffer::WriteInt(int i)
+    void ByteBuffer::WriteInt(int& i)
     {
 		#ifndef NETWORK_BYTE_ORDER
 			ByteSwap((unsigned char*)&i, 4);
 		#endif
-        memcpy((void*)(buffer + index), &i, 4);
-        index += 4;
+        WriteChars(((char*)&i), 4);
+		//memcpy((void*)(buffer + index), &i, 4);
+        //index += 4;
         
     }
-    void ByteBuffer::WriteLong(long long l)
+    void ByteBuffer::WriteLong(long long& l)
     {
 		#ifndef NETWORK_BYTE_ORDER
 			ByteSwap((unsigned char*)&l, 8);
 		#endif
-        memcpy((void*)(buffer + index), &l, 8);
-        index += 8;
+		WriteChars(((char*)&l), 8);
+        //memcpy((void*)(buffer + index), &l, 8);
+        //index += 8;
         
     }
-    void ByteBuffer::WriteDouble(double d)
+    void ByteBuffer::WriteDouble(double& d)
     {
 		#ifndef NETWORK_BYTE_ORDER
 			ByteSwap((unsigned char*)&d, 8);
 		#endif
-        memcpy((void*)(buffer + index), &d, 8);
-        //buffer[index] = d;
-        index += 8;
+		WriteChars(((char*)&d), 8);
+        //memcpy((void*)(buffer + index), &d, 8);
+        //index += 8;
         
     }
-    void ByteBuffer::WriteChar(char c)
+    void ByteBuffer::WriteChar(char& c)
     {
-		#ifndef NETWORK_BYTE_ORDER
+		/*#ifndef NETWORK_BYTE_ORDER
 			ByteSwap((unsigned char*)&c, 1);
 		#endif
         buffer[index] = c;
-        index += 1;
+        index += 1;*/
+		WriteChars(&c, 1);
         
     }
-    void ByteBuffer::WriteString(std::string s)
+    void ByteBuffer::WriteString(std::string& s)
     {
-        WriteInt((int)s.size());
-        memcpy((void*)(buffer + index), s.c_str(), s.size());
+		int siz = (int)s.size();
+        WriteInt(siz);
+		WriteChars((char*)s.c_str(), s.size());
+		
+		//memcpy((void*)(buffer + index), s.c_str(), s.size());
         //(char*)(buffer + index) = (char*)s.c_str();
-        index += (int)s.size();
+        //index += (int)s.size();
+
         
     }
   //  void ByteBuffer::WriteOPSObject(OPSObject* o, OPSObjectHelper* oh)
@@ -146,56 +274,53 @@ namespace ops
   //  }
     float ByteBuffer::ReadFloat()
     {
-        float ret;
+        float ret = 0;
+	
+		ReadChars((char*)&ret, 4);	
 		#ifndef NETWORK_BYTE_ORDER
-			ByteSwap((unsigned char*)(buffer + index), 4);
+			ByteSwap((unsigned char*)&ret, 4);
 		#endif
-		ret = *((float*)(buffer + index));
-        index += 4;
         return ret;
         
     }
     double ByteBuffer::ReadDouble()
     {
-        double ret;
+        double ret = 0;
+
+        ReadChars((char*)&ret, 8);
 		#ifndef NETWORK_BYTE_ORDER
-			ByteSwap((unsigned char*)(buffer + index), 8);
+			ByteSwap((unsigned char*)&ret, 8);
 		#endif
-        ret = *((double*)(buffer + index));
-        index += 8;
         return ret;
         
     }
     int ByteBuffer::ReadInt()
     {
-        int ret;
+        int ret = 0;
+        ReadChars((char*)&ret, 4);
+
 		#ifndef NETWORK_BYTE_ORDER
-			ByteSwap((unsigned char*)(buffer + index), 4);
+			ByteSwap((unsigned char*)&ret, 4);
 		#endif
-        ret = *((int*)(buffer + index));
-        index += 4;
         return ret;
         
     }
-    long long ByteBuffer::ReadLong()
+    __int64 ByteBuffer::ReadLong()
     {
-        long long ret;
+        __int64 ret = 0;
+        ReadChars((char*)&ret, 8);
 		#ifndef NETWORK_BYTE_ORDER
-			ByteSwap((unsigned char*)(buffer + index), 8);
+			ByteSwap((unsigned char*)&ret, 8);
 		#endif
-        ret = *((long long*)(buffer + index));
-        index += 8;
         return ret;
         
     }
     char ByteBuffer::ReadChar()
     {
-        char ret;
-		#ifndef NETWORK_BYTE_ORDER
-        ByteSwap((unsigned char*)(buffer + index), 1);
-		#endif
-        ret = *((char*)(buffer + index));
-        index += 1;
+        char ret = 0;
+
+        ReadChars((char*)&ret, 1);
+
         return ret;
         
     }
@@ -204,12 +329,14 @@ namespace ops
         
         //ByteSwap((unsigned char*)(buffer + index), 4);
         int length = ReadInt();
-        //char* text = new char[length];
+        char* text = new char[length];
+		ReadChars(text, length);
         //text = (buffer + index);
-        std::string ret((buffer + index), length);
-		index += length;
+		std::string ret(text, length);
+        //std::string ret((buffer + index), length);
+		//index += length;
 
-		//delete text;
+		delete[] text;
 		return ret;
 
 	}
@@ -245,26 +372,91 @@ namespace ops
 			WriteInt(size);
 			for(int i = 0; i < size; i++)
 			{
-				WriteChar(out[i] ? 1 : 0);
+				char ch = 0;
+				out[i] ? ch = 1 : ch = 0;
+				WriteChar(ch);
 			}	
 		}
 
 		void ByteBuffer::ReadBytes(std::vector<char>& out)
 		{
-			int size = ReadInt();
-			out.reserve(size);
-			out.resize(size, 0);
-						
-			std::copy(buffer + index, buffer + index + size, out.begin());
-			index += size;
+			int length = ReadInt();
+			out.reserve(length);
+			out.resize(length, 0);
+			ReadBytes(out, 0, length);
 
 		}
+
+		void ByteBuffer::ReadBytes(std::vector<char>& out, int offset, int length)
+		{
+			//int bytesLeftInSegment = nextSegmentAt - index;
+			int bytesLeftInSegment = memMap->getSegmentSize() - index;
+			std::vector<char>::iterator it = out.begin();
+			it += offset;
+			if(bytesLeftInSegment > length)
+			{
+				//memcpy((void*)(buffer + index), chars, length);
+				//index += length;
+				std::copy(memMap->getSegment(currentSegment) + index, memMap->getSegment(currentSegment) + index + length, it);
+				index += length;
+			}
+			else
+			{
+				//memcpy((void*)(buffer + index), chars, bytesLeftInSegment);
+				//index += bytesLeftInSegment;
+				
+				//ReadBytes(out, offset, bytesLeftInSegment);
+
+				std::copy(memMap->getSegment(currentSegment) + index, memMap->getSegment(currentSegment) + index + bytesLeftInSegment, it);
+				index += bytesLeftInSegment;
+				
+				currentSegment++;
+				readNewSegment();
+				
+				ReadBytes(out, offset + bytesLeftInSegment, length - bytesLeftInSegment);
+				//WriteChars(chars + bytesLeftInSegment, length - bytesLeftInSegment);
+			}
+
+		}
+
 		void ByteBuffer::WriteBytes(std::vector<char>& out)
 		{
 			int size = out.size();
 			WriteInt(size);
-			std::copy(out.begin(), out.end(), buffer + index);
-			index += size;
+			WriteBytes(out, 0, size);
+			
+		}
+		void ByteBuffer::WriteBytes(std::vector<char>& out, int offset, int length)
+		{
+			//int bytesLeftInSegment = nextSegmentAt - index;
+			int bytesLeftInSegment = memMap->getSegmentSize() - index;
+			std::vector<char>::iterator it = out.begin();
+			it += offset;
+			if(bytesLeftInSegment > length)
+			{
+				//memcpy((void*)(buffer + index), chars, length);
+				//index += length;
+				std::copy(it, out.end(), memMap->getSegment(currentSegment) + index);
+				index += length;
+			}
+			else
+			{
+				//memcpy((void*)(buffer + index), chars, bytesLeftInSegment);
+				//index += bytesLeftInSegment;
+				
+				//WriteBytes(out, offset, bytesLeftInSegment);
+				std::copy(it, it + bytesLeftInSegment, memMap->getSegment(currentSegment) + index);
+				index += bytesLeftInSegment;
+				
+				nextSegmentAt += memMap->getSegmentSize();
+				currentSegment++;
+				writeNewSegment();
+				
+				WriteBytes(out, offset + bytesLeftInSegment, length - bytesLeftInSegment);
+				//WriteChars(chars + bytesLeftInSegment, length - bytesLeftInSegment);
+			}
+
+			 
 		}
 
 		void ByteBuffer::ReadDoubles(std::vector<double>& out)
@@ -284,10 +476,11 @@ namespace ops
 		{
 			int size = out.size();
 			WriteInt(size);
-			for(int i = 0; i < size; i++)
+			WriteChars((char*)&out[0], size*8);
+			/*for(int i = 0; i < size; i++)
 			{
 				WriteDouble(out[i]);
-			}	
+			}	*/
 		}
 		void ByteBuffer::ReadInts(std::vector<int>& out)
 		{
@@ -306,20 +499,23 @@ namespace ops
 		{
 			int size = out.size();
 			WriteInt(size);
-			for(int i = 0; i < size; i++)
+			WriteChars((char*)&out[0], size*4);
+			/*for(int i = 0; i < size; i++)
 			{
 				WriteInt(out[i]);
-			}	
+			}*/	
 		}
 		void ByteBuffer::ReadFloats(std::vector<float>& out)
 		{
 			int size = ReadInt();
 			out.reserve(size);
 			out.resize(size, 0.0);
+			ReadChars((char*)&out[0], size*4);
+/*
 			for(int i = 0; i < size; i++)
 			{
 				out[i] = ReadFloat();
-			}			
+			}*/			
 			//std::copy((double*)buffer + index, (double*)buffer + index + size, out.begin());
 			//index += size*8;
 
@@ -328,10 +524,11 @@ namespace ops
 		{
 			int size = out.size();
 			WriteInt(size);
-			for(int i = 0; i < size; i++)
+			WriteChars((char*)&out[0], size*4);
+			/*for(int i = 0; i < size; i++)
 			{
 				WriteFloat(out[i]);
-			}	
+			}	*/
 		}
 		void ByteBuffer::ReadLongs(std::vector<__int64>& out)
 		{
@@ -350,10 +547,11 @@ namespace ops
 		{
 			int size = out.size();
 			WriteInt(size);
-			for(int i = 0; i < size; i++)
+			WriteChars((char*)&out[0], size*8);
+			/*for(int i = 0; i < size; i++)
 			{
 				WriteLong(out[i]);
-			}	
+			}	*/
 		}
 		void ByteBuffer::ReadStrings(std::vector<std::string>& out)
 		{

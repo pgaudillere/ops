@@ -127,6 +127,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				AdditionalLibraryDirectories=""
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -163,6 +165,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\ByteBuffer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Configuration.cpp"
 				>
 			</File>
 			<File
@@ -214,6 +220,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Sender.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\SerializableCompositeFactory.cpp"
 				>
 			</File>
@@ -223,6 +233,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\Thread.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\TimeHelper.cpp"
 				>
 			</File>
 			<File
@@ -239,6 +253,22 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\UDPSender.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\UDPSender.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\XMLArchiverIn.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\XMLArchiverOut.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\XMLConfiguration.h"
 				>
 			</File>
 			<Filter
@@ -284,6 +314,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\Configuration.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\DataListener.h"
 				>
 			</File>
@@ -321,6 +355,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\Lockable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\MemoryMap.h"
 				>
 			</File>
 			<File
@@ -408,15 +446,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\TimeHelper.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Topic.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\include\TopicHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\UDPSender.h"
 				>
 			</File>
 			<File
