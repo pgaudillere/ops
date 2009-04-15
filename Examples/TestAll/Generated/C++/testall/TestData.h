@@ -10,7 +10,6 @@
 
 
 
-//Nested namespaces opener.
 namespace testall {
 
 
@@ -31,10 +30,9 @@ public:
 
 
     }
-    virtual ~TestData(void)
-    {
 
-    }
+    ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
+    ///instance of this class to a format dictated by the implementation of the ArchiverInout.
     void serialize(ops::ArchiverInOut* archive)
     {
 		ops::OPSObject::serialize(archive);
@@ -42,10 +40,15 @@ public:
 		archive->inout(std::string("value"), value);
 
     }
+
+    ///Destructor: Note that all aggregated data and vectors are completely deleted.
+    virtual ~TestData(void)
+    {
+
+    }
     
 };
 
-//Close nested namespace
 }
 
 

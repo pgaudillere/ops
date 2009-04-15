@@ -362,6 +362,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\NoSuchTopicException.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Notifier.h"
 				>
 			</File>

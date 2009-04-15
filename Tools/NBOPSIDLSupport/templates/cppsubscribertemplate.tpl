@@ -15,8 +15,8 @@ class __classNameSubscriber : public ops::Subscriber
 {
 
 public:
-    __classNameSubscriber(ops::Topic<__className> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    __classNameSubscriber(ops::Topic<> t)
+        : ops::Subscriber(t)
     {
 
     }

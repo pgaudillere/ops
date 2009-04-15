@@ -15,8 +15,8 @@ class ChildDataSubscriber : public ops::Subscriber
 {
 
 public:
-    ChildDataSubscriber(ops::Topic<ChildData> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    ChildDataSubscriber(ops::Topic<> t)
+        : ops::Subscriber(t)
     {
 
     }

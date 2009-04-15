@@ -2,9 +2,6 @@
 * 
 * Copyright (C) 2006-2009 Anton Gravestam.
 *
-* This notice apply to all source files, *.cpp, *.h, *.java, and *.cs in this directory 
-* and all its subdirectories if nothing else is explicitly stated within the source file itself.
-*
 * This file is part of OPS (Open Publish Subscribe).
 *
 * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
@@ -25,7 +22,8 @@
 #define ops_NotifierH
 #include <vector>
 #include "Listener.h"
-#include <boost/thread/mutex.hpp>
+//#include <boost/thread/mutex.hpp>
+#include "Lockable.h"
 
 namespace ops
 {
@@ -39,13 +37,15 @@ namespace ops
         ///Vector that holds pointers to the Listeners
         std::vector<Listener<ArgType>*> listeners;
 
-		boost::mutex mutex;
-        
+		//boost::mutex mutex;
+        Lockable mutex;
+
     protected:
         ///Called by subclasses that wishes to notify its listeners of the arrival of new events.
 		void notifyNewEvent(ArgType arg)
 		{
-			boost::mutex::scoped_lock lock(mutex);
+			//boost::mutex::scoped_lock lock(mutex);
+			SafeLock lock(&mutex);
 			for(unsigned int i = 0; i < listeners.size() ; i++)
 			{
 				listeners[i]->onNewEvent(this, arg);
@@ -57,13 +57,15 @@ namespace ops
         ///Register a Listener
         void addListener(Listener<ArgType>* listener)
 		{
-			boost::mutex::scoped_lock lock(mutex);
+			//boost::mutex::scoped_lock lock(mutex);
+			SafeLock lock(&mutex);
 			listeners.push_back(listener);
 		}
 
 		void removeListener(Listener<ArgType>* listener)
 		{
-			boost::mutex::scoped_lock lock(mutex);
+			//boost::mutex::scoped_lock lock(mutex);
+			SafeLock lock(&mutex);
 			for(unsigned int i = 0; i < listeners.size(); i++)
 			{
 				std::vector<Listener<ArgType>*>::iterator p = listeners.begin();

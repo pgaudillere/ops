@@ -15,8 +15,8 @@ class __classNamePublisher : public ops::Publisher
 {
     
 public:
-    __classNamePublisher(ops::Topic<__className> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    __classNamePublisher(ops::Topic<> t)
+        : ops::Publisher(t)
     {
 
 

@@ -21,13 +21,16 @@ public:
 		using namespace ops;
 
 		//Create a topic. NOTE, this is a temporary solution to get topics before OPS4 is completely released.
-		ops::Topic<ChildData> topic("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
+		//ops::Topic<ChildData> topic("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
+
+		//Create a topic from configuration.
+		Topic<> topic = Configuration::getConfiguration()->getTopic("ChildTopic");
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
-		//sub->setDeadlineQoS(1000);
+		sub->setDeadlineQoS(10);
 		sub->addDataListener(this);
-		//sub->deadlineMissedEvent.addDeadlineMissedListener(this);
+		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->start();
 	}
 	///Override from ops::DataListener, called whenever new data arrives.
@@ -40,7 +43,7 @@ public:
 			packagesLost++;
 		}
 		lastPacket = data->i;
-		std::cout << data->baseText << " " << data->fs[499000] << " " << data->i << " Lost: " << packagesLost << std::endl;
+		std::cout << data->baseText << " " << data->fs[10] << " " << data->i << " Lost: " << packagesLost << std::endl;
 	}
 	///Override from ops::DeadlineMissedListener, called if no new data has arrived within deadlineQoS.
 	void onDeadlineMissed(ops::DeadlineMissedEvent* evt)

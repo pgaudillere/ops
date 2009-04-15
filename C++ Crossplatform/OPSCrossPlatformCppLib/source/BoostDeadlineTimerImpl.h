@@ -41,25 +41,43 @@ namespace ops
 		}
 		virtual void start(__int64 timeout) 
 		{
-			if(deadlineTimer.expires_from_now(boost::posix_time::milliseconds(timeout)) > 0)
+			//	if(deadlineTimer.expires_from_now(boost::posix_time::milliseconds(timeout)) > 0)
+			//	{
+			//		//Timer was canceled
+			//		std::cout << "cancelling " << timeout << std::endl;
+			//		deadlineTimer.async_wait(boost::bind(&BoostDeadlineTimerImpl::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
+			//		isStarted = true;
+			//	}
+			//	else
+			//	{
+			//std::cout << "expired" << std::endl;
+			deadlineTimer.cancel();
+			deadlineTimer.expires_from_now(boost::posix_time::milliseconds(timeout));
+			deadlineTimer.async_wait(boost::bind(&BoostDeadlineTimerImpl::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
+			/*
+			}/*
+			/*if(!isStarted)
 			{
-				//TODO: Error handling?
-			}
-			if(!isStarted)
-			{
-				deadlineTimer.async_wait(boost::bind(&BoostDeadlineTimerImpl::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
-				isStarted = true;
-			}
+			deadlineTimer.
+			deadlineTimer.async_wait(boost::bind(&BoostDeadlineTimerImpl::asynchHandleDeadlineTimeout, this, boost::asio::placeholders::error));
+			isStarted = true;
+			}*/
 		}
 		void asynchHandleDeadlineTimeout(const boost::system::error_code& e)
 		{
-			notifyNewEvent(0);
-			isStarted = false;
+			if (e != boost::asio::error::operation_aborted)
+			{
+				// Timer was not cancelled, take necessary action.
+				notifyNewEvent(0);
+				isStarted = false;
+			}
+
+
 
 		}
 		~BoostDeadlineTimerImpl()
 		{
-		
+
 		}
 	};
 }
