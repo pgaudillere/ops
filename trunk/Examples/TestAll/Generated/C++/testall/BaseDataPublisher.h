@@ -15,8 +15,8 @@ class BaseDataPublisher : public ops::Publisher
 {
     
 public:
-    BaseDataPublisher(ops::Topic<BaseData> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    BaseDataPublisher(ops::Topic<> t)
+        : ops::Publisher(t)
     {
 
 

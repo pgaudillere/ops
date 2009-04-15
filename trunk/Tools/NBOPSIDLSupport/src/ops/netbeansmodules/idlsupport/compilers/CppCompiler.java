@@ -406,7 +406,7 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
             {
                 if(!field.isArray())
                 {
-                    ret += tab(2) + "delete " + field.getName() + ";" + endl();
+                    ret += tab(2) + "if(" + field.getName() + ") delete " + field.getName() + ";" + endl();
                 }
                 else
                 {

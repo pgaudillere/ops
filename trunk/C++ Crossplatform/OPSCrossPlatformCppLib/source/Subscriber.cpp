@@ -14,7 +14,8 @@ namespace ops
 		firstDataReceived(false)//,
 		//deadlineTimer(*Participant::getIOService())		
     {
-		//deadlineTimer = DeadlineTimer::create();
+		deadlineTimer = DeadlineTimer::create();
+		deadlineTimer->addListener(this);
         filterQoSPolicyMutex = CreateMutex(NULL, false, NULL);
         newDataEvent = CreateEvent(NULL, true, false, NULL);
 		timeLastData = TimeHelper::currentTimeMillis();
@@ -33,6 +34,7 @@ namespace ops
     {
 		
     	topicHandler->addListener(this);
+		deadlineTimer->start(deadlineTimeout);
 		//cancelDeadlineTimeouts();
 		//registerForDeadlineTimeouts();
 		
@@ -57,6 +59,8 @@ namespace ops
                 timeLastDataForTimeBase = TimeHelper::currentTimeMillis();
                 timeLastData = TimeHelper::currentTimeMillis();
                 setDeadlineMissed(false);
+
+				deadlineTimer->start(deadlineTimeout);
 				
 				//cancelDeadlineTimeouts();
 				//registerForDeadlineTimeouts();
@@ -234,7 +238,8 @@ namespace ops
 	//}
 	void Subscriber::onNewEvent(Notifier<int>* sender, int message)
 	{
-		//deadlineMissedEvent.notifyDeadlineMissed();
+		deadlineMissedEvent.notifyDeadlineMissed();
+		deadlineTimer->start(deadlineTimeout);
 		//cancelDeadlineTimeouts();
 	}
 

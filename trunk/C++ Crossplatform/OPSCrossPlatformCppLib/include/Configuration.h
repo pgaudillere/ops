@@ -12,6 +12,11 @@ namespace ops
 		static Configuration* getConfiguration();
 		virtual std::vector<Topic<>* > getTopics() = 0;
 
+		///throws ops::NoSuchTopicException.
+		virtual Topic<> getTopic(std::string name) = 0;
+
+		virtual bool existsTopic(std::string name) = 0;
+
 	};
 }
 

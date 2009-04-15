@@ -10,7 +10,6 @@
 
 __imports
 
-//Nested namespaces opener.
 __packageDeclaration
 
 __classComment
@@ -29,18 +28,22 @@ __constructorHead
 __constructorBody
 
     }
-    virtual ~__className(void)
-    {
-__destructorBody
-    }
+
+    ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
+    ///instance of this class to a format dictated by the implementation of the ArchiverInout.
     void serialize(ops::ArchiverInOut* archive)
     {
 __serialize
     }
+
+    ///Destructor: Note that all aggregated data and vectors are completely deleted.
+    virtual ~__className(void)
+    {
+__destructorBody
+    }
     
 };
 
-//Close nested namespace
 __packageCloser
 
 #endif

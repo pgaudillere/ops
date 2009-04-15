@@ -15,8 +15,8 @@ class BaseDataSubscriber : public ops::Subscriber
 {
 
 public:
-    BaseDataSubscriber(ops::Topic<BaseData> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    BaseDataSubscriber(ops::Topic<> t)
+        : ops::Subscriber(t)
     {
 
     }

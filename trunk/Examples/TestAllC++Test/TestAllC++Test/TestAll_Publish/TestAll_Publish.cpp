@@ -14,14 +14,11 @@ int main(int argc, char* args)
 	using namespace testall;
 	using namespace ops;
 
-	ops::Configuration* config = ops::Configuration::getConfiguration();
-
-
 	//Add support for our types from TestAll IDL project.
 	ops::OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
 
-	//Create a topic. NOTE, this is a temporary solution to get topics before OPS4 is completely released.
-	ops::Topic<ChildData> topic("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
+	ops::Topic<> topic = Configuration::getConfiguration()->getTopic("ChildTopic");  //("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
+
 
 	//Create a publisher on that topic
 	ChildDataPublisher pub(topic);
@@ -103,7 +100,7 @@ int main(int argc, char* args)
 		pub.write(&data);
 		std::cout << "Writing " << data.i <<  std::endl;
 		data.i++;
-		Sleep(20);
+		Sleep(50);
 	}
 
 	return 0;

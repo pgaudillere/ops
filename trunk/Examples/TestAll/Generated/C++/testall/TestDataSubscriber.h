@@ -15,8 +15,8 @@ class TestDataSubscriber : public ops::Subscriber
 {
 
 public:
-    TestDataSubscriber(ops::Topic<TestData> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    TestDataSubscriber(ops::Topic<> t)
+        : ops::Subscriber(t)
     {
 
     }

@@ -15,8 +15,8 @@ class TestDataPublisher : public ops::Publisher
 {
     
 public:
-    TestDataPublisher(ops::Topic<TestData> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    TestDataPublisher(ops::Topic<> t)
+        : ops::Publisher(t)
     {
 
 

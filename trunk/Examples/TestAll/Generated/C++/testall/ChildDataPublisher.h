@@ -15,8 +15,8 @@ class ChildDataPublisher : public ops::Publisher
 {
     
 public:
-    ChildDataPublisher(ops::Topic<ChildData> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    ChildDataPublisher(ops::Topic<> t)
+        : ops::Publisher(t)
     {
 
 

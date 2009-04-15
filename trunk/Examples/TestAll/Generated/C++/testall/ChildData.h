@@ -14,7 +14,6 @@
 #include "TestData.h"
 
 
-//Nested namespaces opener.
 namespace testall {
 
 
@@ -52,13 +51,9 @@ public:
 
 
     }
-    virtual ~ChildData(void)
-    {
-		delete test2;
-		for(unsigned int __i = 0; __i < test2s.size(); __i++){ if(test2s[__i]) delete test2s[__i];}
-		for(unsigned int __i = 0; __i < test2s2.size(); __i++){ if(test2s2[__i]) delete test2s2[__i];}
 
-    }
+    ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
+    ///instance of this class to a format dictated by the implementation of the ArchiverInout.
     void serialize(ops::ArchiverInOut* archive)
     {
 		BaseData::serialize(archive);
@@ -81,10 +76,18 @@ public:
 		archive->inout<TestData*>(std::string("test2s2"), test2s2);
 
     }
+
+    ///Destructor: Note that all aggregated data and vectors are completely deleted.
+    virtual ~ChildData(void)
+    {
+		if(test2) delete test2;
+		for(unsigned int __i = 0; __i < test2s.size(); __i++){ if(test2s[__i]) delete test2s[__i];}
+		for(unsigned int __i = 0; __i < test2s2.size(); __i++){ if(test2s2[__i]) delete test2s2[__i];}
+
+    }
     
 };
 
-//Close nested namespace
 }
 
 
