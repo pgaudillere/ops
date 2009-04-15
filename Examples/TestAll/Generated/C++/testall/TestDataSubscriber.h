@@ -35,13 +35,13 @@ public:
         hasUnreadData = false;
         return narrowedData;
     }
-
+/*
     ops::OPSObject* getDataReference()
     {
         hasUnreadData = false;
         return &narrowedData;
     }
-
+*/
     ~TestDataSubscriber(void)
     {
 

@@ -25,8 +25,7 @@ public:
 
     TestData()
         : ops::OPSObject()
-		,value(0)
-
+		, value(0)
     {
         OPSObject::appendType(std::string("testall.TestData"));
 
@@ -39,8 +38,8 @@ public:
     void serialize(ops::ArchiverInOut* archive)
     {
 		ops::OPSObject::serialize(archive);
-		text = archive->inout(std::string("text"), text);
-		value = archive->inout(std::string("value"), value);
+		archive->inout(std::string("text"), text);
+		archive->inout(std::string("value"), value);
 
     }
     

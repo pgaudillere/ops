@@ -12,10 +12,6 @@ public class TestAllTypeFactory implements SerializableFactory
 {
     public Serializable create(String type)
     {
-		if(type.equals("testall.TestData"))
-		{
-			return new testall.TestData();
-		}
 		if(type.equals("testall.ChildData"))
 		{
 			return new testall.ChildData();
@@ -23,6 +19,10 @@ public class TestAllTypeFactory implements SerializableFactory
 		if(type.equals("testall.BaseData"))
 		{
 			return new testall.BaseData();
+		}
+		if(type.equals("testall.TestData"))
+		{
+			return new testall.TestData();
 		}
 		return null;
 
