@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : ops_config.xml
+    Created on : den 15 april 2009, 17:21
+    Author     : angr
+    Description:
+        Purpose of the document follows.
+-->
+
+<ops>
+    <config type = "XMLConfiguration">
+        <topics>
+            <element type = "Topic">
+                <name>FooTopic</name>
+                <port>9999</port>
+                <address>236.7.8.9</address>
+                <dataType>foo.FooData</dataType>
+            </element>
+            <!-- TODO: Add more topics here... -->
+        </topics>
+
+    </config>
+</ops>
