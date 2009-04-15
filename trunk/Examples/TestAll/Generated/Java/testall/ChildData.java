@@ -14,6 +14,7 @@ public class ChildData extends BaseData
 	public long l;
 	public float f;
 	public double d;
+	////*This string shall hold the word World*/
 	public String s = "";
 	public TestData test2 = new TestData();
 	public java.util.Vector<Boolean> bos = new java.util.Vector<Boolean>();
@@ -24,6 +25,7 @@ public class ChildData extends BaseData
 	public java.util.Vector<Double> ds = new java.util.Vector<Double>();
 	public java.util.Vector<String> ss = new java.util.Vector<String>();
 	public java.util.Vector<TestData> test2s = new java.util.Vector<TestData>();
+	public java.util.Vector<TestData> test2s2 = new java.util.Vector<TestData>();
 
 
     public ChildData()
@@ -51,6 +53,7 @@ public class ChildData extends BaseData
 		ds = (java.util.Vector<Double>) archive.inoutDoubleList("ds", ds);
 		ss = (java.util.Vector<String>) archive.inoutStringList("ss", ss);
 		test2s = (java.util.Vector<TestData>) archive.inoutSerializableList("test2s", test2s);
+		test2s2 = (java.util.Vector<TestData>) archive.inoutSerializableList("test2s2", test2s2);
 
     }
 }

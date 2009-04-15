@@ -10,6 +10,7 @@ class ChildData extends BaseData
     long l;
     float f;
     double d;
+    /*This string shall hold the word World*/
     string s;
     TestData test2;
 
@@ -21,4 +22,5 @@ class ChildData extends BaseData
     double[] ds;
     string[] ss;
     TestData[] test2s;
+    TestData[] test2s2;
 }

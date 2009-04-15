@@ -24,7 +24,7 @@ public:
 
     BaseData()
         : ops::OPSObject()
-
+		
     {
         OPSObject::appendType(std::string("testall.BaseData"));
 
@@ -37,7 +37,7 @@ public:
     void serialize(ops::ArchiverInOut* archive)
     {
 		ops::OPSObject::serialize(archive);
-		baseText = archive->inout(std::string("baseText"), baseText);
+		archive->inout(std::string("baseText"), baseText);
 
     }
     
