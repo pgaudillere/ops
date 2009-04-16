@@ -6,18 +6,18 @@ namespace ops
 	//static
 	std::map<std::string, Participant*> Participant::instances;
 
-	Participant* getInstance(std::string domainID)
+	Participant* Participant::getInstance(std::string domainID)
 	{
 		return getInstance(domainID, "DEFAULT_PARTICIPANT");
 	}
-	Participant* getInstance(std::string domainID, std::string participantID)
+	Participant* Participant::getInstance(std::string domainID, std::string participantID)
 	{
 		if(instances.find(participantID) == instances.end())
 		{
-			Participant* newInst = new Participant();
-			bool configOK = newInst->findConfig(domainID);
+			Participant* newInst = new Participant(domainID);
+			Domain* tDomain = newInst->config->getDomain(domainID);
 
-			if(configOK)
+			if(tDomain != NULL)
 			{
 				instances[participantID] = newInst;
 			}
@@ -29,7 +29,7 @@ namespace ops
 		return instances[participantID];
 	}
 
-	Participant::Participant()
+	Participant::Participant(std::string domainID_): domainID(domainID_)
 	{
 		config = OPSConfig::getConfig();
 	}
@@ -40,16 +40,14 @@ namespace ops
 
 		
 
-	void addTypeSupport(ops::SerializableFactory* typeSupport)
+	void Participant::addTypeSupport(ops::SerializableFactory* typeSupport)
 	{
-
-
+		OPSObjectFactory::getInstance()->add(typeSupport);
 	}
 
-	Topic createTopic(std::string name)
+	Topic Participant::createTopic(std::string name)
 	{
-
-
+		return config->getDomain(domainID)->getTopic(name);
 	}
 
 

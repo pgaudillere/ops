@@ -216,6 +216,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\OPSObjectFactoryImpl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Participant.cpp"
 				>
 			</File>
@@ -387,6 +391,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\OPSConfig.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\OPSConstants.h"
 				>
 			</File>
 			<File

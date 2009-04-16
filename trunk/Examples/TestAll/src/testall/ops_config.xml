@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
     Document   : ops_config.xml
     Created on : den 15 april 2009, 17:21
@@ -7,15 +6,14 @@
     Description:
         Purpose of the document follows.
 -->
-
 <root>
     <ops_config type = "DefaultOPSConfigImpl">
         <domains>
 
             <!-- First multicast domain -->
-            <element type = "MulticastDomainConfig">
+            <element type = "MulticastDomain">
                 <domainID>FooDomain</domainID>
-                <domainAddress>234.5.6.8</address>
+                <domainAddress>234.5.6.8</domainAddress>
                 <topics>
                     <element type = "Topic">
                         <name>FooTopic</name>
@@ -26,39 +24,6 @@
                 </topics>
             </element>
 
-
-
-            <!-- Second multicast domain -->
-            <element type = "MulticastDomainConfig">
-                <domainID>FooDomain2</domainID>
-                <domainAddress>234.5.6.8</address>
-                <basePort>6933</basePort>
-                <topics>
-                    <element type = "MulticastTopic">
-                        <name>FooTopic</name>
-                        <port>1</port>
-                        <address>236.7.8.9</address>
-                        <dataType>foo.FooData</dataType>
-                    </element>
-                    <!-- TODO: Add more topics here... -->
-                </topics>
-            </element>
-
-
-            <!-- Other domain -->
-            <element type = "TCPDomain">
-                <domainID>FooDomain3</domainID>
-                <serverAddress>168.5.6.7</serverAddress>
-                <registrationPort>4545</registrationPort>
-                <topics>
-                    <element type = "Topic">
-                        <name>FooTopic</name>
-                        <port>9999</port>
-                        <dataType>foo.FooData</dataType>
-                    </element>
-                    <!-- TODO: Add more topics here... -->
-                </topics>
-            </element>
         </domains>
     </ops_config>
 </root>

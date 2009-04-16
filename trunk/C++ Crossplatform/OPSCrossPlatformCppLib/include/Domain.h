@@ -21,12 +21,17 @@
 #define	ops_Domain_h
 
 #include "OPSObject.h"
+#include "NoSuchTopicException.h"
 
 namespace ops
 {
-	class Domain : OPSObject
+	class Domain : public OPSObject
 	{
-		std::string domainID;
+	public:
+		Domain()
+		{
+			appendType(std::string("Domain"));
+		}
 
 		std::vector<Topic* > getTopics()
 		{
@@ -55,22 +60,22 @@ namespace ops
 			}
 			return false;
 		}
-		
-	public:
-		Domain()
+		std::string getDomainID()
 		{
-			appendType(std::string("Domain"));
+			return domainID;
 		}
+
 		void serialize(ArchiverInOut* archiver)
 		{
 			OPSObject::serialize(archiver);
-			archiver->inout(std::string("domainID", domainID);
+			archiver->inout(std::string("domainID"), domainID);
 			archiver->inout(std::string("topics"), topics);
 		}
 		virtual ~Domain(){}
 
 	private:
 		std::vector<Topic* > topics;
+		std::string domainID;
 		
 	};
 

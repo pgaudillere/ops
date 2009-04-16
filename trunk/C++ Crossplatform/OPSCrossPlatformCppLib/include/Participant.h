@@ -24,6 +24,11 @@
 #include <string>
 //#include "SingleThreadPool.h"
 #include "IOService.h"
+#include "SerializableFactory.h"
+#include <map>
+#include "Topic.h"
+#include "OPSConfig.h"
+#include "OPSObjectFactory.h"
 
 
 namespace ops
@@ -41,25 +46,16 @@ public:
 
 	Topic createTopic(std::string name);
 
-	//Subscriber* createSubscriber(Topic topic);
-	//Subscriber* createSubscriber(std::string topicName);
 
-	//Publisher* createPublisher(Topic topic);
-	//Publisher* createPublisher(std::string topicName);
-
-
-
-
-
-	static Participant* getParticipant()
-	{
-		static Participant* theParticipant = NULL;
-		if(theParticipant == NULL)
-		{
-			theParticipant = new Participant();
-		}
-		return theParticipant;
-	}
+	//static Participant* getParticipant()
+	//{
+	//	static Participant* theParticipant = NULL;
+	//	if(theParticipant == NULL)
+	//	{
+	//		theParticipant = new Participant();
+	//	}
+	//	return theParticipant;
+	//}
 
 	static IOService* getIOService()
 	{
@@ -73,15 +69,19 @@ public:
 
 	//const static int PACKET_MAX_SIZE = 65000;
 	//const static int MESSAGE_MAX_SIZE = 2600000;
-	const static int PACKET_MAX_SIZE = 60000;
-	const static int MESSAGE_MAX_SIZE = 2400000;
+	//const static int PACKET_MAX_SIZE = 60000;
+	//const static int MESSAGE_MAX_SIZE = 2400000;
 
 private:
 
-	Participant();
+	Participant(std::string domainID_);
 	~Participant();
 
 	OPSConfig* config;
+
+	std::string domainID;
+
+	//OPSObjectFactory* objectFactory;
 
 	
 
