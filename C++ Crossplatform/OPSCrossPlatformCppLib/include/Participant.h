@@ -31,25 +31,25 @@ namespace ops
 class Participant
 {
 public:
-	//const static int PACKET_MAX_SIZE = 65000;
-	//const static int MESSAGE_MAX_SIZE = 2600000;
-	const static int PACKET_MAX_SIZE = 60000;
-	const static int MESSAGE_MAX_SIZE = 2400000;
 	
-	
-	/*static ThreadPool* getReceiveThreadPool()
-	{
-		static SingleThreadPool* receiveThreadPool = NULL;
-		
-		if(receiveThreadPool == NULL)
-		{
-			receiveThreadPool = new SingleThreadPool();
-			receiveThreadPool->start();
-			
-		}
+	///By Singelton, one Participant per participantID
+	static std::map<std::string, Participant*> instances;
+	static Participant* getInstance(std::string domainID);
+	static Participant* getInstance(std::string domainID, std::string participantID);
 
-		return receiveThreadPool;
-	}*/
+	void addTypeSupport(ops::SerializableFactory* typeSupport);
+
+	Topic createTopic(std::string name);
+
+	//Subscriber* createSubscriber(Topic topic);
+	//Subscriber* createSubscriber(std::string topicName);
+
+	//Publisher* createPublisher(Topic topic);
+	//Publisher* createPublisher(std::string topicName);
+
+
+
+
 
 	static Participant* getParticipant()
 	{
@@ -70,7 +70,19 @@ public:
 		}
 		return ioService;
 	}
+
+	//const static int PACKET_MAX_SIZE = 65000;
+	//const static int MESSAGE_MAX_SIZE = 2600000;
+	const static int PACKET_MAX_SIZE = 60000;
+	const static int MESSAGE_MAX_SIZE = 2400000;
+
 private:
+
+	Participant();
+	~Participant();
+
+	OPSConfig* config;
+
 	
 
 };

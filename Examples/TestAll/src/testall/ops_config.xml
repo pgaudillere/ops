@@ -8,17 +8,57 @@
         Purpose of the document follows.
 -->
 
-<ops>
-    <config type = "XMLConfiguration">
-        <topics>
-            <element type = "Topic">
-                <name>FooTopic</name>
-                <port>9999</port>
-                <address>236.7.8.9</address>
-                <dataType>foo.FooData</dataType>
-            </element>
-            <!-- TODO: Add more topics here... -->
-        </topics>
+<root>
+    <ops_config type = "DefaultOPSConfigImpl">
+        <domains>
 
-    </config>
-</ops>
+            <!-- First multicast domain -->
+            <element type = "MulticastDomainConfig">
+                <domainID>FooDomain</domainID>
+                <domainAddress>234.5.6.8</address>
+                <topics>
+                    <element type = "Topic">
+                        <name>FooTopic</name>
+                        <port>6686</port>
+                        <dataType>foo.FooData</dataType>
+                    </element>
+                    <!-- TODO: Add more topics here... -->
+                </topics>
+            </element>
+
+
+
+            <!-- Second multicast domain -->
+            <element type = "MulticastDomainConfig">
+                <domainID>FooDomain2</domainID>
+                <domainAddress>234.5.6.8</address>
+                <basePort>6933</basePort>
+                <topics>
+                    <element type = "MulticastTopic">
+                        <name>FooTopic</name>
+                        <port>1</port>
+                        <address>236.7.8.9</address>
+                        <dataType>foo.FooData</dataType>
+                    </element>
+                    <!-- TODO: Add more topics here... -->
+                </topics>
+            </element>
+
+
+            <!-- Other domain -->
+            <element type = "TCPDomain">
+                <domainID>FooDomain3</domainID>
+                <serverAddress>168.5.6.7</serverAddress>
+                <registrationPort>4545</registrationPort>
+                <topics>
+                    <element type = "Topic">
+                        <name>FooTopic</name>
+                        <port>9999</port>
+                        <dataType>foo.FooData</dataType>
+                    </element>
+                    <!-- TODO: Add more topics here... -->
+                </topics>
+            </element>
+        </domains>
+    </ops_config>
+</root>

@@ -17,13 +17,31 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef ops_MulticastDomain_h
+#define	ops_MulticastDomain_h
 
-#include "Topic.h"
-#include "DataNotifier.h"
-#include "DataListener.h"
-#include "KeyFilterQoSPolicy.h"
-#include "DeadlineMissedListener.h"
-#include "Participant.h"
-#include "OPSObjectFactory.h"
-#include "OPSConfig.h"
-#include "NoSuchTopicException.h"
+#include "Domain.h"
+
+namespace ops
+{
+	class MulticastDomain : public Domain
+	{
+		std::string domainAddress;
+	public:
+		
+		
+		void serialize(ArchiverInOut* archiver)
+		{
+			Domain::serialize(archiver);
+			archiver->inout(std::string("domainAddress", domainAddress);
+		}
+		
+		virtual ~Domain(){}
+
+		
+	};
+
+
+}
+
+#endif

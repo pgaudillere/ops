@@ -15,7 +15,7 @@ class ChildDataPublisher : public ops::Publisher
 {
     
 public:
-    ChildDataPublisher(ops::Topic<> t)
+    ChildDataPublisher(ops::Topic t)
         : ops::Publisher(t)
     {
 

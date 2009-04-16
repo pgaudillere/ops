@@ -15,7 +15,7 @@ class ChildDataSubscriber : public ops::Subscriber
 {
 
 public:
-    ChildDataSubscriber(ops::Topic<> t)
+    ChildDataSubscriber(ops::Topic t)
         : ops::Subscriber(t)
     {
 
