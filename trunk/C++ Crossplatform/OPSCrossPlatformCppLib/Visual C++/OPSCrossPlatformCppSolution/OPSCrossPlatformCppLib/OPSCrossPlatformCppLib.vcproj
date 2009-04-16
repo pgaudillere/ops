@@ -168,10 +168,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\source\Configuration.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\DataNotifier.cpp"
 				>
 			</File>
@@ -180,7 +176,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\DefaultOPSConfigImpl.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\IOService.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\MulticastDomain.h"
 				>
 			</File>
 			<File
@@ -197,6 +201,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\OPSArchiverOut.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\OPSConfig.cpp"
 				>
 			</File>
 			<File
@@ -267,10 +275,6 @@
 				RelativePath="..\..\..\source\XMLArchiverOut.cpp"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\source\XMLConfiguration.h"
-				>
-			</File>
 			<Filter
 				Name="boost"
 				>
@@ -314,10 +318,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\Configuration.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\DataListener.h"
 				>
 			</File>
@@ -335,6 +335,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\Deserializable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Domain.h"
 				>
 			</File>
 			<File
@@ -379,6 +383,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\OPSArchiverOut.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\OPSConfig.h"
 				>
 			</File>
 			<File

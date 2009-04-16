@@ -4,7 +4,7 @@
 
 namespace ops
 {
-	Subscriber::Subscriber(Topic<> t) :
+	Subscriber::Subscriber(Topic t) :
     	topic(t),
         hasUnreadData(false),
         deadlineTimeout(TimeHelper::infinite),
@@ -79,7 +79,7 @@ namespace ops
         SafeLock lock(this);
      	this->data = data;
     }
-    Topic<> Subscriber::getTopic()
+    Topic Subscriber::getTopic()
     {
     	return topic;
     }

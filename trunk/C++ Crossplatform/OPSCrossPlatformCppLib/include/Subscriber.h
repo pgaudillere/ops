@@ -44,7 +44,7 @@ class Subscriber : public DataNotifier, public Lockable, public Listener<OPSMess
 {
 
 public:
-	Subscriber(Topic<> t);
+	Subscriber(Topic t);
     virtual ~Subscriber();
 
     void start();
@@ -59,7 +59,7 @@ public:
     __int64 getTimeBasedFilterQoS();
     void setTimeBasedFilterQoS(__int64 timeBaseMinSeparationMillis);
 
-    Topic<> getTopic();
+    Topic getTopic();
 
     bool waitForNewData(DWORD timeout);
 
@@ -102,7 +102,7 @@ private:
 
 	TopicHandler* topicHandler;
 
-    Topic<> topic;
+    Topic topic;
 
     std::string name;
 

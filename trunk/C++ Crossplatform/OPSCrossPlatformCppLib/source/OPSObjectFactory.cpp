@@ -1,7 +1,8 @@
 #include "OPSObjectFactory.h"
 
 #include "Topic.h"
-#include "XMLConfiguration.h"
+#include "DefaultOPSConfigImpl.h"
+#include "MulticastDomain.h"
 
 #include <boost/algorithm/string/split.hpp> 
 #include <boost/algorithm/string/Classification.hpp>
@@ -21,11 +22,15 @@ public:
         }
 		if(type == ("Topic"))
         {
-            return new Topic<>();
+            return new Topic();
         }
-		if(type == ("XMLConfiguration"))
+		if(type == ("DefaultOPSConfigImpl"))
         {
-            return new XMLConfiguration();
+            return new DefaultOPSConfigImpl();
+        }
+		if(type == ("MulticastDomain"))
+        {
+            return new MulticastDomain();
         }
         return NULL;
     }

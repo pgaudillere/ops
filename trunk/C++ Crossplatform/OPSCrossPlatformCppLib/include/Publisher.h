@@ -39,12 +39,12 @@ class Publisher
 {
 public:
 
-	Publisher(Topic<> t): topic(t),name(""), key(""),priority(0), currentPublicationID(0), memMap(Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
+	Publisher(Topic t): topic(t),name(""), key(""),priority(0), currentPublicationID(0), memMap(Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
 	{
 		udpSender = Sender::create();
 		//bytes = new char[Participant::PACKET_MAX_SIZE];		
 		message.setPublisherName(name);
-		message.setTopicName(topic.GetName());
+		message.setTopicName(topic.getName());
 	}
     virtual ~Publisher()
 	{
@@ -52,7 +52,7 @@ public:
 		//delete bytes;
 	}
 
-    Topic<> getTopic()
+    Topic getTopic()
 	{
 		return this->topic;
 	}
@@ -105,7 +105,7 @@ protected:
 		for(int i = 0; i < buf.getNrOfSegments(); i++)
 		{
 			int segSize = buf.getSegmentSize(i);
-			udpSender->sendTo(buf.getSegment(i), segSize, topic.GetDomainAddress(), topic.GetPort());
+			udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
 			//TimeHelper::sleep(0);
 		}
 		
@@ -118,7 +118,7 @@ protected:
 
 	}
 
-    void setTopic(Topic<> topic)
+    void setTopic(Topic topic)
 	{
 		this->topic = topic;
 	}
@@ -135,7 +135,7 @@ private:
 
 	OPSMessage message;
  
-    Topic<> topic;
+    Topic topic;
 
     __int64 currentPublicationID;
     std::string name;

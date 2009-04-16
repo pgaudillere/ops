@@ -24,7 +24,7 @@ public:
 		//ops::Topic<ChildData> topic("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
 
 		//Create a topic from configuration.
-		Topic<> topic = Configuration::getConfiguration()->getTopic("ChildTopic");
+		Topic topic = OPSConfig::getConfig()->getTopic("ChildTopic");
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);

@@ -44,13 +44,13 @@ namespace ops
 	{
 	public:
 		///By Singelton, one TopicHandler per Topic (Name)
-		static TopicHandler* getTopicHandler(Topic<> top)
+		static TopicHandler* getTopicHandler(Topic top)
 		{
-			if(instances.find(top.GetName()) == instances.end())
+			if(instances.find(top.getName()) == instances.end())
 			{
-				instances[top.GetName()] = new TopicHandler(top);
+				instances[top.getName()] = new TopicHandler(top);
 			}
-			return instances[top.GetName()];
+			return instances[top.getName()];
 		}
 		///Destructor
 		virtual ~TopicHandler()
@@ -69,9 +69,6 @@ namespace ops
 			//Create a temporay map and buf to peek data before putting it in to memMap
 			MemoryMap tMap(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 			ByteBuffer tBuf(&tMap);
-
-			//Things are starting to look OK, we need deep copying or other delete strategy.
-			//Next thing is to increase message size considerable....
 
 			//Check protocol
 			if(tBuf.checkProtocol())
@@ -131,15 +128,15 @@ namespace ops
 		}
 
 	private:
-		///By Singelton, one TopicHandler per Topic (Name)
+		///By Singelton, one TopicHandler per Topic (name)
 		static std::map<std::string, TopicHandler*> instances;
 		
 		///Constructor is private, use static getTopicHandler(Topic)
-		TopicHandler(Topic<> top) 
+		TopicHandler(Topic top) 
 			: expectedSegment(0),
-			  memMap(Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
+			memMap(top.getSampleMaxSize() / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
 		{
-			receiver = Receiver::create(top.GetDomainAddress(), top.GetPort());
+			receiver = Receiver::create(top.getDomainAddress(), top.getPort());
 			receiver->addListener(this);
 			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 			

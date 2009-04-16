@@ -23,10 +23,11 @@
 
 #include <string>
 #include "OPSObject.h"
+#include "Participant.h"
 
 
 namespace ops
-{   template<class DataType = OPSObject>
+{   /*template<class DataType = OPSObject>*/
 	class Topic : public OPSObject
     {
     private:
@@ -39,7 +40,7 @@ namespace ops
         std::string domainAddress;
 		std::string localInterface;
 		bool reliable;
-		int messageMaxSize;
+		int sampleMaxSize;
 		__int64 deadline;
 		__int64 minSeparation;
         
@@ -49,7 +50,7 @@ namespace ops
 			  typeID(typeIDd), 
 			  domainAddress(domainAddresss),
 			  reliable(false),
-			  messageMaxSize(64000),
+			  sampleMaxSize(Participant::PACKET_MAX_SIZE),
 			  deadline(0x0fffffffffffffff),
 			  minSeparation(0)
         {
@@ -62,7 +63,7 @@ namespace ops
 			  typeID(""), 
 			  domainAddress(""),
 			  reliable(false),
-			  messageMaxSize(64000),
+			  sampleMaxSize(Participant::PACKET_MAX_SIZE),
 			  deadline(0x0fffffffffffffff),
 			  minSeparation(0)
         {
@@ -71,19 +72,34 @@ namespace ops
         }
 
         
-        std::string GetName()
+        std::string getName()
         {
             return name;
         }
-        std::string GetTypeID()
+        std::string getTypeID()
         {
             return typeID;
         }
-        std::string GetDomainAddress()
+        std::string getDomainAddress()
         {
             return domainAddress;
         }
-        int GetPort()
+		int getSampleMaxSize()
+        {
+            return sampleMaxSize;
+        }
+		void setSampleMaxSize(int size)
+        {
+			if(size < Participant::PACKET_MAX_SIZE)
+			{
+				sampleMaxSize = Participant::PACKET_MAX_SIZE;
+			}
+			else
+			{
+				sampleMaxSize = size;
+			}
+        }
+        int getPort()
         {
             return port;
         }
@@ -95,7 +111,11 @@ namespace ops
 			archiver->inout(std::string("dataType"), typeID);
 			archiver->inout(std::string("port"), port);		
 			archiver->inout(std::string("address"), domainAddress);
-			archiver->inout(std::string("sampleMaxSize"), messageMaxSize);
+			
+			//Limit this value 
+			int tSampleMaxSize = getSampleMaxSize();
+			archiver->inout(std::string("sampleMaxSize"), tSampleMaxSize);
+			setSampleMaxSize(tSampleMaxSize);
 		}
         
         

@@ -14,7 +14,7 @@ class ChildData extends BaseData
     string s;
     TestData test2;
 
-    boolean[] bos;
+boolean[] bos;
     byte[] bs;
     int[] is;
     long[] ls;

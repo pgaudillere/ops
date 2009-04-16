@@ -1,31 +1,31 @@
-#ifndef ops_XMLConfiguration_h
-#define ops_XMLConfiguration_h
+#ifndef ops_DefaultOPSConfigImpl_h
+#define ops_DefaultOPSConfigImpl_h
 
 #include <vector>
 #include "Topic.h"
-#include "Configuration.h"
+#include "OPSConfig.h"
 #include "NoSuchTopicException.h"
 
 namespace ops
 {
-	class XMLConfiguration : public Configuration 
+	class DefaultOPSConfigImpl : public OPSConfig 
 	{
 
 	public:
-		XMLConfiguration()
+		DefaultOPSConfigImpl()
 		{
-			appendType(std::string("XMLConfiguration"));
-
+			appendType(std::string("DefaultOPSConfigImpl"));
 		}
-		std::vector<Topic<>* > getTopics()
+		
+		std::vector<Topic* > getTopics()
 		{
 			return topics;
 		}
-		Topic<> getTopic(std::string name)
+		Topic getTopic(std::string name)
 		{
 			for(unsigned int i = 0 ; i < topics.size(); i++)
 			{
-				if(topics[i]->GetName() == name)
+				if(topics[i]->getName() == name)
 				{
 					return *topics[i];
 				}
@@ -37,7 +37,7 @@ namespace ops
 		{
 			for(unsigned int i = 0 ; i < topics.size(); i++)
 			{
-				if(topics[i]->GetName() == name)
+				if(topics[i]->getName() == name)
 				{
 					return true;
 				}
@@ -51,8 +51,16 @@ namespace ops
 			archiver->inout(std::string("topics"), topics);
 		}
 
+		~DefaultOPSConfigImpl()
+		{
+			for(unsigned int i = 0; i < topics.size(); i++)
+			{
+				if(topics[i]) delete topics[i];
+			}
+		}
+
 	private:
-		std::vector<Topic<>* > topics;
+		std::vector<Topic* > topics;
 
 	};
 }
