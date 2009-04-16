@@ -24,11 +24,15 @@ public:
 		//ops::Topic<ChildData> topic("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
 
 		//Create a topic from configuration.
-		Topic topic = OPSConfig::getConfig()->getTopic("ChildTopic");
+		ops::Participant* participant = Participant::getInstance("TestAllDomain");
+		participant->addTypeSupport(new TestAll::TestAllTypeFactory());
+
+		//I godtycklig component
+		Topic topic = participant->createTopic("ChildTopic");
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
-		sub->setDeadlineQoS(10);
+		sub->setDeadlineQoS(1000);
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->start();

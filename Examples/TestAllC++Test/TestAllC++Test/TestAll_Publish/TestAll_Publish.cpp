@@ -1,10 +1,11 @@
 // TestAll_Publish.cpp : Defines the entry point for the console application.
 //
+#include "testall/ChildDataPublisher.h"
+#include "testall/TestAllTypeFactory.h"
 #include <ops.h>
 #include <XMLArchiverOut.h>
 #include <XMLArchiverIn.h>
-#include "testall/ChildDataPublisher.h"
-#include "testall/TestAllTypeFactory.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -13,26 +14,14 @@ int main(int argc, char* args)
 	using namespace testall;
 	using namespace ops;
 
-	//i main tråden
-	Participant* partcipant = Participant::getInstance("SarovVehicleDomain");
-	participant->addTypeSupport(TestAll::getTypeSupport());
-		
-	//participant->setLocalInterface("168.124.34.5");
+	ops::Participant* participant = Participant::getInstance("TestAllDomain");
+	participant->addTypeSupport(new TestAll::TestAllTypeFactory());
 
-	//I godtycklig component
-	Topic topic = Participant::getInstance("SarovVehicleDomain")->createTopic("MyTopic");
-	Subscriber* hatt = Participant::getInstance("SarovVehicleDomain")->createSubscriber(topic);
-
-	//Participant::getInstance("SarovVehicleDomain")->deleteSubscriber(hatt);
-
-
-	//Add support for our types from TestAll IDL project.
-	OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
-
-	Topic topic = OPSConfig::getConfig()->getTopic("ChildTopic");  //("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
+	//Create topic, might throw ops::NoSuchTopicException
+	Topic topic = participant->createTopic("ChildTopic");
 
 	//Create a publisher on that topic
-	BaseDataPublisher pub(topic);
+	ChildDataPublisher pub(topic);
 
 	//Create some data to publish
 	ChildData data;

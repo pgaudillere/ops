@@ -29,7 +29,7 @@
 #include "Topic.h"
 #include "ByteBuffer.h"
 #include "OPSArchiverIn.h"
-#include "Participant.h"
+#include "OPSConstants.h"
 #include "Receiver.h"
 #include "OPSMessage.h"
 #include "Notifier.h"
@@ -134,7 +134,7 @@ namespace ops
 		///Constructor is private, use static getTopicHandler(Topic)
 		TopicHandler(Topic top) 
 			: expectedSegment(0),
-			memMap(top.getSampleMaxSize() / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
+			memMap(top.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE)
 		{
 			receiver = Receiver::create(top.getDomainAddress(), top.getPort());
 			receiver->addListener(this);

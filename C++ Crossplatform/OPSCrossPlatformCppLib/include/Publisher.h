@@ -26,7 +26,7 @@
 #include "OPSArchiverOut.h"
 #include "Topic.h"
 #include "Sender.h"
-#include "Participant.h"
+#include "OPSConstants.h"
 #include "TimeHelper.h"
 #include <string>
 #include "MemoryMap.h"
@@ -39,7 +39,7 @@ class Publisher
 {
 public:
 
-	Publisher(Topic t): topic(t),name(""), key(""),priority(0), currentPublicationID(0), memMap(Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE)
+	Publisher(Topic t): topic(t),name(""), key(""),priority(0), currentPublicationID(0), memMap(t.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE)
 	{
 		udpSender = Sender::create();
 		//bytes = new char[Participant::PACKET_MAX_SIZE];		

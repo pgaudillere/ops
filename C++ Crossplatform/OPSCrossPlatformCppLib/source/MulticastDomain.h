@@ -28,15 +28,18 @@ namespace ops
 	{
 		std::string domainAddress;
 	public:
-		
+		MulticastDomain()
+		{
+			appendType(std::string("MulticastDomain"));
+		}
 		
 		void serialize(ArchiverInOut* archiver)
 		{
 			Domain::serialize(archiver);
-			archiver->inout(std::string("domainAddress", domainAddress);
+			archiver->inout(std::string("domainAddress"), domainAddress);
 		}
 		
-		virtual ~Domain(){}
+		virtual ~MulticastDomain(){}
 
 		
 	};

@@ -18,12 +18,12 @@
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef topic_h
-#define topic_h
+#ifndef ops_topic_h
+#define ops_topic_h
 
 #include <string>
 #include "OPSObject.h"
-#include "Participant.h"
+#include "OPSConstants.h"
 
 
 namespace ops
@@ -50,7 +50,7 @@ namespace ops
 			  typeID(typeIDd), 
 			  domainAddress(domainAddresss),
 			  reliable(false),
-			  sampleMaxSize(Participant::PACKET_MAX_SIZE),
+			  sampleMaxSize(OPSConstants::PACKET_MAX_SIZE),
 			  deadline(0x0fffffffffffffff),
 			  minSeparation(0)
         {
@@ -63,7 +63,7 @@ namespace ops
 			  typeID(""), 
 			  domainAddress(""),
 			  reliable(false),
-			  sampleMaxSize(Participant::PACKET_MAX_SIZE),
+			  sampleMaxSize(OPSConstants::PACKET_MAX_SIZE),
 			  deadline(0x0fffffffffffffff),
 			  minSeparation(0)
         {
@@ -90,9 +90,9 @@ namespace ops
         }
 		void setSampleMaxSize(int size)
         {
-			if(size < Participant::PACKET_MAX_SIZE)
+			if(size < OPSConstants::PACKET_MAX_SIZE)
 			{
-				sampleMaxSize = Participant::PACKET_MAX_SIZE;
+				sampleMaxSize = OPSConstants::PACKET_MAX_SIZE;
 			}
 			else
 			{

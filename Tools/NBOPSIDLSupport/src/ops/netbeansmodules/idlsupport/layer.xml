@@ -127,6 +127,14 @@
 
             </file>
         </folder>
+        <folder name="Other">
+            <file name="ops_config.xml" url="ops_config.xml">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="ops.netbeansmodules.idlsupport.Bundle"/>
+                <attr name="template" boolvalue="true"/>
+                <attr name="templateWizardURL" urlvalue="nbresloc:/ops/netbeansmodules/idlsupport/NewOPSConfig.html"/>
+
+            </file>
+        </folder>
     </folder>
     <folder name="Toolbars">
         <folder name="Build">
