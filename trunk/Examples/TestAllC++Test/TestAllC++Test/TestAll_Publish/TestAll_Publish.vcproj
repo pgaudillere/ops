@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OPSCrossPlatformCppLib.lib"
+				AdditionalDependencies="OPSCrossPlatformCppLib.lib Winmm.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\boost\boost_1_38\lib&quot;;&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\Visual C++\OPSCrossPlatformCppSolution\Release&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\Visual C++\OPSCrossPlatformCppSolution\Release&quot;;&quot;C:\Program Files\boost\boost_1_38\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
