@@ -1,5 +1,8 @@
 // TestAll_Publish.cpp : Defines the entry point for the console application.
 //
+
+#include <Windows.h>
+
 #include "testall/ChildDataPublisher.h"
 #include "testall/TestAllTypeFactory.h"
 #include <ops.h>
@@ -11,6 +14,7 @@
 
 int main(int argc, char* args)
 {
+	timeBeginPeriod(1);
 	using namespace testall;
 	using namespace ops;
 
@@ -100,9 +104,10 @@ int main(int argc, char* args)
 		pub.write(&data);
 		std::cout << "Writing " << data.i <<  std::endl;
 		data.i++;
-		Sleep(50);
+		Sleep(80);
 	}
 
+	timeEndPeriod(1);
 	return 0;
 }
 

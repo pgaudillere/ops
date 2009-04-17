@@ -74,7 +74,8 @@ int main(int argc, char* args)
 	//Run it on main application thread only.
 	while(true)
 	{
-		ops::Participant::getIOService()->run();
+		Sleep(1000);
+		//ops::Participant::getIOService()->run();
 	}
 	return 0;
 }
