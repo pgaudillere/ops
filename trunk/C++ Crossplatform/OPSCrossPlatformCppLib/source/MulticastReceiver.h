@@ -2,9 +2,6 @@
 * 
 * Copyright (C) 2006-2009 Anton Gravestam.
 *
-* This notice apply to all source files, *.cpp, *.h, *.java, and *.cs in this directory 
-* and all its subdirectories if nothing else is explicitly stated within the source file itself.
-*
 * This file is part of OPS (Open Publish Subscribe).
 *
 * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
@@ -39,9 +36,9 @@ namespace ops
 	class MulticastReceiver : public Receiver
 	{
 	public:
-		MulticastReceiver(std::string mcAddress, int bindPort): max_length(65535)
+		MulticastReceiver(std::string mcAddress, int bindPort, IOService* ioServ): max_length(65535)
 		{
-			boost::asio::io_service* ioService = ((BoostIOServiceImpl*)Participant::getIOService())->boostIOService;
+			boost::asio::io_service* ioService = ((BoostIOServiceImpl*)ioServ)->boostIOService;//((BoostIOServiceImpl*)Participant::getIOService())->boostIOService;
 			udp::resolver resolver(*ioService);
 			udp::resolver::query query(boost::asio::ip::host_name(),"");
 			udp::resolver::iterator it=resolver.resolve(query);

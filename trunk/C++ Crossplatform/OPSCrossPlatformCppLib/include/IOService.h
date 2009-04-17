@@ -28,7 +28,7 @@ namespace ops
 		virtual void run() = 0;
 		virtual ~IOService(){};
 
-		static IOService* getInstance();
+		static IOService* create();
 	};
 }
 

@@ -35,6 +35,7 @@
 #include "Notifier.h"
 #include "Listener.h"
 #include <iostream>
+#include "Participant.h"
 
 
 
@@ -110,7 +111,7 @@ namespace ops
 					else
 					{
 						//Inform participant that invalid data is on the network.
-						printf("_____________Factory_ERROR___________\n");
+						printf("_______________Factory_ERROR_____________\n");
 					}
 				}
 				else
@@ -136,7 +137,9 @@ namespace ops
 			: expectedSegment(0),
 			memMap(top.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE)
 		{
-			receiver = Receiver::create(top.getDomainAddress(), top.getPort());
+			IOService* ioService = Participant::getInstance(top.getDomainID(), top.getParticipantID())->getIOService();
+			
+			receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService);
 			receiver->addListener(this);
 			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 			

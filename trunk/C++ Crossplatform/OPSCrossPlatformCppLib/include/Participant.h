@@ -22,18 +22,21 @@
 #define	ops_ParticipantH
 
 #include <string>
-//#include "SingleThreadPool.h"
+#include "ThreadPool.h"
+#include "Runnable.h"
 #include "IOService.h"
 #include "SerializableFactory.h"
 #include <map>
 #include "Topic.h"
 #include "OPSConfig.h"
 #include "OPSObjectFactory.h"
+#include "DeadlineTimer.h"
+
 
 
 namespace ops
 {
-class Participant
+	class Participant : Runnable, Listener<int>
 {
 public:
 	
@@ -46,40 +49,32 @@ public:
 
 	Topic createTopic(std::string name);
 
+	void run();
 
-	//static Participant* getParticipant()
-	//{
-	//	static Participant* theParticipant = NULL;
-	//	if(theParticipant == NULL)
-	//	{
-	//		theParticipant = new Participant();
-	//	}
-	//	return theParticipant;
-	//}
+	//Deadline listener callback
+	void onNewEvent(Notifier<int>* sender, int message);
 
-	static IOService* getIOService()
+	IOService* getIOService()
 	{
-		static IOService* ioService = NULL;
-		if(ioService == NULL)
-		{
-			ioService = IOService::getInstance();	
-		}
 		return ioService;
 	}
 
-	//const static int PACKET_MAX_SIZE = 65000;
-	//const static int MESSAGE_MAX_SIZE = 2600000;
-	//const static int PACKET_MAX_SIZE = 60000;
-	//const static int MESSAGE_MAX_SIZE = 2400000;
-
 private:
 
-	Participant(std::string domainID_);
+	Participant(std::string domainID_, std::string participantID_);
 	~Participant();
 
 	OPSConfig* config;
+	IOService* ioService;
+	ThreadPool* threadPool;
+	DeadlineTimer* aliveDeadlineTimer;
 
 	std::string domainID;
+	std::string participantID;
+
+	bool keepRunning;
+
+	__int64 aliveTimeout;
 
 	//OPSObjectFactory* objectFactory;
 
