@@ -33,9 +33,9 @@ namespace ops
 		bool isStarted;
 		boost::asio::deadline_timer deadlineTimer;
 	public:
-		BoostDeadlineTimerImpl() 
+		BoostDeadlineTimerImpl(boost::asio::io_service* boostIOService) 
 			: isStarted(false),
-			deadlineTimer(*((BoostIOServiceImpl*)Participant::getIOService())->boostIOService)
+			deadlineTimer(*boostIOService)
 		{
 
 		}

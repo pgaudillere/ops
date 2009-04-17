@@ -42,30 +42,33 @@ namespace ops
 		{
 			for(unsigned int i = 0; i < runnables.size(); i++)
 			{
+				boost::mutex::scoped_lock lock(mutex);
 				std::vector<Runnable*>::iterator p = runnables.begin();
 				p += i;
 
-				boost::mutex::scoped_lock lock(mutex);
+				
 				runnables.erase(p);
 			}
 			
 		}
 
+		void start()
+		{
+			Thread::start();
+		}
+
 		void run()
 		{
-			while(true)
-			{
+				boost::mutex::scoped_lock lock(mutex);
 				//__int64 startTime = TimeHelper::currentTimeMillis();
 				for(unsigned int i = 0; i < runnables.size(); i++)
 				{
-					boost::mutex::scoped_lock lock(mutex);
-					runnables[i]->run(this);
+					runnables[i]->run();
 				}
 				/*if(TimeHelper::currentTimeMillis() - startTime < 1)
 				{
 					TimeHelper::sleep(1);
 				}*/
-			}
 		}
 
 	private:

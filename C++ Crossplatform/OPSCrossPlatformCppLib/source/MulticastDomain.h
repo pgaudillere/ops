@@ -32,6 +32,33 @@ namespace ops
 		{
 			appendType(std::string("MulticastDomain"));
 		}
+		virtual std::vector<Topic* > getTopics()
+		{
+			for(unsigned int i = 0 ; i < topics.size(); i++)
+			{
+				if(topics[i]->getDomainAddress() == "")
+				{
+					topics[i]->setDomainAddress(domainAddress);
+				}
+			}
+			return topics;
+		}
+		virtual Topic getTopic(std::string name)
+		{
+			for(unsigned int i = 0 ; i < topics.size(); i++)
+			{
+				if(topics[i]->getDomainAddress() == "")
+				{
+					topics[i]->setDomainAddress(domainAddress);
+				}
+				if(topics[i]->getName() == name)
+				{
+					return *topics[i];
+				}
+			}
+			throw NoSuchTopicException("Topic " + name + " does not exist in ops config file.");
+			
+		}
 		
 		void serialize(ArchiverInOut* archiver)
 		{

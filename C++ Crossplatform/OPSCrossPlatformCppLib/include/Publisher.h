@@ -106,7 +106,7 @@ protected:
 		{
 			int segSize = buf.getSegmentSize(i);
 			udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
-			//TimeHelper::sleep(0);
+			//TimeHelper::sleep(1);
 		}
 		
 		//udpSender->sendTo(bytes, buf.GetSize(), topic.GetDomainAddress(), topic.GetPort());

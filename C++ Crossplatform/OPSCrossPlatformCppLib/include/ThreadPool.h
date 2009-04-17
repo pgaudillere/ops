@@ -32,6 +32,7 @@ namespace ops
 	public:
 		virtual void addRunnable(Runnable* runnable) = 0;
 		virtual void removeRunnable(Runnable* runnable) = 0;
+		virtual void start() = 0;
 	};
 
 }
