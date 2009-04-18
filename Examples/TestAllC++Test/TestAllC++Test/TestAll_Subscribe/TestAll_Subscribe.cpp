@@ -27,27 +27,41 @@ public:
 		ops::Participant* participant = Participant::getInstance("TestAllDomain");
 		participant->addTypeSupport(new TestAll::TestAllTypeFactory());
 
+		ErrorWriter* errorWriter = new ErrorWriter(std::cout);
+		participant->addListener(errorWriter);
+
+
 		//I godtycklig component
 		Topic topic = participant->createTopic("ChildTopic");
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
-		sub->setDeadlineQoS(1000);
+		sub->setDeadlineQoS(10000);
+		sub->setTimeBasedFilterQoS(1000);
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->start();
+
+		//while(true)
+		//{
+		//	Sleep(1000);
+		//	sub->aquireMessageLock();
+		//	onNewData(sub);
+		//	sub->releaseMessageLock();
+		//}
 	}
 	///Override from ops::DataListener, called whenever new data arrives.
 	void onNewData(ops::DataNotifier* subscriber)
 	{
 		testall::ChildData* data;
-		data = (testall::ChildData*)sub->getDataReference();
+		data = (testall::ChildData*)sub->getMessage()->getData();
+		if(data == NULL) return;
 		if(data->i != (lastPacket + 1))
 		{
 			packagesLost++;
 		}
 		lastPacket = data->i;
-		std::cout << data->baseText << " " << data->fs[10] << " " << data->i << " Lost: " << packagesLost << std::endl;
+		std::cout << data->baseText << " " << data->fs[10] << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl;
 	}
 	///Override from ops::DeadlineMissedListener, called if no new data has arrived within deadlineQoS.
 	void onDeadlineMissed(ops::DeadlineMissedEvent* evt)
