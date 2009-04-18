@@ -14,7 +14,7 @@
 
 int main(int argc, char* args)
 {
-	timeBeginPeriod(1);
+	//timeBeginPeriod(1);
 	using namespace testall;
 	using namespace ops;
 
@@ -26,6 +26,8 @@ int main(int argc, char* args)
 
 	//Create a publisher on that topic
 	ChildDataPublisher pub(topic);
+
+	pub.setName("TestAllPublisher");
 
 	//Create some data to publish
 	ChildData data;
@@ -107,7 +109,7 @@ int main(int argc, char* args)
 		Sleep(80);
 	}
 
-	timeEndPeriod(1);
+	//timeEndPeriod(1);
 	return 0;
 }
 
