@@ -157,6 +157,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\..\..\source\BasicError.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\BoostDeadlineTimerImpl.h"
 				>
 			</File>
@@ -348,6 +352,14 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\Domain.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Error.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ErrorWriter.h"
 				>
 			</File>
 			<File
