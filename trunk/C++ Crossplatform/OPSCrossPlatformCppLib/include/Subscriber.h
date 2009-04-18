@@ -66,6 +66,10 @@ public:
     int getThreadPolicy();
     void setThreadPolicy(int threadPolicy);
 
+	bool aquireMessageLock();
+	void releaseMessageLock();
+	OPSMessage* getMessage();
+
     std::string getName();
     void setName(std::string name);
     
@@ -90,8 +94,10 @@ public:
 protected:
 	virtual void saveCopy(OPSObject* o) = 0;
     void checkAndNotifyDeadlineMissed();
-    void onNewOPSObject(OPSObject* o);
+    //void onNewOPSObject(OPSObject* o);
 	
+	OPSMessage* message;
+
     OPSObject* data;
     OPSObject* getData();
     bool firstDataReceived;
@@ -100,12 +106,19 @@ protected:
 
 private:
 
+	///The Participant to which this Subscriber belongs.
+	Participant* participant;
+
+	///TopicHandler delivering new data samples to this Subscriber
 	TopicHandler* topicHandler;
 
+	///The Topic this Subscriber subscribes to.
     Topic topic;
 
+	///Name of this subscriber
     std::string name;
 
+	///Receiver side filters that will be applied to data from topicHandler before delivery to application layer.
     std::list<FilterQoSPolicy*> filterQoSPolicies;
 
 	HANDLE filterQoSPolicyMutex;
@@ -124,7 +137,6 @@ private:
 
 	void registerForDeadlineTimeouts();
 	void cancelDeadlineTimeouts();
-	//void asynchHandleDeadlineTimeout(const boost::system::error_code& e);
 
     bool deadlineMissed;
     void setDeadlineMissed(bool deadlineMissed);
@@ -132,7 +144,6 @@ private:
 
 	__int64 currentPulicationID ;
 
-	//boost::asio::deadline_timer deadlineTimer;
 	DeadlineTimer* deadlineTimer;
 
 

@@ -31,56 +31,68 @@
 #include "OPSConfig.h"
 #include "OPSObjectFactory.h"
 #include "DeadlineTimer.h"
+#include "Error.h"
 
 
 
 namespace ops
 {
-	class Participant : Runnable, Listener<int>
-{
-public:
-	
-	///By Singelton, one Participant per participantID
-	static std::map<std::string, Participant*> instances;
-	static Participant* getInstance(std::string domainID);
-	static Participant* getInstance(std::string domainID, std::string participantID);
+	//Forward declaration..
+	class TopicHandler;
 
-	void addTypeSupport(ops::SerializableFactory* typeSupport);
-
-	Topic createTopic(std::string name);
-
-	void run();
-
-	//Deadline listener callback
-	void onNewEvent(Notifier<int>* sender, int message);
-
-	IOService* getIOService()
+	class Participant : Runnable, Listener<int>, public Notifier<Error*>
 	{
-		return ioService;
-	}
+		friend class Subscriber;
+	public:
 
-private:
+		///By Singelton, one Participant per participantID
+		static std::map<std::string, Participant*> instances;
+		static Participant* getInstance(std::string domainID);
+		static Participant* getInstance(std::string domainID, std::string participantID);
 
-	Participant(std::string domainID_, std::string participantID_);
-	~Participant();
+		void addTypeSupport(ops::SerializableFactory* typeSupport);
 
-	OPSConfig* config;
-	IOService* ioService;
-	ThreadPool* threadPool;
-	DeadlineTimer* aliveDeadlineTimer;
+		Topic createTopic(std::string name);
 
-	std::string domainID;
-	std::string participantID;
+		void run();
 
-	bool keepRunning;
+		void reportError(Error* err);
 
-	__int64 aliveTimeout;
+		//Deadline listener callback
+		void onNewEvent(Notifier<int>* sender, int message);
 
-	//OPSObjectFactory* objectFactory;
+		IOService* getIOService()
+		{
+			return ioService;
+		}
 
-	
+	private:
 
-};
+		Participant(std::string domainID_, std::string participantID_);
+		~Participant();
+
+		OPSConfig* config;
+		IOService* ioService;
+		ThreadPool* threadPool;
+		DeadlineTimer* aliveDeadlineTimer;
+
+		///By Singelton, one TopicHandler per Topic (name) on this Participant
+		std::map<std::string, TopicHandler*> topicHandlerInstances;
+		//Visible to friends only
+		TopicHandler* getTopicHandler(Topic top);
+
+		std::string domainID;
+		std::string participantID;
+
+		bool keepRunning;
+
+		__int64 aliveTimeout;
+
+		//OPSObjectFactory* objectFactory;
+
+
+
+	};
 
 }
 #endif

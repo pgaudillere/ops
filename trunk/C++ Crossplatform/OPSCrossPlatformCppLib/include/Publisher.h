@@ -89,6 +89,7 @@ protected:
 		message.setData(data);
 
 		message.setPublicationID(currentPublicationID);
+		message.setPublisherName(name);
 
 		//buf.writeProtocol();
 		//buf.WriteString("");

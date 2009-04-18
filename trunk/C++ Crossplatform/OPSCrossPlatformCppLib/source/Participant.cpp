@@ -20,12 +20,14 @@
 
 #include "Participant.h"
 #include "SingleThreadPool.h"
+#include "TopicHandler.h"
 
 
 namespace ops
 {
 	//static
 	std::map<std::string, Participant*> Participant::instances;
+
 
 	Participant* Participant::getInstance(std::string domainID_)
 	{
@@ -82,6 +84,10 @@ namespace ops
 		aliveDeadlineTimer->start(aliveTimeout);
 		ioService->run();	
 	}
+	void Participant::reportError(Error* err)
+	{
+		notifyNewEvent(err);
+	}
 
 	void Participant::onNewEvent(Notifier<int>* sender, int message)
 	{
@@ -100,6 +106,18 @@ namespace ops
 		topic.setDomainID(domainID);
 		
 		return topic;
+	}
+
+	///By Singelton, one TopicHandler per Topic (Name)
+	//This instance map should be owned by Participant.
+	TopicHandler* Participant::getTopicHandler(Topic top)
+	{
+		if(topicHandlerInstances.find(top.getName()) == topicHandlerInstances.end())
+		{
+			topicHandlerInstances[top.getName()] = new TopicHandler(top, this);
+
+		}
+		return topicHandlerInstances[top.getName()];
 	}
 
 

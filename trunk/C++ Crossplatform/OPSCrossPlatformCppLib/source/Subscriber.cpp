@@ -34,13 +34,17 @@ namespace ops
 		firstDataReceived(false)//,
 		//deadlineTimer(*Participant::getIOService())		
     {
-		deadlineTimer = DeadlineTimer::create(Participant::getInstance(topic.getDomainID(), topic.getParticipantID())->getIOService());
+		message = NULL;
+		data = NULL;
+
+		participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
+		deadlineTimer = DeadlineTimer::create(participant->getIOService());
 		deadlineTimer->addListener(this);
         filterQoSPolicyMutex = CreateMutex(NULL, false, NULL);
         newDataEvent = CreateEvent(NULL, true, false, NULL);
 		timeLastData = TimeHelper::currentTimeMillis();
 
-		topicHandler = TopicHandler::getTopicHandler(t);
+		topicHandler = participant->getTopicHandler(t);
 
     }
     Subscriber::~Subscriber()
@@ -61,11 +65,7 @@ namespace ops
     }
 	void Subscriber::onNewEvent(Notifier<OPSMessage*>* sender, OPSMessage* message)
 	{
-		onNewOPSObject(message->getData());
-	}
-
-	void Subscriber::onNewOPSObject(OPSObject* o)
-    {
+		OPSObject* o = message->getData();		
     	if(applyFilterQoSPolicies(o))
         {
             if(TimeHelper::currentTimeMillis() - timeLastDataForTimeBase > timeBaseMinSeparationTime || timeBaseMinSeparationTime == 0)
@@ -73,7 +73,9 @@ namespace ops
             	firstDataReceived = true;
             	hasUnreadData = true;
             	//saveCopy(o);
-         		data = o;
+				this->message = message;
+				data = o;
+
 				notifyNewData();
 				SetEvent(newDataEvent);
                 timeLastDataForTimeBase = TimeHelper::currentTimeMillis();
@@ -261,6 +263,19 @@ namespace ops
 		deadlineMissedEvent.notifyDeadlineMissed();
 		deadlineTimer->start(deadlineTimeout);
 		//cancelDeadlineTimeouts();
+	}
+
+	bool Subscriber::aquireMessageLock()
+	{
+		return topicHandler->aquireMessageLock();
+	}
+	void Subscriber::releaseMessageLock()
+	{
+		topicHandler->releaseMessageLock();
+	}
+	OPSMessage* Subscriber::getMessage()
+	{
+		return message;
 	}
 
 

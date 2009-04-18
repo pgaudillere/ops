@@ -60,6 +60,8 @@ namespace ops
         //int getPublicationID();
         //char getPublicationPriority();
 		virtual void serialize(ArchiverInOut* archive);
+
+		//virtual OPSObject* clone();
         
     public:
 		//static void deleteObjectVector(OPSObject* start);

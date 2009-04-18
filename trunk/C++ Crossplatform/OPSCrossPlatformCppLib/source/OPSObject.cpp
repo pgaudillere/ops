@@ -53,6 +53,7 @@ namespace ops
 	{
 		archive->inout(std::string("key"), key);
 	}
+	
 
     //int OPSObject::getPublicationID()
     //{
