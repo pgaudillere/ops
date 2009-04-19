@@ -33,11 +33,11 @@ namespace ops
 			appendType(std::string("Domain"));
 		}
 
-		std::vector<Topic* > getTopics()
+		virtual std::vector<Topic* > getTopics()
 		{
 			return topics;
 		}
-		Topic getTopic(std::string name)
+		virtual Topic getTopic(std::string name)
 		{
 			for(unsigned int i = 0 ; i < topics.size(); i++)
 			{
@@ -73,7 +73,7 @@ namespace ops
 		}
 		virtual ~Domain(){}
 
-	private:
+	protected:
 		std::vector<Topic* > topics;
 		std::string domainID;
 		

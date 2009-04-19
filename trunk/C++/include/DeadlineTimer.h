@@ -20,6 +20,7 @@
 #ifndef ops_DeadlineTimer_h
 #define ops_DeadlineTimer_h
 #include "Notifier.h"
+#include "IOService.h"
 
 namespace ops
 {
@@ -30,7 +31,7 @@ namespace ops
 		//virtual void cancel() = 0;
 		virtual ~DeadlineTimer(){};
 
-		static DeadlineTimer* create();
+		static DeadlineTimer* create(IOService* ioService);
 	};
 }
 

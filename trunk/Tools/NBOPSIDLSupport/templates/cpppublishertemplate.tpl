@@ -15,7 +15,7 @@ class __classNamePublisher : public ops::Publisher
 {
     
 public:
-    __classNamePublisher(ops::Topic<> t)
+    __classNamePublisher(ops::Topic t)
         : ops::Publisher(t)
     {
 

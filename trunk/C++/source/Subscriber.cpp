@@ -1,3 +1,23 @@
+/**
+* 
+* Copyright (C) 2006-2009 Anton Gravestam.
+*
+* This file is part of OPS (Open Publish Subscribe).
+*
+* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "Subscriber.h"
 #include "TimeHelper.h"
 #include "Participant.h"
@@ -14,13 +34,17 @@ namespace ops
 		firstDataReceived(false)//,
 		//deadlineTimer(*Participant::getIOService())		
     {
-		deadlineTimer = DeadlineTimer::create();
+		message = NULL;
+		data = NULL;
+
+		participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
+		deadlineTimer = DeadlineTimer::create(participant->getIOService());
 		deadlineTimer->addListener(this);
         filterQoSPolicyMutex = CreateMutex(NULL, false, NULL);
         newDataEvent = CreateEvent(NULL, true, false, NULL);
 		timeLastData = TimeHelper::currentTimeMillis();
 
-		topicHandler = TopicHandler::getTopicHandler(t);
+		topicHandler = participant->getTopicHandler(t);
 
     }
     Subscriber::~Subscriber()
@@ -41,11 +65,7 @@ namespace ops
     }
 	void Subscriber::onNewEvent(Notifier<OPSMessage*>* sender, OPSMessage* message)
 	{
-		onNewOPSObject(message->getData());
-	}
-
-	void Subscriber::onNewOPSObject(OPSObject* o)
-    {
+		OPSObject* o = message->getData();		
     	if(applyFilterQoSPolicies(o))
         {
             if(TimeHelper::currentTimeMillis() - timeLastDataForTimeBase > timeBaseMinSeparationTime || timeBaseMinSeparationTime == 0)
@@ -53,7 +73,9 @@ namespace ops
             	firstDataReceived = true;
             	hasUnreadData = true;
             	//saveCopy(o);
-         		data = o;
+				this->message = message;
+				data = o;
+
 				notifyNewData();
 				SetEvent(newDataEvent);
                 timeLastDataForTimeBase = TimeHelper::currentTimeMillis();
@@ -241,6 +263,19 @@ namespace ops
 		deadlineMissedEvent.notifyDeadlineMissed();
 		deadlineTimer->start(deadlineTimeout);
 		//cancelDeadlineTimeouts();
+	}
+
+	bool Subscriber::aquireMessageLock()
+	{
+		return topicHandler->aquireMessageLock();
+	}
+	void Subscriber::releaseMessageLock()
+	{
+		topicHandler->releaseMessageLock();
+	}
+	OPSMessage* Subscriber::getMessage()
+	{
+		return message;
 	}
 
 

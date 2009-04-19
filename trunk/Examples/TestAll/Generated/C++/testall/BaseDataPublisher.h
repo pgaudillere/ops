@@ -15,7 +15,7 @@ class BaseDataPublisher : public ops::Publisher
 {
     
 public:
-    BaseDataPublisher(ops::Topic<> t)
+    BaseDataPublisher(ops::Topic t)
         : ops::Publisher(t)
     {
 

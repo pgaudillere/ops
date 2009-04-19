@@ -15,12 +15,12 @@ class TestDataSubscriber : public ops::Subscriber
 {
 
 public:
-    TestDataSubscriber(ops::Topic<> t)
+    TestDataSubscriber(ops::Topic t)
         : ops::Subscriber(t)
     {
 
     }
-
+/*
     bool getData(TestData* d)
     {
         bool ret = firstDataReceived;
@@ -35,7 +35,7 @@ public:
         hasUnreadData = false;
         return narrowedData;
     }
-/*
+
     ops::OPSObject* getDataReference()
     {
         hasUnreadData = false;
@@ -50,12 +50,13 @@ private:
     TestData narrowedData;
 protected:
     //Override
+/*
     void saveCopy(ops::OPSObject* o)
     {
         ops::SafeLock lock(this);
         narrowedData = *((TestData*)o);
     }
-
+*/
 
 };
 

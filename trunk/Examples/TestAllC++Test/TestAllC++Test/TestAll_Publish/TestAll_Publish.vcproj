@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\TestAll\Generated\C++&quot;;&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\TestAll\Generated\C++&quot;;&quot;$(SolutionDir)..\..\..\C++\include&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -61,9 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OPSCrossPlatformCppLib.lib"
+				AdditionalDependencies="OPSCppLib_vc90_MTd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\boost\boost_1_38\lib&quot;;&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\Visual C++\OPSCrossPlatformCppSolution\Debug&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\..\..\C++\lib&quot;;&quot;C:\Program Files\boost\boost_1_38\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -117,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\TestAll\Generated\C++&quot;;&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)..\..\TestAll\Generated\C++&quot;;&quot;$(SolutionDir)..\..\..\C++\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -136,9 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OPSCrossPlatformCppLib.lib Winmm.lib"
+				AdditionalDependencies="OPSCppLib_vc90_MT.lib Winmm.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\..\..\C++ Crossplatform\OPSCrossPlatformCppLib\Visual C++\OPSCrossPlatformCppSolution\Release&quot;;&quot;C:\Program Files\boost\boost_1_38\lib&quot;"
+				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\..\..\C++\lib&quot;;&quot;C:\Program Files\boost\boost_1_38\lib&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"

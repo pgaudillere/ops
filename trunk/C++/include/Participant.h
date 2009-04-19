@@ -22,70 +22,77 @@
 #define	ops_ParticipantH
 
 #include <string>
-//#include "SingleThreadPool.h"
+#include "ThreadPool.h"
+#include "Runnable.h"
 #include "IOService.h"
 #include "SerializableFactory.h"
 #include <map>
 #include "Topic.h"
 #include "OPSConfig.h"
 #include "OPSObjectFactory.h"
+#include "DeadlineTimer.h"
+#include "Error.h"
+
 
 
 namespace ops
 {
-class Participant
-{
-public:
-	
-	///By Singelton, one Participant per participantID
-	static std::map<std::string, Participant*> instances;
-	static Participant* getInstance(std::string domainID);
-	static Participant* getInstance(std::string domainID, std::string participantID);
+	//Forward declaration..
+	class TopicHandler;
 
-	void addTypeSupport(ops::SerializableFactory* typeSupport);
-
-	Topic createTopic(std::string name);
-
-
-	//static Participant* getParticipant()
-	//{
-	//	static Participant* theParticipant = NULL;
-	//	if(theParticipant == NULL)
-	//	{
-	//		theParticipant = new Participant();
-	//	}
-	//	return theParticipant;
-	//}
-
-	static IOService* getIOService()
+	class Participant : Runnable, Listener<int>, public Notifier<Error*>
 	{
-		static IOService* ioService = NULL;
-		if(ioService == NULL)
+		friend class Subscriber;
+	public:
+
+		///By Singelton, one Participant per participantID
+		static std::map<std::string, Participant*> instances;
+		static Participant* getInstance(std::string domainID);
+		static Participant* getInstance(std::string domainID, std::string participantID);
+
+		void addTypeSupport(ops::SerializableFactory* typeSupport);
+
+		Topic createTopic(std::string name);
+
+		void run();
+
+		void reportError(Error* err);
+
+		//Deadline listener callback
+		void onNewEvent(Notifier<int>* sender, int message);
+
+		IOService* getIOService()
 		{
-			ioService = IOService::getInstance();	
+			return ioService;
 		}
-		return ioService;
-	}
 
-	//const static int PACKET_MAX_SIZE = 65000;
-	//const static int MESSAGE_MAX_SIZE = 2600000;
-	//const static int PACKET_MAX_SIZE = 60000;
-	//const static int MESSAGE_MAX_SIZE = 2400000;
+	private:
 
-private:
+		Participant(std::string domainID_, std::string participantID_);
+		~Participant();
 
-	Participant(std::string domainID_);
-	~Participant();
+		OPSConfig* config;
+		IOService* ioService;
+		ThreadPool* threadPool;
+		DeadlineTimer* aliveDeadlineTimer;
 
-	OPSConfig* config;
+		///By Singelton, one TopicHandler per Topic (name) on this Participant
+		std::map<std::string, TopicHandler*> topicHandlerInstances;
+		//Visible to friends only
+		TopicHandler* getTopicHandler(Topic top);
 
-	std::string domainID;
+		std::string domainID;
+		std::string participantID;
 
-	//OPSObjectFactory* objectFactory;
+		bool keepRunning;
 
-	
+		__int64 aliveTimeout;
 
-};
+		//OPSObjectFactory* objectFactory;
+
+
+
+	};
 
 }
 #endif

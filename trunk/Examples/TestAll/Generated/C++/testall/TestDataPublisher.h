@@ -15,7 +15,7 @@ class TestDataPublisher : public ops::Publisher
 {
     
 public:
-    TestDataPublisher(ops::Topic<> t)
+    TestDataPublisher(ops::Topic t)
         : ops::Publisher(t)
     {
 

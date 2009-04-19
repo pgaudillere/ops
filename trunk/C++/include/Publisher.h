@@ -39,89 +39,22 @@ class Publisher
 {
 public:
 
-	Publisher(Topic t): topic(t),name(""), key(""),priority(0), currentPublicationID(0), memMap(t.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE)
-	{
-		udpSender = Sender::create();
-		//bytes = new char[Participant::PACKET_MAX_SIZE];		
-		message.setPublisherName(name);
-		message.setTopicName(topic.getName());
-	}
-    virtual ~Publisher()
-	{
-		delete udpSender;
-		//delete bytes;
-	}
+	Publisher(Topic t);
+    virtual ~Publisher();
 
-    Topic getTopic()
-	{
-		return this->topic;
-	}
+    Topic getTopic();
 
-    void setName(std::string name)
-	{
-		this->name = name;
-	}
-    void setKey(std::string name)
-	{
-		this->key = key;
-	}
-    std::string getKey()
-	{
-		return this->key;
-	}
-    std::string getName()
-	{
-		return this->name;
-	}
+    void setName(std::string name);
+    void setKey(std::string name);
+    std::string getKey();
+    std::string getName();
 
-	void writeOPSObject(OPSObject* obj)
-	{
-		write(obj);
-	}
+	void writeOPSObject(OPSObject* obj);
 
 protected:
-	void write(OPSObject* data)
-	{
-		//ByteBuffer buf(bytes, Participant::MESSAGE_MAX_SIZE / Participant::PACKET_MAX_SIZE, Participant::PACKET_MAX_SIZE); 
-		
-		ByteBuffer buf(&memMap);
-		
-		message.setData(data);
+	void write(OPSObject* data);
 
-		message.setPublicationID(currentPublicationID);
-
-		//buf.writeProtocol();
-		//buf.WriteString("");
-		//buf.WriteInt(1);
-		//buf.WriteInt(0);
-		buf.writeNewSegment();
-
-		OPSArchiverOut archive(&buf);
-
-		message = *((OPSMessage*)(archive.inout(std::string("message"), &message)));
-
-		buf.finish();
-
-		for(int i = 0; i < buf.getNrOfSegments(); i++)
-		{
-			int segSize = buf.getSegmentSize(i);
-			udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
-			//TimeHelper::sleep(0);
-		}
-		
-		//udpSender->sendTo(bytes, buf.GetSize(), topic.GetDomainAddress(), topic.GetPort());
-				
-
-		IncCurrentPublicationID();
-
-
-
-	}
-
-    void setTopic(Topic topic)
-	{
-		this->topic = topic;
-	}
+    void setTopic(Topic topic);
  
 
 private:
@@ -142,10 +75,7 @@ private:
     std::string key;
     char priority;
 
-    void IncCurrentPublicationID()
-	{
-		currentPublicationID++;		
-	}
+    void IncCurrentPublicationID();
 
 
 };
