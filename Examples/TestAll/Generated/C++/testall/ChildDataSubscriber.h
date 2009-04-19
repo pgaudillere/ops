@@ -20,7 +20,7 @@ public:
     {
 
     }
-
+/*
     bool getData(ChildData* d)
     {
         bool ret = firstDataReceived;
@@ -35,7 +35,7 @@ public:
         hasUnreadData = false;
         return narrowedData;
     }
-/*
+
     ops::OPSObject* getDataReference()
     {
         hasUnreadData = false;
@@ -50,12 +50,13 @@ private:
     ChildData narrowedData;
 protected:
     //Override
+/*
     void saveCopy(ops::OPSObject* o)
     {
         ops::SafeLock lock(this);
         narrowedData = *((ChildData*)o);
     }
-
+*/
 
 };
 

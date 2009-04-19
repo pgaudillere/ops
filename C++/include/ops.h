@@ -27,3 +27,4 @@
 #include "OPSObjectFactory.h"
 #include "OPSConfig.h"
 #include "NoSuchTopicException.h"
+#include "ErrorWriter.h"

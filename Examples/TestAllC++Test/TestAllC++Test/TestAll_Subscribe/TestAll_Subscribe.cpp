@@ -2,6 +2,7 @@
 //
 #include <ops.h>
 #include "testall/ChildDataSubscriber.h"
+#include "testall/BaseDataSubscriber.h"
 #include "testall/TestAllTypeFactory.h"
 #include <iostream>
 
@@ -10,6 +11,7 @@ class Main : ops::DataListener, ops::DeadlineMissedListener
 {
 	//Use a member subscriber so we can use it from onNewData, see below.
 	testall::ChildDataSubscriber* sub;
+	testall::BaseDataSubscriber* baseSub;
 
 	//
 	int packagesLost;
@@ -37,10 +39,21 @@ public:
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
 		sub->setDeadlineQoS(10000);
-		sub->setTimeBasedFilterQoS(1000);
+		//sub->setTimeBasedFilterQoS(1000);
+		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->start();
+
+		//I godtycklig component
+		Topic baseTopic = participant->createTopic("BaseTopic");
+
+		//Create a subscriber on that topic.
+		baseSub = new BaseDataSubscriber(baseTopic);
+		baseSub->setDeadlineQoS(10000);		
+		baseSub->addDataListener(this);
+		baseSub->deadlineMissedEvent.addDeadlineMissedListener(this);
+		baseSub->start();
 
 		//while(true)
 		//{
@@ -53,15 +66,25 @@ public:
 	///Override from ops::DataListener, called whenever new data arrives.
 	void onNewData(ops::DataNotifier* subscriber)
 	{
-		testall::ChildData* data;
-		data = (testall::ChildData*)sub->getMessage()->getData();
-		if(data == NULL) return;
-		if(data->i != (lastPacket + 1))
+		if(subscriber == sub)
 		{
-			packagesLost++;
+			testall::ChildData* data;
+			data = (testall::ChildData*)sub->getMessage()->getData();
+			if(data == NULL) return;
+			if(data->i != (lastPacket + 1))
+			{
+				packagesLost++;
+			}
+			lastPacket = data->i;
+			std::cout << data->baseText << " " << data->fs[10] << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl;
 		}
-		lastPacket = data->i;
-		std::cout << data->baseText << " " << data->fs[10] << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl;
+		else
+		{
+			testall::BaseData* data;
+			data = (testall::BaseData*)baseSub->getMessage()->getData();
+			if(data == NULL) return;
+			std::cout << data->baseText << " " << baseSub->getMessage()->getPublicationID() << " From: " << baseSub->getMessage()->getPublisherName() << std::endl;
+		}
 	}
 	///Override from ops::DeadlineMissedListener, called if no new data has arrived within deadlineQoS.
 	void onDeadlineMissed(ops::DeadlineMissedEvent* evt)

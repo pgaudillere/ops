@@ -4,6 +4,7 @@
 #include <Windows.h>
 
 #include "testall/ChildDataPublisher.h"
+#include "testall/BaseDataPublisher.h"
 #include "testall/TestAllTypeFactory.h"
 #include <ops.h>
 #include <XMLArchiverOut.h>
@@ -23,14 +24,20 @@ int main(int argc, char* args)
 
 	//Create topic, might throw ops::NoSuchTopicException
 	Topic topic = participant->createTopic("ChildTopic");
-
 	//Create a publisher on that topic
 	ChildDataPublisher pub(topic);
-
 	pub.setName("TestAllPublisher");
+
+	Topic baseTopic = participant->createTopic("BaseTopic");
+
+	BaseDataPublisher basePub(baseTopic);
+	basePub.setName("BasePublisher");
 
 	//Create some data to publish
 	ChildData data;
+	BaseData baseData;
+	baseData.baseText = "Text from base";
+
 
 	//Set Base class field
 	data.baseText = "Hello";
@@ -59,10 +66,11 @@ int main(int argc, char* args)
 	data.fs.push_back(9.0);
 	data.ds.push_back(10.0);
 	data.ss.push_back("Hello Array");
+	data.setKey("key1");
 
 	//return 0;
 
-	for(int i = 0; i < 500000; i++)
+	for(int i = 0; i < 500; i++)
 	{
 		data.fs.push_back(i);
 	}
@@ -106,6 +114,12 @@ int main(int argc, char* args)
 		pub.write(&data);
 		std::cout << "Writing " << data.i <<  std::endl;
 		data.i++;
+
+		if(data.i % 20 == 0)
+		{
+			basePub.write(&baseData);
+		}
+
 		Sleep(80);
 	}
 

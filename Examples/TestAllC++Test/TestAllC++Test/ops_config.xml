@@ -21,6 +21,11 @@
                         <dataType>testall.ChildData</dataType>
                         <sampleMaxSize>2100000</sampleMaxSize>
                     </element>
+                    <element type = "Topic">
+                      <name>BaseTopic</name>
+                      <port>6687</port>
+                      <dataType>testall.BaseData</dataType>
+                    </element>
                     <!-- TODO: Add more topics here... -->
                 </topics>
             </element>

@@ -1,8 +1,139 @@
+/**
+* 
+* Copyright (C) 2006-2009 Anton Gravestam.
+*
+* This file is part of OPS (Open Publish Subscribe).
+*
+* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "TopicHandler.h"
+#include "BasicError.h" 
 
 namespace ops
 {
-	//static
-	std::map<std::string, TopicHandler*> TopicHandler::instances;
+	///Constructor.
+	TopicHandler::TopicHandler(Topic top, Participant* part) :
+		expectedSegment(0),
+		memMap(top.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE),
+		firstReceived(false)
+	{
+		message = NULL;
+		participant = part;
+		IOService* ioService = participant->getIOService();
+
+		receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService);
+		receiver->addListener(this);
+		receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
+
+	}
+	///Destructor
+	TopicHandler::~TopicHandler()
+	{
+		delete receiver;
+	}
+
+
+	///Override from Listener
+	///Called whenever the receiver has new data.
+	void TopicHandler::onNewEvent(Notifier<char*>* sender, char* bytes)
+	{
+		//Deserialize data
+		//ByteBuffer tBuf(bytes, Participant::PACKET_MAX_SIZE);
+
+		//Create a temporay map and buf to peek data before putting it in to memMap
+		MemoryMap tMap(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
+		ByteBuffer tBuf(&tMap);
+
+		//Check protocol
+		if(tBuf.checkProtocol())
+		{
+
+			//Read of message ID and fragmentation info, this is ignored so far.
+			//std::string messageID = tBuf.ReadString();
+			int nrOfFragments = tBuf.ReadInt();
+			int currentFragment = tBuf.ReadInt();
+
+			if(currentFragment != expectedSegment)
+			{//For testing only...
+				if(firstReceived)
+				{
+					BasicError err("Segment Error, sample will be lost.");
+					participant->reportError(&err);
+				}
+				expectedSegment = 0;
+				receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
+				return;
+			}
+
+			if(currentFragment == (nrOfFragments - 1))
+			{
+				firstReceived = true;
+				expectedSegment = 0;
+				ByteBuffer buf(&memMap);
+
+				buf.checkProtocol();
+				int i1 = buf.ReadInt();
+				int i2 = buf.ReadInt();
+
+				//Read of the actual OPSMessage
+				OPSArchiverIn archiver(&buf);
+
+				SafeLock lock(&messageLock);
+				if(message)
+				{
+					delete message;
+					message = NULL;
+				}
+				message = dynamic_cast<OPSMessage*>(archiver.inout(std::string("message"), message));
+				if(message)
+				{
+					//Send it to Subscribers
+					notifyNewEvent(message);
+					//delete message;
+				}
+				else
+				{
+					//Inform participant that invalid data is on the network.
+					BasicError err("Unexpected type received. Type creation failed.");
+					participant->reportError(&err);
+				}
+			}
+			else
+			{
+				expectedSegment ++;
+			}
+			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
+		}
+		else
+		{
+			//Inform participant that invalid data is on the network.
+			BasicError err("Protocol ERROR.");
+			participant->reportError(&err);
+		}
+
+	}
+
+	bool TopicHandler::aquireMessageLock()
+	{
+		return messageLock.lock();
+	}
+	void TopicHandler::releaseMessageLock()
+	{
+		messageLock.unlock();
+	}
+
+
 
 }

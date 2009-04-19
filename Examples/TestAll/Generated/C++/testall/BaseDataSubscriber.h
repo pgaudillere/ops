@@ -15,12 +15,12 @@ class BaseDataSubscriber : public ops::Subscriber
 {
 
 public:
-    BaseDataSubscriber(ops::Topic<> t)
+    BaseDataSubscriber(ops::Topic t)
         : ops::Subscriber(t)
     {
 
     }
-
+/*
     bool getData(BaseData* d)
     {
         bool ret = firstDataReceived;
@@ -35,7 +35,7 @@ public:
         hasUnreadData = false;
         return narrowedData;
     }
-/*
+
     ops::OPSObject* getDataReference()
     {
         hasUnreadData = false;
@@ -50,12 +50,13 @@ private:
     BaseData narrowedData;
 protected:
     //Override
+/*
     void saveCopy(ops::OPSObject* o)
     {
         ops::SafeLock lock(this);
         narrowedData = *((BaseData*)o);
     }
-
+*/
 
 };
 

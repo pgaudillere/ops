@@ -15,12 +15,12 @@ class __classNameSubscriber : public ops::Subscriber
 {
 
 public:
-    __classNameSubscriber(ops::Topic<> t)
+    __classNameSubscriber(ops::Topic t)
         : ops::Subscriber(t)
     {
 
     }
-
+/*
     bool getData(__className* d)
     {
         bool ret = firstDataReceived;
@@ -35,7 +35,7 @@ public:
         hasUnreadData = false;
         return narrowedData;
     }
-/*
+
     ops::OPSObject* getDataReference()
     {
         hasUnreadData = false;
@@ -50,12 +50,13 @@ private:
     __className narrowedData;
 protected:
     //Override
+/*
     void saveCopy(ops::OPSObject* o)
     {
         ops::SafeLock lock(this);
         narrowedData = *((__className*)o);
     }
-
+*/
 
 };
 

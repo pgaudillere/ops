@@ -23,6 +23,7 @@
 
 #include <string>
 #include "Notifier.h"
+#include "IOService.h" 
 
 
 namespace ops
@@ -32,7 +33,7 @@ namespace ops
 	public:
 		virtual ~Receiver(){}
 
-		static Receiver* create(std::string ip, int bindPort);
+		static Receiver* create(std::string ip, int bindPort, IOService* ioService);
 		//void setReceiveBuffer(char* bytes, int bufSize);
 		virtual void asynchWait(char* bytes, int size) = 0;
 
