@@ -18,7 +18,7 @@
     Hit next, and choose Installation Directory to be for example "C:\Program Files\boost\boost_1_38" and start installation.
  # ==Build OPS Core==
    Open 
-    "C++ Crossplatform\OPSCrossPlatformCppLib\Visual C++\OPSCrossPlatformCppSolution\OPSCrossPlatformCppSolution.sln" 
+    "C++\Visual C++\OPSCrossPlatformCppSolution\OPSCrossPlatformCppSolution.sln" 
    with Visual Studio. If you didn't install boost to "C:\Program Files\boost\boost_1_38" you need to repoint your include directories.
   Build the solution and verify it compiles alright (you will have some warnings).
  # Continue to the BuildingExamples page...
