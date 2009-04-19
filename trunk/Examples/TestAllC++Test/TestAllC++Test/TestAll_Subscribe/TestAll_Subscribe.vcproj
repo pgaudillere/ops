@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OPSCppLib_vc90_MTd.lib"
+				AdditionalDependencies="OPSCppLib_vc90_MDd.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\..\..\C++\lib&quot;;&quot;C:\Program Files\boost\boost_1_38\lib&quot;"
 				GenerateDebugInformation="true"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OPSCppLib_vc90_MT.lib"
+				AdditionalDependencies="OPSCppLib_vc90_MD.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\..\..\C++\lib&quot;;&quot;C:\Program Files\boost\boost_1_38\lib&quot;"
 				GenerateDebugInformation="true"
