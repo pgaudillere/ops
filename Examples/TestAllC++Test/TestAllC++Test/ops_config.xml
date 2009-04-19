@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Document   : ops_config.xml
-    Created on : den 15 april 2009, 17:21
-    Author     : angr
-    Description:
-        Purpose of the document follows.
+ Description:
 -->
 <root>
     <ops_config type = "DefaultOPSConfigImpl">
