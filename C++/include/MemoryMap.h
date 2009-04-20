@@ -38,8 +38,8 @@ public:
 			bytes[i] = new char[height];
 		}
 	}
-	MemoryMap(char* segment, int size)
-		: width(1), 
+	MemoryMap(char* segment, int size):
+		  width(1), 
 		  height(size),
 		  dataCreator(false)
 	{
