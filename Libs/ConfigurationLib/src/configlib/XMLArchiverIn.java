@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
  *
  * @author Anton Gravestam
  */
-public class XMLArchiverIn implements ArchiverIn, ArchiverInOut
+public class XMLArchiverIn implements ArchiverInOut
 {
 
     private InputStream is;
@@ -45,6 +45,30 @@ public class XMLArchiverIn implements ArchiverIn, ArchiverInOut
             doc = parser.getDocument();
             
             currentNode = doc;
+        }
+        catch (SAXException ex)
+        {
+            throw new FormatException("Caused by underlying SAXException: " + ex.getMessage());
+        }
+        catch (IOException ex)
+        {
+            throw new FormatException("Caused by underlying IOException: " + ex.getMessage());
+        }
+    }
+    public XMLArchiverIn(InputStream is, String rootNode) throws FormatException
+    {
+        try
+        {
+            this.is = is;
+            DOMParser parser = new DOMParser();
+
+            // Parse the document.
+            parser.parse(new InputSource(is));
+            // Obtain the document.
+            doc = parser.getDocument();
+
+            currentNode = doc;
+            currentNode = getNode(rootNode);
         }
         catch (SAXException ex)
         {
@@ -92,13 +116,13 @@ public class XMLArchiverIn implements ArchiverIn, ArchiverInOut
         return getValue(name);
     }
 
-    public void getDeserializable(String name, Deserializable des)
-    {
-        nodeStack.push(currentNode);
-        currentNode = getNode(name);
-        des.desirialize(this);
-        currentNode = nodeStack.pop();    
-    }
+//    public void getDeserializable(String name, Deserializable des)
+//    {
+//        nodeStack.push(currentNode);
+//        currentNode = getNode(name);
+//        des.desirialize(this);
+//        currentNode = nodeStack.pop();
+//    }
     public int getNrElements(String name)
     {
         nodeStack.push(currentNode);
@@ -116,34 +140,34 @@ public class XMLArchiverIn implements ArchiverIn, ArchiverInOut
         return size; 
         
     }
-    public Deserializable getElement(String name, int i, Deserializable deserializable)
-    {
-        try
-        {
-            nodeStack.push(currentNode);
-            currentNode = getNode(name);
-            nodeStack.push(currentNode);
-            currentNode = getCurrentElement(i);
-
-            //Deserializable deserializable = (Deserializable) cls.getConstructor(null).newInstance();
-
-            deserializable.desirialize(this);
-     
-            currentNode = nodeStack.pop();
-            currentNode = nodeStack.pop();
-
-            return deserializable;
-        }
-        catch (Exception ex)
-        {
-           return null;
-        }
-        
-        
-        
-        
-        
-    }
+//    public Deserializable getElement(String name, int i, Deserializable deserializable)
+//    {
+//        try
+//        {
+//            nodeStack.push(currentNode);
+//            currentNode = getNode(name);
+//            nodeStack.push(currentNode);
+//            currentNode = getCurrentElement(i);
+//
+//            //Deserializable deserializable = (Deserializable) cls.getConstructor(null).newInstance();
+//
+//            deserializable.desirialize(this);
+//
+//            currentNode = nodeStack.pop();
+//            currentNode = nodeStack.pop();
+//
+//            return deserializable;
+//        }
+//        catch (Exception ex)
+//        {
+//           return null;
+//        }
+//
+//
+//
+//
+//
+//    }
     private Node getCurrentElement(int n)
     {
         
@@ -193,53 +217,53 @@ public class XMLArchiverIn implements ArchiverIn, ArchiverInOut
         return null;
     }
 
-    public void getList(String name, AddElementCallback addElementCallback, Class<? extends Deserializable> cls)
-    {
-        nodeStack.push(currentNode);
-        currentNode = getNode(name);
-        NodeList nodes = currentNode.getChildNodes();
-        for(int i = 0 ; i < nodes.getLength(); i++)
-        {
-            if(nodes.item(i).getNodeName().equals("element"))
-            {
-                try
-                {
-                    Deserializable deserializable = (Deserializable) cls.getConstructor(null).newInstance();
-                    getDeserializable("element", deserializable);
-                    addElementCallback.addElement(deserializable);
-                    
-                }
-                catch (NoSuchMethodException ex)
-                {
-                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (SecurityException ex)
-                {
-                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
-                }                
-                catch (InstantiationException ex)
-                {
-                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IllegalAccessException ex)
-                {
-                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (IllegalArgumentException ex)
-                {
-                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                catch (InvocationTargetException ex)
-                {
-                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        
-        
-        currentNode = nodeStack.pop();
-        
-    }
+//    public void getList(String name, AddElementCallback addElementCallback, Class<? extends Deserializable> cls)
+//    {
+//        nodeStack.push(currentNode);
+//        currentNode = getNode(name);
+//        NodeList nodes = currentNode.getChildNodes();
+//        for(int i = 0 ; i < nodes.getLength(); i++)
+//        {
+//            if(nodes.item(i).getNodeName().equals("element"))
+//            {
+//                try
+//                {
+//                    Deserializable deserializable = (Deserializable) cls.getConstructor(null).newInstance();
+//                    getDeserializable("element", deserializable);
+//                    addElementCallback.addElement(deserializable);
+//
+//                }
+//                catch (NoSuchMethodException ex)
+//                {
+//                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                catch (SecurityException ex)
+//                {
+//                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                catch (InstantiationException ex)
+//                {
+//                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                catch (IllegalAccessException ex)
+//                {
+//                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                catch (IllegalArgumentException ex)
+//                {
+//                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                catch (InvocationTargetException ex)
+//                {
+//                    Logger.getLogger(XMLArchiverIn.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//        }
+//
+//
+//        currentNode = nodeStack.pop();
+//
+//    }
 
     public boolean getBoolean(String name)
     {
