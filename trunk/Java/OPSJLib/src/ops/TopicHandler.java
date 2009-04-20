@@ -79,37 +79,22 @@ public class TopicHandler
 
             if (readBuf.checkProtocol())
             {
-                String messID = readBuf.readstring();
+                //String messID = readBuf.readstring();
 
                 int nrOfFragments = readBuf.readint();
                 int currentFragment = readBuf.readint();
 
-//                if(nrOfFragments == 1)
-//                {
-//                    sendBytesToSubscribers(readBuf);
-//                    return;
-//                }
-//                else if(messageBuffers.containsKey(messID))
-//                {
-//                    MessageBuffer messBuf = messageBuffers.get(messID);
-//                    messBuf.addFragment(currentFragment, bytes, messID.length() + 8 + 6);
-//                    if(messBuf.isComplete())
-//                    {
-//                        ReadByteBuffer tBuf = new ReadByteBuffer(messBuf.getBytes());
-//                        sendBytesToSubscribers(tBuf);
-//                        messageBuffers.remove(messID);
-//                        return;
-//                    }
-//                }
-//                else
-//                {
-//                    MessageBuffer tBuf = new MessageBuffer(nrOfFragments);
-//                    tBuf.addFragment(currentFragment, bytes, messID.length() + 8 + 6);
-//                    messageBuffers.put(messID, tBuf);
-//
-//                }
 
-                sendBytesToSubscribers(readBuf);
+
+                if(nrOfFragments == 1 && currentFragment == 0)
+                {
+                    sendBytesToSubscribers(readBuf);
+                }
+                else
+                {
+                    //TODO: make proper error handling.
+                    System.out.println("________________Segment Error, Java does not suppport segmented messages:_____________________");
+                }
             }
 
 
@@ -164,4 +149,31 @@ public class TopicHandler
             onNewBytes((byte[]) arg);
         }
     }
+
+
+
+    //                if(nrOfFragments == 1)
+//                {
+//                    sendBytesToSubscribers(readBuf);
+//                    return;
+//                }
+//                else if(messageBuffers.containsKey(messID))
+//                {
+//                    MessageBuffer messBuf = messageBuffers.get(messID);
+//                    messBuf.addFragment(currentFragment, bytes, messID.length() + 8 + 6);
+//                    if(messBuf.isComplete())
+//                    {
+//                        ReadByteBuffer tBuf = new ReadByteBuffer(messBuf.getBytes());
+//                        sendBytesToSubscribers(tBuf);
+//                        messageBuffers.remove(messID);
+//                        return;
+//                    }
+//                }
+//                else
+//                {
+//                    MessageBuffer tBuf = new MessageBuffer(nrOfFragments);
+//                    tBuf.addFragment(currentFragment, bytes, messID.length() + 8 + 6);
+//                    messageBuffers.put(messID, tBuf);
+//
+//                }
 }

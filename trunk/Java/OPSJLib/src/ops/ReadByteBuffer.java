@@ -12,6 +12,8 @@ package ops;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.Vector;
 
@@ -25,19 +27,19 @@ public class ReadByteBuffer
     final static byte protocolVersionHigh  = 0;
     final static String protocolID = "opsp";
 
-    private DataInputStream dis;
+    //private DataInputStream dis;
 
-    
+    ByteBuffer inBuffer;
     
     /** Creates a new instance of ReadByteBuffer */
-    public ReadByteBuffer(DataInputStream dis)
-    {
-        this.setDis(dis);
-    }
+//    public ReadByteBuffer(DataInputStream dis)
+//    {
+//        this.setDis(dis);
+//    }
     public ReadByteBuffer(byte[] buf)
     {
-        ByteArrayInputStream bais = new ByteArrayInputStream(buf);
-        this.setDis(new DataInputStream(bais));
+        inBuffer = ByteBuffer.wrap(buf);
+        inBuffer.order(ByteOrder.LITTLE_ENDIAN);
     }
         
     
@@ -59,7 +61,7 @@ public class ReadByteBuffer
 //    }
     public boolean readboolean() throws IOException
     {
-        return getDis().readByte() > 0;
+        return inBuffer.get() > 0;
     }
     public List<Boolean> readbooleanArr() throws IOException
     {
@@ -73,7 +75,7 @@ public class ReadByteBuffer
     }
     public byte readbyte() throws IOException
     {
-        return getDis().readByte();
+        return inBuffer.get();
     }
     public List<Byte> readbyteArr() throws IOException
     {
@@ -87,7 +89,7 @@ public class ReadByteBuffer
     }
     public int readint() throws IOException
     {
-        return getDis().readInt();
+        return inBuffer.getInt();
     }
     public List<Integer> readintArr() throws IOException
     {
@@ -101,7 +103,7 @@ public class ReadByteBuffer
     }
     public long readlong() throws IOException
     {
-        return getDis().readLong();
+        return inBuffer.getLong();
     }
     public List<Long> readlongArr() throws IOException
     {
@@ -115,7 +117,7 @@ public class ReadByteBuffer
     }
     public float readfloat() throws IOException
     {
-        return getDis().readFloat();
+        return inBuffer.getFloat();
     }
     public List<Float> readfloatArr() throws IOException
     {
@@ -129,7 +131,7 @@ public class ReadByteBuffer
     }
     public double readdouble() throws IOException
     {
-        return getDis().readDouble();
+        return inBuffer.getDouble();
     }
     public List<Double> readdoubleArr() throws IOException
     {
@@ -145,7 +147,7 @@ public class ReadByteBuffer
     {
         int size = readint();
         byte[] bytes = new byte[size];
-        getDis().read(bytes);
+        inBuffer.get(bytes);
         return new String(bytes); 
     }
     public List<String> readstringArr() throws IOException
@@ -159,25 +161,25 @@ public class ReadByteBuffer
         return ret;
     }
 
-    public DataInputStream getDis()
-    {
-        return dis;
-    }
-
-    public void setDis(DataInputStream dis)
-    {
-        this.dis = dis;
-    }
+//    public DataInputStream getDis()
+//    {
+//        return dis;
+//    }
+//
+//    public void setDis(DataInputStream dis)
+//    {
+//        this.dis = dis;
+//    }
 
     boolean checkProtocol() throws IOException
     {
         byte[] prtIDBytes = new byte[4];
-        dis.read(prtIDBytes);
+        inBuffer.get(prtIDBytes);
         String prtID = new String(prtIDBytes);
         if(prtID.equals(protocolID))
         {
-            byte verLow = dis.readByte();
-            byte verHigh = dis.readByte();
+            byte verLow = readbyte();
+            byte verHigh = readbyte();
             if(verHigh == protocolVersionHigh && verLow == protocolVersionLow)
             {
                 return true;

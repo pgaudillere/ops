@@ -27,10 +27,13 @@ public class Publisher
     private int reliableWriteNrOfResends = 1;
     private int reliableWriteTimeout = 1000;
 
+    private byte[] bytes;
+
 
     public Publisher(Topic topic)
     {
         this.topic = topic;
+        bytes = new byte[StaticManager.MAX_SIZE];
         
 //        try
 //        {
@@ -60,12 +63,12 @@ public class Publisher
         message.setTopicName(topic.getName());
         message.setPublisherName(name);
 
-        WriteByteBuffer buf = new WriteByteBuffer();
+        WriteByteBuffer buf = new WriteByteBuffer(bytes);
         try
         {
 
             buf.writeProtocol();
-            buf.write("");
+            //buf.write("");
             buf.write(1);
             buf.write(0);
 
@@ -79,6 +82,7 @@ public class Publisher
             Logger.getLogger(Publisher.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
+        incCurrentPublicationID();
         
         
     }
