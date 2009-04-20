@@ -3,9 +3,9 @@
 
 #include <Windows.h>
 
-#include "testall/ChildDataPublisher.h"
-#include "testall/BaseDataPublisher.h"
-#include "testall/TestAllTypeFactory.h"
+#include "TestAll/ChildDataPublisher.h"
+#include "TestAll/BaseDataPublisher.h"
+#include "TestAll/TestAllTypeFactory.h"
 #include <ops.h>
 #include <XMLArchiverOut.h>
 #include <XMLArchiverIn.h>
@@ -16,7 +16,7 @@
 int main(int argc, char* args)
 {
 	//timeBeginPeriod(1);
-	using namespace testall;
+	using namespace TestAll;
 	using namespace ops;
 
 	ops::Participant* participant = Participant::getInstance("TestAllDomain");
@@ -70,7 +70,7 @@ int main(int argc, char* args)
 
 	//return 0;
 
-	for(int i = 0; i < 500; i++)
+	for(int i = 0; i < 50; i++)
 	{
 		data.fs.push_back(i);
 	}
@@ -120,7 +120,7 @@ int main(int argc, char* args)
 			basePub.write(&baseData);
 		}
 
-		Sleep(80);
+		Sleep(1000);
 	}
 
 	//timeEndPeriod(1);

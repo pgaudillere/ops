@@ -1,17 +1,17 @@
 // TestAll_Subscribe.cpp : Defines the entry point for the console application.
 //
 #include <ops.h>
-#include "testall/ChildDataSubscriber.h"
-#include "testall/BaseDataSubscriber.h"
-#include "testall/TestAllTypeFactory.h"
+#include "TestAll/ChildDataSubscriber.h"
+#include "TestAll/BaseDataSubscriber.h"
+#include "TestAll/TestAllTypeFactory.h"
 #include <iostream>
 
 //Create a class to act as a listener for OPS data and deadlines
 class Main : ops::DataListener, ops::DeadlineMissedListener
 {
 	//Use a member subscriber so we can use it from onNewData, see below.
-	testall::ChildDataSubscriber* sub;
-	testall::BaseDataSubscriber* baseSub;
+	TestAll::ChildDataSubscriber* sub;
+	TestAll::BaseDataSubscriber* baseSub;
 
 	//
 	int packagesLost;
@@ -19,7 +19,7 @@ class Main : ops::DataListener, ops::DeadlineMissedListener
 public:
 	Main(): packagesLost(0), lastPacket(-1)
 	{
-		using namespace testall;
+		using namespace TestAll;
 		using namespace ops;
 
 		//Create a topic. NOTE, this is a temporary solution to get topics before OPS4 is completely released.
@@ -40,7 +40,7 @@ public:
 		sub = new ChildDataSubscriber(topic);
 		sub->setDeadlineQoS(10000);
 		//sub->setTimeBasedFilterQoS(1000);
-		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
+		//sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->start();
@@ -68,20 +68,20 @@ public:
 	{
 		if(subscriber == sub)
 		{
-			testall::ChildData* data;
-			data = (testall::ChildData*)sub->getMessage()->getData();
+			TestAll::ChildData* data;
+			data = (TestAll::ChildData*)sub->getMessage()->getData();
 			if(data == NULL) return;
 			if(data->i != (lastPacket + 1))
 			{
 				packagesLost++;
 			}
 			lastPacket = data->i;
-			std::cout << data->baseText << " " << data->fs[10] << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl;
+			std::cout << data->baseText << " "  << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl;
 		}
 		else
 		{
-			testall::BaseData* data;
-			data = (testall::BaseData*)baseSub->getMessage()->getData();
+			TestAll::BaseData* data;
+			data = (TestAll::BaseData*)baseSub->getMessage()->getData();
 			if(data == NULL) return;
 			std::cout << data->baseText << " " << baseSub->getMessage()->getPublicationID() << " From: " << baseSub->getMessage()->getPublisherName() << std::endl;
 		}

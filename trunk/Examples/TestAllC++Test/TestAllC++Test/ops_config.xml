@@ -14,13 +14,13 @@
                     <element type = "Topic">
                         <name>ChildTopic</name>
                         <port>6686</port>
-                        <dataType>testall.ChildData</dataType>
+                        <dataType>TestAll.ChildData</dataType>
                         <sampleMaxSize>2100000</sampleMaxSize>
                     </element>
                     <element type = "Topic">
                       <name>BaseTopic</name>
                       <port>6687</port>
-                      <dataType>testall.BaseData</dataType>
+                      <dataType>TestAll.BaseData</dataType>
                     </element>
                     <!-- TODO: Add more topics here... -->
                 </topics>
