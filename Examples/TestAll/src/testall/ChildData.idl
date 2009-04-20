@@ -1,4 +1,4 @@
-package testall;
+package TestAll;
 
 //Dummy data extending BaseData and add fields of all available types
 //including aggregating a third data type TestData
