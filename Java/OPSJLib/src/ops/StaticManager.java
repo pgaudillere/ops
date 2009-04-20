@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
  */
 public class StaticManager
 {
-    public static final int MAX_SIZE = 65000;
+    public static final int MAX_SIZE = 60000;
 
     static void handleMulticastSendError()
     {

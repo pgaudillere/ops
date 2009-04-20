@@ -8,6 +8,9 @@ package ops.archiver;
 import configlib.Serializable;
 import configlib.SerializableCompositeFactory;
 import configlib.SerializableFactory;
+import ops.DefaultOPSConfigImpl;
+import ops.MulticastDomain;
+import ops.Topic;
 import ops.protocol.OPSMessage;
 
 /**
@@ -34,6 +37,19 @@ public class OPSObjectFactory extends SerializableCompositeFactory
                     {
                         return new OPSMessage();
                     }
+                    if(type.equals("DefaultOPSConfigImpl"))
+                    {
+                        return new DefaultOPSConfigImpl();
+                    }
+                    if(type.equals("MulticastDomain"))
+                    {
+                        return new MulticastDomain();
+                    }
+                    if(type.equals("Topic"))
+                    {
+                        return new Topic();
+                    }
+
                     return null;
                 }
             });

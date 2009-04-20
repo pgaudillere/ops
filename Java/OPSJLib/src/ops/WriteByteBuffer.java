@@ -12,6 +12,8 @@ package ops;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.Vector;
 
@@ -26,125 +28,119 @@ public class WriteByteBuffer
     final static byte protocolVersionHigh  = 0;
     final static String protocolID = "opsp";
 
-    private ByteArrayOutputStream baos;
-    private DataOutputStream dos;
+    //private ByteArrayOutputStream baos;
+    //private DataOutputStream dos;
+
+    ByteBuffer outBuffer;
+
     /** Creates a new instance of WriteByteBuffer */
-    public WriteByteBuffer(DataOutputStream dos)
+    public WriteByteBuffer(byte[] bytes)
     {
-        this.setDos(dos);
-    }
-    public WriteByteBuffer()
-    {
-        baos = new ByteArrayOutputStream();
-        setDos(new DataOutputStream(baos));
-        this.setDos(getDos());
+        outBuffer = ByteBuffer.wrap(bytes);
+        outBuffer.order(ByteOrder.LITTLE_ENDIAN); //Only default value, this should be dynamic in future OPS
     }
 
-//    public void writeOPSObjectFields(OPSObject o) throws IOException
+    public final ByteBuffer order(ByteOrder bo)
+    {
+        return outBuffer.order(bo);
+    }
+
+    public final ByteOrder order()
+    {
+        return outBuffer.order();
+    }
+
+
+//    public WriteByteBuffer()
 //    {
-//        dos.writeInt(o.publisherName.length());
-//        dos.writeBytes(o.publisherName);
-//        dos.writeInt(o.key.length());
-//        dos.writeBytes(o.key);
-//        dos.writeInt(o.publicationID);
-//        dos.writeByte(o.publicationPriority);
-//        dos.writeInt(o.typesString.length());
-//        dos.writeBytes(o.typesString);
-//
+//        baos = new ByteArrayOutputStream();
+//        setDos(new DataOutputStream(baos));
+//        this.setDos(getDos());
 //    }
-//
-//    public void write(OPSObject o, OPSObjectHelper oh) throws IOException
-//    {
-//        getDos().writeInt(oh.getSize(o));
-//        getDos().write(oh.serialize(o));
-//
-//    }
-//    public void writeOPSArr(Vector vec, OPSObjectHelper oh) throws IOException
-//    {
-//        getDos().writeInt(vec.size());
-//        for (int i = 0; i < vec.size(); i++)
-//        {
-//            write((OPSObject) vec.get(i), oh);
-//        }
-//
-//    }
+
+
     public void write(boolean v) throws IOException
     {
-        getDos().write((byte)(v ? 1 : 0));     
+        //getDos().write((byte)(v ? 1 : 0));
+        outBuffer.put((byte)(v ? 1 : 0));
     }
     public void writebooleanArr(List<Boolean> arr) throws IOException
     {
         write(arr.size());
         for (Boolean v : arr)
         {
-            getDos().write((byte)(v.booleanValue() ? 1 : 0));
+            write(v);
         }       
     }
     
     public void write(int v) throws IOException
     {
-        getDos().writeInt(v);     
+        //getDos().writeInt(v);
+        outBuffer.putInt(v);
     }
     public void writeintArr(List<Integer> arr) throws IOException
     {
         write(arr.size());
         for (Integer v : arr)
         {
-            getDos().writeInt(v);
-        }       
+            write(v);
+        }
+
     }
     public void write(byte v) throws IOException
     {
-        getDos().writeByte(v);     
+        outBuffer.put(v);
     }
     public void writebyteArr(List<Byte> arr) throws IOException
     {
         write(arr.size());
         for (Byte v : arr)
         {
-            getDos().write(v);
+            write(v);
         }       
     }
     public void write(long v) throws IOException
     {
-        getDos().writeLong(v);     
+        //getDos().writeLong(v);
+        outBuffer.putLong(v);
     }
     public void writelongArr(List<Long> arr) throws IOException
     {
         write(arr.size());
         for (Long v : arr)
         {
-            getDos().writeLong(v);
+            write(v);
         }       
     }
     public void write(float v) throws IOException
     {
-        getDos().writeFloat(v);     
+        outBuffer.putFloat(v);
     }
     public void writefloatArr(List<Float> arr) throws IOException
     {
         write(arr.size());
         for (Float v : arr)
         {
-            getDos().writeFloat(v);
+            write(v);
         }       
     }
     public void write(double v) throws IOException
     {
-        getDos().writeDouble(v);     
+        outBuffer.putDouble(v);
     }
     public void writedoubleArr(List<Double> arr) throws IOException
     {
         write(arr.size());
         for (Double v : arr)
         {
-            getDos().writeDouble(v);
+            write(v);
         }       
     }
     public void write(String v) throws IOException
     {
         write(v.length());
-        getDos().writeBytes(v);    
+        //getDos().writeBytes(v);
+        outBuffer.put(v.getBytes());
     }
     public void writestringArr(List<String> arr) throws IOException
     {
@@ -156,24 +152,24 @@ public class WriteByteBuffer
     }
     public byte[] getBytes()
     {
-        return baos.toByteArray();
+        return outBuffer.array();
     }
 
-    public DataOutputStream getDos()
-    {
-        return dos;
-    }
-
-    public void setDos(DataOutputStream dos)
-    {
-        this.dos = dos;
-    }
+//    public DataOutputStream getDos()
+//    {
+//        return dos;
+//    }
+//
+//    public void setDos(DataOutputStream dos)
+//    {
+//        this.dos = dos;
+//    }
 
     void writeProtocol() throws IOException
     {
-        dos.write(protocolID.getBytes());
-        dos.writeByte(protocolVersionLow);
-        dos.writeByte(protocolVersionHigh);
+        outBuffer.put(protocolID.getBytes());
+        write(protocolVersionLow);
+        write(protocolVersionHigh);
     }
     
 }

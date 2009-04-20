@@ -21,11 +21,11 @@ import ops.WriteByteBuffer;
 public class OPSArchiverOut implements ArchiverInOut
 {
     WriteByteBuffer writeBuf;
-    
-    public OPSArchiverOut()
-    {
-        writeBuf = new WriteByteBuffer();     
-    }
+//
+//    public OPSArchiverOut()
+//    {
+//        writeBuf = new WriteByteBuffer();
+//    }
 
     public OPSArchiverOut(WriteByteBuffer buf)
     {

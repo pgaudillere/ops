@@ -9,24 +9,55 @@
 
 package ops;
 
+import configlib.ArchiverInOut;
+import java.io.IOException;
+
 /**
  *
  * @author Owe
  */
-public class Topic<T>
+public class Topic<T> extends OPSObject
 {
-    public static final int MC_UDP = 0;
-    public static final int MC_TCP = 1;
-    public static final int MC = 2;
-    public static final int UDP = 3;
-    public static final int TCP = 4;
-    
-    private String name;
-    private int port;
+   
+    private String name = "";
+    private int port = -1;
     private int replyPort = 0;
-    private String typeID;
-    private String domainAddress;
-    private int transport = MC_UDP;
+    private String typeID = "";
+    private String domainAddress = "";
+    private int sampleMaxSize = StaticManager.MAX_SIZE;
+
+    
+
+    /** Creates a new instance of Topic */
+    public Topic(String name, int port, String typeID, String domainAddress)
+    {
+        this.name = name;
+        this.port = port;
+        this.typeID = typeID;
+        this.domainAddress = domainAddress;
+        this.sampleMaxSize = StaticManager.MAX_SIZE;
+        appendType("Topic");
+        
+    }
+    public Topic()
+    {
+        appendType("Topic");
+    }
+
+    public String getDomainAddress()
+    {
+        return domainAddress;
+    }
+
+    public void setDomainAddress(String domainAddress)
+    {
+        this.domainAddress = domainAddress;
+    }
+    @Override
+    public String toString()
+    {
+        return name;
+    }
 
     public int getReplyPort()
     {
@@ -42,7 +73,7 @@ public class Topic<T>
     {
         return name;
     }
-    
+
     public String getTypeID()
     {
         return typeID;
@@ -69,42 +100,19 @@ public class Topic<T>
     }
 
 
-    /** Creates a new instance of Topic */
-    public Topic(String name, int port, String typeID, String domainAddress)
+    @Override
+    public void serialize(ArchiverInOut archive) throws IOException
     {
-        this.name = name;
-        this.port = port;
-        this.typeID = typeID;
-        this.domainAddress = domainAddress;
-        
-    }
-    public Topic()
-    {
-        
+        super.serialize(archive);
+        name = archive.inout("name", name);
+        typeID = archive.inout("dataType", typeID);
+        port = archive.inout("port", port);
+        domainAddress = archive.inout("address", domainAddress);
+
+        //sampleMaxSize will be ignored for now.
+
+
     }
 
-    public String getDomainAddress()
-    {
-        return domainAddress;
-    }
-
-    public void setDomainAddress(String domainAddress)
-    {
-        this.domainAddress = domainAddress;
-    }
-    public String toString()
-    {
-        return name;
-    }
-
-    public int getTransport()
-    {
-        return transport;
-    }
-
-    public void setTransport(int transport)
-    {
-        this.transport = transport;
-    }
     
 };
