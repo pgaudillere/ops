@@ -529,7 +529,10 @@ namespace ops
 			int size = ReadInt();
 			out.reserve(size);
 			out.resize(size, 0.0);
-			ReadChars((char*)&out[0], size*4);
+			if(size > 0)
+			{
+				ReadChars((char*)&out[0], size*4);
+			}
 /*
 			for(int i = 0; i < size; i++)
 			{
