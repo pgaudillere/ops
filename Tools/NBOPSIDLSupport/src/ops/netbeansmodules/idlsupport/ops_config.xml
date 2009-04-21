@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Description:
-        Purpose of the document follows.
+ Description:
 -->
 <root>
     <ops_config type = "DefaultOPSConfigImpl">
@@ -15,7 +14,8 @@
                     <element type = "Topic">
                         <name>FooTopic</name>
                         <port>6686</port>
-                        <dataType>foo.FooData</dataType>
+                        <dataType>foopackage.FooData</dataType>
+                        <sampleMaxSize>2100000</sampleMaxSize> <!-- optional, default is 60000 -->
                     </element>
                     <!-- TODO: Add more topics here... -->
                 </topics>
@@ -24,4 +24,3 @@
         </domains>
     </ops_config>
 </root>
-
