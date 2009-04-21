@@ -33,7 +33,7 @@ public:
 		participant->addListener(errorWriter);
 
 
-		//I godtycklig component
+		
 		Topic topic = participant->createTopic("ChildTopic");
 
 		//Create a subscriber on that topic.

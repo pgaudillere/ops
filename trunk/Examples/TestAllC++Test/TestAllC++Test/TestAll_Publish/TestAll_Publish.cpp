@@ -61,9 +61,9 @@ int main(int argc, char* args)
 	//Set arrays (vectors)
 	data.bos.push_back(true);
 	data.bs.push_back(6);
-	data.is.push_back(7);
+	//data.is.push_back(7);
 	data.ls.push_back(8);
-	data.fs.push_back(9.0);
+	//data.fs.push_back(9.0);
 	data.ds.push_back(10.0);
 	data.ss.push_back("Hello Array");
 	data.setKey("key1");
@@ -72,7 +72,7 @@ int main(int argc, char* args)
 
 	for(int i = 0; i < 50; i++)
 	{
-		data.fs.push_back(i);
+		//data.fs.push_back(i);
 	}
 
 	
