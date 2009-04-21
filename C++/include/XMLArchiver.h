@@ -63,7 +63,7 @@ namespace ops
 		{
 			std::cout << v;
 		}
-		void operator<<(short v)
+		void operator<<(__int16 v)
 		{
 			std::cout  << v;
 		}

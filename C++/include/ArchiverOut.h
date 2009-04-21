@@ -39,7 +39,7 @@ public:
     virtual void put(std::string& name, float v) = 0;
     virtual void put(std::string& name, int v) = 0;
     virtual void put(std::string& name, long v) = 0;
-    virtual void put(std::string& name, short v) = 0;
+    virtual void put(std::string& name, __int16 v) = 0;
 	virtual void putStartList(std::string& name, int size) = 0;
 	virtual void putElement(std::string& listName, Serializable* v) = 0;
 	virtual void putEndList(std::string& listName) = 0;

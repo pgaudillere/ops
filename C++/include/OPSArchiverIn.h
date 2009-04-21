@@ -117,7 +117,7 @@ public:
 	{
 		buf->ReadInts(value);
 	}
-    void inout(std::string& name, std::vector<short>& value)
+    void inout(std::string& name, std::vector<__int16>& value)
 	{
 		//Not implemented
 		//return value;

@@ -103,7 +103,7 @@ public:
 		}
 
 	}
-    virtual void inout(std::string& name, short& value)
+    virtual void inout(std::string& name, __int16& value)
 	{
 		if(!currentNode.getChildNode(name.c_str()).isEmpty())
 		{
@@ -288,7 +288,7 @@ public:
 		}
 
 	}
-    virtual void inout(std::string& name, std::vector<short>& value)
+    virtual void inout(std::string& name, std::vector<__int16>& value)
 	{
 		if(!currentNode.getChildNode(name.c_str()).isEmpty())
 		{
