@@ -205,6 +205,16 @@ namespace ops
         //index += 4;
         
     }
+	void ByteBuffer::WriteShort(__int16& i)
+    {
+		#ifndef NETWORK_BYTE_ORDER
+			ByteSwap((unsigned char*)&i, 2);
+		#endif
+        WriteChars(((char*)&i), 2);
+		//memcpy((void*)(buffer + index), &i, 4);
+        //index += 4;
+        
+    }
     void ByteBuffer::WriteLong(long long& l)
     {
 		#ifndef NETWORK_BYTE_ORDER
@@ -320,6 +330,17 @@ namespace ops
 
 		#ifndef NETWORK_BYTE_ORDER
 			ByteSwap((unsigned char*)&ret, 4);
+		#endif
+        return ret;
+        
+    }
+	__int16 ByteBuffer::ReadShort()
+    {
+        __int16 ret = 0;
+        ReadChars((char*)&ret, 2);
+
+		#ifndef NETWORK_BYTE_ORDER
+			ByteSwap((unsigned char*)&ret, 2);
 		#endif
         return ret;
         
@@ -482,47 +503,62 @@ namespace ops
 		{
 			int size = ReadInt();
 			out.reserve(size);
-			out.resize(size, 0.0);
-			for(int i = 0; i < size; i++)
+			out.resize(size, 0);
+			if(size > 0)
 			{
-				out[i] = ReadDouble();
-			}			
-			//std::copy((double*)buffer + index, (double*)buffer + index + size, out.begin());
-			//index += size*8;
+				ReadChars((char*)&out[0], size*8);
+			}	
 
 		}
 		void ByteBuffer::WriteDoubles(std::vector<double>& out)
 		{
 			int size = out.size();
 			WriteInt(size);
-			WriteChars((char*)&out[0], size*8);
-			/*for(int i = 0; i < size; i++)
+			if(size > 0)
 			{
-				WriteDouble(out[i]);
-			}	*/
+				WriteChars((char*)&out[0], size*8);
+			}
+
 		}
 		void ByteBuffer::ReadInts(std::vector<int>& out)
 		{
 			int size = ReadInt();
 			out.reserve(size);
 			out.resize(size, 0);
-			for(int i = 0; i < size; i++)
+			if(size > 0)
 			{
-				out[i] = ReadInt();
-			}			
-			//std::copy((double*)buffer + index, (double*)buffer + index + size, out.begin());
-			//index += size*8;
+				ReadChars((char*)&out[0], size*4);
+			}	
 
 		}
 		void ByteBuffer::WriteInts(std::vector<int>& out)
 		{
 			int size = out.size();
 			WriteInt(size);
-			WriteChars((char*)&out[0], size*4);
-			/*for(int i = 0; i < size; i++)
+			if(size > 0)
 			{
-				WriteInt(out[i]);
-			}*/	
+				WriteChars((char*)&out[0], size*4);
+			}
+		}
+		void ByteBuffer::ReadShorts(std::vector<__int16>& out)
+		{	
+			int size = ReadInt();
+			out.reserve(size);
+			out.resize(size, 0);
+			if(size > 0)
+			{
+				ReadChars((char*)&out[0], size*2);
+			}
+
+		}
+		void ByteBuffer::WriteShorts(std::vector<__int16>& out)
+		{
+			int size = out.size();
+			WriteInt(size);
+			if(size > 0)
+			{
+				WriteChars((char*)&out[0], size*2);
+			}
 		}
 		void ByteBuffer::ReadFloats(std::vector<float>& out)
 		{
@@ -533,47 +569,37 @@ namespace ops
 			{
 				ReadChars((char*)&out[0], size*4);
 			}
-/*
-			for(int i = 0; i < size; i++)
-			{
-				out[i] = ReadFloat();
-			}*/			
-			//std::copy((double*)buffer + index, (double*)buffer + index + size, out.begin());
-			//index += size*8;
 
 		}
 		void ByteBuffer::WriteFloats(std::vector<float>& out)
 		{
 			int size = out.size();
 			WriteInt(size);
-			WriteChars((char*)&out[0], size*4);
-			/*for(int i = 0; i < size; i++)
+			if(size > 0)
 			{
-				WriteFloat(out[i]);
-			}	*/
+				WriteChars((char*)&out[0], size*4);
+			}
+
 		}
 		void ByteBuffer::ReadLongs(std::vector<__int64>& out)
 		{
 			int size = ReadInt();
 			out.reserve(size);
 			out.resize(size, 0);
-			for(int i = 0; i < size; i++)
+			if(size > 0)
 			{
-				out[i] = ReadLong(); 
-			}			
-			//std::copy((double*)buffer + index, (double*)buffer + index + size, out.begin());
-			//index += size*8;
+				ReadChars((char*)&out[0], size*8);
+			}	
 
 		}
 		void ByteBuffer::WriteLongs(std::vector<__int64>& out)
 		{
 			int size = out.size();
 			WriteInt(size);
-			WriteChars((char*)&out[0], size*8);
-			/*for(int i = 0; i < size; i++)
+			if(size > 0)
 			{
-				WriteLong(out[i]);
-			}	*/
+				WriteChars((char*)&out[0], size*8);
+			}
 		}
 		void ByteBuffer::ReadStrings(std::vector<std::string>& out)
 		{

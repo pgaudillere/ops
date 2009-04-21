@@ -54,10 +54,9 @@ public:
 	{
 		buf->WriteInt(value);
 	}
-    void inout(std::string& name, short& value)
+    void inout(std::string& name, __int16& value)
 	{
-		//Not implemented
-		//return value;
+		buf->WriteShort(value);
 	}
     void inout(std::string& name, __int64& value)
 	{
