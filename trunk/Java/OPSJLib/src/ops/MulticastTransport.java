@@ -76,25 +76,25 @@ public class MulticastTransport implements Transport
         }
         //return false;
     }
-
+    @Deprecated
     public void send(byte[] b)
     {
         try
         {
-            
+
             multicastSocket.send(new DatagramPacket(b, b.length, ipAddress,this.port));
             //multicastSocket.send(new DatagramPacket("snopp".getBytes(), "snopp".getBytes().length, ipAddress,this.port));
         }
         catch(NoRouteToHostException nrte)
         {
-            Participant.getParticipant().handleMulticastNotAvailableError();
+            //Participant.getParticipant().handleMulticastNotAvailableError();
         }
         catch (IOException ex)
         {
-            Participant.getParticipant().handleMulticastNotAvailableError();
+            //Participant.getParticipant().handleMulticastNotAvailableError();
             //ex.printStackTrace();
         }
-        
+
     }
 
     public void setReceiveTimeout(int millis) throws CommException

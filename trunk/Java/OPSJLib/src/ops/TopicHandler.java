@@ -19,30 +19,31 @@ import ops.protocol.OPSMessage;
 public class TopicHandler
 {
 
-    private static HashMap<String, TopicHandler> instances = new HashMap<String, TopicHandler>();
+    //private static HashMap<String, TopicHandler> instances = new HashMap<String, TopicHandler>();
     private boolean hasSubscribers;
     private boolean hasPublishers;
     private HashMap<String, MessageBuffer> messageBuffers = new HashMap<String, MessageBuffer>();
 
-    static TopicHandler getTopicHandler(Topic t)
-    {
-        if (!instances.containsKey(t.getName()))
-        {
-            TopicHandler newTopicHandler = new TopicHandler(t);
-            instances.put(t.getName(), newTopicHandler);
-        }
-        return instances.get(t.getName());
-    }
+//    static TopicHandler getTopicHandler(Topic t)
+//    {
+//        if (!instances.containsKey(t.getName()))
+//        {
+//            TopicHandler newTopicHandler = new TopicHandler(t);
+//            instances.put(t.getName(), newTopicHandler);
+//        }
+//        return instances.get(t.getName());
+//    }
     private Topic topic;
     private Transport transport;
     private Vector<Subscriber> subscribers = new Vector<Subscriber>();
     private ObserverImpl bytesListener = new ObserverImpl();
+    private Participant participant;
 
-    private TopicHandler(Topic t)
+    public TopicHandler(Topic t, Participant part)
     {
+        participant = part;
         topic = t;
-        transport = TransportFactory.getTransport(t);
-
+        transport = new MulticastTransport(t.getDomainAddress(), t.getPort());//TransportFactory.getTransport(t);
 
     }
 
