@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Description:
+        Purpose of the document follows.
+-->
+<root>
+    <ops_config type = "DefaultOPSConfigImpl">
+        <domains>
+
+            <!-- First multicast domain -->
+            <element type = "MulticastDomain">
+                <domainID>FooDomain</domainID>
+                <domainAddress>234.5.6.8</domainAddress>
+                <topics>
+                    <element type = "Topic">
+                        <name>FooTopic</name>
+                        <port>6686</port>
+                        <dataType>foo.FooData</dataType>
+                    </element>
+                    <!-- TODO: Add more topics here... -->
+                </topics>
+            </element>
+
+        </domains>
+    </ops_config>
+</root>
+
