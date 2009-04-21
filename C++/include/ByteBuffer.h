@@ -100,6 +100,9 @@ namespace ops
         ///Writes the 4 bytes making up i to the buffer and increments index by 4.
         ///Byte order is swaped before writing takes place.
         void WriteInt(int& i);
+		//Writes the 2 bytes making up i to the buffer and increments index by 4.
+        ///Byte order is swaped before writing takes place.
+        void WriteShort(__int16& i);
         ///Writes the 8 bytes making up l to the buffer and increments index by 8.
         ///Byte order is swaped before writing takes place.
         void WriteLong(long long& l);
@@ -126,6 +129,9 @@ namespace ops
         ///Reads 4 bytes from the buffer and returns them as an int. Index is increased by 4.
         ///Byte order is swaped before return.
         int ReadInt();
+		///Reads 2 bytes from the buffer and returns them as an int. Index is increased by 4.
+        ///Byte order is swaped before return.
+        __int16 ReadShort();
         ///Reads 8 bytes from the buffer and returns them as a long long (__int64). Index is increased by 8.
         ///Byte order is swaped before return.
         long long ReadLong();
@@ -142,6 +148,7 @@ namespace ops
 		void ReadBytes(std::vector<char>& out);
 		void ReadDoubles(std::vector<double>& out);
 		void ReadInts(std::vector<int>& out);
+		void ReadShorts(std::vector<__int16>& out);
 		void ReadFloats(std::vector<float>& out);		
 		void ReadLongs(std::vector<__int64>& out);		
 		void ReadStrings(std::vector<std::string>& out);
@@ -153,6 +160,7 @@ namespace ops
 		
 		void WriteDoubles(std::vector<double>& out);
 		void WriteInts(std::vector<int>& out);
+		void WriteShorts(std::vector<__int16>& out);
 		void WriteFloats(std::vector<float>& out);
 		void WriteLongs(std::vector<__int64>& out);
 

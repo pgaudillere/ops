@@ -56,10 +56,10 @@ public:
 	{
 		value = buf->ReadInt();
 	}
-    void inout(std::string& name, short& value)
+    void inout(std::string& name, __int16& value)
 	{
 		//Not implemented
-		value = value;
+		value = buf->ReadShort();
 	}
     void inout(std::string& name, __int64& value)
 	{
