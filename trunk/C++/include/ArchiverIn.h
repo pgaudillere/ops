@@ -34,7 +34,7 @@ class ArchiverIn
 public:
 	virtual char getByte(std::string name) = 0;
     virtual int getInt(std::string name) = 0;
-    virtual short getShort(std::string name) = 0;
+    virtual __int16 getShort(std::string name) = 0;
     virtual __int64 getLong(std::string name) = 0;
     virtual float getFloat(std::string name) = 0;
     virtual double getDouble(std::string name) = 0;

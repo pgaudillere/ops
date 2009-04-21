@@ -39,7 +39,7 @@ public:
 	virtual	void inout(std::string& name, bool& value) = 0;
 	virtual void inout(std::string& name, char& value) = 0;
     virtual void inout(std::string& name, int& value) = 0;
-    virtual void inout(std::string& name, short& value) = 0;
+    virtual void inout(std::string& name, __int16& value) = 0;
     virtual void inout(std::string& name, __int64& value) = 0;
     virtual void inout(std::string& name, float& value) = 0;
     virtual void inout(std::string& name, double& value) = 0;
@@ -51,7 +51,7 @@ public:
 	virtual void inout(std::string& name, std::vector<bool>& value) = 0;
 	virtual void inout(std::string& name, std::vector<char>& value) = 0;
     virtual void inout(std::string& name, std::vector<int>& value) = 0;
-    virtual void inout(std::string& name, std::vector<short>& value) = 0;
+    virtual void inout(std::string& name, std::vector<__int16>& value) = 0;
     virtual void inout(std::string& name, std::vector<__int64>& value) = 0;
     virtual void inout(std::string& name, std::vector<float>& value) = 0;
     virtual void inout(std::string& name, std::vector<double>& value) = 0;

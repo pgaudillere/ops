@@ -77,7 +77,7 @@ public:
 	{
 		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
 	}
-    virtual void inout(std::string& name, short& value)
+    virtual void inout(std::string& name, __int16& value)
 	{
 		os << tab() << "<" << name << ">" << value << "</" << name << ">\n";
 	}
@@ -164,7 +164,7 @@ public:
 		}
 		os << tab() << "</" << name << ">" << endl;
 	}
-    virtual void inout(std::string& name, std::vector<short>& value)
+    virtual void inout(std::string& name, std::vector<__int16>& value)
 	{
 		os << tab() << "<" << name << ">" << endl;
 		for(unsigned int i = 0; i < value.size(); i++)
