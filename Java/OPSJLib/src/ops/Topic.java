@@ -25,6 +25,8 @@ public class Topic<T> extends OPSObject
     private String typeID = "";
     private String domainAddress = "";
     private int sampleMaxSize = StaticManager.MAX_SIZE;
+    private String participantID;
+    private String domainID;
 
     
 
@@ -99,6 +101,22 @@ public class Topic<T> extends OPSObject
         this.name = name;
     }
 
+    public String getDomainID()
+    {
+        return domainID;
+    }
+
+    public String getParticipantID()
+    {
+        return participantID;
+    }
+
+    public int getSampleMaxSize()
+    {
+        return sampleMaxSize;
+    }
+
+
 
     @Override
     public void serialize(ArchiverInOut archive) throws IOException
@@ -110,8 +128,16 @@ public class Topic<T> extends OPSObject
         domainAddress = archive.inout("address", domainAddress);
 
         //sampleMaxSize will be ignored for now.
+    }
 
+    void setDomainID(String domainID)
+    {
+        this.domainID = domainID;
+    }
 
+    void setParticipantID(String participantID)
+    {
+        this.participantID = participantID;
     }
 
     
