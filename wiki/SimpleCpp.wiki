@@ -1,8 +1,21 @@
 
-
 = Basic example=
 
-Create a subscriber
+Given the following type defined in OPS IDL:
+
+{{{
+
+package foo;
+
+class FooData
+{
+    string fooText;
+}
+}}}
+
+And a topic FooTopic for that data type.
+
+This is how you create a subscriber
 
 {{{
 
@@ -17,7 +30,7 @@ ChildDataSubscriber sub(topic);
 
 }}}
 
-Create a Publisher
+This is how you create a publisher
 
 {{{
 
