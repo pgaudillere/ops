@@ -1,4 +1,4 @@
-A sample configuration file that defines one Domain (FooDomain) and one Topic (FooTopic).
+A sample configuration file that defines one Domain (!FooDomain) and one Topic (!FooTopic).
 {{{
 <root>
     <ops_config type = "DefaultOPSConfigImpl">
