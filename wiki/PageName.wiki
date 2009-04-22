@@ -1,1 +1,1 @@
-http://code.google.com/p/ops/source/browse/trunk/Pizza.jpg
+http://ops.googlecode.com/svn/trunk/Pizza.JPG
