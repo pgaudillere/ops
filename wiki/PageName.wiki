@@ -1,1 +1,1 @@
-http://ops.googlecode.com/svn/trunk/Pizza.JPG
+http://ops.googlecode.com/svn/wiki/Pizza.JPG
