@@ -1,0 +1,34 @@
+
+
+= Basic example=
+
+Create a subscriber
+
+{{{
+
+Participant* participant = Participant::getInstance("FooDomain");
+participant->addTypeSupport(new Foo::FooTypeFactory());
+
+Topic topic = participant->createTopic("FooTopic");
+
+ChildDataSubscriber sub(topic);
+
+...
+
+}}}
+
+Create a Publisher
+
+{{{
+
+ops::Participant* participant = Participant::getInstance("FooDomain");
+participant->addTypeSupport(new Foo::FooTypeFactory());
+
+Topic topic = participant->createTopic("FooTopic");
+
+ChildDataPublisher pub(topic);
+
+...
+
+
+}}}
