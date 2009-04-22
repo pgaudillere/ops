@@ -1,5 +1,5 @@
+A sample configuration file that defines one Domain (FooDomain) and one Topic (FooTopic).
 {{{
-
 <root>
     <ops_config type = "DefaultOPSConfigImpl">
         <domains>
@@ -14,10 +14,8 @@
                         <port>8888</port>
                         <dataType>foo.FooData</dataType>
                     </element>
-
                 </topics>
             </element>
-
         </domains>
     </ops_config>
 </root>
