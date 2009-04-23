@@ -1,6 +1,6 @@
 = Basic example=
 
-Given the following type defined in []:
+Given the following type defined in [IDLCompilerTutorial IDL]:
 
 {{{
 
