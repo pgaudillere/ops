@@ -30,4 +30,4 @@ The following table shows al isting of all available OPS IDL types and their cor
 ||float||float||float||float||4 byte||
 ||double||double||double||double||8 bytes||
 ||string||std::string||String||string||4 bytes (size) + 1 byte per character (8-bit)||
-||T[]||std::vector<T>||java.util.Vector< T >||List< T >||4 bytes (size) + sizeof(T) per element||
+||T[]||std::vector< T >||java.util.Vector< T >||List< T >||4 bytes (size) + sizeof( T ) per element||
