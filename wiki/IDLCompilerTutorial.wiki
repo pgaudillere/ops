@@ -74,8 +74,6 @@ public:
 #endif
 }}}
 
-
-
 The IDL Compiler is also where you define your topics on which you will publish and subscribe to in your applications. This is done by creating a XML configuration file tht looks something like this:
 
 {{{
@@ -87,7 +85,7 @@ The IDL Compiler is also where you define your topics on which you will publish 
                 <domainID>SampleDomain</domainID>
                 <domainAddress>234.5.6.8</domainAddress>
                 <topics>
-                    <!-- Define a Topic called FooTopic. -->
+                    <!-- Define a Topic called SimpleTopic. -->
                     <element type = "Topic">
                         <name>SimpleTopic</name>
                         <port>8888</port>
