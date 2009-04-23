@@ -1,4 +1,5 @@
-||[Installation]||[SimpleCpp Examples]||[BuildInstructions]||
+[Installation] [SimpleCpp Examples] [BuildInstructions]
+----
 = Welcome to the OPS Wiki=
 
 ==Introduction==
