@@ -1,5 +1,6 @@
 #summary This section describes how and why you use the IDL Compiler to create the outline for a distributed OPS project.
-
+[Installation] [SimpleCpp Examples] [BuildInstructions]
+----
 = The IDL Compiler Basics = 
 == What is IDL? ==
 IDL stands for Interface Definition Language and is a common name for programming language neutral languages used in middlewares to enable support for multiple programming languages (E.g. C++ and Java).
