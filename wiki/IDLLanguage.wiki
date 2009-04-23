@@ -17,7 +17,7 @@ class SamplData
 The package definition consists of the reserved word package followed by the name of the package for the data class. Package in OPS IDL is equivalent to package in Java or namespace in C++ or C#. The package shall be expressed as a single word or as a series of dot separated words, e.g. “samples” or “samples.subsamples” etc and the package declaration shall be ended with a “;”. 
 The class definition is the word class followed by a single word for the class name followed by a body marked with an opening and a closing brace, “{     }”. Within the body of the class, an arbitrary number of fields can be declared. Each field can be of any of the OPS IDL defined basic types, an array of a basic type, another user defined data class or an array of such a data class.
 
-The following table shows al isting of all available OPS IDL types and their corresponding  rpresentations in common programming languages:
+The following table shows a listing of all available OPS IDL types and their corresponding  representations in common programming languages:
 
 ||OPS IDL||C++||Java||C#||Serialized on the network||
 ||class||class||class||class||-||
@@ -30,4 +30,34 @@ The following table shows al isting of all available OPS IDL types and their cor
 ||float||float||float||float||4 byte||
 ||double||double||double||double||8 bytes||
 ||string||std::string||String||string||4 bytes (size) + 1 byte per character (8-bit)||
+||T||T||T||T||sizeof( T )||
 ||T`[``]`||std::vector< T >||java.util.Vector< T >||List< T >||4 bytes (size) + sizeof( T ) per element||
+
+Or as IDL code example:
+
+{{{
+package samples;
+class SamplData
+{
+   boolean boo;
+   byte b;
+   short sh;
+   int i;
+   long l;
+   float f;
+   double d;
+   string s;
+   UserData uData;
+
+   boolean[] boos;
+   byte[] bytes;
+   short[] shorts;
+   int[] ints;
+   long[] longs;
+   float[] floats;
+   double[] doubles;
+   string[] strings;
+   UserData[] uDatas; 
+
+}
+}}}
