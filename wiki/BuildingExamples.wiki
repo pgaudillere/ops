@@ -1,5 +1,6 @@
 #summary This page describes how to build and run the OPS Examples in C++ and Java
-
+[Installation] [SimpleCpp Examples] [BuildInstructions]
+----
 =Building Examples=
 
 Under _OPS_HOME_/Examples, you will find an example called *!TestAll* and a corresponding C++ implementation called *TestAllC++Test*.
