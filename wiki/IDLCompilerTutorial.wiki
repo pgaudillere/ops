@@ -22,4 +22,4 @@ To edit IDL files and to compile these files into target languages, OPS comes wi
 
 http://ops.googlecode.com/svn/wiki/idlcompiler.jpg
 
-With the OPS IDL Compiler you create projects containing possibly multiple IDL files with all the different data types you use in your project. The IDL Compiler is also where you define your topics on which you will publish and subscribe to in your applications. This is done by creating a XML configuration file.
+With the OPS IDL Compiler you create projects containing possibly multiple IDL files with all the different data types you use in your project. The IDL Compiler is also where you define your topics on which you will publish and subscribe to in your applications. This is done by creating a XML configuration file tht looks something like this:
