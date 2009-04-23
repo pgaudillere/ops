@@ -26,5 +26,5 @@
    Open OPS IDL Builder, from OPS_DIR\Tools\OPS IDL Builder\bin\ops_idl_builder_nb.exe
    Use the OPS IDL Builder to open TestAll sample IDL project (File->Open
    Project...browse to OPS_DIR\Examples\TestAll, check open as main project and
-   click Open Project.). Read more about the OPS IDL Builde [IDLBuilderTutorial here].
+   click Open Project.). Read more about the OPS IDL Builde [IDLCompilerTutorial here].
    
