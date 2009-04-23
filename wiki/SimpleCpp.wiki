@@ -1,6 +1,6 @@
 = Basic example=
 
-Given the following type defined in OPS IDL:
+Given the following type defined in []:
 
 {{{
 
