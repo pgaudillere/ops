@@ -15,5 +15,6 @@
         called path, you can do this without being an administrator of your system.
  
  # ==Download OPS==
-   Go to [http://code.google.com/p/ops/download/list Download] to get the latest binaries
-   for the languages you want to use OPS with. You will also need the latest Tools.
+   Go to [http://code.google.com/p/ops/downloads/list Downloads] to get the latest 
+   binaries for the languages you want to use OPS with. You will also need the
+   latest Tools.
