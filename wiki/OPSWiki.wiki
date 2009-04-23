@@ -6,6 +6,10 @@ New to Publish/Subscribe? Here are some resources to get you started:
  * http://en.wikipedia.org/wiki/Publish/subscribe
  * http://www.cse.wustl.edu/~corsaro/papers/pubsubChapter.pdf
 
+Acknowlegments, OPS makes heavy use of the following other Open Source Projects:
+ * http://www.netbeans.org , the tools for OPS are built on Netbeans Platform. 
+ * http://www.boost.org , The C++ implementation of OPS use several boost libraries to keep platform independant. Most notable, boost.asio.
+
 Getting started with OPS
  * [Installation]
  * [SimpleCpp First simple example]
