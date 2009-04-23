@@ -19,5 +19,11 @@ The class definition is the word class followed by a single word for the class n
 
 The following table shows al isting of all available OPS IDL types and their corresponding  rpresentations in common programming languages:
 
-||OPS IDL||Java||C++||C#||Serialized on the network||
+||OPS IDL||C++||Java||C#||Serialized on the network||
 ||class||class||class||class||-||
+||package||namespace||package||namespace||-||
+||boolean||bool||boolean||bool||1 byte||
+||byte||char||byte||byte||1  byte||
+||short||__int16||short||short||2 bytes||
+||int||__int32||int||int||4 bytes||
+||long||__int64||long||long||8 bytes||
