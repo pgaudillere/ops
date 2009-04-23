@@ -7,4 +7,4 @@ New to Publish/Subscribe? Here are some resources to get you started:
  * http://www.cse.wustl.edu/~corsaro/papers/pubsubChapter.pdf
 
 Getting started with OPS
- * [First simple example SimpleCpp]
+ * [ SimpleCpp First simple example]
