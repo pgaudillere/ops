@@ -1,4 +1,4 @@
-= Basic example=
+=Basic Example=
 
 Given the following type defined in [IDLCompilerTutorial OPS IDL]:
 
