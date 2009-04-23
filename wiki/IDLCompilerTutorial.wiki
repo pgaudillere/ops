@@ -22,7 +22,61 @@ To edit IDL files and to compile these files into target languages, OPS comes wi
 
 http://ops.googlecode.com/svn/wiki/idlcompiler.jpg
 
-With the OPS IDL Compiler you create projects containing possibly multiple IDL files with all the different data types you use in your project. The IDL Compiler is also where you define your topics on which you will publish and subscribe to in your applications. This is done by creating a XML configuration file tht looks something like this:
+With the OPS IDL Compiler you create projects containing possibly multiple IDL files with all the different data types you use in your project. 
+Compiled to C++, this is what would be generated from the SimpleData data type above:
+
+{{{
+//Auto generated OPS-code. DO NOT MODIFY!
+#ifndef samples_SimpleData_h
+#define samples_SimpleData_h
+
+#include "OPSObject.h"
+#include "ArchiverInOut.h"
+#include <string>
+#include <vector>
+
+namespace samples {
+
+class SimpleData :
+	public ops::OPSObject
+{
+public:
+	
+    int i;
+    double d;
+    std::string s;
+
+    SimpleData() : ops::OPSObject(),
+        i(0),
+        d(0)
+    {
+        OPSObject::appendType(std::string("samples.SimpleData"));
+    }
+
+    ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
+    ///instance of this class to a format dictated by the implementation of the ArchiverInout.
+    void serialize(ops::ArchiverInOut* archive)
+    {
+		ops::OPSObject::serialize(archive);
+		archive->inout(std::string("i"), i);
+		archive->inout(std::string("d"), d);
+		archive->inout(std::string("s"), s);
+    }
+
+    ///Destructor: Note that all aggregated data and vectors are completely deleted.
+    virtual ~SimpleData(void)
+    {
+    }
+};
+
+}
+
+#endif
+}}}
+
+
+
+The IDL Compiler is also where you define your topics on which you will publish and subscribe to in your applications. This is done by creating a XML configuration file tht looks something like this:
 
 {{{
 <root>
