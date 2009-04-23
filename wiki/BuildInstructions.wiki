@@ -1,6 +1,7 @@
 #summary This page describes how you checkout and build OPS for C++ on Windows XP
 #labels Featured
-
+[Installation] [SimpleCpp Examples] [BuildInstructions]
+----
 = Build Instructions =
 
  # ==Checkout==
