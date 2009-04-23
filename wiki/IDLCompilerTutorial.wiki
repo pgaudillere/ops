@@ -1,4 +1,4 @@
-#description This section describes how and why you use the IDL Compiler to create the outline for a distributed OPS project.
+#summary This section describes how and why you use the IDL Compiler to create the outline for a distributed OPS project.
 
 = The IDL Compiler Basics = 
 == What is IDL? ==
