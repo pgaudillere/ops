@@ -1,0 +1,7 @@
+#summary One-sentence summary of this page.
+
+= Welcome to the OPS Wiki=
+
+New to Publish/Subscribe? Here are some resources to get you started:
+ * http://en.wikipedia.org/wiki/Publish/subscribe
+ *
