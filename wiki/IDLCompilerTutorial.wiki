@@ -74,7 +74,7 @@ public:
 #endif
 }}}
 
-The IDL Compiler is also where you define your topics on which you will publish and subscribe to in your applications. This is done by creating a XML configuration file tht looks something like this:
+The IDL Compiler is also where you define your topics on which you will publish and subscribe to in your applications. This is done by creating a XML configuration file that looks something like this:
 
 {{{
 <root>
