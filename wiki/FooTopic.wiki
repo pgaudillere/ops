@@ -1,3 +1,5 @@
+[Installation] [SimpleCpp Examples] [BuildInstructions]
+----
 A sample configuration file that defines one Domain (!FooDomain) and one Topic (!FooTopic) in that Domain.
 {{{
 <root>
