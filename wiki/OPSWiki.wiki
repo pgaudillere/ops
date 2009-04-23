@@ -1,3 +1,4 @@
+#labels Featured
 [Installation] [SimpleCpp Examples] [BuildInstructions]
 ----
 = Welcome to the OPS Wiki=
