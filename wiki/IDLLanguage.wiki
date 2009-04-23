@@ -16,3 +16,8 @@ class SamplData
 
 The package definition consists of the reserved word package followed by the name of the package for the data class. Package in OPS IDL is equivalent to package in Java or namespace in C++ or C#. The package shall be expressed as a single word or as a series of dot separated words, e.g. “samples” or “samples.subsamples” etc and the package declaration shall be ended with a “;”. 
 The class definition is the word class followed by a single word for the class name followed by a body marked with an opening and a closing brace, “{     }”. Within the body of the class, an arbitrary number of fields can be declared. Each field can be of any of the OPS IDL defined basic types, an array of a basic type, another user defined data class or an array of such a data class.
+
+The following table shows al isting of all available OPS IDL types and their corresponding  rpresentations in common programming languages:
+
+||OPS IDL||Java||C++||C#||Serialized on the network||
+||class||class||class||class||-||
