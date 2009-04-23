@@ -1,0 +1,19 @@
+
+ = The OPS IDL language = 
+The OPS IDL language is a language for defining data types (or data classes) in a programming language neutral way. The point is to define data types to be communicated over OPS once in OPS IDL and then ”compile” the IDL code into the desired target programming languages. In addition to a language specific data class it is also necessary to generate additional code to enable type safe and developer friendly communication for the data types.
+
+The OPS IDL language resembles very simplified Java and is due to its minimalistic design easy to learn and read. As mention above, the language is made for designing data classes, and that is in fact also the only thing it can do. A data class definition in OPS IDL must contain the following:
+
+ * One and only one package definition
+ * One and only one class definition
+
+{{{
+packege samples;
+class SamplData
+{
+
+}
+}}}
+
+The package definition consists of the reserved word package followed by the name of the package for the data class. Package in OPS IDL is equivalent to package in Java or namespace in C++ or C#. The package shall be expressed as a single word or as a series of dot separated words, e.g. “samples” or “samples.subsamples” etc and the package declaration shall be ended with a “;”. 
+The class definition is the word class followed by a single word for the class name followed by a body marked with an opening and a closing brace, “{     }”. Within the body of the class, an arbitrary number of fields can be declared. Each field can be of any of the OPS IDL defined basic types, an array of a basic type, another user defined data class or an array of such a data class.
