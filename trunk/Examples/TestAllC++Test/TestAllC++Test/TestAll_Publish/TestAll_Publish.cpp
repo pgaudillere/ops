@@ -24,6 +24,7 @@ int main(int argc, char* args)
 
 	//Create topic, might throw ops::NoSuchTopicException
 	Topic topic = participant->createTopic("ChildTopic");
+	//topic.setDomainAddress("10.73.4.93");
 	//Create a publisher on that topic
 	ChildDataPublisher pub(topic);
 	pub.setName("TestAllPublisher");
@@ -70,9 +71,9 @@ int main(int argc, char* args)
 
 	//return 0;
 
-	for(int i = 0; i < 50; i++)
+	for(int i = 0; i < 500; i++)
 	{
-		//data.fs.push_back(i);
+		data.fs.push_back(i);
 	}
 
 	
@@ -120,7 +121,7 @@ int main(int argc, char* args)
 			basePub.write(&baseData);
 		}
 
-		Sleep(1000);
+		Sleep(100);
 	}
 
 	//timeEndPeriod(1);
