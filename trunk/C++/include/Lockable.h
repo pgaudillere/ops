@@ -40,6 +40,16 @@ public:
 	{
 		mutex = CreateMutex(NULL, false, NULL);
 	}
+	Lockable(const Lockable& l)
+	{
+		mutex = CreateMutex(NULL, false, NULL);
+	}
+	/*Lockable& Lockable::operator=(const Lockable& l) 
+	{
+	  CopyObj(rhs);
+	  return *this;
+	}*/
+
 	bool lock()
 	{
 		if(WaitForSingleObject(mutex, INFINITE) != WAIT_FAILED)

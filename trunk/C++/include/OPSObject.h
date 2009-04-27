@@ -24,6 +24,7 @@
 #include <string>
 #include "Serializable.h"
 #include "ArchiverInOut.h"
+#include "Reservable.h"
 
 
 namespace ops
@@ -31,7 +32,7 @@ namespace ops
     ///Interface that tags an object as being an OPSObject.
     ///
     //TODO: Put functionalities common for all OPSObjects here, e.g. ID's sizes etc...
-	class OPSObject : public Serializable
+	class OPSObject :  public Reservable, public Serializable
     {
         
         friend class ByteBuffer;

@@ -32,7 +32,7 @@ namespace ops
 	{
 	public:
 		virtual void serialize(ArchiverInOut* archiver) = 0;
-		virtual ~Serializable(){}
+		virtual ~Serializable(){};
 
 	};
 }

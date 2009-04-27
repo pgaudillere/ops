@@ -87,7 +87,7 @@ namespace ops
 			if (!error && nrBytesReceived > 0)
 			{
 				//printf("Data receivedm in multicast receiver\n");
-				handleReadOK();
+				handleReadOK(data, nrBytesReceived);
 				//notifyNewEvent(data);
 			
 			}
@@ -98,9 +98,9 @@ namespace ops
 			
 			
 		}
-		void handleReadOK()
+		void handleReadOK(char* bytes_, int size)
 		{
-			notifyNewEvent(data);
+			notifyNewEvent(BytesSizePair(data, size));
 
 			/*sock->async_receive(
 				boost::asio::buffer(data, max_length), 
