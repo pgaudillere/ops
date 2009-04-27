@@ -18,50 +18,24 @@
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "OPSObject.h"
+#ifndef ops_ReserveInfo_h
+#define ops_ReserveInfo_h
 
 namespace ops
 {
-	OPSObject::OPSObject() : Reservable(), Serializable()
-    {
-        key = "k";
-		typesString = "";
-        
-    }
-    /*
-    std::string OPSObject::getPublisherName()
-    {
-        return publisherName;
-    }*/
-    std::string OPSObject::getKey()
-    {
-         return key;
-    }
-	const std::string& OPSObject::getTypeString()
+	class Reservable;
+	class ReserveInfo
 	{
-		return typesString;
-	}
-	void OPSObject::setKey(std::string k)
-	{
-		key = k;
-	}
+	public:
+		ReserveInfo(Reservable* reservabl, int nrOfReserv):
+		  nrOfReservations(nrOfReserv)
+		{
+			reservable = reservabl;			
+		}
+		Reservable* reservable;
+		int nrOfReservations;
+	};
 
-	void OPSObject::serialize(ArchiverInOut* archive)
-	{
-		archive->inout(std::string("key"), key);
-	}
-	
-
-    //int OPSObject::getPublicationID()
-    //{
-    //    return publicationID;
-    //}
-    //char OPSObject::getPublicationPriority()
-    //{
-    //    return publicationPriority;
-    //}
-    //
-    OPSObject::~OPSObject()
-    {
-    }
 }
+
+#endif

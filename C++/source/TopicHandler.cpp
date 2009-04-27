@@ -47,7 +47,7 @@ namespace ops
 
 	///Override from Listener
 	///Called whenever the receiver has new data.
-	void TopicHandler::onNewEvent(Notifier<char*>* sender, char* bytes)
+	void TopicHandler::onNewEvent(Notifier<BytesSizePair>* sender, BytesSizePair byteSizePair)
 	{
 		//Deserialize data
 		//ByteBuffer tBuf(bytes, Participant::PACKET_MAX_SIZE);
@@ -91,23 +91,26 @@ namespace ops
 				OPSArchiverIn archiver(&buf);
 
 				SafeLock lock(&messageLock);
-				if(message)
-				{
-					delete message;
-					message = NULL;
-				}
+
+				OPSMessage* oldMessage = message;
+				
+				message = NULL;
 				message = dynamic_cast<OPSMessage*>(archiver.inout(std::string("message"), message));
 				if(message)
 				{
+					messageReferenceHandler.addReservable(message);
+					message->reserve();
 					//Send it to Subscribers
 					notifyNewEvent(message);
-					//delete message;
+					//This will delete this message if no one reserved it in the application layer.
+					if(oldMessage) oldMessage->unreserve();
 				}
 				else
 				{
 					//Inform participant that invalid data is on the network.
 					BasicError err("Unexpected type received. Type creation failed.");
 					participant->reportError(&err);
+					message = oldMessage;
 				}
 			}
 			else

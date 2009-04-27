@@ -18,50 +18,43 @@
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "OPSObject.h"
+#ifndef ops_Reservable_h
+#define ops_Reservable_h
+
+#include "Notifier.h"
+#include "ReserveInfo.h"
 
 namespace ops
 {
-	OPSObject::OPSObject() : Reservable(), Serializable()
-    {
-        key = "k";
-		typesString = "";
-        
-    }
-    /*
-    std::string OPSObject::getPublisherName()
-    {
-        return publisherName;
-    }*/
-    std::string OPSObject::getKey()
-    {
-         return key;
-    }
-	const std::string& OPSObject::getTypeString()
+	class Reservable: public Notifier<ReserveInfo>
 	{
-		return typesString;
-	}
-	void OPSObject::setKey(std::string k)
-	{
-		key = k;
-	}
+	public:
+		Reservable():
+		  nrOfReservations(0)
+		{
+		}
+	    void reserve()
+		{
+			nrOfReservations++;
+			notifyNewEvent(ReserveInfo(this,nrOfReservations));
+		}
+		void unreserve()
+		{
+			nrOfReservations--;
+			notifyNewEvent(ReserveInfo(this,nrOfReservations));
+		}
+		int getNrOfReservations()
+		{
+			return nrOfReservations;
+		}
+		virtual ~Reservable()
+		{
+			//TODO: Should we do a check here?
+		}
+	private:
+		int nrOfReservations;
+	};
 
-	void OPSObject::serialize(ArchiverInOut* archive)
-	{
-		archive->inout(std::string("key"), key);
-	}
-	
-
-    //int OPSObject::getPublicationID()
-    //{
-    //    return publicationID;
-    //}
-    //char OPSObject::getPublicationPriority()
-    //{
-    //    return publicationPriority;
-    //}
-    //
-    OPSObject::~OPSObject()
-    {
-    }
 }
+
+#endif

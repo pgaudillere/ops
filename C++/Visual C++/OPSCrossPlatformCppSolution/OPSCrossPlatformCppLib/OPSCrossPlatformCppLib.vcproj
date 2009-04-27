@@ -429,6 +429,10 @@
 				Name="xml"
 				>
 				<File
+					RelativePath="..\..\..\include\Thread.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\source\xml\xmlParser.cpp"
 					>
 				</File>
@@ -457,6 +461,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\ByteListener.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\BytesSizePair.h"
 				>
 			</File>
 			<File
@@ -568,6 +576,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\ReferenceHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Reservable.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ReserveInfo.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Runnable.h"
 				>
 			</File>
@@ -597,10 +617,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\Subscriber.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\Thread.h"
 				>
 			</File>
 			<File

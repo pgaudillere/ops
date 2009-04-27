@@ -68,14 +68,17 @@ namespace ops
 			SafeLock lock(&mutex);
 			for(unsigned int i = 0; i < listeners.size(); i++)
 			{
-				std::vector<Listener<ArgType>*>::iterator p = listeners.begin();
-				p += i;
-				listeners.erase(p);
+				if(listeners[i] == listener)
+				{
+					std::vector<Listener<ArgType>*>::iterator p = listeners.begin();
+					p += i;
+					listeners.erase(p);
+				}
 			}
 		}
         
         //Destructor:
-        ~Notifier()
+        virtual ~Notifier()
 		{
 			listeners.clear();
 		}

@@ -24,11 +24,12 @@
 #include <string>
 #include "Notifier.h"
 #include "IOService.h" 
+#include "BytesSizePair.h"
 
 
 namespace ops
 {
-	class Receiver : public Notifier<char*>
+	class Receiver : public Notifier<BytesSizePair>
 	{
 	public:
 		virtual ~Receiver(){}

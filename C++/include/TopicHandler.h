@@ -33,12 +33,14 @@
 #include "Listener.h"
 #include <iostream>
 #include "Participant.h"
+#include "BytesSizePair.h"
+#include "ReferenceHandler.h"
 
 
 
 namespace ops
 {
-	class TopicHandler : public Notifier<OPSMessage*>, Listener<char*>
+	class TopicHandler : public Notifier<OPSMessage*>, Listener<BytesSizePair>
 	{
 	public:
 		
@@ -53,7 +55,7 @@ namespace ops
 	protected:
 		///Override from Listener
 		///Called whenever the receiver has new data.
-		void onNewEvent(Notifier<char*>* sender, char* bytes);
+		void onNewEvent(Notifier<BytesSizePair>* sender, BytesSizePair byteSizePair);
 
 	private:
 
@@ -70,6 +72,9 @@ namespace ops
 		OPSMessage* message;
 
 		Lockable messageLock;
+
+		///ReferenceHandler that keeps track of object created on reception and deletes them when no one is interested anymore.
+		ReferenceHandler messageReferenceHandler;
 		
 		int expectedSegment;
 		bool firstReceived;
