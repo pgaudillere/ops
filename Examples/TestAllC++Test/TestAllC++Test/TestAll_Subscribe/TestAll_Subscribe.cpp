@@ -70,6 +70,7 @@ public:
 		{
 			TestAll::ChildData* data;
 			data = (TestAll::ChildData*)sub->getMessage()->getData();
+			sub->getMessage()->reserve();
 			if(data == NULL) return;
 			if(data->i != (lastPacket + 1))
 			{
