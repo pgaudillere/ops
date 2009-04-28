@@ -65,6 +65,10 @@ namespace ops
 		{
 			return ioService;
 		}
+		OPSConfig* getConfig()
+		{
+			return config;
+		}
 
 	private:
 

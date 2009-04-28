@@ -36,22 +36,25 @@ namespace ops
 	class MulticastReceiver : public Receiver
 	{
 	public:
-		MulticastReceiver(std::string mcAddress, int bindPort, IOService* ioServ): max_length(65535)
+		MulticastReceiver(std::string mcAddress, int bindPort, IOService* ioServ, std::string localInterface = "0.0.0.0", int inSocketBufferSizent = 16000000): max_length(65535)
 		{
 			boost::asio::io_service* ioService = ((BoostIOServiceImpl*)ioServ)->boostIOService;//((BoostIOServiceImpl*)Participant::getIOService())->boostIOService;
-			udp::resolver resolver(*ioService);
-			udp::resolver::query query(boost::asio::ip::host_name(),"");
-			udp::resolver::iterator it=resolver.resolve(query);
-			boost::asio::ip::address addr=(it++)->endpoint().address();
+			//udp::resolver resolver(*ioService);
+			//udp::resolver::query query(boost::asio::ip::host_name(),"");
+			//udp::resolver::iterator it=resolver.resolve(query);
+			//boost::asio::ip::address addr=(it++)->endpoint().address();
 
-			localEndpoint = new udp::endpoint(addr, bindPort);
+			boost::asio::ip::address ipAddr(boost::asio::ip::address_v4::from_string(localInterface));
+
+			localEndpoint = new boost::asio::ip::udp::endpoint(ipAddr, bindPort);
+			
+			//localEndpoint = new udp::endpoint(addr, bindPort);
 
 			sock = new boost::asio::ip::udp::socket(*ioService);
 
 
-
 			sock->open(localEndpoint->protocol());
-			boost::asio::socket_base::receive_buffer_size option(4000000);
+			boost::asio::socket_base::receive_buffer_size option(inSocketBufferSizent);
 			sock->set_option(option);
 
 
@@ -60,7 +63,8 @@ namespace ops
 
 
 			// Join the multicast group.
-			const boost::asio::ip::address multicastAddress = boost::asio::ip::address::from_string(mcAddress);
+			const boost::asio::ip::address multicastAddress = boost::asio::ip::address_v4::from_string(mcAddress);
+			//const boost::asio::ip::address multicastAddress = boost::asio::ip::address::from_string(mcAddress);
 			sock->set_option(boost::asio::ip::multicast::join_group(multicastAddress));
 
 			ipaddress = mcAddress;

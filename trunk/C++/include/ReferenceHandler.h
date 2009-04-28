@@ -44,7 +44,7 @@ namespace ops
 		{
 			if(reserveInfo.nrOfReservations == 0)
 			{
-				removeReference(reserveInfo.reservable);
+				removeReference((Reservable*)notifier);
 			}
 
 		}
@@ -59,6 +59,7 @@ namespace ops
 				{
 					if(references[i])
 					{
+						references[i]->removeListener(this);
 						delete references[i];
 						references[i] = NULL;
 					}

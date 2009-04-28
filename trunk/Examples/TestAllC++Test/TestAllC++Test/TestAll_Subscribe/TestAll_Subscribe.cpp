@@ -5,6 +5,7 @@
 #include "TestAll/BaseDataSubscriber.h"
 #include "TestAll/TestAllTypeFactory.h"
 #include <iostream>
+#include <vector>
 
 //Create a class to act as a listener for OPS data and deadlines
 class Main : ops::DataListener, ops::DeadlineMissedListener
@@ -13,11 +14,15 @@ class Main : ops::DataListener, ops::DeadlineMissedListener
 	TestAll::ChildDataSubscriber* sub;
 	TestAll::BaseDataSubscriber* baseSub;
 
+	std::vector<ops::OPSMessage*> inCommingMessages;
+
 	//
 	int packagesLost;
 	int lastPacket;
 public:
-	Main(): packagesLost(0), lastPacket(-1)
+	Main(): 
+	  packagesLost(0), 
+	  lastPacket(-1)
 	{
 		using namespace TestAll;
 		using namespace ops;
@@ -70,7 +75,26 @@ public:
 		{
 			TestAll::ChildData* data;
 			data = (TestAll::ChildData*)sub->getMessage()->getData();
-			sub->getMessage()->reserve();
+
+			//Do this to tell OPS not to delete this message until you do unreserve() on it, note you must keep track of your reference to avoid memory leak.
+			ops::OPSMessage* newMess = sub->getMessage();
+			newMess->reserve();
+			inCommingMessages.push_back(newMess);
+
+			if(inCommingMessages.size() == 50)
+			{
+				for(unsigned int i = 0; i < inCommingMessages.size(); i++)
+				{
+					std::cout << inCommingMessages[i]->getPublicationID() << " From: " << inCommingMessages[i]->getPublisherName() << std::endl;
+					inCommingMessages[i]->unreserve();
+
+				}
+				inCommingMessages.clear();
+				
+
+			}
+			/*
+			
 			if(data == NULL) return;
 			if(data->i != (lastPacket + 1))
 			{
@@ -78,6 +102,7 @@ public:
 			}
 			lastPacket = data->i;
 			std::cout << data->baseText << " "  << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl;
+		*/
 		}
 		else
 		{

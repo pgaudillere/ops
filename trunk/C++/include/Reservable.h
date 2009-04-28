@@ -41,7 +41,7 @@ namespace ops
 		void unreserve()
 		{
 			nrOfReservations--;
-			notifyNewEvent(ReserveInfo(this,nrOfReservations));
+			notifyNewEvent(ReserveInfo(NULL,nrOfReservations));
 		}
 		int getNrOfReservations()
 		{

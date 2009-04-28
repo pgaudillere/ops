@@ -23,9 +23,9 @@
 
 namespace ops
 {
-	Receiver* Receiver::create(std::string ip, int bindPort, IOService* ioService)
+	Receiver* Receiver::create(std::string ip, int bindPort, IOService* ioService, std::string localInterface, int inSocketBufferSize)
 	{
-		return new MulticastReceiver(ip, bindPort, ioService);
+		return new MulticastReceiver(ip, bindPort, ioService, localInterface, inSocketBufferSize);
 	}
 
 }
