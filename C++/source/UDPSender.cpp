@@ -30,18 +30,24 @@
 namespace ops
 {
     using boost::asio::ip::udp;
-    UDPSender::UDPSender()
+	UDPSender::UDPSender(std::string localInterface, int ttl, int outSocketBufferSize)
            
     {
-        localEndpoint = new boost::asio::ip::udp::endpoint(udp::v4(), 0);
+		boost::asio::ip::address ipAddr(boost::asio::ip::address_v4::from_string(localInterface));
+
+		localEndpoint = new boost::asio::ip::udp::endpoint(ipAddr, 0);
+        //localEndpoint = new boost::asio::ip::udp::endpoint(udp::v4(), 0);
         socket = new boost::asio::ip::udp::socket(io_service, localEndpoint->protocol());
 
-		boost::asio::socket_base::send_buffer_size option(16000000);
+		boost::asio::socket_base::send_buffer_size option(outSocketBufferSize);
 		socket->set_option(option);
+
+		boost::asio::ip::multicast::hops ttlOption(ttl);
+		socket->set_option(ttlOption);
+
 		boost::asio::socket_base::non_blocking_io command(true);
 		socket->io_control(command);
-
-		
+	
     }
 
     UDPSender::~UDPSender()
@@ -52,7 +58,7 @@ namespace ops
         delete localEndpoint;
     }
 
-    bool UDPSender::sendTo(char* buf, int size, std::string ip, int port)
+    bool UDPSender::sendTo(char* buf, int size, const std::string& ip, int port)
     {
         try
         {

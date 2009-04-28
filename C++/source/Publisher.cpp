@@ -19,12 +19,29 @@
 */
 
 #include "Publisher.h"
+#include "Participant.h"
+#include "MulticastDomain.h"
 
 namespace ops
 {
-	Publisher::Publisher(Topic t): topic(t),name(""), key(""),priority(0), currentPublicationID(0), memMap(t.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE)
+	Publisher::Publisher(Topic t): 
+		topic(t),
+		name(""), 
+		key(""),
+		priority(0), 
+		currentPublicationID(0), 
+		memMap(t.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE)
 	{
-		udpSender = Sender::create();
+		Participant* participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
+		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getConfig()->getDomain(topic.getDomainID()));
+		if(mcDomain != NULL)
+		{
+			udpSender = Sender::create(mcDomain->getLocalInterface(), mcDomain->getTimeToLive(), mcDomain->getOutSocketBufferSize());
+		}
+		else
+		{
+			//TODO: decide upon exceptions, application will crash...
+		}
 		//bytes = new char[Participant::PACKET_MAX_SIZE];		
 		message.setPublisherName(name);
 		message.setTopicName(topic.getName());

@@ -34,7 +34,7 @@ namespace ops
 	public:
 		virtual ~Receiver(){}
 
-		static Receiver* create(std::string ip, int bindPort, IOService* ioService);
+		static Receiver* create(std::string ip, int bindPort, IOService* ioService, std::string localInterface = "0.0.0.0", int inSocketBufferSize = 16000000);
 		//void setReceiveBuffer(char* bytes, int bufSize);
 		virtual void asynchWait(char* bytes, int size) = 0;
 

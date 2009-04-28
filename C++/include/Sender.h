@@ -39,12 +39,12 @@ namespace ops
     {
     public:
 
-        virtual bool sendTo(char* buf, int size, std::string address, int port) = 0;
+        virtual bool sendTo(char* buf, int size, const std::string& ip, int port) = 0;
 		virtual int receiveReply(char* buf, int size) = 0;
         virtual int getPort() = 0;
         virtual std::string getAddress() = 0;
 
-		static Sender* create();
+		static Sender* create(std::string localInterface = "0.0.0.0", int ttl = 1, int outSocketBufferSize = 16000000);
 
         virtual ~Sender()
         {

@@ -27,8 +27,16 @@ namespace ops
 	class MulticastDomain : public Domain
 	{
 		std::string domainAddress;
+		int timeToLive;
+		std::string localInterface;
+		int inSocketBufferSize;
+		int outSocketBufferSize;
 	public:
-		MulticastDomain()
+		MulticastDomain() : 
+			timeToLive(1), 
+			localInterface("0.0.0.0"),
+			inSocketBufferSize(16000000),
+			outSocketBufferSize(16000000)
 		{
 			appendType(std::string("MulticastDomain"));
 		}
@@ -64,6 +72,29 @@ namespace ops
 		{
 			Domain::serialize(archiver);
 			archiver->inout(std::string("domainAddress"), domainAddress);
+			archiver->inout(std::string("localInterface"), localInterface);
+			archiver->inout(std::string("timeToLive"), timeToLive);
+			archiver->inout(std::string("inSocketBufferSize"), inSocketBufferSize);
+			archiver->inout(std::string("outSocketBufferSize"), outSocketBufferSize);
+			
+		}
+		int getTimeToLive()
+		{
+			return timeToLive;
+		}
+
+		std::string getLocalInterface()
+		{
+			return localInterface;
+		}
+
+		int getInSocketBufferSize()
+		{
+			return inSocketBufferSize;
+		}
+		int getOutSocketBufferSize()
+		{
+			return outSocketBufferSize;
 		}
 		
 		virtual ~MulticastDomain(){}

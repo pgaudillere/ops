@@ -80,6 +80,7 @@ namespace ops
         //Destructor:
         virtual ~Notifier()
 		{
+			SafeLock lock(&mutex);
 			listeners.clear();
 		}
     };

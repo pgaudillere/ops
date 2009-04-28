@@ -20,6 +20,7 @@
 
 #include "TopicHandler.h"
 #include "BasicError.h" 
+#include "MulticastDomain.h"
 
 namespace ops
 {
@@ -31,9 +32,11 @@ namespace ops
 	{
 		message = NULL;
 		participant = part;
+		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getConfig()->getDomain(top.getDomainID()));
+
 		IOService* ioService = participant->getIOService();
 
-		receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService);
+		receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService, mcDomain->getLocalInterface(), mcDomain->getInSocketBufferSize());
 		receiver->addListener(this);
 		receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 
@@ -98,6 +101,7 @@ namespace ops
 				message = dynamic_cast<OPSMessage*>(archiver.inout(std::string("message"), message));
 				if(message)
 				{
+					//Add message to a reference handler that will keep the message until it is no longer needed.
 					messageReferenceHandler.addReservable(message);
 					message->reserve();
 					//Send it to Subscribers
