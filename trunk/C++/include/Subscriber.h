@@ -29,6 +29,7 @@
 #include "DeadlineMissedListener.h"
 #include "FilterQoSPolicy.h"
 #include <list>
+#include <deque>
 #include "ThreadPool.h"
 #include "Listener.h"
 #include "OPSMessage.h"
@@ -79,6 +80,10 @@ public:
 
     bool isDeadlineMissed();
 
+	void setHistoryMaxSize(int s);
+	std::deque<OPSMessage*> getHistory();
+	//OPSMessage* getHistoricMessage(int i);
+
 
 	virtual OPSObject* getDataReference()
     {
@@ -120,6 +125,10 @@ private:
 
 	///Receiver side filters that will be applied to data from topicHandler before delivery to application layer.
     std::list<FilterQoSPolicy*> filterQoSPolicies;
+
+	std::deque<OPSMessage*> messageBuffer;
+	int messageBufferMaxSize;
+	void addToBuffer(OPSMessage* mess);
 
 	HANDLE filterQoSPolicyMutex;
     HANDLE newDataEvent;
