@@ -8,6 +8,8 @@ For example if you save references to messages in your DataListener, these refer
 void onNewData(DataNotifier* notifier)
 {
    OPSMessage* mess = sub->getMessage();
+
+   //Save the reference in a collection to be used later.
    myVector.push_back(mess);
 
 }
@@ -18,7 +20,7 @@ void messagePrinter()
    for(unsigned int i = 0; i < myVector.size(); i++)
    {
       //NOTE: This will cause errors, references might no longer be valid
-      print(myVector[i]);
+      print(myVector[i]); 
    }
    myVector.clear();
 }
@@ -44,6 +46,7 @@ void messagePrinter()
    for(unsigned int i = 0; i < myVector.size(); i++)
    {
       print(myVector[i]);
+
       //This will state that you no longer have use for this messages, and it will be 
       //deleted as soon as no one else has it reserved.
       myVector[i]->unreserve();
