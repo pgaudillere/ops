@@ -1,0 +1,27 @@
+= Handling Message References=
+
+By default, as soon as a new sample arrives to a subscribing application, the previous sample is overwritten and its reference is no longer valid.
+For example if you save references to messages in your DataListener, these references will be invalid when new data arrives and may therfor cause your application to crash if you try to use these references:
+
+{{{
+
+///Overide from DataListener
+void onNewData(DataNotifier* notifier)
+{
+   OPSMessage* mess = sub->getMessage();
+   myVector.push_back(mess);
+
+}
+///Method called from application thread that prints all messages in myVector
+///and clears the vector.
+void messagePrinter()
+{
+   for(unsigned int i = 0; i < myVector.size(); i++)
+   {
+      //NOTE: This will cause errors, references might no longer be valid
+      print(myVector[i]);
+   }
+   myVector.clear();
+}
+
+}}}
