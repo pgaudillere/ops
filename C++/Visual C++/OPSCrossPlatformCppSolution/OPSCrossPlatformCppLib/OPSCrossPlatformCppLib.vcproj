@@ -370,6 +370,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Reservable.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Sender.cpp"
 				>
 			</File>

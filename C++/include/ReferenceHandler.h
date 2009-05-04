@@ -27,7 +27,8 @@
 
 namespace ops
 {
-	class ReferenceHandler : Listener<ReserveInfo>, Lockable
+
+	class ReferenceHandler : Lockable//: Listener<ReserveInfo>, Lockable
 	{
 	public:
 		ReferenceHandler()
@@ -38,13 +39,13 @@ namespace ops
 		{
 			SafeLock lock(this);
 			references.push_back(res);
-			res->addListener(this);
+			res->setReferenceHandler(this);
 		}
-		void onNewEvent(Notifier<ReserveInfo>* notifier, ReserveInfo reserveInfo)
+		void onNewEvent(Reservable* notifier, ReserveInfo reserveInfo)
 		{
 			if(reserveInfo.nrOfReservations == 0)
 			{
-				removeReference((Reservable*)notifier);
+				removeReference(notifier);
 			}
 
 		}
@@ -59,7 +60,7 @@ namespace ops
 				{
 					if(references[i])
 					{
-						references[i]->removeListener(this);
+						//references[i]->removeListener(this);
 						delete references[i];
 						references[i] = NULL;
 					}
