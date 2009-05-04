@@ -24,35 +24,23 @@
 #include "Notifier.h"
 #include "ReserveInfo.h"
 
+
 namespace ops
 {
-	class Reservable: public Notifier<ReserveInfo>
+	class ReferenceHandler;
+	class Reservable//: public Notifier<ReserveInfo>
 	{
 	public:
-		Reservable():
-		  nrOfReservations(0)
-		{
-		}
-	    void reserve()
-		{
-			nrOfReservations++;
-			notifyNewEvent(ReserveInfo(this,nrOfReservations));
-		}
-		void unreserve()
-		{
-			nrOfReservations--;
-			notifyNewEvent(ReserveInfo(NULL,nrOfReservations));
-		}
-		int getNrOfReservations()
-		{
-			return nrOfReservations;
-		}
-		virtual ~Reservable()
-		{
-			//TODO: Should we do a check here?
-		}
+		Reservable();
+		void setReferenceHandler(ReferenceHandler* refHandler);
+		ReferenceHandler* getReferenceHandler();
+	    void reserve();
+		void unreserve();
+		int getNrOfReservations();
+		virtual ~Reservable();
 	private:
 		int nrOfReservations;
+		ReferenceHandler* referenceHandler;
 	};
 
 }

@@ -81,6 +81,7 @@ public:
 			newMess->reserve();
 			inCommingMessages.push_back(newMess);
 
+			//When we have 50 samples in our list, we print them out and unreserve them. This will cause their memory to be freed.
 			if(inCommingMessages.size() == 50)
 			{
 				for(unsigned int i = 0; i < inCommingMessages.size(); i++)
@@ -90,7 +91,6 @@ public:
 
 				}
 				inCommingMessages.clear();
-				
 
 			}
 			/*

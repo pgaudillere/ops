@@ -128,6 +128,7 @@ namespace ops
 			//Inform participant that invalid data is on the network.
 			BasicError err("Protocol ERROR.");
 			participant->reportError(&err);
+			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 		}
 
 	}

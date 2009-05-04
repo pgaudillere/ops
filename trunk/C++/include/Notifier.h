@@ -46,10 +46,12 @@ namespace ops
 		{
 			//boost::mutex::scoped_lock lock(mutex);
 			SafeLock lock(&mutex);
+			//mutex.lock();
 			for(unsigned int i = 0; i < listeners.size() ; i++)
 			{
 				listeners[i]->onNewEvent(this, arg);
 			}
+			//mutex.unlock();
 		}
     public:
         
