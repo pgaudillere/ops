@@ -31,7 +31,8 @@ namespace ops
         timeBaseMinSeparationTime(0),
         threadPolicy(SHARED_THREAD),
         deadlineMissed(false),
-		firstDataReceived(false)//,
+		firstDataReceived(false),
+		messageBufferMaxSize(1)
 		//deadlineTimer(*Participant::getIOService())		
     {
 		message = NULL;
@@ -73,6 +74,7 @@ namespace ops
             	firstDataReceived = true;
             	hasUnreadData = true;
             	//saveCopy(o);
+				addToBuffer(message);
 				this->message = message;
 				data = o;
 
@@ -90,6 +92,28 @@ namespace ops
             }
         }
     }
+	void Subscriber::addToBuffer(OPSMessage* mess)
+	{
+		mess->reserve();
+		messageBuffer.push_front(mess);
+		while(messageBuffer.size() > messageBufferMaxSize)
+		{
+			messageBuffer.back()->unreserve();
+			messageBuffer.pop_back();
+		}
+		
+		
+	}
+
+	void Subscriber::setHistoryMaxSize(int s)
+	{
+		messageBufferMaxSize = s;
+
+	}
+	std::deque<OPSMessage*> Subscriber::getHistory()
+	{
+		return messageBuffer;
+	}
   
     OPSObject* Subscriber::getData()
     {

@@ -10,6 +10,7 @@
 //Create a class to act as a listener for OPS data and deadlines
 class Main : ops::DataListener, ops::DeadlineMissedListener
 {
+public:
 	//Use a member subscriber so we can use it from onNewData, see below.
 	TestAll::ChildDataSubscriber* sub;
 	TestAll::BaseDataSubscriber* baseSub;
@@ -48,6 +49,7 @@ public:
 		//sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
+		sub->setHistoryMaxSize(5);
 		sub->start();
 
 		//I godtycklig component
@@ -76,23 +78,26 @@ public:
 			TestAll::ChildData* data;
 			data = (TestAll::ChildData*)sub->getMessage()->getData();
 
-			//Do this to tell OPS not to delete this message until you do unreserve() on it, note you must keep track of your reference to avoid memory leak.
+			//Do this to tell OPS not to delete this message until you do unreserve() on it, note you must keep track of your reserved references to avoid memory leak.
 			ops::OPSMessage* newMess = sub->getMessage();
 			newMess->reserve();
 			inCommingMessages.push_back(newMess);
 
-			//When we have 50 samples in our list, we print them out and unreserve them. This will cause their memory to be freed.
-			if(inCommingMessages.size() == 50)
+			//When we have 50 samples in our list, we print, remove and unreserve them. This will allow their memory to be freed.
+			if(inCommingMessages.size() == 5)
 			{
 				for(unsigned int i = 0; i < inCommingMessages.size(); i++)
 				{
-					std::cout << inCommingMessages[i]->getPublicationID() << " From: " << inCommingMessages[i]->getPublisherName() << std::endl;
+					//std::cout << inCommingMessages[i]->getPublicationID() << " From: " << inCommingMessages[i]->getPublisherName() << std::endl;
 					inCommingMessages[i]->unreserve();
 
 				}
 				inCommingMessages.clear();
 
 			}
+			//If you dont want to keep track of data yourself, you can use the history deque from the subscriber, its max size is set by sub->setHistoryMaxSize() in constructor.
+			//std::cout << "Buffer size: " << sub->getHistory().size() << std::endl;
+
 			/*
 			
 			if(data == NULL) return;
@@ -137,7 +142,16 @@ int main(int argc, char* args)
 	//Run it on main application thread only.
 	while(true)
 	{
-		Sleep(1000);
+		Sleep(1);
+		m.sub->aquireMessageLock();
+		std::deque<ops::OPSMessage*> messages = m.sub->getHistory();
+		for(int i = 0; i < 5 && i < messages.size(); i++)
+		{
+			std::cout << messages[i]->getPublicationID() << " ";
+		}
+		m.sub->releaseMessageLock();
+		std::cout << std::endl;
+
 		//ops::Participant::getIOService()->run();
 	}
 	return 0;

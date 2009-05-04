@@ -71,7 +71,7 @@ int main(int argc, char* args)
 
 	//return 0;
 
-	for(int i = 0; i < 500000; i++)
+	for(int i = 0; i < 5; i++)
 	{
 		data.fs.push_back(i);
 	}
@@ -121,7 +121,7 @@ int main(int argc, char* args)
 			basePub.write(&baseData);
 		}
 
-		Sleep(100);
+		Sleep(1000);
 	}
 
 	//timeEndPeriod(1);
