@@ -113,7 +113,12 @@ public class XMLArchiverIn implements ArchiverInOut
 
     public String getString(String name)
     {
-        return getValue(name);
+        String ret = getValue(name);
+        if(ret == null)
+        {
+            ret = "";
+        }
+        return ret;
     }
 
 //    public void getDeserializable(String name, Deserializable des)
