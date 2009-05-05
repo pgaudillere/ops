@@ -72,7 +72,7 @@ public class Participant
 		OPSObjectFactory.getInstance().add(typeSupport);
 	}
 
-	Topic createTopic(String name)
+	public Topic createTopic(String name)
 	{
 		Topic topic = config.getDomain(domainID).getTopic(name);
 		topic.setParticipantID(participantID);
