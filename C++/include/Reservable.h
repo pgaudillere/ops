@@ -21,7 +21,7 @@
 #ifndef ops_Reservable_h
 #define ops_Reservable_h
 
-#include "Notifier.h"
+#include "Lockable.h"
 #include "ReserveInfo.h"
 
 
@@ -39,6 +39,7 @@ namespace ops
 		int getNrOfReservations();
 		virtual ~Reservable();
 	private:
+		Lockable incLock;
 		int nrOfReservations;
 		ReferenceHandler* referenceHandler;
 	};

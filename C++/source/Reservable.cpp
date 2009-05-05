@@ -6,6 +6,7 @@ namespace ops
 	Reservable::Reservable():
 		nrOfReservations(0)
 	{
+		referenceHandler = NULL;
 	}
 	void Reservable::setReferenceHandler(ReferenceHandler* refHandler)
 	{
@@ -17,13 +18,23 @@ namespace ops
 	}
 	void Reservable::reserve()
 	{
+		incLock.lock();
 		nrOfReservations++;
-		referenceHandler->onNewEvent(this, ReserveInfo(this, nrOfReservations));
+		incLock.unlock();
+		if(referenceHandler)
+		{
+			referenceHandler->onNewEvent(this, ReserveInfo(this, nrOfReservations));
+		}
 	}
 	void Reservable::unreserve()
 	{
+		incLock.lock();
 		nrOfReservations--;
-		referenceHandler->onNewEvent(this, ReserveInfo(this, nrOfReservations));
+		incLock.unlock();
+		if(referenceHandler)
+		{
+			referenceHandler->onNewEvent(this, ReserveInfo(this, nrOfReservations));
+		}
 	}
 	int Reservable::getNrOfReservations()
 	{
