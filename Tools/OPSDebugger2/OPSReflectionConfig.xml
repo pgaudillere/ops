@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<root>
+    <factoryConfig type = "opsreflection.OPSFactoryConfig">
+        <domainID>TestAllDomain</domainID>
+        <jarFilePaths>
+            <element type = "opsreflection.JarPathConfig">
+                <path>TestAll.jar</path>
+            </element>
+        </jarFilePaths>
+    </factoryConfig>
+</root>
