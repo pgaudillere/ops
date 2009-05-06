@@ -17,7 +17,7 @@
                 <topics>
                     <element type = "Topic">
                         <name>ChildTopic</name>
-                        <port>6686</port>
+                        <port>6689</port>
                         <dataType>TestAll.ChildData</dataType>
                         <sampleMaxSize>2100000</sampleMaxSize>
                     </element>
