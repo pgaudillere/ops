@@ -71,7 +71,7 @@ int main(int argc, char* args)
 
 	//return 0;
 
-	for(int i = 0; i < 5; i++)
+	for(int i = 0; i < 400000; i++)
 	{
 		data.fs.push_back(i);
 	}
