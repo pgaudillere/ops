@@ -38,15 +38,13 @@ public:
 		ErrorWriter* errorWriter = new ErrorWriter(std::cout);
 		participant->addListener(errorWriter);
 
-
-		
 		Topic topic = participant->createTopic("ChildTopic");
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
 		sub->setDeadlineQoS(10000);
 		//sub->setTimeBasedFilterQoS(1000);
-		//sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
+		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("relay"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->setHistoryMaxSize(5);
@@ -77,6 +75,14 @@ public:
 		{
 			TestAll::ChildData* data;
 			data = (TestAll::ChildData*)sub->getMessage()->getData();
+			for(int i = 0; i < data->fs.size(); i++)
+			{
+				if(i != (int)data->fs[i])
+				{
+					throw "Error!";
+				}
+
+			}
 
 			//Do this to tell OPS not to delete this message until you do unreserve() on it, note you must keep track of your reserved references to avoid memory leak.
 			ops::OPSMessage* newMess = sub->getMessage();
