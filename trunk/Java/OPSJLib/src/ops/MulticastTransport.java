@@ -55,15 +55,13 @@ public class MulticastTransport implements Transport
         }
         
     }
-
-    public boolean receive(byte[] b) //throws ReceiveTimedOutException
+    public boolean receive(byte[] b, int offset)
     {
-        //byte[] b = new byte[StaticManager.MAX_SIZE];
-        DatagramPacket p = new DatagramPacket(b, b.length);
+        DatagramPacket p = new DatagramPacket(b, offset, StaticManager.MAX_SIZE);
         try
         {
             multicastSocket.receive(p);
-            newBytesEvent.fireEvent(b);
+            newBytesEvent.fireEvent(p);
             return true;
         }
         catch (SocketTimeoutException ex)
@@ -74,7 +72,11 @@ public class MulticastTransport implements Transport
         {
             return false;
         }
-        //return false;
+    }
+
+    public boolean receive(byte[] b) //throws ReceiveTimedOutException
+    {
+        return receive(b, 0);
     }
     @Deprecated
     public void send(byte[] b)
@@ -113,5 +115,7 @@ public class MulticastTransport implements Transport
     {
         return newBytesEvent;
     }
+
+
     
 }

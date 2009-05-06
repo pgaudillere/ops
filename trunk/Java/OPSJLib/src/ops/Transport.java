@@ -15,6 +15,8 @@ package ops;
  */
 public interface Transport
 {
+
+    public boolean receive(byte[] bytes, int offset);
     void setReceiveTimeout(int millis) throws CommException;
     //void receive(byte[] b) throws ReceiveTimedOutException;
     boolean receive(byte[] b);

@@ -40,6 +40,28 @@ public class WriteByteBuffer
         outBuffer.order(ByteOrder.LITTLE_ENDIAN); //Only default value, this should be dynamic in future OPS
     }
 
+    public static byte[] putSegmentInfo(byte[] bytes, int segmentSize, int headerSize) throws IOException
+    {
+        int nrOfSegments = bytes.length / segmentSize;
+        if(bytes.length % segmentSize != 0) nrOfSegments++;
+        byte[] result = new byte[bytes.length + nrOfSegments * headerSize];
+
+        WriteByteBuffer buf = new WriteByteBuffer(result);
+        for (int i = 0; i < nrOfSegments; i++)
+        {
+            buf.write(nrOfSegments);
+            buf.write(i);
+            buf.writeProtocol();
+            buf.write(bytes, i*segmentSize, segmentSize - headerSize);
+        }
+        return result;
+    }
+
+    private void write(byte[] bytes, int start, int size)
+    {
+        outBuffer.put(bytes, start, size);
+    }
+
     public final ByteBuffer order(ByteOrder bo)
     {
         return outBuffer.order(bo);
@@ -171,5 +193,7 @@ public class WriteByteBuffer
         write(protocolVersionLow);
         write(protocolVersionHigh);
     }
+
+
     
 }

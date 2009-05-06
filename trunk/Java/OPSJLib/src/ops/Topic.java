@@ -116,6 +116,19 @@ public class Topic<T> extends OPSObject
         return sampleMaxSize;
     }
 
+    public void setSampleMaxSize(int size)
+    {
+        if(size < StaticManager.MAX_SIZE)
+		{
+			sampleMaxSize = StaticManager.MAX_SIZE;
+		}
+		else
+		{
+			sampleMaxSize = size;
+		}
+    }
+
+
 
 
     @Override
@@ -126,6 +139,10 @@ public class Topic<T> extends OPSObject
         typeID = archive.inout("dataType", typeID);
         port = archive.inout("port", port);
         domainAddress = archive.inout("address", domainAddress);
+
+        int tSampleMaxSize = getSampleMaxSize();
+		tSampleMaxSize= archive.inout("sampleMaxSize", tSampleMaxSize);
+		setSampleMaxSize(tSampleMaxSize);
 
         //sampleMaxSize will be ignored for now.
     }
