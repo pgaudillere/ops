@@ -5,6 +5,7 @@
 package ops;
 
 import java.io.IOException;
+import java.net.DatagramPacket;
 import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
@@ -38,11 +39,18 @@ public class TopicHandler
     private Vector<Subscriber> subscribers = new Vector<Subscriber>();
     private ObserverImpl bytesListener = new ObserverImpl();
     private Participant participant;
+    private int expectedFragment = 0;
+    private int fragmentSize;
+    private final byte[] bytes;
+    private int byteOffset = 0;
+    private static int FRAGMENT_HEADER_SIZE = 14;
 
     public TopicHandler(Topic t, Participant part)
     {
+        bytes = new byte[t.getSampleMaxSize()];
         participant = part;
         topic = t;
+        fragmentSize = StaticManager.MAX_SIZE;
         transport = new MulticastTransport(t.getDomainAddress(), t.getPort());//TransportFactory.getTransport(t);
 
     }
@@ -72,10 +80,12 @@ public class TopicHandler
         return result;
     }
 
-    private synchronized void onNewBytes(byte[] bytes)
+
+    private synchronized void onNewBytes(DatagramPacket p)
     {
         try
         {
+            //byte[] bytes = p.getData();
             ReadByteBuffer readBuf = new ReadByteBuffer(bytes);
 
             if (readBuf.checkProtocol())
@@ -85,16 +95,23 @@ public class TopicHandler
                 int nrOfFragments = readBuf.readint();
                 int currentFragment = readBuf.readint();
 
-
-
-                if(nrOfFragments == 1 && currentFragment == 0)
+                if(currentFragment == nrOfFragments)
                 {
-                    sendBytesToSubscribers(readBuf);
+                    //We have received a full message, let's deserialize it and send it to subscribers.
+                    //First we trim the bytes to remove all fragment headers. Note, unlike in C++.
+                    byte[] trimmedBytes = ReadByteBuffer.trimSegments(bytes, fragmentSize, FRAGMENT_HEADER_SIZE);
+                    sendBytesToSubscribers(new ReadByteBuffer(trimmedBytes));
+                    expectedFragment = 0;
+
+                }
+                else if(currentFragment == expectedFragment)
+                {
+                    expectedFragment++;
                 }
                 else
                 {
-                    //TODO: make proper error handling.
-                    System.out.println("________________Segment Error, Java does not suppport segmented messages:_____________________");
+                    //Sample will be lost here, add error handling
+                    expectedFragment = 0;
                 }
             }
 
@@ -125,7 +142,7 @@ public class TopicHandler
 
     private void setupTransportThread()
     {
-        final byte[] bytes = new byte[StaticManager.MAX_SIZE];
+
         Thread thread = new Thread(new Runnable()
         {
 
@@ -133,7 +150,7 @@ public class TopicHandler
             {
                 while (hasSubscribers)
                 {
-                    transport.receive(bytes);
+                    boolean recOK = transport.receive(bytes, expectedFragment*fragmentSize);
                 }
                 System.out.println("Leaving transport thread...");
 
@@ -147,7 +164,7 @@ public class TopicHandler
 
         public void update(Observable o, Object arg)
         {
-            onNewBytes((byte[]) arg);
+            onNewBytes((DatagramPacket) arg);
         }
     }
 

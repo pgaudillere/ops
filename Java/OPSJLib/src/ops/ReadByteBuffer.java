@@ -41,6 +41,22 @@ public class ReadByteBuffer
         inBuffer = ByteBuffer.wrap(buf);
         inBuffer.order(ByteOrder.LITTLE_ENDIAN);
     }
+    
+    public static byte[] trimSegments(byte[] bytes, int segmentSize, int headerSize)
+    {
+        int nrOfSegments = bytes.length / segmentSize;
+        if(bytes.length % segmentSize != 0) nrOfSegments++;
+
+        byte[] result = new byte[bytes.length - nrOfSegments*headerSize];
+
+        
+        for (int i = 0; i < nrOfSegments; i++)
+        {
+            System.arraycopy(bytes, i*segmentSize + headerSize, result, i*(segmentSize-headerSize), segmentSize - headerSize);
+        }
+        return result;
+        
+    }
         
     
 //    public OPSObject readOPSObject(OPSObjectHelper oh) throws IOException
