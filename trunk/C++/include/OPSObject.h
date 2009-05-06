@@ -37,7 +37,7 @@ namespace ops
         
         friend class ByteBuffer;
         //friend class OPSObjectHelper;
-        friend class Publisher;
+        friend class OPSArchiverIn;
         
     protected:
         //Should only be set by the Publisher at publication time and by ByteBuffer at deserialization time.
@@ -62,6 +62,8 @@ namespace ops
         //char getPublicationPriority();
 		virtual void serialize(ArchiverInOut* archive);
 
+		//
+		std::vector<char> spareBytes;
 		//virtual OPSObject* clone();
         
     public:

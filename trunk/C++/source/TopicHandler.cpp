@@ -28,7 +28,8 @@ namespace ops
 	TopicHandler::TopicHandler(Topic top, Participant* part) :
 		expectedSegment(0),
 		memMap(top.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE),
-		firstReceived(false)
+		firstReceived(false),
+		currentMessageSize(0)
 	{
 		message = NULL;
 		participant = part;
@@ -68,6 +69,8 @@ namespace ops
 			int nrOfFragments = tBuf.ReadInt();
 			int currentFragment = tBuf.ReadInt();
 
+			currentMessageSize += byteSizePair.size;
+
 			if(currentFragment != expectedSegment)
 			{//For testing only...
 				if(firstReceived)
@@ -76,6 +79,7 @@ namespace ops
 					participant->reportError(&err);
 				}
 				expectedSegment = 0;
+				currentMessageSize = 0;
 				receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 				return;
 			}
@@ -101,6 +105,20 @@ namespace ops
 				message = dynamic_cast<OPSMessage*>(archiver.inout(std::string("message"), message));
 				if(message)
 				{
+					//Put spare bytes in data of message
+					int nrOfSpareBytes = currentMessageSize - buf.GetSize();
+
+					if(nrOfSpareBytes > 0)
+					{
+					
+						message->getData()->spareBytes.reserve(nrOfSpareBytes);
+						message->getData()->spareBytes.resize(nrOfSpareBytes, 0);
+
+						//This will read the rest of the bytes as raw bytes and put them into sparBytes field of data.
+						buf.ReadChars(&(message->getData()->spareBytes[0]), nrOfSpareBytes);
+						
+					}
+
 					//Add message to a reference handler that will keep the message until it is no longer needed.
 					messageReferenceHandler.addReservable(message);
 					message->reserve();
@@ -108,6 +126,7 @@ namespace ops
 					notifyNewEvent(message);
 					//This will delete this message if no one reserved it in the application layer.
 					if(oldMessage) oldMessage->unreserve();
+					currentMessageSize = 0;
 				}
 				else
 				{

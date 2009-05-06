@@ -63,6 +63,26 @@ public:
 	{
 		return width*height;
 	}
+	///Makes a copy of the content of this memory to dest. startIndex and endIndex are memory map relative. 
+	void copyToBytes(char* dest, int startIndex, int endIndex )
+	{
+		int currentSegment = (int)(startIndex / getSegmentSize());
+		int indexInSegment = startIndex - (currentSegment +  1) * getSegmentSize(); 
+		int bytesToWrite = endIndex - startIndex;
+		int bytesLeftInSegment = getSegmentSize() - indexInSegment;
+
+		if(bytesLeftInSegment >= bytesToWrite)
+		{
+			memcpy(dest, getSegment(currentSegment) + indexInSegment, bytesToWrite);
+		}
+		else
+		{
+			//Recursively call this method again until we copied all bytes.
+			memcpy(dest, getSegment(currentSegment) + indexInSegment, bytesLeftInSegment);
+			copyToBytes(dest + bytesLeftInSegment, startIndex + bytesLeftInSegment, endIndex);
+		}
+
+	}
 	~MemoryMap()
 	{
 		//Delete all data.

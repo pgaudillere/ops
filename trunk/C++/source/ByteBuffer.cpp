@@ -27,6 +27,7 @@ namespace ops
     
     ByteBuffer::ByteBuffer(MemoryMap* mMap)
     {
+		totalSize = 0;
 		index = 0;
 		memMap = mMap;
 		currentSegment = 0;
@@ -111,11 +112,13 @@ namespace ops
 		{
 			memcpy((void*)(memMap->getSegment(currentSegment) + index), chars, length);
 			index += length;
+			totalSize += length;
 		}
 		else
 		{
 			memcpy((void*)(memMap->getSegment(currentSegment) + index), chars, bytesLeftInSegment);
 			index += bytesLeftInSegment;
+			totalSize += bytesLeftInSegment;
 			nextSegmentAt += memMap->getSegmentSize();
 			currentSegment++;
 			writeNewSegment();
@@ -152,12 +155,14 @@ namespace ops
 		{
 			memcpy((void*)chars, memMap->getSegment(currentSegment) + index, length);
 			index += length;
+			totalSize += length;
 		}
 		else
 		{
 			memcpy((void*)chars, memMap->getSegment(currentSegment) + index, bytesLeftInSegment);
 			index += bytesLeftInSegment;
 			currentSegment++;
+			totalSize += bytesLeftInSegment;
 			readNewSegment();
 			ReadChars(chars + bytesLeftInSegment, length - bytesLeftInSegment);
 		}
@@ -181,7 +186,7 @@ namespace ops
 
 	int ByteBuffer::GetSize()
     {
-        return index;
+        return totalSize; //was index
     }
     
     void ByteBuffer::WriteFloat(float& f)
@@ -439,6 +444,7 @@ namespace ops
 				//index += length;
 				std::copy(memMap->getSegment(currentSegment) + index, memMap->getSegment(currentSegment) + index + length, it);
 				index += length;
+				totalSize += length;
 			}
 			else
 			{
@@ -449,6 +455,7 @@ namespace ops
 
 				std::copy(memMap->getSegment(currentSegment) + index, memMap->getSegment(currentSegment) + index + bytesLeftInSegment, it);
 				index += bytesLeftInSegment;
+				totalSize += bytesLeftInSegment;
 				
 				currentSegment++;
 				readNewSegment();
@@ -478,6 +485,7 @@ namespace ops
 				//index += length;
 				std::copy(it, out.end(), memMap->getSegment(currentSegment) + index);
 				index += length;
+				totalSize += length;
 			}
 			else
 			{
@@ -487,6 +495,7 @@ namespace ops
 				//WriteBytes(out, offset, bytesLeftInSegment);
 				std::copy(it, it + bytesLeftInSegment, memMap->getSegment(currentSegment) + index);
 				index += bytesLeftInSegment;
+				totalSize += bytesLeftInSegment;
 				
 				nextSegmentAt += memMap->getSegmentSize();
 				currentSegment++;

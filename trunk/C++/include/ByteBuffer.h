@@ -46,6 +46,8 @@ namespace ops
         ///This variable is automatically incremented by the read and write  operations.
         int index;
 
+		int totalSize;
+
 		//int segmentSize;
 		int nextSegmentAt;
 		int currentSegment;
