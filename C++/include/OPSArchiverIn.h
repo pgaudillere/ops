@@ -99,6 +99,9 @@ public:
 		Serializable* newSer = factory->create(types);
         if(newSer != NULL)
         {
+			//Do this tp preserve type information even if slicing has occured.
+			((OPSObject*)newSer)->typesString = types;
+
             newSer->serialize(this);
         }
 

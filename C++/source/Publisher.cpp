@@ -96,15 +96,17 @@ namespace ops
 		message.setPublicationID(currentPublicationID);
 		message.setPublisherName(name);
 
-		//buf.writeProtocol();
-		//buf.WriteString("");
-		//buf.WriteInt(1);
-		//buf.WriteInt(0);
 		buf.writeNewSegment();
 
 		OPSArchiverOut archive(&buf);
 
 		message = *((OPSMessage*)(archive.inout(std::string("message"), &message)));
+
+		//If data has spare bytes, write them to the end of the buf
+		if(message.getData()->spareBytes.size() > 0)
+		{
+			buf.WriteChars(&(message.getData()->spareBytes[0]), message.getData()->spareBytes.size());
+		}
 
 		buf.finish();
 

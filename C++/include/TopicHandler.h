@@ -71,6 +71,9 @@ namespace ops
 		///Current OPSMessage, valid until next sample arrives.
 		OPSMessage* message;
 
+		///The accumulated size in bytes of the current message
+		int currentMessageSize;
+
 		Lockable messageLock;
 
 		///ReferenceHandler that keeps track of object created on reception and deletes them when no one is interested anymore.
