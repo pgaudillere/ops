@@ -139,7 +139,7 @@ public:
 int main(int argc, char* args)
 {
 	//Add support for our types from TestAll IDL project.
-	ops::OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
+	//ops::OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
 
 	//Create an object that will listen to OPS events
 	Main m;
