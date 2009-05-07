@@ -35,7 +35,7 @@ namespace ops
         if(instance == NULL)
         {
             instance = new OPSObjectFactoryImpl();
-            instance->add(new BuiltInFactory());
+            //instance->add(new BuiltInFactory());
         }
         return instance;
     }

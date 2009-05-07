@@ -95,7 +95,7 @@ namespace ops
 				int i2 = buf.ReadInt();
 
 				//Read of the actual OPSMessage
-				OPSArchiverIn archiver(&buf);
+				OPSArchiverIn archiver(&buf, participant->getObjectFactory());
 
 				SafeLock lock(&messageLock);
 

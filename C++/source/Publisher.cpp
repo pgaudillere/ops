@@ -61,7 +61,7 @@ namespace ops
 	{
 		this->name = name;
 	}
-	void Publisher::setKey(std::string name)
+	void Publisher::setKey(std::string key)
 	{
 		this->key = key;
 	}
