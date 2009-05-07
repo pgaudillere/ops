@@ -20,20 +20,9 @@ import ops.protocol.OPSMessage;
 public class TopicHandler
 {
 
-    //private static HashMap<String, TopicHandler> instances = new HashMap<String, TopicHandler>();
     private boolean hasSubscribers;
     private boolean hasPublishers;
     private HashMap<String, MessageBuffer> messageBuffers = new HashMap<String, MessageBuffer>();
-
-//    static TopicHandler getTopicHandler(Topic t)
-//    {
-//        if (!instances.containsKey(t.getName()))
-//        {
-//            TopicHandler newTopicHandler = new TopicHandler(t);
-//            instances.put(t.getName(), newTopicHandler);
-//        }
-//        return instances.get(t.getName());
-//    }
     private Topic topic;
     private Transport transport;
     private Vector<Subscriber> subscribers = new Vector<Subscriber>();
@@ -42,17 +31,18 @@ public class TopicHandler
     private int expectedFragment = 0;
     private int fragmentSize;
     private final byte[] bytes;
+    private byte[] trimmedBytes;
     private int byteOffset = 0;
     private static int FRAGMENT_HEADER_SIZE = 14;
-    byte[] by = new byte[StaticManager.MAX_SIZE];
 
     public TopicHandler(Topic t, Participant part)
     {
         bytes = new byte[t.getSampleMaxSize()];
+        trimmedBytes = new byte[t.getSampleMaxSize()];
         participant = part;
         topic = t;
         fragmentSize = StaticManager.MAX_SIZE;
-        transport = new MulticastTransport(t.getDomainAddress(), t.getPort());//TransportFactory.getTransport(t);
+        transport = new MulticastTransport(t.getDomainAddress(), t.getPort());
 
     }
 
@@ -87,13 +77,11 @@ public class TopicHandler
         try
         {
             
-            System.arraycopy(bytes, expectedFragment*fragmentSize, by, 0, p.getLength());
-            ReadByteBuffer readBuf = new ReadByteBuffer(by);
+            //System.arraycopy(bytes, expectedFragment*fragmentSize, by, 0, p.getLength());
+            ReadByteBuffer readBuf = new ReadByteBuffer(bytes, expectedFragment*fragmentSize, fragmentSize);
 
             if (readBuf.checkProtocol())
             {
-                //String messID = readBuf.readstring();
-
                 int nrOfFragments = readBuf.readint();
                 int currentFragment = readBuf.readint();
 
@@ -101,7 +89,7 @@ public class TopicHandler
                 {
                     //We have received a full message, let's deserialize it and send it to subscribers.
                     //First we trim the bytes to remove all fragment headers. Note, unlike in C++.
-                    byte[] trimmedBytes = ReadByteBuffer.trimSegments(bytes, fragmentSize, FRAGMENT_HEADER_SIZE);
+                    ReadByteBuffer.trimSegments(bytes, fragmentSize, FRAGMENT_HEADER_SIZE, trimmedBytes);
                     sendBytesToSubscribers(new ReadByteBuffer(trimmedBytes));
                     expectedFragment = 0;
 
@@ -113,16 +101,14 @@ public class TopicHandler
                 else
                 {
                     //Sample will be lost here, add error handling
+                    System.out.println("___________________Fragment error, sample lost__________________");
                     expectedFragment = 0;
                 }
             }
 
-
-
         } catch (IOException ex)
         {
-            ex.printStackTrace();
-        //TODO: Add error handling here
+            expectedFragment = 0;
         }
     }
 
