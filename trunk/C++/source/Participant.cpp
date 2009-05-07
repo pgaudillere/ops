@@ -21,6 +21,7 @@
 #include "Participant.h"
 #include "SingleThreadPool.h"
 #include "TopicHandler.h"
+#include "OPSObjectFactoryImpl.h"
 
 
 namespace ops
@@ -58,6 +59,7 @@ namespace ops
 		keepRunning(true),
 		aliveTimeout(1000)
 	{
+		objectFactory = new OPSObjectFactoryImpl();
 		ioService = IOService::create();
 		if(!ioService)
 		{
@@ -96,7 +98,8 @@ namespace ops
 
 	void Participant::addTypeSupport(ops::SerializableFactory* typeSupport)
 	{
-		OPSObjectFactory::getInstance()->add(typeSupport);
+		//OPSObjectFactory::getInstance()->add(typeSupport);
+		objectFactory->add(typeSupport);
 	}
 
 	Topic Participant::createTopic(std::string name)

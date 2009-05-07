@@ -41,6 +41,11 @@ public:
 		buf = _buf;
 		factory = OPSObjectFactory::getInstance();
 	}
+	OPSArchiverIn(ByteBuffer* _buf, OPSObjectFactory* factory) 
+	{
+		buf = _buf;
+		this->factory = factory;
+	}
 	~OPSArchiverIn()
 	{}
 
@@ -99,7 +104,7 @@ public:
 		Serializable* newSer = factory->create(types);
         if(newSer != NULL)
         {
-			//Do this tp preserve type information even if slicing has occured.
+			//Do this to preserve type information even if slicing has occured.
 			((OPSObject*)newSer)->typesString = types;
 
             newSer->serialize(this);

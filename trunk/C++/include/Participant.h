@@ -69,6 +69,10 @@ namespace ops
 		{
 			return config;
 		}
+		OPSObjectFactory* getObjectFactory()
+		{
+			return objectFactory;
+		}
 
 	private:
 
@@ -92,7 +96,7 @@ namespace ops
 
 		__int64 aliveTimeout;
 
-		//OPSObjectFactory* objectFactory;
+		OPSObjectFactory* objectFactory;
 
 
 

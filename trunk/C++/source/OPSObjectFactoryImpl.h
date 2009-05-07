@@ -60,7 +60,10 @@ class OPSObjectFactoryImpl : public OPSObjectFactory
 {
     
 public:
-    
+    OPSObjectFactoryImpl()
+	{
+		add(new BuiltInFactory());
+	}
     /**
      * Tries to construct the most specialized version of the given typeString
      */
