@@ -36,6 +36,7 @@ public class MulticastTransport implements Transport
             this.port = port;
             //multicastSocket = new MulticastSocket();
             multicastSocket = new MulticastSocket(port);
+            multicastSocket.setReceiveBufferSize(16000000);
             try
             {
                 setReceiveTimeout(100);
