@@ -27,9 +27,8 @@ public class XMLArchiverIn implements ArchiverInOut
     private InputStream is;
     private Document doc;
     private Node currentNode;
-    private int currentElement =  -1;
+    private int currentElement = -1;
     private Stack<Node> nodeStack = new Stack<Node>();
-
     private SerializableCompositeFactory factory = new SerializableCompositeFactory();
 
     public XMLArchiverIn(InputStream is) throws FormatException
@@ -38,23 +37,22 @@ public class XMLArchiverIn implements ArchiverInOut
         {
             this.is = is;
             DOMParser parser = new DOMParser();
-            
+
             // Parse the document.
             parser.parse(new InputSource(is));
             // Obtain the document.
             doc = parser.getDocument();
-            
+
             currentNode = doc;
-        }
-        catch (SAXException ex)
+        } catch (SAXException ex)
         {
             throw new FormatException("Caused by underlying SAXException: " + ex.getMessage());
-        }
-        catch (IOException ex)
+        } catch (IOException ex)
         {
             throw new FormatException("Caused by underlying IOException: " + ex.getMessage());
         }
     }
+
     public XMLArchiverIn(InputStream is, String rootNode) throws FormatException
     {
         try
@@ -69,12 +67,10 @@ public class XMLArchiverIn implements ArchiverInOut
 
             currentNode = doc;
             currentNode = getNode(rootNode);
-        }
-        catch (SAXException ex)
+        } catch (SAXException ex)
         {
             throw new FormatException("Caused by underlying SAXException: " + ex.getMessage());
-        }
-        catch (IOException ex)
+        } catch (IOException ex)
         {
             throw new FormatException("Caused by underlying IOException: " + ex.getMessage());
         }
@@ -83,7 +79,7 @@ public class XMLArchiverIn implements ArchiverInOut
     public byte getByte(String name)
     {
         return Byte.parseByte(getValue(name));
-        
+
     }
 
     public int getInt(String name)
@@ -114,7 +110,7 @@ public class XMLArchiverIn implements ArchiverInOut
     public String getString(String name)
     {
         String ret = getValue(name);
-        if(ret == null)
+        if (ret == null)
         {
             ret = "";
         }
@@ -134,16 +130,16 @@ public class XMLArchiverIn implements ArchiverInOut
         currentNode = getNode(name);
         NodeList nodes = currentNode.getChildNodes();
         int size = 0;
-        for(int i = 0 ; i < nodes.getLength(); i++)
+        for (int i = 0; i < nodes.getLength(); i++)
         {
-            if(nodes.item(i).getNodeName().equals("element"))
+            if (nodes.item(i).getNodeName().equals("element"))
             {
-                size++;                
+                size++;
             }
         }
         currentNode = nodeStack.pop();
-        return size; 
-        
+        return size;
+
     }
 //    public Deserializable getElement(String name, int i, Deserializable deserializable)
 //    {
@@ -173,51 +169,51 @@ public class XMLArchiverIn implements ArchiverInOut
 //
 //
 //    }
+
     private Node getCurrentElement(int n)
     {
-        
+
         int ittElement = 0;
         NodeList nodes = currentNode.getChildNodes();
-        for(int i = 0 ; i < nodes.getLength(); i++)
+        for (int i = 0; i < nodes.getLength(); i++)
         {
-            if(nodes.item(i).getNodeName().equals("element") && n == ittElement)
+            if (nodes.item(i).getNodeName().equals("element") && n == ittElement)
             {
                 return nodes.item(i);
-            }
-            else if(nodes.item(i).getNodeName().equals("element"))
+            } else if (nodes.item(i).getNodeName().equals("element"))
             {
-                ittElement++;                
+                ittElement++;
             }
         }
-        
+
         return null;
-        
+
     }
 
     private Node getNode(String name)
     {
         NodeList nodes = currentNode.getChildNodes();
-        for(int i = 0 ; i < nodes.getLength(); i++)
+        for (int i = 0; i < nodes.getLength(); i++)
         {
-            if(nodes.item(i).getNodeName().equals(name))
+            if (nodes.item(i).getNodeName().equals(name))
             {
                 return nodes.item(i);
             }
         }
         return null;
-        
+
     }
 
     private String getValue(String name)
     {
         NodeList nodes = currentNode.getChildNodes();
-        for(int i = 0 ; i < nodes.getLength(); i++)
+        for (int i = 0; i < nodes.getLength(); i++)
         {
-            if(nodes.item(i).getNodeName().equals(name))
+            if (nodes.item(i).getNodeName().equals(name))
             {
                 return nodes.item(i).getTextContent();
             }
-            
+
         }
         return null;
     }
@@ -269,7 +265,6 @@ public class XMLArchiverIn implements ArchiverInOut
 //        currentNode = nodeStack.pop();
 //
 //    }
-
     public boolean getBoolean(String name)
     {
         return Boolean.parseBoolean(getValue(name));
@@ -277,42 +272,85 @@ public class XMLArchiverIn implements ArchiverInOut
 
     public int inout(String name, int v) throws IOException
     {
-        return getInt(name);
+        try
+        {
+            return getInt(name);
+        } catch (NumberFormatException e)
+        {
+            return v;
+        }
     }
 
     public long inout(String name, long v) throws IOException
     {
-        return getLong(name);
+        try
+        {
+            return getLong(name);
+        } catch (NumberFormatException e)
+        {
+            return v;
+        }
     }
 
     public byte inout(String name, byte v) throws IOException
     {
-        return getByte(name);
+        try
+        {
+            return getByte(name);
+        } catch (NumberFormatException e)
+        {
+            return v;
+        }
     }
 
     public short inout(String name, short v) throws IOException
     {
-        return getShort(name);
+        try
+        {
+            return getShort(name);
+        } catch (NumberFormatException e)
+        {
+            return v;
+        }
     }
 
     public float inout(String name, float v) throws IOException
     {
-        return getFloat(name);
+        try
+        {
+            return getFloat(name);
+        } catch (NumberFormatException e)
+        {
+            return v;
+        }
     }
 
     public boolean inout(String name, boolean v) throws IOException
     {
-        return getBoolean(name);
+        try
+        {
+            return getBoolean(name);
+        } catch (NumberFormatException e)
+        {
+            return v;
+        }
     }
 
     public String inout(String name, String v) throws IOException
     {
         return getString(name);
+
     }
 
     public double inout(String name, double v) throws IOException
     {
-        return getDouble(name);
+        try
+        {
+            return getDouble(name);
+        } catch (NumberFormatException e)
+        {
+            return v;
+        }
     }
 
     public Serializable inout(String name, Serializable v) throws IOException
@@ -335,6 +373,7 @@ public class XMLArchiverIn implements ArchiverInOut
         }
         return v;
     }
+
     public Serializable getElement(String name, int i)
     {
         try
@@ -353,10 +392,9 @@ public class XMLArchiverIn implements ArchiverInOut
             currentNode = nodeStack.pop();
 
             return newElem;
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
-           return null;
+            return null;
         }
     }
 
@@ -419,7 +457,4 @@ public class XMLArchiverIn implements ArchiverInOut
         }
         return v;
     }
-
-
-
 }
