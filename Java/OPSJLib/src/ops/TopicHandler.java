@@ -44,6 +44,7 @@ public class TopicHandler
     private final byte[] bytes;
     private int byteOffset = 0;
     private static int FRAGMENT_HEADER_SIZE = 14;
+    byte[] by = new byte[StaticManager.MAX_SIZE];
 
     public TopicHandler(Topic t, Participant part)
     {
@@ -85,8 +86,9 @@ public class TopicHandler
     {
         try
         {
-            //byte[] bytes = p.getData();
-            ReadByteBuffer readBuf = new ReadByteBuffer(bytes);
+            
+            System.arraycopy(bytes, expectedFragment*fragmentSize, by, 0, p.getLength());
+            ReadByteBuffer readBuf = new ReadByteBuffer(by);
 
             if (readBuf.checkProtocol())
             {
@@ -95,7 +97,7 @@ public class TopicHandler
                 int nrOfFragments = readBuf.readint();
                 int currentFragment = readBuf.readint();
 
-                if(currentFragment == nrOfFragments)
+                if(currentFragment == (nrOfFragments - 1) && currentFragment == expectedFragment)
                 {
                     //We have received a full message, let's deserialize it and send it to subscribers.
                     //First we trim the bytes to remove all fragment headers. Note, unlike in C++.
