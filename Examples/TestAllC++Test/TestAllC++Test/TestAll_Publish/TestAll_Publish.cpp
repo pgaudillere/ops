@@ -121,7 +121,7 @@ int main(int argc, char* args)
 			basePub.write(&baseData);
 		}
 
-		Sleep(1000);
+		Sleep(100);
 	}
 
 	//timeEndPeriod(1);
