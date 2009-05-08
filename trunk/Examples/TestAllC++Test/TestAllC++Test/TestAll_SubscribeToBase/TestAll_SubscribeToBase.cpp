@@ -80,6 +80,11 @@ public:
 
 };
 
+void newData()
+{
+
+}
+
 //Application entry point
 int main(int argc, char* args)
 {
@@ -87,7 +92,12 @@ int main(int argc, char* args)
 	//ops::OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
 
 	//Create an object that will listen to OPS events
-	Main m;
+	//Main m;
+
+	ops::DataListener* callback = class DataCalback : ops::DataListener { void onNewData(ops::DataNotifier* subscriber){newData();}};
+	//DataCallback callBack;
+
+
 
 	//Make sure the OPS ioService never runs out of work.
 	//Run it on main application thread only.
