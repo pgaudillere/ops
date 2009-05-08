@@ -4,6 +4,7 @@
  */
 package testprogram;
 
+import configlib.exception.FormatException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,14 +27,15 @@ public class MainTest
     public static void main(String[] args)
     {
 
-        OPSFactory factory = new OPSFactory("TestAllDomain");
 
-        for (String string : factory.listTopicNames())
-        {
-            System.out.println("" + string);
-        }
         try
         {
+            OPSFactory factory = new OPSFactory(new File("TestAllDomain"));
+
+            for (String string : factory.listTopicNames())
+            {
+                System.out.println("" + string);
+            }
 
             factory.addJar(new File("TestAll.jar"));
             factory.save(new File("TestFactoryConfig.xml"));
@@ -43,6 +45,7 @@ public class MainTest
             Subscriber sub = factory.createSubscriber("ChildTopic");
             sub.addObserver(new Observer()
             {
+
                 public void update(Observable o, Object arg)
                 {
                     onNewData();
@@ -54,6 +57,9 @@ public class MainTest
             pub.writeAsOPSObject(oo);
             System.out.println("" + pub);
 
+        } catch (FormatException ex)
+        {
+            Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException ex)
         {
             Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
