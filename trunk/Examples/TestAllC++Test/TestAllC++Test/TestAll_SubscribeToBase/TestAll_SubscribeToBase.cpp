@@ -92,11 +92,12 @@ int main(int argc, char* args)
 	//ops::OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
 
 	//Create an object that will listen to OPS events
-	//Main m;
+	Main m;
 
-	ops::DataListener* callback = class DataCalback : ops::DataListener { void onNewData(ops::DataNotifier* subscriber){newData();}};
+	//This is a way to create inline subscriber event handlers in c++
+	//class DataCalback : ops::DataListener { void onNewData(ops::DataNotifier* subscriber){newData();}};
 	//DataCallback callBack;
-
+	
 
 
 	//Make sure the OPS ioService never runs out of work.
