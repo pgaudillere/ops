@@ -20,8 +20,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import ops.OPSObject;
 import ops.Participant;
 import ops.Publisher;
