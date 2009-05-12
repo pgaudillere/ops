@@ -17,6 +17,11 @@ import java.util.ArrayList;
  */
 public class OPSFactoryConfig implements Serializable
 {
+    
+    ArrayList<JarPathConfig> jarFilePaths = new ArrayList<JarPathConfig>();
+    String domainID = "";
+    String opsConfigRelativePath = "";
+
     public ArrayList<File> getJarFiles()
     {
         ArrayList<File> jarFiles = new ArrayList<File>();
@@ -26,12 +31,12 @@ public class OPSFactoryConfig implements Serializable
         }
         return jarFiles;
     }
-    ArrayList<JarPathConfig> jarFilePaths = new ArrayList<JarPathConfig>();
-    String domainID = "";
+
     public void serialize(ArchiverInOut archive) throws IOException
     {
         jarFilePaths = (ArrayList<JarPathConfig>) archive.inoutSerializableList("jarFilePaths", jarFilePaths);
         domainID = archive.inout("domainID", domainID);
+        opsConfigRelativePath = archive.inout("opsConfigRelativePath", opsConfigRelativePath);
     }
 
 }

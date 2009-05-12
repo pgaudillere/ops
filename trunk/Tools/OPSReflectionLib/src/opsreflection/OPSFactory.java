@@ -56,7 +56,7 @@ public class OPSFactory
         {
             jarSearcher.addJar(file);
         }
-        participant = Participant.getInstance(domainID);
+        participant = Participant.getInstance(domainID, "DEFAULT_PARTICIPANT", new File(configFile.getPath() + "/" + factoryConfig.opsConfigRelativePath));
         
         TypeSupportImpl typeSupport = new TypeSupportImpl();
         participant.addTypeSupport(typeSupport);
@@ -64,6 +64,8 @@ public class OPSFactory
 
 
     }
+
+
 
     public OPSObject createOPSObject(String string)
     {
