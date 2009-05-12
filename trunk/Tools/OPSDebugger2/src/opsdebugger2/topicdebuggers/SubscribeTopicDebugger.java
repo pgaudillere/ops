@@ -69,7 +69,7 @@ public class SubscribeTopicDebugger extends javax.swing.JPanel implements Observ
 
         if (valeuName.equals(opsdebugger2.OPSDebugger2App.getActiveSubscriberProxy().getTopic().getName()))
         {
-            Subscriber sub = OPSDebugger2App.getOPSFactory().createSubscriber(valeuName);
+            Subscriber sub = OPSDebugger2App.getActiveProject().getOPSFactory().createSubscriber(valeuName);
 
             if (sub != null)
             {

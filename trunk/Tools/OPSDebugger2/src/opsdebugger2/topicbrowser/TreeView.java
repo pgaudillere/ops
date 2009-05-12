@@ -23,7 +23,7 @@ public class TreeView extends javax.swing.JPanel
         initComponents();
 
         tree.setDragEnabled(true);
-        updateTopics();
+        //updateTopics();
 
 
     }
@@ -40,9 +40,6 @@ public class TreeView extends javax.swing.JPanel
         jScrollPane1 = new javax.swing.JScrollPane();
         tree = new javax.swing.JTree();
         topicsComboBox = new javax.swing.JComboBox();
-        goButton = new javax.swing.JButton();
-        domainAddressTextField = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         manageJarsButton = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(opsdebugger2.OPSDebugger2App.class).getContext().getResourceMap(TreeView.class);
@@ -62,20 +59,6 @@ public class TreeView extends javax.swing.JPanel
             }
         });
 
-        goButton.setText(resourceMap.getString("goButton.text")); // NOI18N
-        goButton.setName("goButton"); // NOI18N
-        goButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                goButtonActionPerformed(evt);
-            }
-        });
-
-        domainAddressTextField.setText(resourceMap.getString("domainAddressTextField.text")); // NOI18N
-        domainAddressTextField.setName("domainAddressTextField"); // NOI18N
-
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-
         manageJarsButton.setText(resourceMap.getString("manageJarsButton.text")); // NOI18N
         manageJarsButton.setName("manageJarsButton"); // NOI18N
         manageJarsButton.addActionListener(new java.awt.event.ActionListener() {
@@ -92,11 +75,6 @@ public class TreeView extends javax.swing.JPanel
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(domainAddressTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(goButton, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(topicsComboBox, 0, 208, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -110,30 +88,13 @@ public class TreeView extends javax.swing.JPanel
                     .addComponent(manageJarsButton)
                     .addComponent(topicsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(domainAddressTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(goButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 598, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-private void goButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_goButtonActionPerformed
-    //TODO add your handling code here:
-    TopicSubscriberProxy prx = new TopicSubscriberProxy((String) topicsComboBox.getSelectedItem(), domainAddressTextField.getText());
-
-    OPSDebugger2App.setActiveSubscriberProxy(prx);
-
-
-    tree.setModel(prx);
-    tree.updateUI();
-}//GEN-LAST:event_goButtonActionPerformed
-
 private void topicsComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_topicsComboBoxItemStateChanged
 // TODO add your handling code here:
-    TopicSubscriberProxy prx = new TopicSubscriberProxy((String) topicsComboBox.getSelectedItem(), domainAddressTextField.getText());
+    TopicSubscriberProxy prx = new TopicSubscriberProxy((String) topicsComboBox.getSelectedItem());
 
     OPSDebugger2App.setActiveSubscriberProxy(prx);
 
@@ -149,9 +110,6 @@ private void manageJarsButtonActionPerformed(java.awt.event.ActionEvent evt) {//
 }//GEN-LAST:event_manageJarsButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField domainAddressTextField;
-    private javax.swing.JButton goButton;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton manageJarsButton;
     private javax.swing.JComboBox topicsComboBox;
@@ -161,7 +119,7 @@ private void manageJarsButtonActionPerformed(java.awt.event.ActionEvent evt) {//
     private void updateTopics() 
     {
 
-        ArrayList<String> topics = OPSDebugger2App.getOPSFactory().listTopicNames();
+        ArrayList<String> topics = OPSDebugger2App.getActiveProject().getOPSFactory().listTopicNames();
         topicsComboBox.removeAllItems();
 
         for (String string : topics)

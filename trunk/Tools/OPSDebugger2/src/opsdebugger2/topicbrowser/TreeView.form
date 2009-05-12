@@ -30,12 +30,6 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jScrollPane1" alignment="0" pref="326" max="32767" attributes="1"/>
-                  <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="domainAddressTextField" pref="241" max="32767" attributes="1"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="goButton" min="-2" pref="79" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="topicsComboBox" pref="208" max="32767" attributes="1"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -54,14 +48,7 @@
                   <Component id="topicsComboBox" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="domainAddressTextField" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="goButton" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="598" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="652" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -97,27 +84,6 @@
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="topicsComboBoxItemStateChanged"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="goButton">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="goButton.text"/>
-        <Property name="name" type="java.lang.String" value="goButton" noResource="true"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="goButtonActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JTextField" name="domainAddressTextField">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="domainAddressTextField.text"/>
-        <Property name="name" type="java.lang.String" value="domainAddressTextField" noResource="true"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
-        <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="manageJarsButton">
       <Properties>
