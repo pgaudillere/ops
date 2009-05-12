@@ -63,7 +63,7 @@ public class PublishTopicDebugger extends javax.swing.JPanel
     {
         if (valeuName.equals(opsdebugger2.OPSDebugger2App.getActiveSubscriberProxy().getTopic().getName()))
         {
-            OPSFactory opsf = OPSDebugger2App.getOPSFactory();
+            OPSFactory opsf = OPSDebugger2App.getActiveProject().getOPSFactory();
             Publisher pub = opsf.createPublisher(valeuName);
 
             if (pub != null)

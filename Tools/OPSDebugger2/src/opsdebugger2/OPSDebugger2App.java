@@ -25,35 +25,19 @@ public class OPSDebugger2App extends SingleFrameApplication
     private static TopicSubscriberProxy activeSub;
     private static OPSFactory opsFactory;
     private static HashMap<String,OPSFactory> opsFactoryInstances = new HashMap<String, OPSFactory>();
+    private static DebuggerProject activeProject;
+
+    public static DebuggerProject getActiveProject()
+    {
+        return activeProject;
+    }
 
     public static void setActiveSubscriberProxy(TopicSubscriberProxy prx)
     {
         activeSub = prx;
     }
     public static String domain = "";
-    public static OPSFactory getOPSFactory()
-    {
-        if(!opsFactoryInstances.containsKey(domain))
-        {
-            try
-            {
-                try
-                {
-                    opsFactoryInstances.put(domain, new OPSFactory(new File("OPSReflectionConfig.xml")));
-                } catch (FormatException ex)
-                {
-                    Logger.getLogger(OPSDebugger2App.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } catch (FileNotFoundException ex)
-            {
-                Logger.getLogger(OPSDebugger2App.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex)
-            {
-                Logger.getLogger(OPSDebugger2App.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return opsFactoryInstances.get(domain);
-    }
+    
 
     /**
      * At startup create and show the main frame of the application.

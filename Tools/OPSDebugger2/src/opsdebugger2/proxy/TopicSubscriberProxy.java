@@ -34,14 +34,14 @@ public class TopicSubscriberProxy extends ValueNotifier implements TreeModel, Ru
     private Vector<String> keys = new Vector<String>();
     private KeyFilterQoSPolicy keyFilter = new KeyFilterQoSPolicy();
     private String keyString;
-    private String domainAddress;
+    //private String domainAddress;
 
-    public TopicSubscriberProxy(String topicName, String domainAddress)
+    public TopicSubscriberProxy(String topicName)
     {
         this.topicName = topicName;
 
-        OPSFactory opsf = OPSDebugger2App.getOPSFactory();
-        this.domainAddress = domainAddress;
+        OPSFactory opsf = OPSDebugger2App.getActiveProject().getOPSFactory();
+        //this.domainAddress = domainAddress;
         topic = opsf.createTopic(topicName);
         String typeName = topic.getTypeID();
 
@@ -249,11 +249,6 @@ public class TopicSubscriberProxy extends ValueNotifier implements TreeModel, Ru
         {
             while (true)
             {
-
-
-
-
-
                 Thread.sleep(100);
             }
         } catch (InterruptedException interruptedException)
@@ -340,8 +335,8 @@ public class TopicSubscriberProxy extends ValueNotifier implements TreeModel, Ru
         return keys;
     }
 
-    public String getDomainAddress()
-    {
-        return domainAddress;
-    }
+//    public String getDomainAddress()
+//    {
+//        return domainAddress;
+//    }
 }
