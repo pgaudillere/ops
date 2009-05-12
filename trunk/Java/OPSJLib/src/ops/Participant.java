@@ -3,6 +3,7 @@ package ops;
 
 import configlib.SerializableFactory;
 import configlib.exception.FormatException;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -23,9 +24,14 @@ public class Participant
     }
 	public static Participant getInstance(String domainID, String participantID)
     {
+        return getInstance(domainID, domainID, null);
+    }
+
+    public static Participant getInstance(String domainID, String participantID, File file)
+    {
         if(!instances.containsKey(participantID))
 		{
-			Participant newInst = new Participant(domainID, participantID);
+			Participant newInst = new Participant(domainID, participantID, file);
 			Domain tDomain = newInst.config.getDomain(domainID);
 
 			if(tDomain != null)
@@ -38,8 +44,6 @@ public class Participant
 			}
 		}
 		return instances.get(participantID);
-
-
     }
     private String domainID;
     private String participantID;
@@ -48,13 +52,20 @@ public class Participant
     private OPSConfig config;
     private HashMap<String, TopicHandler> topicHandlerInstances = new HashMap<String, TopicHandler>();
 
-    private Participant(String domainID, String participantID)
+    private Participant(String domainID, String participantID, File configFile)
     {
         this.domainID = domainID;
         this.participantID = participantID;
         try
         {
-            config = OPSConfig.getConfig();
+            if(configFile == null)
+            {
+                config = OPSConfig.getConfig();
+            }
+            else
+            {
+                config = OPSConfig.getConfig(configFile);
+            }
         }
         catch (IOException ex)
         {
