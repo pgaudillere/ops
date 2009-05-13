@@ -32,7 +32,7 @@ public class PlotValue extends JLabel implements ValueListener, ListCellRenderer
         this.valueName = valueName;
         //OPSDebugger2App.getActiveSubscriberProxy().add(this);
         
-        String topic = OPSDebugger2App.getActiveSubscriberProxy().getTopic().getName();
+        String topic = valueName;//OPSDebugger2App.getApplication().getActiveSubscriberProxy().getTopic().getName();
         //String domain = OPSDebugger2App.getActiveSubscriberProxy().getDomainAddress();
         TopicSubscriberProxy subPrx = new TopicSubscriberProxy(topic);
         

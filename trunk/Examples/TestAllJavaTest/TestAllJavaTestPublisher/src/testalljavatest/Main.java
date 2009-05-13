@@ -27,16 +27,10 @@ public class Main {
     public static void main(String[] args)
     {
 
-        OPSConfig config = Participant.getParticipant().getConfig();
+        Participant participant = Participant.getInstance("TestAllDomain");
+        participant.addTypeSupport(new TestAll.TestAllTypeFactory());
 
-        // TODO code application logic here
-        OPSObjectFactory.getInstance().add(new TestAll.TestAllTypeFactory());
-
-        ops.Topic<ChildData> topic = new Topic<ChildData>();
-        topic.setDomainAddress("234.5.6.8");
-        topic.setName("ChildTopic");
-        topic.setPort(6686);
-        topic.setTypeID("TestAll.ChildData");
+        Topic topic = participant.createTopic("ChildTopic");
 
         ChildDataPublisher pub = new ChildDataPublisher(topic);
 

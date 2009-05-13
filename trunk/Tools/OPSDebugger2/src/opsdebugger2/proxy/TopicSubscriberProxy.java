@@ -40,7 +40,7 @@ public class TopicSubscriberProxy extends ValueNotifier implements TreeModel, Ru
     {
         this.topicName = topicName;
 
-        OPSFactory opsf = OPSDebugger2App.getActiveProject().getOPSFactory();
+        OPSFactory opsf = OPSDebugger2App.getApplication().getActiveProject().getOPSFactory();
         //this.domainAddress = domainAddress;
         topic = opsf.createTopic(topicName);
         String typeName = topic.getTypeID();

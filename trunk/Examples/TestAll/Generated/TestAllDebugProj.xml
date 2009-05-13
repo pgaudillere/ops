@@ -2,7 +2,7 @@
 <root>
     <factoryConfig type = "opsreflection.OPSFactoryConfig">
         <domainID>TestAllDomain</domainID>
-        <opsConfigRelativePath>ops_config.xml</opsConfigRelativePath>
+        <opsConfigRelativePath>../src/testall/ops_config.xml</opsConfigRelativePath>
         <jarFilePaths>
             <element type = "opsreflection.JarPathConfig">
                 <path>TestAll.jar</path>

@@ -23,7 +23,6 @@ public class Domain extends OPSObject
         appendType("Domain");
     }
 
-
     public Vector<Topic> getTopics()
     {
         return topics;

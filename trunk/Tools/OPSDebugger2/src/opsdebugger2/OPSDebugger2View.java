@@ -3,6 +3,12 @@
  */
 package opsdebugger2;
 
+import configlib.exception.FormatException;
+import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -10,22 +16,89 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import opsdebugger2.topicbrowser.TreeView;
 
 /**
  * The application's main frame.
  */
 public class OPSDebugger2View extends FrameView
 {
+    JFileChooser projectFileChooser = new JFileChooser();
+    
+    private File privateBrowseStartFile;
+
 
     public OPSDebugger2View(SingleFrameApplication app)
     {
         super(app);
 
         initComponents();
+
+        projectFileChooser.setFileFilter(new FileNameExtensionFilter("OPS Debugger Project Files", "xml"));
+        
+        privateBrowseStartFile = new File("session.private");
+
+        if(!privateBrowseStartFile.exists())
+        {
+            try
+            {
+                privateBrowseStartFile.createNewFile();
+            } catch (IOException ex)
+            {
+                //Logger.getLogger(OPSDebugger2View.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            try
+            {
+                FileInputStream fis = new FileInputStream(privateBrowseStartFile);
+                String homeDir = "";
+                BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+                homeDir = br.readLine();
+                projectFileChooser.setCurrentDirectory(new File(homeDir));
+
+            } catch (IOException ex)
+            {
+
+            }
+
+        }
+
+        getFrame().addWindowListener(new WindowAdapter()
+        {
+
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                FileOutputStream fos;
+                try
+                {
+                    fos = new FileOutputStream(privateBrowseStartFile);
+                    fos.write(projectFileChooser.getCurrentDirectory().getPath().getBytes());
+                } catch (IOException ex)
+                {
+                    
+                }
+
+                super.windowClosing(e);
+            }
+
+        });
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
@@ -124,6 +197,11 @@ public class OPSDebugger2View extends FrameView
         OPSDebugger2App.getApplication().show(aboutBox);
     }
 
+    TreeView getTreeView()
+    {
+        return treeView1;
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -146,6 +224,7 @@ public class OPSDebugger2View extends FrameView
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -217,6 +296,15 @@ public class OPSDebugger2View extends FrameView
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
 
+        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
+        jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem1);
+
         menuBar.add(fileMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
@@ -270,7 +358,30 @@ public class OPSDebugger2View extends FrameView
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        if(projectFileChooser.showOpenDialog(mainPanel) == JFileChooser.APPROVE_OPTION)
+        {
+            File selectedFile = projectFileChooser.getSelectedFile();
+            try
+            {
+                OPSDebugger2App.getApplication().setActiveProject(new DebuggerProject(selectedFile));
+            } catch (FileNotFoundException ex)
+            {
+                JOptionPane.showMessageDialog(mainPanel, "File was not found.");
+            } catch (FormatException ex)
+            {
+                JOptionPane.showMessageDialog(mainPanel, "File could not be loaded.");
+            } catch (IOException ex)
+            {
+                JOptionPane.showMessageDialog(mainPanel, "File could not be read.");
+            }
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

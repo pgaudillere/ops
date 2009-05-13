@@ -24,7 +24,7 @@ public class Participant
     }
 	public static Participant getInstance(String domainID, String participantID)
     {
-        return getInstance(domainID, domainID, null);
+        return getInstance(domainID, participantID, null);
     }
 
     public static Participant getInstance(String domainID, String participantID, File file)

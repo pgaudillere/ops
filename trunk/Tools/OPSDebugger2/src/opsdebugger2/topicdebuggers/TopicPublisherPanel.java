@@ -7,7 +7,6 @@ package opsdebugger2.topicdebuggers;
 
 import java.lang.reflect.Field;
 import java.util.Observable;
-import java.util.Vector;
 import ops.OPSObject;
 import ops.Publisher;
 
@@ -33,10 +32,8 @@ public class TopicPublisherPanel extends javax.swing.JPanel implements Runnable
         this.publisher = p;
         this.obj = obj;
 
-
-
         initComponents();
-        topicNameLabel.setText("" + p.getTopic().getName());
+        topicNameLabel.setText("" + p.getTopic().getName()+ " on " + p.getTopic().getDomainAddress() + ":" + p.getTopic().getPort());
 
         createTable(obj);
 

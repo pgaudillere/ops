@@ -49,4 +49,9 @@ public class DebuggerProject
         return opsFactory;
     }
 
+    String getName()
+    {
+        return projectHome.getName();
+    }
+
 }

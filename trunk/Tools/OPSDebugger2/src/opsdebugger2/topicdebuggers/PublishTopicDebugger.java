@@ -59,18 +59,18 @@ public class PublishTopicDebugger extends javax.swing.JPanel
         setTransferHandler(tTransHand);
     }
 
-    private void addNewPublisher(String valeuName) throws IllegalAccessException, InstantiationException, ClassNotFoundException
+    private void addNewPublisher(String valueName) throws IllegalAccessException, InstantiationException, ClassNotFoundException
     {
-        if (valeuName.equals(opsdebugger2.OPSDebugger2App.getActiveSubscriberProxy().getTopic().getName()))
-        {
-            OPSFactory opsf = OPSDebugger2App.getActiveProject().getOPSFactory();
-            Publisher pub = opsf.createPublisher(valeuName);
+        //if (valueName.equals(opsdebugger2.OPSDebugger2App.getApplication().getActiveSubscriberProxy().getTopic().getName()))
+        //{
+            OPSFactory opsf = OPSDebugger2App.getApplication().getActiveProject().getOPSFactory();
+            Publisher pub = opsf.createPublisher(valueName);
 
             if (pub != null)
             {
 
                 OPSObject data;
-                Topic t = opsf.createTopic(valeuName);
+                Topic t = opsf.createTopic(valueName);
                 data = opsf.createOPSObject(t.getTypeID());
                 TopicPublisherPanel tpp = new TopicPublisherPanel(pub, data);
 
@@ -82,12 +82,12 @@ public class PublishTopicDebugger extends javax.swing.JPanel
                 ((TitledBorder) getBorder()).setTitle("");
                 updateUI();
             }
-        }
-        else
-        {
-            ((TitledBorder) getBorder()).setTitle("Error: " + valeuName + " is not a valid topic, you can only drop topics on this panel...");
-            updateUI();
-        }
+        //}
+            else
+            {
+                ((TitledBorder) getBorder()).setTitle("Error: " + valueName + " is not a valid topic, you can only drop topics on this panel...");
+                updateUI();
+            }
     }
 
     /** This method is called from within the constructor to
