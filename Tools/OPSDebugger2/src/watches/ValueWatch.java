@@ -22,8 +22,8 @@ public class ValueWatch extends javax.swing.JPanel implements ValueListener
     public ValueWatch() 
     {
         initComponents();
-        OPSDebugger2App.getActiveSubscriberProxy().add(this);
-        topicNameLabel.setText("From " + OPSDebugger2App.getActiveSubscriberProxy().getTopic().getName());
+        OPSDebugger2App.getApplication().getActiveSubscriberProxy().add(this);
+        topicNameLabel.setText("From " + OPSDebugger2App.getApplication().getActiveSubscriberProxy().getTopic().getName());
     }
 
     /** This method is called from within the constructor to

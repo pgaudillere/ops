@@ -40,7 +40,6 @@ public class TreeView extends javax.swing.JPanel
         jScrollPane1 = new javax.swing.JScrollPane();
         tree = new javax.swing.JTree();
         topicsComboBox = new javax.swing.JComboBox();
-        manageJarsButton = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(opsdebugger2.OPSDebugger2App.class).getContext().getResourceMap(TreeView.class);
         setBorder(javax.swing.BorderFactory.createTitledBorder(resourceMap.getString("Form.border.title"))); // NOI18N
@@ -59,14 +58,6 @@ public class TreeView extends javax.swing.JPanel
             }
         });
 
-        manageJarsButton.setText(resourceMap.getString("manageJarsButton.text")); // NOI18N
-        manageJarsButton.setName("manageJarsButton"); // NOI18N
-        manageJarsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                manageJarsButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,21 +65,16 @@ public class TreeView extends javax.swing.JPanel
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(topicsComboBox, 0, 208, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(manageJarsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(topicsComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, 326, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(manageJarsButton)
-                    .addComponent(topicsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(topicsComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -96,30 +82,23 @@ private void topicsComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN
 // TODO add your handling code here:
     TopicSubscriberProxy prx = new TopicSubscriberProxy((String) topicsComboBox.getSelectedItem());
 
-    OPSDebugger2App.setActiveSubscriberProxy(prx);
+    OPSDebugger2App.getApplication().setActiveSubscriberProxy(prx);
 
 
     tree.setModel(prx);
     tree.updateUI();
 }//GEN-LAST:event_topicsComboBoxItemStateChanged
 
-private void manageJarsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manageJarsButtonActionPerformed
-
-    updateTopics();
-
-}//GEN-LAST:event_manageJarsButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton manageJarsButton;
     private javax.swing.JComboBox topicsComboBox;
     private javax.swing.JTree tree;
     // End of variables declaration//GEN-END:variables
 
-    private void updateTopics() 
+    public void updateTopics()
     {
 
-        ArrayList<String> topics = OPSDebugger2App.getActiveProject().getOPSFactory().listTopicNames();
+        ArrayList<String> topics = OPSDebugger2App.getApplication().getActiveProject().getOPSFactory().listTopicNames();
         topicsComboBox.removeAllItems();
 
         for (String string : topics)

@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Vector;
+import ops.MulticastDomain;
 import ops.OPSObject;
 import ops.Participant;
 import ops.Publisher;
@@ -54,9 +55,9 @@ public class OPSFactory
         this.domainID = factoryConfig.domainID;
         for (File file : factoryConfig.getJarFiles())
         {
-            jarSearcher.addJar(file);
+            jarSearcher.addJar(new File(configFile.getParentFile().getPath() + "/" + file.getPath()));
         }
-        participant = Participant.getInstance(domainID, "DEFAULT_PARTICIPANT", new File(configFile.getPath() + "/" + factoryConfig.opsConfigRelativePath));
+        participant = Participant.getInstance(domainID, "DEFAULT_PARTICIPANT", new File(configFile.getParentFile().getPath() + "/" + factoryConfig.opsConfigRelativePath));
         
         TypeSupportImpl typeSupport = new TypeSupportImpl();
         participant.addTypeSupport(typeSupport);
@@ -77,6 +78,11 @@ public class OPSFactory
         {
             return null;
         }
+    }
+
+    public String getDomainAdrress()
+    {
+        return ((MulticastDomain)participant.getConfig().getDomain(domainID)).getDomainAddress();
     }
 
     public void save(File f) throws FileNotFoundException, IOException

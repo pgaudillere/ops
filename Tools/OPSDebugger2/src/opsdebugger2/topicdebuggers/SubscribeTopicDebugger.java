@@ -13,6 +13,7 @@ import java.util.Observer;
 import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import ops.Subscriber;
+import ops.Topic;
 import opsdebugger2.OPSDebugger2App;
 
 /**
@@ -67,15 +68,18 @@ public class SubscribeTopicDebugger extends javax.swing.JPanel implements Observ
     private void openNewSubscriber(String valeuName)
     {
 
-        if (valeuName.equals(opsdebugger2.OPSDebugger2App.getActiveSubscriberProxy().getTopic().getName()))
+        if (valeuName.equals(opsdebugger2.OPSDebugger2App.getApplication().getActiveSubscriberProxy().getTopic().getName()))
         {
-            Subscriber sub = OPSDebugger2App.getActiveProject().getOPSFactory().createSubscriber(valeuName);
+            Subscriber sub = OPSDebugger2App.getApplication().getActiveProject().getOPSFactory().createSubscriber(valeuName);
 
             if (sub != null)
             {
                 //sub.setThreadPolicy(Subscriber.EXCLUSIVE);
-                String topicName = valeuName;
-                TopicInspectorPanel tip = new TopicInspectorPanel(sub, valeuName);
+
+                Topic t = OPSDebugger2App.getApplication().getActiveProject().getOPSFactory().createTopic(valeuName);
+
+                String topicName = valeuName + " on "+ t.getDomainAddress() + ":" + t.getPort() + "";
+                TopicInspectorPanel tip = new TopicInspectorPanel(sub, topicName);
 
                 sub.start();
                 add(tip);

@@ -3,15 +3,6 @@
  */
 package opsdebugger2;
 
-import configlib.exception.FormatException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import opsdebugger2.proxy.TopicSubscriberProxy;
 import opsreflection.OPSFactory;
 import org.jdesktop.application.Application;
@@ -22,22 +13,31 @@ import org.jdesktop.application.SingleFrameApplication;
  */
 public class OPSDebugger2App extends SingleFrameApplication
 {
-    private static TopicSubscriberProxy activeSub;
-    private static OPSFactory opsFactory;
-    private static HashMap<String,OPSFactory> opsFactoryInstances = new HashMap<String, OPSFactory>();
-    private static DebuggerProject activeProject;
 
-    public static DebuggerProject getActiveProject()
+    private TopicSubscriberProxy activeSub;
+    private OPSFactory opsFactory;
+    private OPSDebugger2View mainFrame;
+    //private HashMap<String,OPSFactory> opsFactoryInstances = new HashMap<String, OPSFactory>();
+    private DebuggerProject activeProject;
+
+    public DebuggerProject getActiveProject()
     {
         return activeProject;
     }
 
-    public static void setActiveSubscriberProxy(TopicSubscriberProxy prx)
+    public void setActiveProject(DebuggerProject debuggerProject)
     {
+        mainFrame.getFrame().setTitle(debuggerProject.getName());
+
+        activeProject = debuggerProject;
+        mainFrame.getTreeView().updateTopics();
+    }
+
+    public void setActiveSubscriberProxy(TopicSubscriberProxy prx)
+    {
+
         activeSub = prx;
     }
-    public static String domain = "";
-    
 
     /**
      * At startup create and show the main frame of the application.
@@ -46,7 +46,8 @@ public class OPSDebugger2App extends SingleFrameApplication
     protected void startup()
     {
         activeSub = null;
-        show(new OPSDebugger2View(this));
+        mainFrame = new OPSDebugger2View(this);
+        show(mainFrame);
     }
 
     /**
@@ -67,11 +68,11 @@ public class OPSDebugger2App extends SingleFrameApplication
     {
         return Application.getInstance(OPSDebugger2App.class);
     }
-    
-    public static TopicSubscriberProxy getActiveSubscriberProxy()
+
+    public TopicSubscriberProxy getActiveSubscriberProxy()
     {
         return activeSub;
-        
+
     }
 
     /**
@@ -79,15 +80,15 @@ public class OPSDebugger2App extends SingleFrameApplication
      */
     public static void main(String[] args)
     {
-        Timer gcTimer = new Timer();
-        gcTimer.scheduleAtFixedRate(new TimerTask() {
-
-            @Override
-            public void run()
-            {
-                System.gc();
-            }
-        }, 5000, 1000);
+//        Timer gcTimer = new Timer();
+//        gcTimer.scheduleAtFixedRate(new TimerTask() {
+//
+//            @Override
+//            public void run()
+//            {
+//                System.gc();
+//            }
+//        }, 5000, 1000);
         launch(OPSDebugger2App.class, args);
     }
 }

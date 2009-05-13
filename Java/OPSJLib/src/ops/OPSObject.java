@@ -12,9 +12,6 @@ package ops;
 import configlib.ArchiverInOut;
 import configlib.Serializable;
 import java.io.IOException;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -60,6 +57,13 @@ public class OPSObject implements Serializable
     {
         archive.inout("key", key);
     }
+
+    @Override
+    public String toString()
+    {
+        return getClass().getName();
+    }
+
    
     
 

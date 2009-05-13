@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Document   : ops_config.xml
-    Created on : den 15 april 2009, 17:21
-    Author     : angr
-    Description:
-        Purpose of the document follows.
+ Description:
 -->
 <root>
     <ops_config type = "DefaultOPSConfigImpl">
@@ -12,13 +8,23 @@
 
             <!-- First multicast domain -->
             <element type = "MulticastDomain">
-                <domainID>FooDomain</domainID>
+                <domainID>TestAllDomain</domainID>
                 <domainAddress>234.5.6.8</domainAddress>
+                <!--optional <timeToLive>1</timeToLive>-->
+                <!--optional <localInterface>0.0.0.0</timeToLive>-->
+                <!--optional <inSocketBufferSize>16000000</inSocketBufferSize>-->
+                <!--optional <outSocketBufferSize>16000000</outSocketBufferSize>-->
                 <topics>
                     <element type = "Topic">
-                        <name>FooTopic</name>
-                        <port>6686</port>
-                        <dataType>foo.FooData</dataType>
+                        <name>ChildTopic</name>
+                        <port>6689</port>
+                        <dataType>TestAll.ChildData</dataType>
+                        <sampleMaxSize>2100000</sampleMaxSize>
+                    </element>
+                    <element type = "Topic">
+                      <name>BaseTopic</name>
+                      <port>6687</port>
+                      <dataType>TestAll.BaseData</dataType>
                     </element>
                     <!-- TODO: Add more topics here... -->
                 </topics>
