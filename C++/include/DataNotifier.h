@@ -32,10 +32,12 @@ namespace ops
     class DataNotifier
     {
     private:
-        ///Vector that holds pointers to the DataListeners
-        std::vector<DataListener*> listeners;
+        
         
     protected:
+		///Vector that holds pointers to the DataListeners
+        std::vector<DataListener*> listeners;
+
         ///Called by subclasses that wishes to notify its listeners of the arrival of new data.
 		void notifyNewData();
     public:

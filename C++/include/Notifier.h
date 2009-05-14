@@ -42,7 +42,7 @@ namespace ops
 
     protected:
         ///Called by subclasses that wishes to notify its listeners of the arrival of new events.
-		void notifyNewEvent(ArgType arg)
+		virtual void notifyNewEvent(ArgType arg)
 		{
 			//boost::mutex::scoped_lock lock(mutex);
 			SafeLock lock(&mutex);
@@ -57,14 +57,14 @@ namespace ops
         
         
         ///Register a Listener
-        void addListener(Listener<ArgType>* listener)
+        virtual void addListener(Listener<ArgType>* listener)
 		{
 			//boost::mutex::scoped_lock lock(mutex);
 			SafeLock lock(&mutex);
 			listeners.push_back(listener);
 		}
 
-		void removeListener(Listener<ArgType>* listener)
+		virtual void removeListener(Listener<ArgType>* listener)
 		{
 			//boost::mutex::scoped_lock lock(mutex);
 			SafeLock lock(&mutex);
@@ -77,6 +77,12 @@ namespace ops
 					listeners.erase(p);
 				}
 			}
+		}
+		int getNrOfListeners()
+		{
+			SafeLock lock(&mutex);
+			return listeners.size();
+
 		}
         
         //Destructor:

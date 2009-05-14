@@ -32,11 +32,12 @@ namespace ops
 	class Receiver : public Notifier<BytesSizePair>
 	{
 	public:
-		virtual ~Receiver(){}
+		virtual ~Receiver() {}
 
 		static Receiver* create(std::string ip, int bindPort, IOService* ioService, std::string localInterface = "0.0.0.0", int inSocketBufferSize = 16000000);
 		//void setReceiveBuffer(char* bytes, int bufSize);
 		virtual void asynchWait(char* bytes, int size) = 0;
+		virtual void stop() = 0;
 
 		
 	};

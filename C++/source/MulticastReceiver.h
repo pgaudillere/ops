@@ -36,7 +36,9 @@ namespace ops
 	class MulticastReceiver : public Receiver
 	{
 	public:
-		MulticastReceiver(std::string mcAddress, int bindPort, IOService* ioServ, std::string localInterface = "0.0.0.0", int inSocketBufferSizent = 16000000): max_length(65535)
+		MulticastReceiver(std::string mcAddress, int bindPort, IOService* ioServ, std::string localInterface = "0.0.0.0", int inSocketBufferSizent = 16000000): 
+		  max_length(65535),
+		  cancelled(false)
 		{
 			boost::asio::io_service* ioService = ((BoostIOServiceImpl*)ioServ)->boostIOService;//((BoostIOServiceImpl*)Participant::getIOService())->boostIOService;
 			//udp::resolver resolver(*ioService);
@@ -87,7 +89,10 @@ namespace ops
 		void handle_receive_from(const boost::system::error_code& error,
 			size_t nrBytesReceived)
 		{
-			
+			if(cancelled)
+			{
+				return;
+			}			
 			if (!error && nrBytesReceived > 0)
 			{
 				//printf("Data receivedm in multicast receiver\n");
@@ -97,7 +102,7 @@ namespace ops
 			}
 			else
 			{
-				handleReadError();
+				handleReadError(error);
 			}
 			
 			
@@ -111,8 +116,14 @@ namespace ops
 				boost::bind(&MulticastReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));*/
 
 		}
-		void handleReadError()
+		void handleReadError(const boost::system::error_code& error)
 		{
+			
+			if(error.value() == BREAK_COMM_ERROR_CODE)
+			{
+				//Communcation has been canceled from stop, do not scedule new receive
+				return;
+			}
 			//notifyNewEvent(data);
 			printf("___________handleReadError__________\n");
 			sock->async_receive(
@@ -126,7 +137,7 @@ namespace ops
 		{
 			delete sock;
 			delete localEndpoint;
-			delete ioService;
+			//delete ioService;
 		}
 		int receive(char* buf, int size)
 		{
@@ -166,6 +177,15 @@ namespace ops
 			return ipaddress;
 		}
 
+		///Override from Receiver
+		void stop()
+		{
+			boost::system::error_code error(BREAK_COMM_ERROR_CODE, boost::system::generic_category);
+			cancelled = true;
+			sock->cancel(error);
+			
+		}
+
 		
 	private:
 		int port;
@@ -177,6 +197,9 @@ namespace ops
 
 		int max_length; //enum { max_length = 65535 };
 		char* data;//[max_length];
+
+		static const int BREAK_COMM_ERROR_CODE = 345676;
+		bool cancelled;
 
 
 	};

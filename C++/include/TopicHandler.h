@@ -52,6 +52,8 @@ namespace ops
 		bool aquireMessageLock();
 		void releaseMessageLock();
 
+		void stop();
+
 	protected:
 		///Override from Listener
 		///Called whenever the receiver has new data.

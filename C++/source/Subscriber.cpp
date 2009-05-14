@@ -32,7 +32,8 @@ namespace ops
         threadPolicy(SHARED_THREAD),
         deadlineMissed(false),
 		firstDataReceived(false),
-		messageBufferMaxSize(1)
+		messageBufferMaxSize(1),
+		started(false)
 		//deadlineTimer(*Participant::getIOService())		
     {
 		message = NULL;
@@ -40,30 +41,45 @@ namespace ops
 
 		participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
 		deadlineTimer = DeadlineTimer::create(participant->getIOService());
-		deadlineTimer->addListener(this);
         filterQoSPolicyMutex = CreateMutex(NULL, false, NULL);
         newDataEvent = CreateEvent(NULL, true, false, NULL);
 		timeLastData = TimeHelper::currentTimeMillis();
 
-		topicHandler = participant->getTopicHandler(t);
+		
 
     }
     Subscriber::~Subscriber()
     {
-		topicHandler->removeListener(this);
+		listeners.clear();
+		if(started)
+		{
+			stop();
+		}
+		delete deadlineTimer;
     }
 
 	
 
     void Subscriber::start()
     {
-		
+		topicHandler = participant->getTopicHandler(topic);
     	topicHandler->addListener(this);
+		deadlineTimer->addListener(this);
 		deadlineTimer->start(deadlineTimeout);
-		//cancelDeadlineTimeouts();
-		//registerForDeadlineTimeouts();
-		
+		started= true;
+
     }
+	void Subscriber::stop()
+	{
+		topicHandler->aquireMessageLock();
+		topicHandler->removeListener(this);
+		topicHandler->releaseMessageLock();
+		participant->releaseTopicHandler(topic);
+		deadlineTimer->removeListener(this);
+		deadlineTimer->cancel();
+		started = false;
+		
+	}
 	void Subscriber::onNewEvent(Notifier<OPSMessage*>* sender, OPSMessage* message)
 	{
 		OPSObject* o = message->getData();		

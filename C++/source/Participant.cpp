@@ -91,8 +91,19 @@ namespace ops
 		notifyNewEvent(err);
 	}
 
+	void Participant::cleanUpTopicHandlers()
+	{
+		SafeLock lock(&garbageLock);
+		for(unsigned int i = 0; i < garbageTopicHandlers.size(); i++)
+		{
+			garbageTopicHandlers[i]->stop();
+			delete garbageTopicHandlers[i];
+		}
+		garbageTopicHandlers.clear();
+	}
 	void Participant::onNewEvent(Notifier<int>* sender, int message)
 	{
+		cleanUpTopicHandlers();
 		aliveDeadlineTimer->start(aliveTimeout);
 	}
 
@@ -121,6 +132,22 @@ namespace ops
 
 		}
 		return topicHandlerInstances[top.getName()];
+	}
+	void Participant::releaseTopicHandler(Topic top)
+	{
+		if(topicHandlerInstances.find(top.getName()) != topicHandlerInstances.end())
+		{
+			TopicHandler* topHandler = topicHandlerInstances[top.getName()];
+			if(topHandler->getNrOfListeners() == 0)
+			{
+				//Time to mark this topicHandler as garbage.
+				topicHandlerInstances.erase(topicHandlerInstances.find(top.getName()));
+				SafeLock lock(&garbageLock);
+				garbageTopicHandlers.push_back(topHandler);
+
+			}
+		}
+		
 	}
 
 

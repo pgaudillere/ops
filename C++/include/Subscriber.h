@@ -48,7 +48,10 @@ public:
 	Subscriber(Topic t);
     virtual ~Subscriber();
 
+	///Starts communication.
     void start();
+	///Stops communication, unubscribe this subscriber to data.
+	void stop();
 
     DeadlineMissedEvent deadlineMissedEvent;
     void setDeadlineQoS(__int64 deadlineT);
@@ -149,6 +152,8 @@ private:
 
     bool deadlineMissed;
     void setDeadlineMissed(bool deadlineMissed);
+
+	bool started;
 
 
 	__int64 currentPulicationID ;

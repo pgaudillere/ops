@@ -69,7 +69,7 @@ namespace ops
 			int nrOfFragments = tBuf.ReadInt();
 			int currentFragment = tBuf.ReadInt();
 
-			currentMessageSize += byteSizePair.size;
+			currentMessageSize += byteSizePair.size;// - tBuf.GetSize();
 
 			if(currentFragment != expectedSegment)
 			{//For testing only...
@@ -94,6 +94,8 @@ namespace ops
 				int i1 = buf.ReadInt();
 				int i2 = buf.ReadInt();
 
+				int segmentPaddingSize = buf.GetSize();
+
 				//Read of the actual OPSMessage
 				OPSArchiverIn archiver(&buf, participant->getObjectFactory());
 
@@ -106,7 +108,9 @@ namespace ops
 				if(message)
 				{
 					//Put spare bytes in data of message
-					int nrOfSpareBytes = currentMessageSize - buf.GetSize();
+					//Lennart: Lite funderingar, det går inte att göra som i komentaren nedan, för vi vet ju inte säkert att allt data som
+					//vi lyckats serializera ligger i första segmentet. Vi måste räkna ut hur många segmentgränser som ligger i sparebytes!?
+					int nrOfSpareBytes = currentMessageSize - buf.GetSize();// - ((buf.getNrOfSegments()-1) * segmentPaddingSize);
 
 					if(nrOfSpareBytes > 0)
 					{
@@ -150,6 +154,11 @@ namespace ops
 			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 		}
 
+	}
+	void TopicHandler::stop()
+	{
+		receiver->removeListener(this);
+		receiver->stop();
 	}
 
 	bool TopicHandler::aquireMessageLock()

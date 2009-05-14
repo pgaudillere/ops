@@ -45,6 +45,7 @@ namespace ops
 		//bytes = new char[Participant::PACKET_MAX_SIZE];		
 		message.setPublisherName(name);
 		message.setTopicName(topic.getName());
+		message.setDataOwner(false);
 	}
 	Publisher::~Publisher()
 	{
