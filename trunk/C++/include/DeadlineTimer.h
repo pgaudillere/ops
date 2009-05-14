@@ -28,7 +28,7 @@ namespace ops
 	{
 	public:
 		virtual void start(__int64 timeout) = 0;
-		//virtual void cancel() = 0;
+		virtual void cancel() = 0;
 		virtual ~DeadlineTimer(){};
 
 		static DeadlineTimer* create(IOService* ioService);

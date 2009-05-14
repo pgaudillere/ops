@@ -63,6 +63,10 @@ namespace ops
 			isStarted = true;
 			}*/
 		}
+		virtual void cancel()
+		{
+			deadlineTimer.cancel();
+		}
 		void asynchHandleDeadlineTimeout(const boost::system::error_code& e)
 		{
 			if (e != boost::asio::error::operation_aborted)

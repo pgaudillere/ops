@@ -95,7 +95,14 @@ int main(int argc, char* args)
 	Main m;
 
 	//This is a way to create inline subscriber event handlers in c++
-	//class DataCalback : ops::DataListener { void onNewData(ops::DataNotifier* subscriber){newData();}};
+	/*class DataCallback : ops::DataListener 
+	{ 
+		void onNewData(ops::DataNotifier* subscriber)
+		{
+			
+			newData();
+		}
+	};*/
 	//DataCallback callBack;
 	
 

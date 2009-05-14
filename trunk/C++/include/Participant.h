@@ -60,6 +60,8 @@ namespace ops
 
 		//Deadline listener callback
 		void onNewEvent(Notifier<int>* sender, int message);
+		void cleanUpTopicHandlers();
+
 
 		IOService* getIOService()
 		{
@@ -86,8 +88,14 @@ namespace ops
 
 		///By Singelton, one TopicHandler per Topic (name) on this Participant
 		std::map<std::string, TopicHandler*> topicHandlerInstances;
+
+		//Garbage vector for TopicHandlers, these can safely be deleted.
+		std::vector<TopicHandler*> garbageTopicHandlers;
+		ops::Lockable garbageLock;
+
 		//Visible to friends only
 		TopicHandler* getTopicHandler(Topic top);
+		void releaseTopicHandler(Topic top);
 
 		std::string domainID;
 		std::string participantID;

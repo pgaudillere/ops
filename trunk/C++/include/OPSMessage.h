@@ -37,22 +37,35 @@ public:
 		publisherPriority(),
 		port(0),
 		qosMask(0),
-		publicationID(0)
+		publicationID(0),
+		dataOwner(true)
 	{
 		OPSObject::appendType(std::string("ops.protocol.OPSMessage"));
 		data = NULL;
 		
 	}
+	virtual void setDataOwner(bool ownership)
+	{
+		dataOwner = ownership;
+	}
+	virtual bool isDataOwner()
+	{
+		return dataOwner;
+	}
 	virtual ~OPSMessage()
 	{
 		//TODO: should this delete data???
-		if(data) delete data;
+		if(dataOwner)
+		{
+			if(data) delete data;
+		}
 	}
 
 private:
 	char messageType;
     char  endianness;
     char publisherPriority;
+	bool dataOwner;
     int port;
     __int64 qosMask;
     __int64 publicationID;

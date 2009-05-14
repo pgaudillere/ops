@@ -44,7 +44,7 @@ public:
 		sub = new ChildDataSubscriber(topic);
 		sub->setDeadlineQoS(10000);
 		//sub->setTimeBasedFilterQoS(1000);
-		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("relay"));
+		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->setHistoryMaxSize(5);
@@ -71,6 +71,7 @@ public:
 	///Override from ops::DataListener, called whenever new data arrives.
 	void onNewData(ops::DataNotifier* subscriber)
 	{
+		
 		if(subscriber == sub)
 		{
 			TestAll::ChildData* data;
@@ -94,7 +95,7 @@ public:
 			{
 				for(unsigned int i = 0; i < inCommingMessages.size(); i++)
 				{
-					//std::cout << inCommingMessages[i]->getPublicationID() << " From: " << inCommingMessages[i]->getPublisherName() << std::endl;
+					std::cout << inCommingMessages[i]->getPublicationID() << " From: " << inCommingMessages[i]->getPublisherName() << std::endl;
 					inCommingMessages[i]->unreserve();
 
 				}
@@ -130,6 +131,9 @@ public:
 	}
 	~Main()
 	{
+		baseSub->stop();
+		delete baseSub;
+		sub->stop();
 		delete sub;
 	}
 
@@ -142,24 +146,29 @@ int main(int argc, char* args)
 	//ops::OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
 
 	//Create an object that will listen to OPS events
-	Main m;
+	Main* m = new Main();
 
 	//Make sure the OPS ioService never runs out of work.
 	//Run it on main application thread only.
 	while(true)
 	{
-		Sleep(1);
-		m.sub->aquireMessageLock();
+		Sleep(5000);
+		break;
+		/*m.sub->aquireMessageLock();
 		std::deque<ops::OPSMessage*> messages = m.sub->getHistory();
 		for(int i = 0; i < 5 && i < messages.size(); i++)
 		{
 			std::cout << messages[i]->getPublicationID() << " ";
 		}
 		m.sub->releaseMessageLock();
-		std::cout << std::endl;
+		std::cout << std::endl;*/
 
 		//ops::Participant::getIOService()->run();
 	}
+
+
+	delete m;
+	
 	return 0;
 }
 
