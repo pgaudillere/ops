@@ -44,7 +44,7 @@ public:
 		sub = new ChildDataSubscriber(topic);
 		sub->setDeadlineQoS(10000);
 		//sub->setTimeBasedFilterQoS(1000);
-		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
+		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("relay"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		sub->setHistoryMaxSize(5);
@@ -153,7 +153,7 @@ int main(int argc, char* args)
 	while(true)
 	{
 		Sleep(5000);
-		break;
+		//break;
 		/*m.sub->aquireMessageLock();
 		std::deque<ops::OPSMessage*> messages = m.sub->getHistory();
 		for(int i = 0; i < 5 && i < messages.size(); i++)

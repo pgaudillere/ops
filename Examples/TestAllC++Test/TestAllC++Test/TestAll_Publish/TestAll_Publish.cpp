@@ -71,10 +71,10 @@ int main(int argc, char* args)
 
 	//return 0;
 
-	/*for(int i = 0; i < 400000; i++)
+	for(int i = 0; i < 100; i++)
 	{
 		data.fs.push_back(i);
-	}*/
+	}
 
 	
 	TestData testData2;
@@ -88,15 +88,15 @@ int main(int argc, char* args)
 	data.test2s.push_back(&testData2);
 	data.test2s.push_back(&testData3);
 
-	//std::ofstream oStream("ops_config.xml");
+	std::ofstream oStream("hatt.xml");
 
-	//ops::XMLArchiverOut archiver(oStream, "config");
+	ops::XMLArchiverOut archiver(oStream, "config");
 
-	//archiver.inout(std::string("topic"), &topic);
+	archiver.inout(std::string("data"), &data);
 
-	//archiver.close();
+	archiver.close();
 
-	//oStream.close();
+	oStream.close();
 
 	//std::ifstream iStream ("fulfile.xml");
 
