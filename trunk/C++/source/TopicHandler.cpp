@@ -49,6 +49,7 @@ namespace ops
 	}
 
 
+	
 	///Override from Listener
 	///Called whenever the receiver has new data.
 	void TopicHandler::onNewEvent(Notifier<BytesSizePair>* sender, BytesSizePair byteSizePair)
@@ -108,20 +109,7 @@ namespace ops
 				if(message)
 				{
 					//Put spare bytes in data of message
-					//Lennart: Lite funderingar, det går inte att göra som i komentaren nedan, för vi vet ju inte säkert att allt data som
-					//vi lyckats serializera ligger i första segmentet. Vi måste räkna ut hur många segmentgränser som ligger i sparebytes!?
-					int nrOfSpareBytes = currentMessageSize - buf.GetSize();// - ((buf.getNrOfSegments()-1) * segmentPaddingSize);
-
-					if(nrOfSpareBytes > 0)
-					{
-					
-						message->getData()->spareBytes.reserve(nrOfSpareBytes);
-						message->getData()->spareBytes.resize(nrOfSpareBytes, 0);
-
-						//This will read the rest of the bytes as raw bytes and put them into sparBytes field of data.
-						buf.ReadChars(&(message->getData()->spareBytes[0]), nrOfSpareBytes);
-						
-					}
+					calculateAndSetSpareBytes(buf, segmentPaddingSize);
 
 					//Add message to a reference handler that will keep the message until it is no longer needed.
 					messageReferenceHandler.addReservable(message);
@@ -168,6 +156,29 @@ namespace ops
 	void TopicHandler::releaseMessageLock()
 	{
 		messageLock.unlock();
+	}
+
+
+	void TopicHandler::calculateAndSetSpareBytes(ByteBuffer &buf, int segmentPaddingSize)
+	{
+		//We must calculate how many unserialized segment headers we have and substract that total header size from the size of spareBytes.
+		int nrOfSerializedBytes = buf.GetSize();
+		int totalNrOfSegments = (int)(currentMessageSize / memMap.getSegmentSize());
+		int nrOfSerializedSegements = (int)(nrOfSerializedBytes / memMap.getSegmentSize());
+		int nrOfUnserializedSegments = totalNrOfSegments - nrOfSerializedSegements;
+
+		int nrOfSpareBytes = currentMessageSize - buf.GetSize() - (nrOfUnserializedSegments * segmentPaddingSize);
+
+		if(nrOfSpareBytes > 0)
+		{
+
+			message->getData()->spareBytes.reserve(nrOfSpareBytes);
+			message->getData()->spareBytes.resize(nrOfSpareBytes, 0);
+
+			//This will read the rest of the bytes as raw bytes and put them into sparBytes field of data.
+			buf.ReadChars(&(message->getData()->spareBytes[0]), nrOfSpareBytes);
+
+		}
 	}
 
 
