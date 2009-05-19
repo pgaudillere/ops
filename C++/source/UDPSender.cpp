@@ -45,6 +45,12 @@ namespace ops
 		boost::asio::ip::multicast::hops ttlOption(ttl);
 		socket->set_option(ttlOption);
 
+///LA
+		boost::asio::ip::address_v4 local_interface = boost::asio::ip::address_v4::from_string(localInterface);
+		boost::asio::ip::multicast::outbound_interface ifOption(local_interface);
+		socket->set_option(ifOption);
+///LA
+
 		boost::asio::socket_base::non_blocking_io command(true);
 		socket->io_control(command);
 	
