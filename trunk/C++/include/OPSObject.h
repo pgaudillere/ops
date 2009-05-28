@@ -29,9 +29,8 @@
 
 namespace ops
 {
-    ///Interface that tags an object as being an OPSObject.
-    ///
-    //TODO: Put functionalities common for all OPSObjects here, e.g. ID's sizes etc...
+    
+    ///Base class for object that can be serialized with OPSArchivers
 	class OPSObject :  public Reservable, public Serializable
     {
         
@@ -51,8 +50,6 @@ namespace ops
 		{
 			typesString = type + " " + typesString;
 		}
-        
-       
     public:
         //std::string getPublisherName();
         std::string getKey();
@@ -62,9 +59,15 @@ namespace ops
         //char getPublicationPriority();
 		virtual void serialize(ArchiverInOut* archive);
 
-		//
+		///Bytes that hold unserialized data for this object.
+		///This happens if a type can not be fully understood by a participants type support.
 		std::vector<char> spareBytes;
-		//virtual OPSObject* clone();
+		
+		///Returns a newely allocated deep copy/clone of this object.
+		virtual OPSObject* clone();
+
+		///Fills the parameter obj with all values from this object.
+		virtual void fillClone(OPSObject* obj);
         
     public:
 		//static void deleteObjectVector(OPSObject* start);

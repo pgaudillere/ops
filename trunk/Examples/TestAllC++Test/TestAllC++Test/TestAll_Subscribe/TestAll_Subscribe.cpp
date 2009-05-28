@@ -14,6 +14,7 @@ public:
 	//Use a member subscriber so we can use it from onNewData, see below.
 	TestAll::ChildDataSubscriber* sub;
 	TestAll::BaseDataSubscriber* baseSub;
+	TestAll::ChildData data;
 
 	std::vector<ops::OPSMessage*> inCommingMessages;
 
@@ -74,34 +75,41 @@ public:
 		
 		if(subscriber == sub)
 		{
-			TestAll::ChildData* data;
-			data = (TestAll::ChildData*)sub->getMessage()->getData();
-			for(int i = 0; i < data->fs.size(); i++)
-			{
-				if(i != (int)data->fs[i])
-				{
-					throw "Error!";
-				}
+			
+			sub->numReservedMessages();
 
-			}
+			sub->getData(&data);
 
-			//Do this to tell OPS not to delete this message until you do unreserve() on it, note you must keep track of your reserved references to avoid memory leak.
-			ops::OPSMessage* newMess = sub->getMessage();
-			newMess->reserve();
-			inCommingMessages.push_back(newMess);
+			std::cout << data.i << " From: " << sub->getMessage()->getPublisherName() << std::endl;
 
-			//When we have 50 samples in our list, we print, remove and unreserve them. This will allow their memory to be freed.
-			if(inCommingMessages.size() == 5)
-			{
-				for(unsigned int i = 0; i < inCommingMessages.size(); i++)
-				{
-					std::cout << inCommingMessages[i]->getPublicationID() << " From: " << inCommingMessages[i]->getPublisherName() << std::endl;
-					inCommingMessages[i]->unreserve();
 
-				}
-				inCommingMessages.clear();
+			//data = (TestAll::ChildData*)sub->getMessage()->getData();
+			//for(int i = 0; i < data->fs.size(); i++)
+			//{
+			//	if(i != (int)data->fs[i])
+			//	{
+			//		throw "Error!";
+			//	}
 
-			}
+			//}
+
+			////Do this to tell OPS not to delete this message until you do unreserve() on it, note you must keep track of your reserved references to avoid memory leak.
+			//ops::OPSMessage* newMess = sub->getMessage();
+			//newMess->reserve();
+			//inCommingMessages.push_back(newMess);
+
+			////When we have 50 samples in our list, we print, remove and unreserve them. This will allow their memory to be freed.
+			//if(inCommingMessages.size() == 5)
+			//{
+			//	for(unsigned int i = 0; i < inCommingMessages.size(); i++)
+			//	{
+			//		std::cout << inCommingMessages[i]->getPublicationID() << " From: " << inCommingMessages[i]->getPublisherName() << std::endl;
+			//		inCommingMessages[i]->unreserve();
+
+			//	}
+			//	inCommingMessages.clear();
+
+			//}
 			//If you dont want to keep track of data yourself, you can use the history deque from the subscriber, its max size is set by sub->setHistoryMaxSize() in constructor.
 			//std::cout << "Buffer size: " << sub->getHistory().size() << std::endl;
 

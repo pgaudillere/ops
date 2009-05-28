@@ -233,6 +233,8 @@ public class OPSDebugger2View extends FrameView
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(opsdebugger2.OPSDebugger2App.class).getContext().getResourceMap(OPSDebugger2View.class);
+        mainPanel.setBackground(resourceMap.getColor("mainPanel.background")); // NOI18N
         mainPanel.setName("mainPanel"); // NOI18N
 
         jTabbedPane1.setName("jTabbedPane1"); // NOI18N
@@ -242,7 +244,6 @@ public class OPSDebugger2View extends FrameView
         subscribeTopicDebugger1.setName("subscribeTopicDebugger1"); // NOI18N
         jScrollPane1.setViewportView(subscribeTopicDebugger1);
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(opsdebugger2.OPSDebugger2App.class).getContext().getResourceMap(OPSDebugger2View.class);
         jTabbedPane1.addTab(resourceMap.getString("jScrollPane1.TabConstraints.tabTitle"), jScrollPane1); // NOI18N
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
@@ -316,6 +317,7 @@ public class OPSDebugger2View extends FrameView
 
         menuBar.add(helpMenu);
 
+        statusPanel.setBackground(resourceMap.getColor("statusPanel.background")); // NOI18N
         statusPanel.setName("statusPanel"); // NOI18N
 
         statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N

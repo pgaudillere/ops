@@ -4,6 +4,7 @@
   <NonVisualComponents>
     <Container class="javax.swing.JPanel" name="mainPanel">
       <Properties>
+        <Property name="background" type="java.awt.Color" resourceKey="mainPanel.background"/>
         <Property name="name" type="java.lang.String" value="mainPanel" noResource="true"/>
       </Properties>
 
@@ -198,6 +199,7 @@
     </Container>
     <Container class="javax.swing.JPanel" name="statusPanel">
       <Properties>
+        <Property name="background" type="java.awt.Color" resourceKey="statusPanel.background"/>
         <Property name="name" type="java.lang.String" value="statusPanel" noResource="true"/>
       </Properties>
 

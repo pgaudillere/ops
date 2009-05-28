@@ -28,7 +28,7 @@ namespace ops
 		void serialize(ArchiverInOut* archiver)
 		{
 			OPSObject::serialize(archiver);
-			archiver->inout(std::string("domains"), domains);
+			archiver->inout<Domain>(std::string("domains"), domains);
 		}
 	private:
 		std::vector<Domain* > domains;

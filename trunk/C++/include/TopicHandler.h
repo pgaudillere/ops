@@ -54,6 +54,13 @@ namespace ops
 
 		void stop();
 
+///LA
+		int numReservedMessages()
+		{
+			return messageReferenceHandler.size();
+		}
+///LA
+
 	protected:
 		///Override from Listener
 		///Called whenever the receiver has new data.

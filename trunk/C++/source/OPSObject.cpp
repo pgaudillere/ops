@@ -28,6 +28,18 @@ namespace ops
 		typesString = "";
         
     }
+	OPSObject* OPSObject::clone()
+	{
+		//Does nothing.
+		OPSObject* obj = new OPSObject();
+		fillClone(obj);
+		return obj;
+	}
+	void OPSObject::fillClone(OPSObject* obj)
+	{
+		obj->key = key;
+		obj->typesString = typesString;
+	}
     /*
     std::string OPSObject::getPublisherName()
     {

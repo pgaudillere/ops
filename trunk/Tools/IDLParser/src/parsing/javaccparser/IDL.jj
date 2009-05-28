@@ -355,7 +355,7 @@ String idl_type() :
 String abs_idl_type() :
 { String className = ""; String tName = ""; String fieldName = "";}
 {
-   "abstract" tName = identifier() {className += tName;} (  "." {className += ".";} tName = identifier() {className += tName;} )*
+   "virtual" tName = identifier() {className += tName;} (  "." {className += ".";} tName = identifier() {className += tName;} )*
    {
         return className;
    }

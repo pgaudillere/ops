@@ -52,7 +52,7 @@ public interface IDLParserConstants {
     "\"extends\"",
     "\"[\"",
     "\"]\"",
-    "\"abstract\"",
+    "\"virtual\"",
     "\"float\"",
     "\"double\"",
     "\"int\"",

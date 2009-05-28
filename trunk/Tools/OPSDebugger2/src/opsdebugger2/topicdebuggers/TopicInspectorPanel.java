@@ -45,7 +45,7 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
 
         subscriber = sub;
         //subscriber.start();
-        subscriber.addObserver(this);
+
 
         initComponents();
         availableKeysComboModel = new DefaultComboBoxModel();
@@ -61,6 +61,7 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
 
         topicNameLabel.setText(name);
         tabbedPane1.add("Table view", new TopicTableView(getSubscriber()));
+        subscriber.addObserver(this);
     //tabbedPane1.add("Advanced", new TopicCompositeView(s, (JFrame)getParent()));
     //topicTreeView1.setSubscriber(s);
     }
@@ -203,25 +204,28 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
     private void applyKeyFilterButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_applyKeyFilterButtonActionPerformed
     {//GEN-HEADEREND:event_applyKeyFilterButtonActionPerformed
 // TODO add your handling code here:
-        if (keyFilter == null)
+        synchronized (this)
         {
-            keyFilter = new KeyFilterQoSPolicy();
-        }
-        String[] strings = keyFilterField.getText().split(" ");
-        if (strings.length < 2 && strings[0].equals(""))
-        {
-            getSubscriber().getFilterQoSPolicies().remove(keyFilter);
-        } else
-        {
-            Vector<String> keys = new Vector<String>();
-            for (int i = 0; i < strings.length; i++)
+            if (keyFilter == null)
             {
-                keys.add(strings[i]);
+                keyFilter = new KeyFilterQoSPolicy();
             }
-            keyFilter.setKeys(keys);
-            if (!getSubscriber().getFilterQoSPolicies().contains(keyFilter))
+            String[] strings = keyFilterField.getText().split(" ");
+            if (strings.length < 2 && strings[0].equals(""))
             {
-                getSubscriber().addFilterQoSPolicy(keyFilter);
+                getSubscriber().getFilterQoSPolicies().remove(keyFilter);
+            } else
+            {
+                Vector<String> keys = new Vector<String>();
+                for (int i = 0; i < strings.length; i++)
+                {
+                    keys.add(strings[i]);
+                }
+                keyFilter.setKeys(keys);
+                if (!getSubscriber().getFilterQoSPolicies().contains(keyFilter))
+                {
+                    getSubscriber().addFilterQoSPolicy(keyFilter);
+                }
             }
         }
 
@@ -238,7 +242,7 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
 
 private void availableKeysComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_availableKeysComboBoxActionPerformed
 // TODO add your handling code here:
-    synchronized(this)
+    synchronized (this)
     {
         keyFilterField.setText((String) availableKeysComboModel.getSelectedItem());
     }
@@ -247,7 +251,7 @@ private void availableKeysComboBoxActionPerformed(java.awt.event.ActionEvent evt
 private void availablePublishersComboBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_availablePublishersComboBoxActionPerformed
 {//GEN-HEADEREND:event_availablePublishersComboBoxActionPerformed
     // TODO add your handling code here:
-    synchronized(this)
+    synchronized (this)
     {
         publisherFilterField.setText((String) availablePublishersComboModel.getSelectedItem());
     }
@@ -255,8 +259,12 @@ private void availablePublishersComboBoxActionPerformed(java.awt.event.ActionEve
 
 private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_applyPublisherFilterButtonActionPerformed
 {//GEN-HEADEREND:event_applyPublisherFilterButtonActionPerformed
-    // TODO add your handling code here:
-    if (publisherFilter == null)
+
+    synchronized (this)
+    {
+
+        // TODO add your handling code here:
+        if (publisherFilter == null)
         {
             publisherFilter = new PublisherFilterQoSPolicy();
         }
@@ -264,8 +272,7 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
         if (strings.length < 2 && strings[0].equals(""))
         {
             getSubscriber().getFilterQoSPolicies().remove(publisherFilter);
-        }
-        else
+        } else
         {
             Vector<String> publishers = new Vector<String>();
             for (int i = 0; i < strings.length; i++)
@@ -278,6 +285,7 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
                 getSubscriber().addFilterQoSPolicy(publisherFilter);
             }
         }
+    }
 }//GEN-LAST:event_applyPublisherFilterButtonActionPerformed
 
     public Subscriber getSubscriber()
@@ -303,23 +311,27 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
 
             }
             availableKeysComboModel.addElement(key);
-            //availableKeysComboBox.updateUI();
+        //availableKeysComboBox.updateUI();
         }
     }
+
     private void updateAvailablePublishers(String pub)
     {
         synchronized (this)
         {
+
             for (int i = 0; i < availablePublishersComboModel.getSize(); i++)
             {
-                if (availableKeysComboModel.getElementAt(i).equals(pub))
+
+                if (availablePublishersComboModel.getElementAt(i).equals(pub))
                 {
                     return;
                 }
 
             }
             availablePublishersComboModel.addElement(pub);
-            //availableKeysComboBox.updateUI();
+
+        //availableKeysComboBox.updateUI();
         }
     }
 
@@ -374,7 +386,7 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
 
         }
 
-        
+
     //topicTableView1.updateUI();
     //topicTextArea1.setText("\"" + getName() + "\":\n" + outString);
 

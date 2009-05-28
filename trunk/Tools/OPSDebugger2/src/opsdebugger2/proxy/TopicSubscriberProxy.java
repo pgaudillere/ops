@@ -46,16 +46,36 @@ public class TopicSubscriberProxy extends ValueNotifier implements TreeModel, Ru
         String typeName = topic.getTypeID();
 
         data = opsf.createOPSObject(typeName);
-
-        subscriber = opsf.createSubscriber(topicName);
-
-        if (subscriber != null)
-        {
-            subscriber.addObserver(this);
-            subscriber.start();
-        }
+//
+//        subscriber = opsf.createSubscriber(topicName);
+//
+//        if (subscriber != null)
+//        {
+//            subscriber.addObserver(this);
+//            subscriber.start();
+//        }
 
     }
+
+    @Override
+    public synchronized boolean add(ValueListener e)
+    {
+        if(subscriber == null)
+        {
+            OPSFactory opsf = OPSDebugger2App.getApplication().getActiveProject().getOPSFactory();
+            subscriber = opsf.createSubscriber(topicName);
+
+            if (subscriber != null)
+            {
+                subscriber.addObserver(this);
+                subscriber.start();
+            }
+        }
+
+        return super.add(e);
+    }
+
+
 
     public String getKeyString()
     {

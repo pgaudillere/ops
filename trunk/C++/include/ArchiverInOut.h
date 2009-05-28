@@ -44,8 +44,10 @@ public:
     virtual void inout(std::string& name, float& value) = 0;
     virtual void inout(std::string& name, double& value) = 0;
 	virtual void inout(std::string& name, std::string& value) = 0;
+	virtual void inout(std::string& name, Serializable& value) = 0;
 
     virtual Serializable* inout(std::string& name, Serializable* value) = 0;
+	
 	virtual Serializable* inout(std::string& name, Serializable* value, int element) = 0;
 
 	virtual void inout(std::string& name, std::vector<bool>& value) = 0;
@@ -57,17 +59,17 @@ public:
     virtual void inout(std::string& name, std::vector<double>& value) = 0;
 	virtual void inout(std::string& name, std::vector<std::string>& value) = 0;
 
-	
-	template <class SerializableType> void inout(std::string& name, std::vector<SerializableType>& vec)
+	template <class SerializableType> void inout(std::string& name, std::vector<SerializableType>& vec, SerializableType prototype)
 	{
 		int size = beginList(name, vec.size());
 		if((int)vec.size() < size)
 		{
 			vec.clear();
 			vec.reserve(size);
+			vec.resize(size, prototype);
 			for(int i = 0; i < size; i++)
 			{
-				vec.push_back((SerializableType)inout(std::string(name), (Serializable*)NULL, i));
+				inout(std::string("element"), vec[i]);
 			}
 			
 			//vec.resize(size, new SerializableType());
@@ -76,7 +78,32 @@ public:
 		{
 			for(int i = 0; i < size; i++)
 			{
-				vec[i] = (SerializableType)inout(std::string(name), vec[i], i);
+				inout(std::string("element"), vec[i]);
+			}
+		}
+		endList(name);
+
+	}
+	
+	template <class SerializableType> void inout(std::string& name, std::vector<SerializableType*>& vec)
+	{
+		int size = beginList(name, vec.size());
+		if((int)vec.size() < size)
+		{
+			vec.clear();
+			vec.reserve(size);
+			for(int i = 0; i < size; i++)
+			{
+				vec.push_back((SerializableType*)inout(std::string(name), (Serializable*)NULL, i));
+			}
+			
+			//vec.resize(size, new SerializableType());
+		}
+		else
+		{
+			for(int i = 0; i < size; i++)
+			{
+				vec[i] = (SerializableType*)inout(std::string(name), vec[i], i);
 			}
 		}
 		endList(name);

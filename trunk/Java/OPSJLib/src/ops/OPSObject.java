@@ -55,7 +55,7 @@ public class OPSObject implements Serializable
 
     public void serialize(ArchiverInOut archive) throws IOException
     {
-        archive.inout("key", key);
+        key = archive.inout("key", key);
     }
 
     @Override
