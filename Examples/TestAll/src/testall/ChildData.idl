@@ -13,14 +13,15 @@ class ChildData extends BaseData
     /*This string shall hold the word World*/
     string s;
     TestData test2;
+    virtual TestData testPointer;
 
-boolean[] bos;
+    boolean[] bos;
     byte[] bs;
     int[] is;
     long[] ls;
     float[] fs;
     double[] ds;
     string[] ss;
-    TestData[] test2s;
+    virtual TestData[] test2s;
     TestData[] test2s2;
 }

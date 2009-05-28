@@ -82,6 +82,14 @@ public:
 	{
 		value = buf->ReadString();
 	}
+
+
+	void inout(std::string& name, Serializable& value)
+	{
+		std::string types = buf->ReadString();        
+        value.serialize(this);        
+	}
+
 	Serializable* inout(std::string& name, Serializable* value, int element)
 	{
 		std::string types = buf->ReadString();

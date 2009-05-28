@@ -44,10 +44,10 @@ int main(int argc, char* args)
 	data.baseText = "Hello";
 
 	////Set aggregated object
-	//TestData testData;
-	//testData.text = "text in aggregated class";
-	//testData.value = 0.0;
-	//data.test2 = &testData;
+	TestData testData;
+	testData.text = "text in aggregated class";
+	testData.value = 3456.0;
+	data.test2 = testData;
 	//
 	//Set primitives
 	data.bo = true;
@@ -67,7 +67,7 @@ int main(int argc, char* args)
 	//data.fs.push_back(9.0);
 	data.ds.push_back(10.0);
 	data.ss.push_back("Hello Array");
-	data.setKey("key1");
+	data.setKey("relay");
 
 	//return 0;
 
@@ -87,6 +87,9 @@ int main(int argc, char* args)
 
 	data.test2s.push_back(&testData2);
 	data.test2s.push_back(&testData3);
+
+	data.test2s2.push_back(testData3);
+	data.test2s2.push_back(testData2);
 
 	std::ofstream oStream("hatt.xml");
 
@@ -109,14 +112,16 @@ int main(int argc, char* args)
 
 	//return 0;
 
+	ChildData* dataClone = (ChildData*)data.clone();
+
 	//Publish the data peridically and make a small changes to the data.
 	while(true)
 	{
-		pub.write(&data);
-		std::cout << "Writing " << data.i <<  std::endl;
-		data.i++;
+		pub.write(dataClone);
+		std::cout << "Writing " << dataClone->i <<  std::endl;
+		dataClone->i++;
 
-		if(data.i % 20 == 0)
+		if(dataClone->i % 20 == 0)
 		{
 			basePub.write(&baseData);
 		}

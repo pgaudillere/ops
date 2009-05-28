@@ -188,6 +188,10 @@ public:
 		return newSer;
 
 	}
+	virtual void inout(std::string& name, Serializable& value)
+	{
+		      
+	}
 
     virtual Serializable* inout(std::string& name, Serializable* value)
 	{

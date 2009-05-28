@@ -31,6 +31,9 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
     final static String DESTRUCTOR_BODY_REGEX = "__destructorBody";
     final static String DECLARATIONS_REGEX = "__declarations";
     final static String SERIALIZE_REGEX = "__serialize";
+    final static String CLONE_REGEX = "__clone";
+    final static String FILL_CLONE_REGEX = "__fillClone";
+
 
     final static String UNDERSCORED_PACK_NAME_REGEX = "__underscoredPackName";
     final static String PACKAGE_DECLARATION_REGEX = "__packageDeclaration";
@@ -103,6 +106,8 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         templateText = templateText.replace(DESTRUCTOR_BODY_REGEX, getDestructorBody(idlClass));
         templateText = templateText.replace(DECLARATIONS_REGEX, getDeclarations(idlClass));
         templateText = templateText.replace(SERIALIZE_REGEX, getSerialize(idlClass));
+        templateText = templateText.replace(CLONE_REGEX, getClone(idlClass));
+        templateText = templateText.replace(FILL_CLONE_REGEX, getFillClone(idlClass));
 
 
         //Save the modified text to the output file.
@@ -231,12 +236,74 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
 
     }
 
+    private String getClone(IDLClass idlClass)
+    {
+        String ret = tab(2) + idlClass.getClassName() + "* ret = new " + languageType(idlClass.getClassName()) + ";" + endl();
+        ret += tab(2) + "this->fillClone(ret);" + endl();
+        ret += tab(2) + "return ret;" + endl();
+
+        return ret;
+
+    }
+    private String getFillClone(IDLClass idlClass)
+    {
+        String ret = tab(2) + idlClass.getClassName() + "* narrRet = (" + languageType(idlClass.getClassName()) + "*)obj;" + endl();
+
+        if(idlClass.getBaseClassName() != null)
+        {
+            ret += tab(2) + languageType(idlClass.getBaseClassName()) + "::fillClone(narrRet);" + endl();
+        }
+        else
+        {
+            ret += tab(2) + "ops::OPSObject::fillClone(narrRet);" + endl();
+        }
+        for (IDLField field : idlClass.getFields())
+        {
+            if(field.isIdlType())
+            {
+                if(!field.isArray() && field.isAbstract())
+                {
+                    ret += tab(2) + "if(narrRet->" + field.getName() + ") delete narrRet->" + field.getName() + ";" + endl();
+                    ret += tab(2) + "narrRet->" + field.getName() + " = (" + languageType(field.getType()) + "*)" + field.getName() + "->clone();" + endl();
+                }
+                else if(!field.isArray())
+                {
+                    ret += tab(2) + "narrRet->" + field.getName() + " = " + field.getName() + ";" + endl();
+                }
+                else if(field.isArray())
+                {
+                    if(!field.isAbstract())
+                    {
+                        ret += tab(2) + "narrRet->" + field.getName() + " = " + field.getName() + ";" + endl();
+                    }
+                    else
+                    {
+                        ret += tab(2) + "for(unsigned int __i = 0; __i < " + "" + field.getName() + ".size(); __i++)" + endl();
+                        ret += tab(3) + "{ narrRet->" + field.getName() + ".push_back(" + field.getName() + "[__i]); }" +  endl();
+                    }
+                }
+            }
+            else if(field.isArray())
+            {
+
+                ret += tab(2) + "narrRet->" + field.getName() + " = " + field.getName() + ";" + endl();
+
+            }
+            else
+            {
+                ret += tab(2) + "narrRet->" + field.getName() + " = " + field.getName() + ";" + endl();
+            }
+
+        }
+        return ret;
+    }
+
     private String getConstructorBody(IDLClass idlClass)
     {
         String ret = "";
         for (IDLField field : idlClass.getFields())
         {
-            if(field.isIdlType() && !field.isArray())
+            if(field.isIdlType() && !field.isArray() && field.isAbstract())
             {
                 ret += tab(2) + field.getName() + " = new " + languageType(field.getType()).replace("*", "()") + ";" + endl();
             }
@@ -291,7 +358,14 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
             }
             else if(field.isIdlType())
             {
+                if(field.isAbstract())
+                {
+                    ret += tab(1) + "" + languageType(field.getType()) + "* " + field.getName() + ";" + endl();
+                }
+                else
+                {
                     ret += tab(1) + "" + languageType(field.getType()) + " " + field.getName() + ";" + endl();
+                }
             }
             else //Simple primitive type
             {
@@ -304,7 +378,16 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
 
     private String getDeclareVector(IDLField field)
     {
-        return languageType(field.getType()) + " " + field.getName() + ";" + endl();
+        String ret = "";
+        if(field.isAbstract())
+        {
+            ret += tab(1) + "std::vector<" + languageType(elementType(field.getType())) + "*> " + field.getName() + ";" + endl();
+        }
+        else 
+        {
+            ret += tab(1) + "std::vector<" + languageType(elementType(field.getType())) + "> " + field.getName() + ";" + endl();
+        }
+        return ret;
     }
 
     protected String languageType(String s)
@@ -355,7 +438,7 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         {
             return "std::vector<" + applyLanguagePackageSeparator(s.substring(0, s.indexOf('['))) + "*>";
         }
-        return applyLanguagePackageSeparator(s) + "*";
+        return applyLanguagePackageSeparator(s) + "";
 
     }
     protected String applyLanguagePackageSeparator(String packageName)
@@ -404,13 +487,17 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         {
             if(field.isIdlType())
             {
-                if(!field.isArray())
+                if(!field.isArray() && field.isAbstract())
                 {
                     ret += tab(2) + "if(" + field.getName() + ") delete " + field.getName() + ";" + endl();
                 }
-                else
+                else if(field.isArray())
                 {
-                    ret += tab(2) + "for(unsigned int __i = 0; __i < " + field.getName() + ".size(); __i++){ if(" + field.getName() + "[__i]) delete " + field.getName() + "[__i];}" +  endl();
+                    if(field.isAbstract())
+                    {
+                        ret += tab(2) + "for(unsigned int __i = 0; __i < " + field.getName() + ".size(); __i++){ if(" + field.getName() + "[__i]) delete " + field.getName() + "[__i];}" +  endl();
+                
+                    }
                 }
             }
         }
@@ -455,14 +542,21 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         {
             if(field.isIdlType())
             {
-                if(!field.isArray())
+                if(!field.isArray() && field.isAbstract())
                 {
-                    ret += tab(2) + field.getName() + " = (" + languageType(field.getType()) + ") archive->inout(std::string(\"" + field.getName() + "\"), " + field.getName() + ");" + endl();
+                    ret += tab(2) + field.getName() + " = (" + languageType(field.getType()) + "*) archive->inout(std::string(\"" + field.getName() + "\"), " + field.getName() + ");" + endl();
+                }
+                else if(!field.isArray())
+                {
+                    ret += tab(2) + "archive->inout(std::string(\"" + field.getName() + "\"), " + field.getName() + ");" + endl();
+                }
+                else if(field.isArray() && field.isAbstract())
+                {
+                    ret += tab(2) + "archive->inout<" + languageType(elementType(field.getType())) + ">(std::string(\"" + field.getName() + "\"), " + field.getName() + ");" + endl();
                 }
                 else
                 {
-                    ret += tab(2) + "archive->inout<" + languageType(elementType(field.getType())) + ">(std::string(\"" + field.getName() + "\"), " + field.getName() + ");" + endl();
-
+                    ret += tab(2) + "archive->inout<" + languageType(elementType(field.getType())) + ">(std::string(\"" + field.getName() + "\"), " + field.getName() + ", " + languageType(elementType(field.getType())) + "());" + endl();
                 }
             }
             else if(field.isArray())

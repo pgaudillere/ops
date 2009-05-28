@@ -74,6 +74,13 @@ public:
 	{
 		buf->WriteString(value);
 	}
+	void inout(std::string& name, Serializable& value)
+	{
+		std::string typeS = ((OPSObject&)value).getTypeString();
+		buf->WriteString(typeS);
+		value.serialize(this);        
+	}
+
 	Serializable* inout(std::string& name, Serializable* value, int element)
 	{
 		std::string typeS = ((OPSObject*)value)->getTypeString();

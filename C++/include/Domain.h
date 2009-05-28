@@ -69,7 +69,7 @@ namespace ops
 		{
 			OPSObject::serialize(archiver);
 			archiver->inout(std::string("domainID"), domainID);
-			archiver->inout(std::string("topics"), topics);
+			archiver->inout<Topic>(std::string("topics"), topics);
 		}
 		virtual ~Domain(){}
 

@@ -489,7 +489,7 @@ public class IDLParser implements IDLParserConstants {
   String className = ""; String tName = ""; String fieldName = "";
     jj_consume_token(18);
     tName = identifier();
-                                    className += tName;
+                                   className += tName;
     label_8:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -501,9 +501,9 @@ public class IDLParser implements IDLParserConstants {
         break label_8;
       }
       jj_consume_token(9);
-                                                                 className += ".";
+                                                                className += ".";
       tName = identifier();
-                                                                                                          className += tName;
+                                                                                                         className += tName;
     }
         {if (true) return className;}
     throw new Error("Missing return statement in function");

@@ -1,21 +1,21 @@
-#ifndef __underscoredPackName__classNameSubscriber_h
-#define __underscoredPackName__classNameSubscriber_h
+#ifndef TestAllBaseDataSubscriber_h
+#define TestAllBaseDataSubscriber_h
 
 #include "Subscriber.h"
 #include "Topic.h"
 #include "OPSObject.h"
-#include "__className.h"
+#include "BaseData.h"
 
 
-__packageDeclaration
+namespace TestAll {
 
 
 
-class __classNameSubscriber : public ops::Subscriber
+class BaseDataSubscriber : public ops::Subscriber
 {
 
 public:
-    __classNameSubscriber(ops::Topic t)
+    BaseDataSubscriber(ops::Topic t)
         : ops::Subscriber(t)
     {
 
@@ -30,37 +30,38 @@ public:
         return true;
     }
 /*
-    __className getDataCopy()
+    BaseData getDataCopy()
     {
         ops::SafeLock lock(this);
         hasUnreadData = false;
         return narrowedData;
     }
 */
-    __className* getTypedDataReference()
+    BaseData* getTypedDataReference()
     {
-        return (__className*)getDataReference();
+        return (BaseData*)getDataReference();
     }
 
-    ~__classNameSubscriber(void)
+    ~BaseDataSubscriber(void)
     {
 
     }
 private:
-    __className narrowedData;
+    BaseData narrowedData;
 protected:
     //Override
 /*
     void saveCopy(ops::OPSObject* o)
     {
         ops::SafeLock lock(this);
-        narrowedData = *((__className*)o);
+        narrowedData = *((BaseData*)o);
     }
 */
 
 };
 
 
-__packageCloser
+}
+
 
 #endif

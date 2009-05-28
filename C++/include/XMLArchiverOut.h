@@ -129,6 +129,10 @@ public:
 		return value;
 
 	}
+	virtual void inout(std::string& name, Serializable& value)
+	{
+		      
+	}
 
 	virtual void inout(std::string& name, std::vector<bool>& value)
 	{

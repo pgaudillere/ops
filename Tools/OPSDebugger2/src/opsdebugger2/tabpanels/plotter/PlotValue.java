@@ -30,15 +30,17 @@ public class PlotValue extends JLabel implements ValueListener, ListCellRenderer
     {
         this.settings = settings;
         this.valueName = valueName;
-        //OPSDebugger2App.getActiveSubscriberProxy().add(this);
+        //OPSDebugger2App.getApplication().getActiveSubscriberProxy().add(this);
         
-        String topic = valueName;//OPSDebugger2App.getApplication().getActiveSubscriberProxy().getTopic().getName();
+        String topic = OPSDebugger2App.getApplication().getActiveSubscriberProxy().getTopic().getName();
         //String domain = OPSDebugger2App.getActiveSubscriberProxy().getDomainAddress();
         TopicSubscriberProxy subPrx = new TopicSubscriberProxy(topic);
-        
+
+        subPrx.add(this);
+
         subPrx.setKey(settings.keyVec);
         
-        subPrx.add(this);
+        
         
     }
     

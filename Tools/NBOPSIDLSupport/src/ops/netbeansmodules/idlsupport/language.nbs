@@ -21,7 +21,7 @@ TOKEN:keyword:(
 "double"|
 "string"|
 "boolean"|
-"abstract"
+"virtual"
 
 )
 

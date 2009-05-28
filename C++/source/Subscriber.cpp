@@ -117,8 +117,6 @@ namespace ops
 			messageBuffer.back()->unreserve();
 			messageBuffer.pop_back();
 		}
-		
-		
 	}
 
 	void Subscriber::setHistoryMaxSize(int s)

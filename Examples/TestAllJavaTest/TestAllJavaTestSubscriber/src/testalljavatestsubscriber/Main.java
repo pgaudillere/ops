@@ -11,6 +11,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ops.KeyFilterQoSPolicy;
 import ops.Participant;
 import ops.Topic;
 import ops.archiver.OPSObjectFactory;
@@ -35,6 +36,7 @@ public class Main {
         Topic topic = participant.createTopic("ChildTopic");
 
         ChildDataSubscriber sub = new ChildDataSubscriber(topic);
+        sub.addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 
         sub.addObserver(new Observer() { public void update(Observable o, Object arg){onNewChildData((ChildData)arg);} });
 

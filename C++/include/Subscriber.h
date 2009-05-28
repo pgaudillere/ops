@@ -50,10 +50,15 @@ public:
 
 	///Starts communication.
     void start();
-	///Stops communication, unubscribe this subscriber to data.
+	
+	///Stops communication, unsubscribe this subscriber to data.
 	void stop();
 
     DeadlineMissedEvent deadlineMissedEvent;
+
+	///Sets the deadline timout for this subscriber.
+	///If no message is received within deadline, 
+	///listeners to deadlineMissedEvent will be notified
     void setDeadlineQoS(__int64 deadlineT);
     __int64 getDeadlineQoS();
 
@@ -61,18 +66,33 @@ public:
     void removeFilterQoSPolicy(FilterQoSPolicy* fqos);
 
     __int64 getTimeBasedFilterQoS();
+	///Sets the minimum time separation between to consecutive messages. 
+	///Received messages in between will be ignored by this Subscriber
     void setTimeBasedFilterQoS(__int64 timeBaseMinSeparationMillis);
 
+	///Returns a copy of this subscribers Topic.
     Topic getTopic();
 
     bool waitForNewData(DWORD timeout);
 
+	///Depricated since OPS4
     int getThreadPolicy();
+	///Depricated since OPS4
     void setThreadPolicy(int threadPolicy);
 
 	bool aquireMessageLock();
 	void releaseMessageLock();
 	OPSMessage* getMessage();
+
+///LA
+	///Returns the number of reserved messages in the underlying TopicHandler
+	///This value is the total nr for this topic on this participant not only
+	///for this subscriber.
+	int numReservedMessages()
+	{
+		return topicHandler->numReservedMessages();
+	}
+///LA
 
     std::string getName();
     void setName(std::string name);

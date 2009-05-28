@@ -1,31 +1,32 @@
 //Auto generated OPS-code. DO NOT MODIFY!
 
-#ifndef __underscoredPackName___className_h
-#define __underscoredPackName___className_h
+#ifndef TestAll_BaseData_h
+#define TestAll_BaseData_h
 
 #include "OPSObject.h"
 #include "ArchiverInOut.h"
 #include <string>
 #include <vector>
 
-__imports
 
-__packageDeclaration
 
-__classComment
-class __className :
-	public __baseClassName
+namespace TestAll {
+
+
+class BaseData :
+	public ops::OPSObject
 {
 public:
 	
-__declarations
+	std::string baseText;
 
-    __className()
-        : __baseClassName()
-__constructorHead
+
+    BaseData()
+        : ops::OPSObject()
+		
     {
-        OPSObject::appendType(std::string("__packageName.__className"));
-__constructorBody
+        OPSObject::appendType(std::string("TestAll.BaseData"));
+
 
     }
 
@@ -33,27 +34,36 @@ __constructorBody
     ///instance of this class to a format dictated by the implementation of the ArchiverInout.
     void serialize(ops::ArchiverInOut* archive)
     {
-__serialize
+		ops::OPSObject::serialize(archive);
+		archive->inout(std::string("baseText"), baseText);
+
     }
     //Returns a deep copy of this object.
     virtual ops::OPSObject* clone()
     {
-__clone
+		BaseData* ret = new BaseData;
+		this->fillClone(ret);
+		return ret;
+
     }
 
     virtual void fillClone(ops::OPSObject* obj)
     {
-__fillClone
+		BaseData* narrRet = (BaseData*)obj;
+		ops::OPSObject::fillClone(narrRet);
+		narrRet->baseText = baseText;
+
     }
 
     ///Destructor: Note that all aggregated data and vectors are completely deleted.
-    virtual ~__className(void)
+    virtual ~BaseData(void)
     {
-__destructorBody
+
     }
     
 };
 
-__packageCloser
+}
+
 
 #endif

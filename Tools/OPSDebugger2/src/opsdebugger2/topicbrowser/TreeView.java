@@ -105,6 +105,7 @@ private void topicsComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN
         {
             topicsComboBox.addItem(string);
         }
+        topicsComboBoxItemStateChanged(null);
         topicsComboBox.updateUI();
     }
 }
