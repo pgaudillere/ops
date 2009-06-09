@@ -96,38 +96,38 @@ public class OPSDebugger2App extends SingleFrameApplication
 //            }
 //        }, 5000, 1000);
 
-        UIManager.put("nimbusBase", Color.BLACK);
-        UIManager.put("desktop", Color.black);
-        UIManager.put("nimbusBlueGrey", Color.black);
-        UIManager.put("control", Color.darkGray);
-        UIManager.put("controlText", Color.white);
-        UIManager.put("nimbusFocus", Color.darkGray);
-        UIManager.put("text", Color.white);
-        UIManager.put("textHighLightText", Color.white);
-        UIManager.put("nimbusLightBackground", Color.gray);
-
-        for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels())
-        {
-            if ("Nimbus".equals(laf.getName()))
-            {
-                try
-                {
-                    UIManager.setLookAndFeel(laf.getClassName());
-                } catch (ClassNotFoundException ex)
-                {
-
-                } catch (InstantiationException ex)
-                {
-
-                } catch (IllegalAccessException ex)
-                {
-
-                } catch (UnsupportedLookAndFeelException ex)
-                {
-
-                }
-            }
-        }
+//        UIManager.put("nimbusBase", Color.BLACK);
+//        UIManager.put("desktop", Color.black);
+//        UIManager.put("nimbusBlueGrey", Color.black);
+//        UIManager.put("control", Color.darkGray);
+//        UIManager.put("controlText", Color.white);
+//        UIManager.put("nimbusFocus", Color.darkGray);
+//        UIManager.put("text", Color.white);
+//        UIManager.put("textHighLightText", Color.white);
+//        UIManager.put("nimbusLightBackground", Color.gray);
+//
+//        for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels())
+//        {
+//            if ("Nimbus".equals(laf.getName()))
+//            {
+//                try
+//                {
+//                    UIManager.setLookAndFeel(laf.getClassName());
+//                } catch (ClassNotFoundException ex)
+//                {
+//
+//                } catch (InstantiationException ex)
+//                {
+//
+//                } catch (IllegalAccessException ex)
+//                {
+//
+//                } catch (UnsupportedLookAndFeelException ex)
+//                {
+//
+//                }
+//            }
+//        }
 
         launch(OPSDebugger2App.class, args);
     }
