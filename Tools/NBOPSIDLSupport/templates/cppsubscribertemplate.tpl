@@ -21,7 +21,7 @@ public:
 
     }
 
-    bool getData(ChildData* d)
+    bool getData(__className* d)
     {
         if(!data) return false;
         aquireMessageLock();
@@ -29,14 +29,7 @@ public:
 		releaseMessageLock();
         return true;
     }
-/*
-    __className getDataCopy()
-    {
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        return narrowedData;
-    }
-*/
+
     __className* getTypedDataReference()
     {
         return (__className*)getDataReference();
@@ -48,15 +41,6 @@ public:
     }
 private:
     __className narrowedData;
-protected:
-    //Override
-/*
-    void saveCopy(ops::OPSObject* o)
-    {
-        ops::SafeLock lock(this);
-        narrowedData = *((__className*)o);
-    }
-*/
 
 };
 
