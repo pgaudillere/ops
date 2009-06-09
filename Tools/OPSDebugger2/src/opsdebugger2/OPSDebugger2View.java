@@ -30,6 +30,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import ops.KeyFilterQoSPolicy;
+import ops.Subscriber;
+import opsdebugger2.proxy.OPSValueListener;
+import opsdebugger2.proxy.OPSValueNotifier;
 import opsdebugger2.topicbrowser.TreeView;
 
 /**
@@ -223,8 +227,9 @@ public class OPSDebugger2View extends FrameView
         treeView1 = new opsdebugger2.topicbrowser.TreeView();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -292,11 +297,6 @@ public class OPSDebugger2View extends FrameView
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(opsdebugger2.OPSDebugger2App.class).getContext().getActionMap(OPSDebugger2View.class, this);
-        exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
-        exitMenuItem.setName("exitMenuItem"); // NOI18N
-        fileMenu.add(exitMenuItem);
-
         jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
         jMenuItem1.setName("jMenuItem1"); // NOI18N
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -305,6 +305,20 @@ public class OPSDebugger2View extends FrameView
             }
         });
         fileMenu.add(jMenuItem1);
+
+        jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
+        jMenuItem2.setName("jMenuItem2"); // NOI18N
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        fileMenu.add(jMenuItem2);
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(opsdebugger2.OPSDebugger2App.class).getContext().getActionMap(OPSDebugger2View.class, this);
+        exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
+        exitMenuItem.setName("exitMenuItem"); // NOI18N
+        fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
 
@@ -382,8 +396,37 @@ public class OPSDebugger2View extends FrameView
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        String topic = JOptionPane.showInputDialog("Enter topic.");
+        String key  = JOptionPane.showInputDialog("Enter Key.");
+        String variableName = JOptionPane.showInputDialog("Enter variable name.");
+
+        Subscriber sub = OPSDebugger2App.getApplication().getActiveProject().getOPSFactory().createSubscriber(topic);
+        sub.addFilterQoSPolicy(new KeyFilterQoSPolicy(key));
+
+        new OPSValueNotifier(sub, new OPSValueListener() {
+
+            public void onError(Subscriber subscriber, OPSValueNotifier notifier, String message)
+            {
+                System.out.println("Value listener error: " + message);
+            }
+
+            public void onNewValue(Subscriber sub, OPSValueNotifier notifier, Object value)
+            {
+                System.out.println("Value: " + value);
+            }
+        }, variableName);
+        sub.start();
+        
+
+
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
