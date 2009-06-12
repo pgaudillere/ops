@@ -21,31 +21,25 @@ public class ProjectIDLParser
 {
     Vector<IDLClass> idlClasses = new Vector<IDLClass>();
     parsing.javaccparser.FileParser fileParser = new parsing.javaccparser.FileParser();
-    private InputOutput io;
+    //private InputOutput io;
 
     private int nrErrors = 0;
     private int nrWarnings = 0;
 
     public ProjectIDLParser()
     {
-        io = IOProvider.getDefault().getIO("OPS Build", false);
+        //io = IOProvider.getDefault().getIO("OPS Build", false);
     }
 
     public void reset()
     {
-        try
-        {
+     
             idlClasses.clear();
             nrErrors = 0;
             nrWarnings = 0;
-            io.getOut().reset();
-        }
-        catch (IOException ex)
-        {
-            Exceptions.printStackTrace(ex);
-        }
+            
     }
-    public void parse(String name, String fileText)
+    public void parse(String name, String fileText, InputOutput io)
     {
         try
         {

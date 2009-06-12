@@ -13,7 +13,9 @@ class ChildData extends BaseData
     /*This string shall hold the word World*/
     string s;
     TestData test2;
-    virtual TestData testPointer;
+    virtual TestAll.TestData testPointer;
+
+    //TestMore.MoreData more;
 
     boolean[] bos;
     byte[] bs;
@@ -23,5 +25,6 @@ class ChildData extends BaseData
     double[] ds;
     string[] ss;
     virtual TestData[] test2s;
+    virtual TestData[] secondVirtArray;
     TestData[] test2s2;
 }

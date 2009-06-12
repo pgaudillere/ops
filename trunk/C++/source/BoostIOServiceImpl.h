@@ -38,6 +38,12 @@ namespace ops
 		{
 			boostIOService->run();
 		}
+		virtual ~BoostIOServiceImpl()
+		{
+			boostIOService->stop();
+			delete boostIOService;
+		}
+
 
 	};
 }

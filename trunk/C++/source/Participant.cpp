@@ -78,6 +78,9 @@ namespace ops
 	}
 	Participant::~Participant()
 	{
+		SafeLock lock(&serviceMutex);
+		aliveDeadlineTimer->cancel();
+		delete ioService;
 
 	}
 
@@ -103,6 +106,7 @@ namespace ops
 	}
 	void Participant::onNewEvent(Notifier<int>* sender, int message)
 	{
+		SafeLock lock(&serviceMutex);
 		cleanUpTopicHandlers();
 		aliveDeadlineTimer->start(aliveTimeout);
 	}

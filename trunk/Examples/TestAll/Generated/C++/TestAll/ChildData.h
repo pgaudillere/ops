@@ -8,11 +8,9 @@
 #include <string>
 #include <vector>
 
+#include "TestAll/TestData.h"
+#include "TestData.h"
 #include "BaseData.h"
-#include "TestData.h"
-#include "TestData.h"
-#include "TestData.h"
-#include "TestData.h"
 
 
 namespace TestAll {
@@ -32,26 +30,44 @@ public:
 	///This string shall hold the word World
 	std::string s;
 	TestData test2;
-	TestData* testPointer;
-		std::vector<bool> bos;
-		std::vector<char> bs;
-		std::vector<int> is;
-		std::vector<__int64> ls;
-		std::vector<float> fs;
-		std::vector<double> ds;
-		std::vector<std::string> ss;
-		std::vector<TestData*> test2s;
-		std::vector<TestData> test2s2;
+	TestAll::TestData* testPointer;
+	std::vector<bool> bos;
+	std::vector<char> bs;
+	std::vector<int> is;
+	std::vector<__int64> ls;
+	std::vector<float> fs;
+	std::vector<double> ds;
+	std::vector<std::string> ss;
+	std::vector<TestData*> test2s;
+	std::vector<TestData*> secondVirtArray;
+	std::vector<TestData> test2s2;
 
-
+    ///Default constructor.
     ChildData()
         : BaseData()
 		, bo(false), b(0), i(0), l(0), f(0), d(0)
     {
         OPSObject::appendType(std::string("TestAll.ChildData"));
-		testPointer = new TestData;
+		testPointer = new TestAll::TestData;
 
 
+    }
+    ///Copy-constructor making full deep copy of a(n) ChildData object.
+    ChildData(const ChildData& __c)
+       : BaseData()
+		, bo(false), b(0), i(0), l(0), f(0), d(0)
+    {
+        OPSObject::appendType(std::string("TestAll.ChildData"));
+		testPointer = new TestAll::TestData;
+
+        __c.fillClone((ChildData*)this);
+
+    }
+    ///Assignment operator making full deep copy of a(n) ChildData object.
+    ChildData& operator = (const ChildData& other)
+    {
+        other.fillClone(this);
+        return *this;
     }
 
     ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
@@ -67,7 +83,7 @@ public:
 		archive->inout(std::string("d"), d);
 		archive->inout(std::string("s"), s);
 		archive->inout(std::string("test2"), test2);
-		testPointer = (TestData*) archive->inout(std::string("testPointer"), testPointer);
+		testPointer = (TestAll::TestData*) archive->inout(std::string("testPointer"), testPointer);
 		archive->inout(std::string("bos"), bos);
 		archive->inout(std::string("bs"), bs);
 		archive->inout(std::string("is"), is);
@@ -76,6 +92,7 @@ public:
 		archive->inout(std::string("ds"), ds);
 		archive->inout(std::string("ss"), ss);
 		archive->inout<TestData>(std::string("test2s"), test2s);
+		archive->inout<TestData>(std::string("secondVirtArray"), secondVirtArray);
 		archive->inout<TestData>(std::string("test2s2"), test2s2, TestData());
 
     }
@@ -88,7 +105,7 @@ public:
 
     }
 
-    virtual void fillClone(ops::OPSObject* obj)
+    virtual void fillClone(ops::OPSObject* obj) const
     {
 		ChildData* narrRet = (ChildData*)obj;
 		BaseData::fillClone(narrRet);
@@ -101,7 +118,7 @@ public:
 		narrRet->s = s;
 		narrRet->test2 = test2;
 		if(narrRet->testPointer) delete narrRet->testPointer;
-		narrRet->testPointer = (TestData*)testPointer->clone();
+		narrRet->testPointer = (TestAll::TestData*)testPointer->clone();
 		narrRet->bos = bos;
 		narrRet->bs = bs;
 		narrRet->is = is;
@@ -110,7 +127,29 @@ public:
 		narrRet->ds = ds;
 		narrRet->ss = ss;
 		for(unsigned int __i = 0; __i < test2s.size(); __i++)
-			{ narrRet->test2s.push_back(test2s[__i]); }
+		{
+			if(narrRet->test2s.size() >= __i + 1)
+			{
+				if(narrRet->test2s[__i]) delete narrRet->test2s[__i];
+				narrRet->test2s[__i] = (TestData*)test2s[__i]->clone();
+			}
+			else
+			{
+				narrRet->test2s.push_back((TestData*)test2s[__i]->clone()); 
+			}
+		}
+		for(unsigned int __i = 0; __i < secondVirtArray.size(); __i++)
+		{
+			if(narrRet->secondVirtArray.size() >= __i + 1)
+			{
+				if(narrRet->secondVirtArray[__i]) delete narrRet->secondVirtArray[__i];
+				narrRet->secondVirtArray[__i] = (TestData*)secondVirtArray[__i]->clone();
+			}
+			else
+			{
+				narrRet->secondVirtArray.push_back((TestData*)secondVirtArray[__i]->clone()); 
+			}
+		}
 		narrRet->test2s2 = test2s2;
 
     }
@@ -120,6 +159,7 @@ public:
     {
 		if(testPointer) delete testPointer;
 		for(unsigned int __i = 0; __i < test2s.size(); __i++){ if(test2s[__i]) delete test2s[__i];}
+		for(unsigned int __i = 0; __i < secondVirtArray.size(); __i++){ if(secondVirtArray[__i]) delete secondVirtArray[__i];}
 
     }
     

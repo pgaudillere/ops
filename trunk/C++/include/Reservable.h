@@ -32,6 +32,9 @@ namespace ops
 	{
 	public:
 		Reservable();
+		Reservable(const Reservable& r);
+		Reservable & operator = (const Reservable& l);
+		
 		void setReferenceHandler(ReferenceHandler* refHandler);
 		ReferenceHandler* getReferenceHandler();
 	    void reserve();

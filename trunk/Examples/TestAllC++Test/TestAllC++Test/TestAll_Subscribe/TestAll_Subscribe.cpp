@@ -45,10 +45,10 @@ public:
 		sub = new ChildDataSubscriber(topic);
 		sub->setDeadlineQoS(10000);
 		//sub->setTimeBasedFilterQoS(1000);
-		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("relay"));
+		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
-		sub->setHistoryMaxSize(5);
+		//sub->setHistoryMaxSize(5);
 		sub->start();
 
 		//I godtycklig component
@@ -79,6 +79,9 @@ public:
 			sub->numReservedMessages();
 
 			sub->getData(&data);
+
+			TestAll::ChildData data2 ;
+			data2 = data;
 
 			std::cout << data.i << " From: " << sub->getMessage()->getPublisherName() << std::endl;
 
@@ -143,6 +146,7 @@ public:
 		delete baseSub;
 		sub->stop();
 		delete sub;
+		
 	}
 
 };
@@ -150,17 +154,17 @@ public:
 //Application entry point
 int main(int argc, char* args)
 {
-	//Add support for our types from TestAll IDL project.
-	//ops::OPSObjectFactory::getInstance()->add(new TestAll::TestAllTypeFactory()); 
-
+	ops::Participant* participant = ops::Participant::getInstance("TestAllDomain");
+	
+	
 	//Create an object that will listen to OPS events
 	Main* m = new Main();
 
 	//Make sure the OPS ioService never runs out of work.
 	//Run it on main application thread only.
-	while(true)
+	for(int i = 0; i < 100; i++)
 	{
-		Sleep(5000);
+		Sleep(100);
 		//break;
 		/*m.sub->aquireMessageLock();
 		std::deque<ops::OPSMessage*> messages = m.sub->getHistory();
@@ -176,6 +180,9 @@ int main(int argc, char* args)
 
 
 	delete m;
+	//Force OPS shudown.
+	delete participant;
+	
 	
 	return 0;
 }

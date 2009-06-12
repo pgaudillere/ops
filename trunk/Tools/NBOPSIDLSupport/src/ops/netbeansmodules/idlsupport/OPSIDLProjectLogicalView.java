@@ -5,6 +5,10 @@
 package ops.netbeansmodules.idlsupport;
 
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataFolder;
@@ -32,7 +36,6 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
         this.project = project;
     }
 
-
     public org.openide.nodes.Node createLogicalView() {
 
         try {
@@ -42,20 +45,20 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
 
             //Get the DataObject that represents it:
             DataFolder scenesDataObject =
-                    DataFolder.findFolder (source);
+                    DataFolder.findFolder(source);
 
             //Get its default node—we'll wrap our node around it to change the
             //display name, icon, etc:
             Node realScenesFolderNode = scenesDataObject.getNodeDelegate();
 
             //This FilterNode will be our project node:
-            return new SourcesNode (realScenesFolderNode, project);
+            return new SourcesNode(realScenesFolderNode, project);
 
         } catch (DataObjectNotFoundException donfe) {
             Exceptions.printStackTrace(donfe);
             //Fallback—the directory couldn't be created -
             //read-only filesystem or something evil happened:
-            return new AbstractNode (Children.LEAF);
+            return new AbstractNode(Children.LEAF);
         }
 
     }
@@ -65,20 +68,20 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
 
         final OPSIDLProject project;
 
-        public SourcesNode (Node node, OPSIDLProject project) throws DataObjectNotFoundException {
-            super (node, new FilterNode.Children (node),
+        public SourcesNode(Node node, OPSIDLProject project) throws DataObjectNotFoundException {
+            super(node, new FilterNode.Children(node),
                     //The projects system wants the project in the Node's lookup.
                     //NewAction and friends want the original Node's lookup.
                     //Make a merge of both:
-                    new ProxyLookup (new Lookup[] { Lookups.singleton(project),
-                    node.getLookup() }));
+                    new ProxyLookup(new Lookup[]{Lookups.singleton(project),
+                        node.getLookup()}));
             this.project = project;
         }
 
         @Override
         public Image getIcon(int type) {
-            return ImageUtilities.loadImage (
-                "ops/netbeansmodules/idlsupport/opsprojecticon.GIF");
+            return ImageUtilities.loadImage(
+                    "ops/netbeansmodules/idlsupport/opsprojecticon.GIF");
         }
 
         @Override
@@ -91,8 +94,37 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
             return project.getProjectDirectory().getName();
         }
 
+        @Override
+        public Action[] getActions(boolean selected)
+        {
+            Action[] actions = new Action[super.getActions(selected).length + 1];
+
+            for (int i = 0; i < super.getActions(selected).length; i++)
+            {
+//                if(super.getActions(selected)[i].getValue("props").equals("Properties"))
+//                {
+//                    super.getActions(selected)[i] = new AbstractAction("Properties") {
+//
+//                        public void actionPerformed(ActionEvent e) {
+//                            System.out.println("Properties action...");
+//                        }
+//                    };
+//                }
+//                System.out.println("" + super.getActions(selected)[i]);
+                actions[i] = super.getActions(selected)[i];
+            }
+            actions[super.getActions(selected).length] = new AbstractAction("Build") {
+
+                public void actionPerformed(ActionEvent e) {
+                    project.build();
+                }
+            };
+
+            return actions;
 
 
+
+        }
     }
 
     @Override
@@ -100,6 +132,5 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
         //leave unimplemented for now:
         return null;
     }
-
 }
 

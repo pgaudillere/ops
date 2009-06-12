@@ -29,14 +29,7 @@ public:
 		releaseMessageLock();
         return true;
     }
-/*
-    ChildData getDataCopy()
-    {
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        return narrowedData;
-    }
-*/
+
     ChildData* getTypedDataReference()
     {
         return (ChildData*)getDataReference();
@@ -48,15 +41,6 @@ public:
     }
 private:
     ChildData narrowedData;
-protected:
-    //Override
-/*
-    void saveCopy(ops::OPSObject* o)
-    {
-        ops::SafeLock lock(this);
-        narrowedData = *((ChildData*)o);
-    }
-*/
 
 };
 
