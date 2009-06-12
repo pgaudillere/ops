@@ -8,6 +8,15 @@ namespace ops
 	{
 		referenceHandler = NULL;
 	}
+	Reservable::Reservable(const Reservable& r)
+	{
+		referenceHandler = NULL;
+	}
+	Reservable& Reservable::operator = (const Reservable& l)
+	{
+		return *this;
+	}
+	
 	void Reservable::setReferenceHandler(ReferenceHandler* refHandler)
 	{
 		referenceHandler = refHandler;
@@ -43,6 +52,7 @@ namespace ops
 	Reservable::~Reservable()
 	{
 		//TODO: Should we do a check here?
+		//SafeLock lock(&incLock);
 	}
 
 

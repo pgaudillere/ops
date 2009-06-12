@@ -44,6 +44,11 @@ public:
 	{
 		mutex = CreateMutex(NULL, false, NULL);
 	}
+	Lockable & operator = (const Lockable& l)
+	{
+		mutex = CreateMutex(NULL, false, NULL);
+		return *this;
+	}
 	/*Lockable& Lockable::operator=(const Lockable& l) 
 	{
 	  CopyObj(rhs);

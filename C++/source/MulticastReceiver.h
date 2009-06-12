@@ -65,9 +65,14 @@ namespace ops
 
 
 			// Join the multicast group.
-			const boost::asio::ip::address multicastAddress = boost::asio::ip::address_v4::from_string(mcAddress);
-			//const boost::asio::ip::address multicastAddress = boost::asio::ip::address::from_string(mcAddress);
-			sock->set_option(boost::asio::ip::multicast::join_group(multicastAddress));
+///LA
+			////const boost::asio::ip::address multicastAddress = boost::asio::ip::address_v4::from_string(mcAddress);
+			//////const boost::asio::ip::address multicastAddress = boost::asio::ip::address::from_string(mcAddress);
+			////sock->set_option(boost::asio::ip::multicast::join_group(multicastAddress));
+			const boost::asio::ip::address_v4 multicastAddress = boost::asio::ip::address_v4::from_string(mcAddress);
+			const boost::asio::ip::address_v4 networkInterface(boost::asio::ip::address_v4::from_string(localInterface));
+			sock->set_option(boost::asio::ip::multicast::join_group(multicastAddress,networkInterface));
+///LA
 
 			ipaddress = mcAddress;
 			port = sock->local_endpoint().port();

@@ -15,15 +15,42 @@
 
 int main(int argc, char* args)
 {
+	////Fixa minnesläcka!!!
+	//for(unsigned int __i = 0; __i < test2s.size(); __i++)
+	//{
+	//	if(narrRet->test2s.size() >= __i + 1)
+	//	{
+	//		if(narrRet->test2s[__i])
+	//			delete narrRet->test2s[__i];
+	//		narrRet->test2s[__i] = (TestData*)test2s[__i]->clone();
+	//	}
+	//	else
+	//	{
+	//		narrRet->test2s.push_back((TestData*)test2s[__i]->clone()); 
+	//	}
+	//}
+
+
 	//timeBeginPeriod(1);
 	using namespace TestAll;
 	using namespace ops;
+
+	std::vector<TestData*> bP;
+	bP.push_back(new TestData());
+	bP.clear();
 
 	ops::Participant* participant = Participant::getInstance("TestAllDomain");
 	participant->addTypeSupport(new TestAll::TestAllTypeFactory());
 
 	//Create topic, might throw ops::NoSuchTopicException
 	Topic topic = participant->createTopic("ChildTopic");
+
+	/*{
+		Topic scoopedTopic;
+		scoopedTopic = participant->createTopic("ChildTopic");
+		topic = scoopedTopic;
+	}*/
+	
 	//topic.setDomainAddress("10.73.4.93");
 	//Create a publisher on that topic
 	ChildDataPublisher pub(topic);
@@ -48,6 +75,9 @@ int main(int argc, char* args)
 	testData.text = "text in aggregated class";
 	testData.value = 3456.0;
 	data.test2 = testData;
+
+	data.testPointer = (TestData*)testData.clone();
+
 	//
 	//Set primitives
 	data.bo = true;
@@ -67,7 +97,7 @@ int main(int argc, char* args)
 	//data.fs.push_back(9.0);
 	data.ds.push_back(10.0);
 	data.ss.push_back("Hello Array");
-	data.setKey("relay");
+	data.setKey("key1");
 
 	//return 0;
 
@@ -85,8 +115,8 @@ int main(int argc, char* args)
 	testData3.text = "text in aggregated array element class";
 	testData3.value = 3.0;
 
-	data.test2s.push_back(&testData2);
-	data.test2s.push_back(&testData3);
+	data.test2s.push_back(new TestData());
+	data.test2s.push_back(new TestData());
 
 	data.test2s2.push_back(testData3);
 	data.test2s2.push_back(testData2);
@@ -127,9 +157,14 @@ int main(int argc, char* args)
 		}
 
 		Sleep(100);
+		if(dataClone->i > 100)
+		{
+			break;
+		}
 	}
 
 	//timeEndPeriod(1);
+	delete participant;
 	return 0;
 }
 

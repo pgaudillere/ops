@@ -76,10 +76,12 @@ namespace ops
 			return objectFactory;
 		}
 
+		~Participant();
+
 	private:
 
 		Participant(std::string domainID_, std::string participantID_);
-		~Participant();
+		
 
 		OPSConfig* config;
 		IOService* ioService;
@@ -96,6 +98,9 @@ namespace ops
 		//Visible to friends only
 		TopicHandler* getTopicHandler(Topic top);
 		void releaseTopicHandler(Topic top);
+
+		//Mutex for ioService, used to shutdown safely
+		Lockable serviceMutex;
 
 		std::string domainID;
 		std::string participantID;

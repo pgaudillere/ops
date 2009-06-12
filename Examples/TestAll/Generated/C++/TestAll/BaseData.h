@@ -20,7 +20,7 @@ public:
 	
 	std::string baseText;
 
-
+    ///Default constructor.
     BaseData()
         : ops::OPSObject()
 		
@@ -28,6 +28,22 @@ public:
         OPSObject::appendType(std::string("TestAll.BaseData"));
 
 
+    }
+    ///Copy-constructor making full deep copy of a(n) BaseData object.
+    BaseData(const BaseData& __c)
+       : ops::OPSObject()
+		
+    {
+        OPSObject::appendType(std::string("TestAll.BaseData"));
+
+        __c.fillClone((BaseData*)this);
+
+    }
+    ///Assignment operator making full deep copy of a(n) BaseData object.
+    BaseData& operator = (const BaseData& other)
+    {
+        other.fillClone(this);
+        return *this;
     }
 
     ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
@@ -47,7 +63,7 @@ public:
 
     }
 
-    virtual void fillClone(ops::OPSObject* obj)
+    virtual void fillClone(ops::OPSObject* obj) const
     {
 		BaseData* narrRet = (BaseData*)obj;
 		ops::OPSObject::fillClone(narrRet);

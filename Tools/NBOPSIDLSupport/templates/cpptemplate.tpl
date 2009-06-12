@@ -19,7 +19,7 @@ class __className :
 public:
 	
 __declarations
-
+    ///Default constructor.
     __className()
         : __baseClassName()
 __constructorHead
@@ -27,6 +27,22 @@ __constructorHead
         OPSObject::appendType(std::string("__packageName.__className"));
 __constructorBody
 
+    }
+    ///Copy-constructor making full deep copy of a(n) __className object.
+    __className(const __className& __c)
+       : __baseClassName()
+__constructorHead
+    {
+        OPSObject::appendType(std::string("__packageName.__className"));
+__constructorBody
+        __c.fillClone((__className*)this);
+
+    }
+    ///Assignment operator making full deep copy of a(n) __className object.
+    __className& operator = (const __className& other)
+    {
+        other.fillClone(this);
+        return *this;
     }
 
     ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
@@ -41,7 +57,7 @@ __serialize
 __clone
     }
 
-    virtual void fillClone(ops::OPSObject* obj)
+    virtual void fillClone(ops::OPSObject* obj) const
     {
 __fillClone
     }

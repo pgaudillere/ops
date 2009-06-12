@@ -108,14 +108,14 @@ public class OPSIDLProject implements Project
         return new Info().getDisplayName();
     }
 
-    private void iterateFileObject(FileObject sourceFolder)
+    private void iterateFileObject(FileObject sourceFolder, InputOutput io)
     {
         for (FileObject fileObject : sourceFolder.getChildren())
         {
             if(fileObject.isFolder())
             {
                 System.out.println("Folder " + fileObject.getName());
-                iterateFileObject(fileObject);
+                iterateFileObject(fileObject, io);
             }
             else if(fileObject.getExt().toLowerCase().equals("idl"))
             {
@@ -124,7 +124,7 @@ public class OPSIDLProject implements Project
                     int size = fileObject.getInputStream().available();
                     byte[] textBytes = new byte[size];
                     fileObject.getInputStream().read(textBytes);
-                    projectIDLParser.parse(fileObject.getName(), new String(textBytes));
+                    projectIDLParser.parse(fileObject.getName(), new String(textBytes), io);
                     
                 } catch (IOException ex)
                 {
@@ -133,19 +133,38 @@ public class OPSIDLProject implements Project
             }
         }
     }
+    public void build()
+    {
+        
+        try {
+            InputOutput io = IOProvider.getDefault().getIO("OPS Build - " + getName(), false);
+            //io.getOut().reset();
+            io.getOut().reset();
+            io.select();
+            io.getOut().println("Starting build of " + getName() + "...");
+            iterateFiles(io);
+            io.getOut().println("Build finished.");
+        } catch (Exception ex)
+        {
+            //io.getErr().println("Build failed.");
+        }
 
-    private void iterateFiles()
+    }
+
+    private void iterateFiles(InputOutput io)
     {
         projectIDLParser.reset();
-        iterateFileObject(getSourceFolder(false));
+        iterateFileObject(getSourceFolder(false), io);
         if(projectIDLParser.getNrErrors() > 0)
         {
-            InputOutput io = IOProvider.getDefault().getIO("OPS Build", false);
+            //InputOutput io = IOProvider.getDefault().getIO("OPS Build - " + getName(), false);
+            //io.select();
             io.getErr().println("Project parsing failed with " + projectIDLParser.getNrErrors() + " errors.");
         }
         else
         {
-            InputOutput io = IOProvider.getDefault().getIO("OPS Build", false);
+            //InputOutput io = IOProvider.getDefault().getIO("OPS Build - " + getName(), false);
+            io.select();
             io.getOut().println("Parsing successful.");
             projectIDLCompiler.compile(projectIDLParser.getIdlClasses());
         }
@@ -213,21 +232,22 @@ public class OPSIDLProject implements Project
 
         public void invokeAction(String string, Lookup lookup) throws IllegalArgumentException
         {
-            try
-            {
+//            try
+//            {
                 //do nothing
-                InputOutput io = IOProvider.getDefault().getIO("OPS Build", false);
-                io.getOut().reset();
-                io.select();
-                io.getOut().println("Starting build... of " + project.getName() );
-                io.getErr().println("Build is not yet implemented.");
+//                InputOutput io = IOProvider.getDefault().getIO("OPS Build", false);
+//                io.getOut().reset();
+//                io.select();
+//                io.getOut().println("Starting build... of " + project.getName() );
+//                io.getErr().println("Build is not yet implemented.");
+//
+//                project.iterateFiles();
+                project.build();
 
-                project.iterateFiles();
-
-            } catch (IOException ex)
-            {
-                Exceptions.printStackTrace(ex);
-            }
+//            } catch (IOException ex)
+//            {
+//                Exceptions.printStackTrace(ex);
+//            }
 
         }
 

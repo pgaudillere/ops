@@ -21,7 +21,7 @@ public:
 	std::string text;
 	double value;
 
-
+    ///Default constructor.
     TestData()
         : ops::OPSObject()
 		, value(0)
@@ -29,6 +29,22 @@ public:
         OPSObject::appendType(std::string("TestAll.TestData"));
 
 
+    }
+    ///Copy-constructor making full deep copy of a(n) TestData object.
+    TestData(const TestData& __c)
+       : ops::OPSObject()
+		, value(0)
+    {
+        OPSObject::appendType(std::string("TestAll.TestData"));
+
+        __c.fillClone((TestData*)this);
+
+    }
+    ///Assignment operator making full deep copy of a(n) TestData object.
+    TestData& operator = (const TestData& other)
+    {
+        other.fillClone(this);
+        return *this;
     }
 
     ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
@@ -49,7 +65,7 @@ public:
 
     }
 
-    virtual void fillClone(ops::OPSObject* obj)
+    virtual void fillClone(ops::OPSObject* obj) const
     {
 		TestData* narrRet = (TestData*)obj;
 		ops::OPSObject::fillClone(narrRet);

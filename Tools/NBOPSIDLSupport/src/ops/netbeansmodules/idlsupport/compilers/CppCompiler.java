@@ -9,10 +9,8 @@
 
 package ops.netbeansmodules.idlsupport.compilers;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.Vector;
-import ops.netbeansmodules.util.FileHelper;
-import org.openide.util.Exceptions;
 import parsing.AbstractTemplateBasedIDLCompiler;
 import parsing.IDLClass;
 import parsing.IDLField;
@@ -225,7 +223,7 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
 
     private String elementType(String type)
     {
-        return type.replace("[]", "");
+        return languageType(type.replace("[]", ""));
     }
 
     private String extractProjectName(String projectDirectory)
@@ -279,7 +277,17 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
                     else
                     {
                         ret += tab(2) + "for(unsigned int __i = 0; __i < " + "" + field.getName() + ".size(); __i++)" + endl();
-                        ret += tab(3) + "{ narrRet->" + field.getName() + ".push_back(" + field.getName() + "[__i]); }" +  endl();
+                        ret += tab(2) + "{" + endl();
+                        ret += tab(3) +     "if(" + "narrRet->" + field.getName() + ".size() >= __i + 1)" + endl();
+                        ret += tab(3) +     "{" + endl();
+                        ret += tab(4) +         "if(" + "narrRet->" + field.getName() + "[__i])" + " delete " + "narrRet->" + field.getName() + "[__i];"  + endl();
+                        ret += tab(4) +         "narrRet->" + field.getName() + "[__i] = " + "(" + elementType(field.getType()) + "*)" + field.getName() + "[__i]->clone();" + endl();
+                        ret += tab(3) +     "}" + endl();
+                        ret += tab(3) +     "else" + endl();
+                        ret += tab(3) +     "{" + endl();
+                        ret += tab(4) +         "narrRet->" + field.getName() + ".push_back((" + elementType(field.getType()) + "*)" + field.getName() + "[__i]->clone()); " +  endl();
+                        ret += tab(3) +     "}" + endl();
+                        ret += tab(2) + "}" + endl();
                     }
                 }
             }
@@ -381,11 +389,11 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         String ret = "";
         if(field.isAbstract())
         {
-            ret += tab(1) + "std::vector<" + languageType(elementType(field.getType())) + "*> " + field.getName() + ";" + endl();
+            ret += "std::vector<" + languageType(elementType(field.getType())) + "*> " + field.getName() + ";" + endl();
         }
         else 
         {
-            ret += tab(1) + "std::vector<" + languageType(elementType(field.getType())) + "> " + field.getName() + ";" + endl();
+            ret += "std::vector<" + languageType(elementType(field.getType())) + "> " + field.getName() + ";" + endl();
         }
         return ret;
     }
@@ -448,10 +456,12 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
 
     private CharSequence getImports(IDLClass idlClass)
     {
+        HashMap<String, String> typesToInclude = new HashMap();
         String ret = "";
         if(idlClass.getBaseClassName() != null)
         {
-            ret += tab(0) + "#include \"" + getSlashedType(idlClass.getBaseClassName()) + ".h\"" + endl();
+            typesToInclude.put(idlClass.getBaseClassName(), idlClass.getBaseClassName());
+            //ret += tab(0) + "#include \"" + getSlashedType(idlClass.getBaseClassName()) + ".h\"" + endl();
         }
         for (IDLField field : idlClass.getFields())
         {
@@ -463,9 +473,15 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
                 {
                     type = type.substring(0, type.length() - 2);
                 }
+                typesToInclude.put(type, type);
 
-                ret += tab(0) + "#include \"" + getSlashedType(type) + ".h\"" + endl();
+                //ret += tab(0) + "#include \"" + getSlashedType(type) + ".h\"" + endl();
             }
+        }
+        for (String includeType : typesToInclude.values())
+        {
+            ret += tab(0) + "#include \"" + getSlashedType(includeType) + ".h\"" + endl();
+
         }
         return ret;
     }
@@ -573,10 +589,5 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         }
         return ret;
     }
-
-    
-
-
-
 
 }

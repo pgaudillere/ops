@@ -23,10 +23,10 @@ final class OPSOptionsPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        label1 = new java.awt.Label();
         godeGeneratorsTabs = new javax.swing.JTabbedPane();
+        defaultOptionsPanel1 = new ops.netbeansmodules.idlsupport.DefaultOptionsPanel();
 
-        label1.setText(org.openide.util.NbBundle.getMessage(OPSOptionsPanel.class, "OPSOptionsPanel.label1.text")); // NOI18N
+        godeGeneratorsTabs.addTab(org.openide.util.NbBundle.getMessage(OPSOptionsPanel.class, "OPSOptionsPanel.defaultOptionsPanel1.TabConstraints.tabTitle"), defaultOptionsPanel1); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -34,18 +34,14 @@ final class OPSOptionsPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(godeGeneratorsTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
-                    .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(godeGeneratorsTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(godeGeneratorsTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                .addComponent(godeGeneratorsTabs, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -79,7 +75,7 @@ final class OPSOptionsPanel extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private ops.netbeansmodules.idlsupport.DefaultOptionsPanel defaultOptionsPanel1;
     private javax.swing.JTabbedPane godeGeneratorsTabs;
-    private java.awt.Label label1;
     // End of variables declaration//GEN-END:variables
 }
