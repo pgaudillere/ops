@@ -1,19 +1,34 @@
-/*
- * MulticastTransport.java
- *
- * Created on den 11 maj 2007, 19:20
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/**
+*
+* Copyright (C) 2006-2009 Anton Gravestam.
+*
+* This file is part of OPS (Open Publish Subscribe).
+*
+* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 package ops;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
+import java.net.NetworkInterface;
 import java.net.NoRouteToHostException;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
@@ -28,14 +43,21 @@ public class MulticastTransport implements Transport
     InetAddress ipAddress;
     private Event newBytesEvent = new Event();
     /** Creates a new instance of MulticastTransport */
-    public MulticastTransport(String ip, int port)
+    public MulticastTransport(String ip, int port, String localInterface)
     {
         try
         {
             ipAddress = InetAddress.getByName(ip);
+            SocketAddress mcSocketAddress = new InetSocketAddress(ipAddress, port);
             this.port = port;
             //multicastSocket = new MulticastSocket();
             multicastSocket = new MulticastSocket(port);
+
+
+            if(!localInterface.equals("0.0.0.0"))
+            {//For some reason this method throws an error if we try to set outgoing interface to ANY.
+                multicastSocket.setNetworkInterface(NetworkInterface.getByInetAddress(Inet4Address.getByName(localInterface)));
+            }
             multicastSocket.setReceiveBufferSize(16000000);
             try
             {
@@ -48,13 +70,17 @@ public class MulticastTransport implements Transport
             //multicastSocket.setReuseAddress(true);
             //multicastSocket.bind(new InetSocketAddress(port));
             multicastSocket.setTimeToLive(1);
-            multicastSocket.joinGroup(ipAddress);
+            multicastSocket.joinGroup(mcSocketAddress, NetworkInterface.getByInetAddress(InetAddress.getByName(localInterface)));
         }
         catch (IOException ex)
         {
             ex.printStackTrace();
         }
         
+    }
+    public MulticastTransport(String ip, int port)
+    {
+        this(ip, port, "0.0.0.0");
     }
     public boolean receive(byte[] b, int offset)
     {
@@ -85,7 +111,10 @@ public class MulticastTransport implements Transport
         try
         {
 
-            multicastSocket.send(new DatagramPacket(b, b.length, ipAddress,this.port));
+            //multicastSocket.s
+            DatagramPacket datagramPacket = new DatagramPacket(b, b.length, ipAddress,this.port);
+
+            multicastSocket.send(datagramPacket);
             //multicastSocket.send(new DatagramPacket("snopp".getBytes(), "snopp".getBytes().length, ipAddress,this.port));
         }
         catch(NoRouteToHostException nrte)

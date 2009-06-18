@@ -1,5 +1,25 @@
+/**
+*
+* Copyright (C) 2006-2009 Anton Gravestam.
+*
+* This file is part of OPS (Open Publish Subscribe).
+*
+* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+*/
 package ops;
 
+import com.sun.org.apache.bcel.internal.generic.IFEQ;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +36,7 @@ public class Subscriber extends Observable
     private Topic topic;
     private String identity = "";
     private ArrayList<FilterQoSPolicy> filterQoSPolicies = new ArrayList<FilterQoSPolicy>();
+    private MessageFilterSet messageFilters = new MessageFilterSet();
     private ReentrantLock newDataLock = new ReentrantLock(true);
     private OPSObject data;
     private long deadlineTimeout;
@@ -94,6 +115,7 @@ public class Subscriber extends Observable
 //    }
     protected void notifyNewOPSObject(OPSObject o)
     {
+
         if (applyFilterQoSPolicies(o))
         {
             if (System.currentTimeMillis() - timeLastDataForTimeBase > timeBaseMinSeparationTime || timeBaseMinSeparationTime == 0)
@@ -143,8 +165,11 @@ public class Subscriber extends Observable
 
     void notifyNewOPSMessage(OPSMessage message)
     {
-        this.message = message;
-        notifyNewOPSObject(message.getData());
+        if(messageFilters.applyFilter(message))
+        {
+            this.message = message;
+            notifyNewOPSObject(message.getData());
+        }
     }
 
     private boolean applyFilterQoSPolicies(OPSObject o)
@@ -197,5 +222,24 @@ public class Subscriber extends Observable
     {
         return data;
     }
+
+    public void removeFilter(MessageFilter filter)
+    {
+        messageFilters.removeFilter(filter);
+    }
+
+    public void addFilter(MessageFilter filter)
+    {
+        messageFilters.addFilter(filter);
+    }
+
+    public MessageFilterSet getMessageFilters()
+    {
+        return messageFilters;
+    }
+
+
+
+
 
 }
