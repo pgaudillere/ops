@@ -17,25 +17,17 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package ops;
 
-import java.util.Observable;
+import ops.protocol.OPSMessage;
 
 /**
  *
- * @author Anton Gravestam
+ * @author angr
  */
-public class Event extends Observable
+public interface MessageFilter
 {
-    
-    public void fireEvent(Object args)
-    {
-        setChanged();
-        notifyObservers(args);
-    }
-    public void fireEvent()
-    {
-        setChanged();
-        notifyObservers();
-    }
+    public boolean applyFilter(OPSMessage o);
+
 }

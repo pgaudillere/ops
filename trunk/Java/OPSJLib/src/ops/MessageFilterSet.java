@@ -17,25 +17,46 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
+
 package ops;
 
-import java.util.Observable;
+import java.util.Vector;
+import ops.protocol.OPSMessage;
 
 /**
  *
- * @author Anton Gravestam
+ * @author angr
  */
-public class Event extends Observable
+public class MessageFilterSet implements MessageFilter
 {
-    
-    public void fireEvent(Object args)
+    Vector<MessageFilter> filters = new Vector();
+    public synchronized void addFilter(MessageFilter filter)
     {
-        setChanged();
-        notifyObservers(args);
+        filters.add(filter);
     }
-    public void fireEvent()
+    public synchronized void removeFilter(MessageFilter filter)
     {
-        setChanged();
-        notifyObservers();
+        filters.remove(filter);
     }
+
+    public synchronized boolean applyFilter(OPSMessage o)
+    {
+        for (MessageFilter messageFilter : filters)
+        {
+            if(!messageFilter.applyFilter(o))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean contains(Object o)
+    {
+        return filters.contains(o);
+    }
+
+
+
+
 }

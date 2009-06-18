@@ -1,4 +1,22 @@
+/**
+*
+* Copyright (C) 2006-2009 Anton Gravestam.
+*
+* This file is part of OPS (Open Publish Subscribe).
+*
+* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
 
+* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+*/
 package ops;
 
 import java.io.IOException;
@@ -28,6 +46,7 @@ public class Publisher
     private int reliableWriteTimeout = 1000;
 
     private byte[] bytes;
+    private Participant participant;
 
 
     public Publisher(Topic topic)
@@ -38,7 +57,12 @@ public class Publisher
 //        try
 //        {
 //            transport = SendTransport.getDefaultSendTransport(topic.getDomainAddress());
-            transport = new MulticastTransport(topic.getDomainAddress(), topic.getPort());
+            
+        this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
+        
+        MulticastDomain domain = (MulticastDomain) participant.getConfig().getDomain(topic.getDomainID());
+        
+        transport = new MulticastTransport(topic.getDomainAddress(), topic.getPort(), domain.getLocalInterface());
 //        }
 //        catch (SocketException se)
 //        {
@@ -58,6 +82,7 @@ public class Publisher
     {
 
         OPSMessage message = new OPSMessage();
+        o.setKey(key);
         message.setData(o);
         message.setPublicationID(currentPublicationID);
         message.setTopicName(topic.getName());

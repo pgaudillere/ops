@@ -1,11 +1,22 @@
-/*
- * Topic.java
- *
- * Created on den 1 februari 2007, 19:07
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- */
+/**
+*
+* Copyright (C) 2006-2009 Anton Gravestam.
+*
+* This file is part of OPS (Open Publish Subscribe).
+*
+* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+
+* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public License
+* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 package ops;
 
@@ -17,8 +28,7 @@ import java.io.IOException;
  * @author Owe
  */
 public class Topic<T> extends OPSObject
-{
-   
+{   
     private String name = "";
     private int port = -1;
     private int replyPort = 0;
@@ -27,8 +37,6 @@ public class Topic<T> extends OPSObject
     private int sampleMaxSize = StaticManager.MAX_SIZE;
     private String participantID;
     private String domainID;
-
-    
 
     /** Creates a new instance of Topic */
     public Topic(String name, int port, String typeID, String domainAddress)
@@ -127,9 +135,6 @@ public class Topic<T> extends OPSObject
 			sampleMaxSize = size;
 		}
     }
-
-
-
 
     @Override
     public void serialize(ArchiverInOut archive) throws IOException
