@@ -72,7 +72,7 @@ public:
 		std::vector<std::string> types;
 		boost::algorithm::split(types, typeString, boost::algorithm::is_any_of(" "));
 
-        for(int i = 0; i < types.size(); i++)
+        for(unsigned int i = 0; i < types.size(); i++)
         {
 			Serializable* serializable = SerializableCompositeFactory::create(types[i]);
             if(serializable != NULL)
