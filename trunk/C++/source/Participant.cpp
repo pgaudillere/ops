@@ -36,6 +36,7 @@ namespace ops
 	}
 	Participant* Participant::getInstance(std::string domainID_, std::string participantID)
 	{
+///LA Borde skyddas mot samtidig åtkomst
 		if(instances.find(participantID) == instances.end())
 		{
 			Participant* newInst = new Participant(domainID_, participantID);
@@ -97,12 +98,22 @@ namespace ops
 	void Participant::cleanUpTopicHandlers()
 	{
 		SafeLock lock(&garbageLock);
-		for(unsigned int i = 0; i < garbageTopicHandlers.size(); i++)
+///LA
+		for(int i = garbageTopicHandlers.size() - 1; i >= 0; i--)
 		{
-			garbageTopicHandlers[i]->stop();
-			delete garbageTopicHandlers[i];
+			if (garbageTopicHandlers[i]->numReservedMessages() == 0) {
+				delete garbageTopicHandlers[i];
+				std::vector<TopicHandler*>::iterator iter = garbageTopicHandlers.begin() + i;
+				garbageTopicHandlers.erase(iter);
+			}
 		}
-		garbageTopicHandlers.clear();
+		////for(unsigned int i = 0; i < garbageTopicHandlers.size(); i++)
+		////{
+		////	garbageTopicHandlers[i]->stop();
+		////	delete garbageTopicHandlers[i];
+		////}
+		////garbageTopicHandlers.clear();
+///LA
 	}
 	void Participant::onNewEvent(Notifier<int>* sender, int message)
 	{
@@ -130,6 +141,7 @@ namespace ops
 	//This instance map should be owned by Participant.
 	TopicHandler* Participant::getTopicHandler(Topic top)
 	{
+///LA Borde skyddas mot samtidig åtkomst, tex med garbageLock
 		if(topicHandlerInstances.find(top.getName()) == topicHandlerInstances.end())
 		{
 			topicHandlerInstances[top.getName()] = new TopicHandler(top, this);
@@ -139,6 +151,7 @@ namespace ops
 	}
 	void Participant::releaseTopicHandler(Topic top)
 	{
+///LA Borde inte garbageLock tas redan här, för att skydda listorna
 		if(topicHandlerInstances.find(top.getName()) != topicHandlerInstances.end())
 		{
 			TopicHandler* topHandler = topicHandlerInstances[top.getName()];
@@ -147,6 +160,9 @@ namespace ops
 				//Time to mark this topicHandler as garbage.
 				topicHandlerInstances.erase(topicHandlerInstances.find(top.getName()));
 				SafeLock lock(&garbageLock);
+///LA
+				topHandler->stop();
+///LA
 				garbageTopicHandlers.push_back(topHandler);
 
 			}
