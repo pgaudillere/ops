@@ -17,6 +17,65 @@
     </folder>
     <folder name="Loaders">
         <folder name="text">
+            <folder name="opsconfig+xml">
+                <folder name="Actions">
+                    <file name="org-openide-actions-CopyAction.instance">
+                        <attr name="position" intvalue="400"/>
+                    </file>
+                    <file name="org-openide-actions-CutAction.instance">
+                        <attr name="position" intvalue="300"/>
+                    </file>
+                    <file name="org-openide-actions-DeleteAction.instance">
+                        <attr name="position" intvalue="600"/>
+                    </file>
+                    <file name="org-openide-actions-FileSystemAction.instance">
+                        <attr name="position" intvalue="1100"/>
+                    </file>
+                    <file name="org-openide-actions-OpenAction.instance">
+                        <attr name="position" intvalue="100"/>
+                    </file>
+                    <file name="org-openide-actions-PropertiesAction.instance">
+                        <attr name="position" intvalue="1400"/>
+                    </file>
+                    <file name="org-openide-actions-RenameAction.instance">
+                        <attr name="position" intvalue="700"/>
+                    </file>
+                    <file name="org-openide-actions-SaveAsTemplateAction.instance">
+                        <attr name="position" intvalue="900"/>
+                    </file>
+                    <file name="org-openide-actions-ToolsAction.instance">
+                        <attr name="position" intvalue="1300"/>
+                    </file>
+                    <file name="sep-1.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="200"/>
+                    </file>
+                    <file name="sep-2.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="500"/>
+                    </file>
+                    <file name="sep-3.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="800"/>
+                    </file>
+                    <file name="sep-4.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="1000"/>
+                    </file>
+                    <file name="sep-5.instance">
+                        <attr name="instanceClass" stringvalue="javax.swing.JSeparator"/>
+                        <attr name="position" intvalue="1200"/>
+                    </file>
+                </folder>
+                <folder name="Factories">
+                    <file name="OPSConfigDataLoader.instance">
+                        <attr name="SystemFileSystem.icon" urlvalue="nbresloc:/ops/netbeansmodules/idlsupport/opsprojecticonxml.GIF"/>
+                        <attr name="dataObjectClass" stringvalue="ops.netbeansmodules.idlsupport.OPSConfigDataObject"/>
+                        <attr name="instanceCreate" methodvalue="org.openide.loaders.DataLoaderPool.factory"/>
+                        <attr name="mimeType" stringvalue="text/opsconfig+xml"/>
+                    </file>
+                </folder>
+            </folder>
             <folder name="x-idl">
                 <folder name="Actions">
                     <file name="org-openide-actions-CopyAction.instance">
@@ -112,6 +171,9 @@
     </folder>
     <folder name="Services">
         <folder name="MIMEResolver">
+            <file name="OPSConfigResolver.xml" url="OPSConfigResolver.xml">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="ops.netbeansmodules.idlsupport.Bundle"/>
+            </file>
             <file name="OPSIDLResolver.xml" url="OPSIDLResolver.xml">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="ops.netbeansmodules.idlsupport.Bundle"/>
             </file>
@@ -120,6 +182,10 @@
     </folder>
     <folder name="Templates">
         <folder name="Other">
+            <file name="OPSConfigTemplate.xml" url="OPSConfigTemplate.xml">
+                <attr name="SystemFileSystem.localizingBundle" stringvalue="ops.netbeansmodules.idlsupport.Bundle"/>
+                <attr name="template" boolvalue="true"/>
+            </file>
             <file name="OPSIDLTemplate.idl" url="OPSIDLTemplate.idl">
                 <attr name="SystemFileSystem.localizingBundle" stringvalue="ops.netbeansmodules.idlsupport.Bundle"/>
                 <attr name="template" boolvalue="true"/>
