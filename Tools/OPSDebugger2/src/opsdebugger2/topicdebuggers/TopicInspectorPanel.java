@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import ops.KeyFilterQoSPolicy;
+import ops.MessageFilter;
 import ops.OPSObject;
 import ops.Subscriber;
 import ops.Topic;
@@ -34,7 +35,7 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
     private Subscriber subscriber;
     private KeyFilterQoSPolicy keyFilter;
     private DefaultComboBoxModel availableKeysComboModel;
-    private PublisherFilterQoSPolicy publisherFilter;
+    private PublisherMessageFilter publisherFilter;
     private DefaultComboBoxModel availablePublishersComboModel;
 
     /** Creates new form TopicInspectorPanel */
@@ -266,7 +267,7 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
         // TODO add your handling code here:
         if (publisherFilter == null)
         {
-            publisherFilter = new PublisherFilterQoSPolicy();
+            publisherFilter = new PublisherMessageFilter();
         }
         String[] strings = publisherFilterField.getText().split(" ");
         if (strings.length < 2 && strings[0].equals(""))
@@ -280,9 +281,9 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
                 publishers.add(strings[i]);
             }
             publisherFilter.setKeys(publishers);
-            if (!getSubscriber().getFilterQoSPolicies().contains(publisherFilter))
+            if (!getSubscriber().getMessageFilters().contains(publisherFilter))
             {
-                getSubscriber().addFilterQoSPolicy(publisherFilter);
+                getSubscriber().addFilter(publisherFilter);
             }
         }
     }
