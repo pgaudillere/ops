@@ -10,8 +10,10 @@ class ChildData extends BaseData
     long l;
     float f;
     double d;
+
     /*This string shall hold the word World*/
     string s;
+    
     TestData test2;
     virtual TestAll.TestData testPointer;
 
