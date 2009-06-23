@@ -10,7 +10,7 @@
     * Under "Select Default Variants" in the installer choose the build versions of boost you need (depends on how you want to build and link OPS). If you dont know, select all.
     * Under "Choose Components", select at least the following (make sure you only select components for the compiler versions you need):
       # Boost header files
-      # Boost DateTime
+      # Boost !DateTime
       # Boost Filesystem
       # Boost Regex
       # Boost System
