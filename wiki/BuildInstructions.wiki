@@ -6,7 +6,7 @@
  # ==Checkout==
    Checkout OPS to a directory of your choice e.g. "C:\OPS", see Source tab.
  # ==Install Boost==
-   Download pre-built binaries for boost 1.38 from http://www.boostpro.com
+   Download pre-built binaries for boost 1.38 from http://www.boostpro.com/download
     * Under "Select Default Variants" in the installer choose the build versions of boost you need (depends on how you want to build and link OPS). If you dont know, select all.
     * Under "Choose Components", select at least the following (make sure you only select components for the compiler versions you need):
       # Boost header files
