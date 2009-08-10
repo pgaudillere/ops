@@ -28,6 +28,7 @@ namespace ops
 {
 	//static
 	std::map<std::string, Participant*> Participant::instances;
+	Lockable Participant::creationMutex;
 
 
 	Participant* Participant::getInstance(std::string domainID_)
@@ -36,7 +37,7 @@ namespace ops
 	}
 	Participant* Participant::getInstance(std::string domainID_, std::string participantID)
 	{
-///LA Borde skyddas mot samtidig åtkomst
+		SafeLock lock(&creationMutex);
 		if(instances.find(participantID) == instances.end())
 		{
 			Participant* newInst = new Participant(domainID_, participantID);
@@ -138,10 +139,9 @@ namespace ops
 	}
 
 	///By Singelton, one TopicHandler per Topic (Name)
-	//This instance map should be owned by Participant.
 	TopicHandler* Participant::getTopicHandler(Topic top)
 	{
-///LA Borde skyddas mot samtidig åtkomst, tex med garbageLock
+		SafeLock lock(&garbageLock);
 		if(topicHandlerInstances.find(top.getName()) == topicHandlerInstances.end())
 		{
 			topicHandlerInstances[top.getName()] = new TopicHandler(top, this);
@@ -151,7 +151,7 @@ namespace ops
 	}
 	void Participant::releaseTopicHandler(Topic top)
 	{
-///LA Borde inte garbageLock tas redan här, för att skydda listorna
+		SafeLock lock(&garbageLock);
 		if(topicHandlerInstances.find(top.getName()) != topicHandlerInstances.end())
 		{
 			TopicHandler* topHandler = topicHandlerInstances[top.getName()];
@@ -159,7 +159,6 @@ namespace ops
 			{
 				//Time to mark this topicHandler as garbage.
 				topicHandlerInstances.erase(topicHandlerInstances.find(top.getName()));
-				SafeLock lock(&garbageLock);
 ///LA
 				topHandler->stop();
 ///LA
