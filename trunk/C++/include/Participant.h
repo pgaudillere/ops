@@ -111,6 +111,9 @@ namespace ops
 
 		OPSObjectFactory* objectFactory;
 
+		//Static Mutex used by factory methods getInstance()
+		static Lockable creationMutex;
+
 
 
 	};
