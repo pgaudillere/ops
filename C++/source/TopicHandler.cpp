@@ -37,7 +37,14 @@ namespace ops
 
 		IOService* ioService = participant->getIOService();
 
-		receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService, mcDomain->getLocalInterface(), mcDomain->getInSocketBufferSize());
+		if(top.getTransport() == Topic::TRANSPORT_MC)
+		{
+			receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService, mcDomain->getLocalInterface(), mcDomain->getInSocketBufferSize());
+		}
+		else if(top.getTransport() == Topic::TRANSPORT_TCP)
+		{
+			receiver = Receiver::createTCPClient(top.getDomainAddress(), top.getPort(), ioService); 
+		}
 		receiver->addListener(this);
 		receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 
@@ -54,8 +61,26 @@ namespace ops
 	///Called whenever the receiver has new data.
 	void TopicHandler::onNewEvent(Notifier<BytesSizePair>* sender, BytesSizePair byteSizePair)
 	{
-		//Deserialize data
-		//ByteBuffer tBuf(bytes, Participant::PACKET_MAX_SIZE);
+		if(byteSizePair.size <= 0)
+		{
+			//Inform participant that we had an error waiting for data,
+			//this means the underlying socket is down but hopefully it will reconnect, so no need to do anything.
+			//Only happens with tcp connections so far.
+			
+			if(byteSizePair.size == -5)
+			{
+				BasicError err("Connection was lost but is no reconnected.");
+				participant->reportError(&err);
+			}
+			else
+			{
+				BasicError err("Empty message or error.");
+				participant->reportError(&err);
+			}
+			
+			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
+			return;
+		}
 
 		//Create a temporay map and buf to peek data before putting it in to memMap
 		MemoryMap tMap(memMap.getSegment(expectedSegment), memMap.getSegmentSize());

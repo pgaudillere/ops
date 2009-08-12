@@ -17,6 +17,8 @@
                 <topics>
                     <element type = "Topic">
                         <name>ChildTopic</name>
+                        <transport>tcp</transport>
+                        <address>127.0.0.1</address>
                         <port>6689</port>
                         <dataType>TestAll.ChildData</dataType>
                         <sampleMaxSize>2100000</sampleMaxSize>

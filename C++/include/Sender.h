@@ -30,6 +30,7 @@
 
 #include "ByteBuffer.h"
 #include <string>
+#include "IOService.h" 
 
 namespace ops
 {
@@ -45,6 +46,7 @@ namespace ops
         virtual std::string getAddress() = 0;
 
 		static Sender* create(std::string localInterface = "0.0.0.0", int ttl = 1, int outSocketBufferSize = 16000000);
+		static Sender* createTCPServer(std::string ip, int port, IOService* ioService);
 
         virtual ~Sender()
         {

@@ -386,6 +386,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\TCPClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\TCPClient.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\TCPServer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Thread.cpp"
 				>
 			</File>
@@ -473,6 +485,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\CommException.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ConfigException.h"
 				>
 			</File>
 			<File

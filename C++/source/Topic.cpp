@@ -2,6 +2,7 @@
 #include "Topic.h"
 #include "OPSConstants.h"
 #include "Participant.h"
+#include "ConfigException.h"
 
 namespace ops
 {
@@ -86,6 +87,10 @@ namespace ops
 	{
 		return port;
 	}
+	std::string Topic::getTransport()
+	{
+		return transport;
+	}
 
 	void Topic::serialize(ArchiverInOut* archiver)
 	{
@@ -99,7 +104,21 @@ namespace ops
 		int tSampleMaxSize = getSampleMaxSize();
 		archiver->inout(std::string("sampleMaxSize"), tSampleMaxSize);
 		setSampleMaxSize(tSampleMaxSize);
+
+		archiver->inout(std::string("transport"), transport);
+		if(transport == "")
+		{
+			transport = TRANSPORT_MC;
+		}
+		else if (transport != TRANSPORT_TCP)
+		{
+			throw ops::ConfigException("Transport in topic must be either 'multicast', 'TCP' or left blank( = multicast).");
+		}
 	}
+
+	std::string Topic::TRANSPORT_MC = "multicast";
+	std::string Topic::TRANSPORT_TCP = "tcp";
+	std::string Topic::TRANSPORT_UDP = "udp";
 
 
 }

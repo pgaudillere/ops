@@ -36,7 +36,14 @@ namespace ops
 		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getConfig()->getDomain(topic.getDomainID()));
 		if(mcDomain != NULL)
 		{
-			udpSender = Sender::create(mcDomain->getLocalInterface(), mcDomain->getTimeToLive(), mcDomain->getOutSocketBufferSize());
+			if(topic.getTransport() == Topic::TRANSPORT_MC)
+			{
+				udpSender = Sender::create(mcDomain->getLocalInterface(), mcDomain->getTimeToLive(), mcDomain->getOutSocketBufferSize());
+			}
+			else if(topic.getTransport() == Topic::TRANSPORT_TCP)
+			{
+				udpSender = Sender::createTCPServer(topic.getDomainAddress(), topic.getPort(), participant->getIOService());
+			}
 		}
 		else
 		{
