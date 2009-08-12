@@ -20,6 +20,7 @@
 
 #include "Sender.h"
 #include "UDPSender.h"
+#include "TCPServer.h"
 
 namespace ops
 {
@@ -27,6 +28,10 @@ namespace ops
 	Sender* Sender::create(std::string localInterface, int ttl, int outSocketBufferSize)
 	{
 		return new UDPSender(localInterface, ttl, outSocketBufferSize);
+	}
+	Sender* Sender::createTCPServer(std::string ip, int port, IOService* ioService)
+	{
+		return new TCPServer(ip, port, ioService);
 	}
 
 

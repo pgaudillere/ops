@@ -20,12 +20,17 @@
 
 #include "Receiver.h"
 #include "MulticastReceiver.h"
+#include "TCPClient.h"
 
 namespace ops
 {
 	Receiver* Receiver::create(std::string ip, int bindPort, IOService* ioService, std::string localInterface, int inSocketBufferSize)
 	{
 		return new MulticastReceiver(ip, bindPort, ioService, localInterface, inSocketBufferSize);
+	}
+	Receiver* Receiver::createTCPClient(std::string ip, int port, IOService* ioService)
+	{
+		return new TCPClient(ip, port, ioService);
 	}
 
 }

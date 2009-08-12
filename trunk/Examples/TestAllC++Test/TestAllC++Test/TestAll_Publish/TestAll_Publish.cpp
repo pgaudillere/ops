@@ -13,24 +13,14 @@
 #include <iostream>
 #include <fstream>
 
+#include "Receiver.h"
+#include "Sender.h"
+
 int main(int argc, char* args)
 {
-	////Fixa minnesläcka!!!
-	//for(unsigned int __i = 0; __i < test2s.size(); __i++)
-	//{
-	//	if(narrRet->test2s.size() >= __i + 1)
-	//	{
-	//		if(narrRet->test2s[__i])
-	//			delete narrRet->test2s[__i];
-	//		narrRet->test2s[__i] = (TestData*)test2s[__i]->clone();
-	//	}
-	//	else
-	//	{
-	//		narrRet->test2s.push_back((TestData*)test2s[__i]->clone()); 
-	//	}
-	//}
 
-
+	
+	
 	//timeBeginPeriod(1);
 	using namespace TestAll;
 	using namespace ops;
@@ -41,6 +31,24 @@ int main(int argc, char* args)
 
 	ops::Participant* participant = Participant::getInstance("TestAllDomain");
 	participant->addTypeSupport(new TestAll::TestAllTypeFactory());
+
+	/*Sleep(2000);
+	ops::Sender* tcpServer = ops::Sender::createTCPServer("", 1342, participant->getIOService());
+	
+
+	
+	
+
+	while(true)
+	{
+		
+		Sleep(10);
+		tcpServer->sendTo("Hello World!", 13, "", 0);
+		
+	}
+	return 1;*/
+
+
 
 	//Create topic, might throw ops::NoSuchTopicException
 	Topic topic = participant->createTopic("ChildTopic");
@@ -101,13 +109,13 @@ int main(int argc, char* args)
 
 	//return 0;
 
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 500000; i++)
 	{
 		data.fs.push_back(i);
 	}
 
 	
-	TestData testData2;
+	/*TestData testData2;
 	testData2.text = "text in aggregated array element class";
 	testData2.value = 2.0;
 
@@ -129,7 +137,7 @@ int main(int argc, char* args)
 
 	archiver.close();
 
-	oStream.close();
+	oStream.close();*/
 
 	//std::ifstream iStream ("fulfile.xml");
 
@@ -159,11 +167,11 @@ int main(int argc, char* args)
 		Sleep(100);
 		if(dataClone->i > 100)
 		{
-			break;
+			//break;
 		}
 	}
 
-	//timeEndPeriod(1);
+	
 	delete participant;
 	return 0;
 }

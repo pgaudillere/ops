@@ -6,9 +6,10 @@
 #include "TestAll/TestAllTypeFactory.h"
 #include <iostream>
 #include <vector>
+#include "Receiver.h"
 
 //Create a class to act as a listener for OPS data and deadlines
-class Main : ops::DataListener, ops::DeadlineMissedListener
+class Main : ops::DataListener, ops::DeadlineMissedListener, ops::Listener<ops::BytesSizePair>
 {
 public:
 	//Use a member subscriber so we can use it from onNewData, see below.
@@ -21,7 +22,14 @@ public:
 	//
 	int packagesLost;
 	int lastPacket;
+
+	ops::Receiver* rec;
+	char bytes[100];
 public:
+	void onNewEvent(ops::Notifier<ops::BytesSizePair>* sender, ops::BytesSizePair byteSizePair)
+	{
+		rec->asynchWait(bytes, 100);
+	}
 	Main(): 
 	  packagesLost(0), 
 	  lastPacket(-1)
@@ -29,12 +37,23 @@ public:
 		using namespace TestAll;
 		using namespace ops;
 
+
+		
+
 		//Create a topic. NOTE, this is a temporary solution to get topics before OPS4 is completely released.
 		//ops::Topic<ChildData> topic("ChildTopic", 6778, "testall.ChildData", "236.7.8.44");
 
 		//Create a topic from configuration.
 		ops::Participant* participant = Participant::getInstance("TestAllDomain");
 		participant->addTypeSupport(new TestAll::TestAllTypeFactory());
+
+		/*rec = ops::Receiver::createTCPClient("127.0.0.1", 1342, participant->getIOService());
+		rec->addListener(this);
+		rec->asynchWait(bytes, 100);
+		while(true)
+		{
+			Sleep(1000);
+		}*/
 
 		ErrorWriter* errorWriter = new ErrorWriter(std::cout);
 		participant->addListener(errorWriter);
@@ -162,7 +181,7 @@ int main(int argc, char* args)
 
 	//Make sure the OPS ioService never runs out of work.
 	//Run it on main application thread only.
-	for(int i = 0; i < 100; i++)
+	for(int i = 0; i < 100; )
 	{
 		Sleep(100);
 		//break;

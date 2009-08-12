@@ -44,11 +44,17 @@ namespace ops
         std::string getName();
         std::string getTypeID();
         std::string getDomainAddress();
+		std::string getTransport();
 		void setDomainAddress(std::string domainAddr);
 		int getSampleMaxSize();
 		void setSampleMaxSize(int size);
         int getPort();
 		void serialize(ArchiverInOut* archiver);
+
+		static std::string TRANSPORT_MC;
+		static std::string TRANSPORT_TCP;
+		static std::string TRANSPORT_UDP;
+
 
 	private:
         std::string name;
@@ -63,6 +69,7 @@ namespace ops
 		int sampleMaxSize;
 		__int64 deadline;
 		__int64 minSeparation;
+		std::string transport;
         
 
 		

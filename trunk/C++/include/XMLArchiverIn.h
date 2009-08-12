@@ -26,10 +26,34 @@
 #include <iostream>
 #include <sstream>
 #include "xml/xmlParser.h"
+#include <string>
 
 namespace ops
 {
 	using namespace std;
+	namespace exceptions
+    {
+        class XMLArchiverException
+        {
+        private:
+            std::string message;
+        public:
+            XMLArchiverException()
+            {
+                message = "XMLArchiverException: empty" ;
+            }
+            XMLArchiverException(std::string m)
+            {
+                message = "XMLArchiverException: " + m ;
+            }
+            std::string GetMessage()
+            {
+                return message;
+            }
+        };
+    }
+	using namespace exceptions;
+
 ///
 class XMLArchiverIn 
 	: ArchiverInOut 
@@ -75,6 +99,7 @@ public:
 			if(s.compare("True")==0) value = true;
 			if(s.compare("False")==0) value = false;
 		}
+
 
 	}
 	virtual void inout(std::string& name, char& value)
@@ -127,6 +152,7 @@ public:
 			ss >> inVal;
 			value = inVal;
 		}
+
 	}
     virtual void inout(std::string& name, float& value)
 	{
@@ -152,7 +178,6 @@ public:
 			ss >> inVal;
 			value = inVal;
 		}
-
 
 	}
 	virtual void inout(std::string& name, std::string& value)
@@ -240,9 +265,7 @@ public:
 
 			currentNode = tempNode;
 		}
-
-
-
+		
 	}
 	virtual void inout(std::string& name, std::vector<char>& value)
 	{
@@ -266,6 +289,7 @@ public:
 
 			currentNode = tempNode;
 		}
+		
 
 	}
     virtual void inout(std::string& name, std::vector<int>& value)
@@ -290,6 +314,7 @@ public:
 
 			currentNode = tempNode;
 		}
+		
 
 	}
     virtual void inout(std::string& name, std::vector<__int16>& value)
@@ -314,6 +339,7 @@ public:
 
 			currentNode = tempNode;
 		}
+		
 
 	}
     virtual void inout(std::string& name, std::vector<__int64>& value)
@@ -338,6 +364,7 @@ public:
 
 			currentNode = tempNode;
 		}
+		
 	}
     virtual void inout(std::string& name, std::vector<float>& value)
 	{
@@ -361,6 +388,7 @@ public:
 
 			currentNode = tempNode;
 		}
+		
 		
 
 	}
@@ -386,6 +414,7 @@ public:
 
 			currentNode = tempNode;
 		}
+		
 	}
 	virtual void inout(std::string& name, std::vector<std::string>& value)
 	{
@@ -409,6 +438,7 @@ public:
 
 			currentNode = tempNode;
 		}
+		
 
 	}
 	
