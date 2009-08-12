@@ -1,2 +1,1 @@
-<a id="nabblelink" href="http://n2.nabble.com/OPS-Forum-f3430451.html">OPS Forum</a>
-<script src="http://n2.nabble.com/embed/f3430451"></script>
+http://n2.nabble.com/OPS-Forum-f3430451.html
