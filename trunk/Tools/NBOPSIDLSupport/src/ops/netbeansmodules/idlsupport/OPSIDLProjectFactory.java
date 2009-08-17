@@ -4,6 +4,11 @@
  */
 package ops.netbeansmodules.idlsupport;
 
+import configlib.XMLArchiverIn;
+
+import configlib.XMLArchiverOut;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import org.netbeans.api.project.Project;
 import org.netbeans.spi.project.ProjectFactory;
@@ -30,8 +35,13 @@ public class OPSIDLProjectFactory implements ProjectFactory
 
     }
 
-    public void saveProject(Project arg0) throws IOException, ClassCastException
+    public void saveProject(Project project) throws IOException, ClassCastException
     {
+        File outFile = new File(project.getProjectDirectory().getPath() +  "/" + PROJECT_DIR + "/" + PROJECT_PROPFILE);
+        XMLArchiverOut archiver = new XMLArchiverOut(new FileOutputStream(outFile));
+
+        archiver.inout("properties", ((OPSIDLProject)project).getProperties());
+
         
     }
 }

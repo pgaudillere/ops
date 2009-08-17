@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Properties;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import ops.netbeansmodules.idlsupport.projectproperties.OPSProjectProperties;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
 import org.netbeans.spi.project.ActionProvider;
@@ -38,6 +39,8 @@ public class OPSIDLProject implements Project
     LogicalViewProvider logicalView = new OPSIDLProjectLogicalView(this);
     ProjectIDLParser projectIDLParser = new ProjectIDLParser();
     ProjectIDLCompiler projectIDLCompiler = new ProjectIDLCompiler(this);
+
+    OPSProjectProperties properties = new OPSProjectProperties();
 
     public OPSIDLProject(FileObject projectDir, ProjectState state)
     {
@@ -79,6 +82,13 @@ public class OPSIDLProject implements Project
         }
         return result;
     }
+
+    public OPSProjectProperties getProperties()
+    {
+        return properties;
+    }
+
+    
 
     public FileObject getProjectDirectory()
     {

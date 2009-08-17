@@ -9,7 +9,9 @@
 
 package ops.netbeansmodules.idlsupport.compilers;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 import ops.netbeansmodules.util.FileHelper;
 import org.openide.util.Exceptions;
@@ -36,10 +38,12 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
     private static String CREATE_BODY_REGEX = "__createBody";
 
     String createdFiles = "";
+    private Vector<String> jarDependencies;
 
 
     public void compileDataClasses(Vector<IDLClass> idlClasses, String projectDirectory)
     {
+        createdFiles = "";
         this.idlClasses = idlClasses;
         this.projectDirectory = projectDirectory;
         for (IDLClass iDLClass : idlClasses)
@@ -51,17 +55,17 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         }
         compileTypeSupport(idlClasses, extractProjectName(projectDirectory));
 
-        try
-        {
-            buildAndJar(createdFiles);
-        }
-        catch (IOException ex)
-        {
-            Exceptions.printStackTrace(ex);
-        } catch (InterruptedException ex)
-        {
-            Exceptions.printStackTrace(ex);
-        }
+//        try
+//        {
+//            buildAndJar(createdFiles);
+//        }
+//        catch (IOException ex)
+//        {
+//            Exceptions.printStackTrace(ex);
+//        } catch (InterruptedException ex)
+//        {
+//            Exceptions.printStackTrace(ex);
+//        }
 
     }
 
@@ -340,27 +344,31 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         }
         return ret;
     }
+    public void setJarDependencies(Vector<String> jarDeps)
+    {
+        this.jarDependencies = jarDeps;
 
-    
-    private void buildAndJar(String createdFiles) throws IOException, InterruptedException, IOException, IOException
+    }
+
+    public void buildAndJar(String projectDir) throws IOException, InterruptedException, IOException, IOException
     {
         String jarPackString = null;
 
         String jarDepString = "";
         String manifestJarDepString = "Class-Path: ";
-//        for (String string : theProject.getJarDependencies())
-//        {
-//            jarDepString += ";\"" + theProject.getRunDirectory() + "/" + string + "\"";
-//
-//            File jarToBeCopied = new File(theProject.getRunDirectory() + "/" + string);
-//            File jarCopy = new File(theProject.getRunDirectory() + "/" + theProject.getRelativeOutputPath() + "/" + jarToBeCopied.getName());
-//            jarCopy.createNewFile();
-//            FileHelper.copyFile(jarToBeCopied, jarCopy);
-//
-//            manifestJarDepString += jarCopy.getName() + " ";
-//        }
+        for (String string : jarDependencies)
+        {
+            jarDepString += ";\"" + projectDir + "/" + string + "\"";
+
+            File jarToBeCopied = new File(projectDir + "/" + string);
+            File jarCopy = new File(projectDir + "/" + "Generated" + "/" + jarToBeCopied.getName());
+            jarCopy.createNewFile();
+            FileHelper.copyFile(jarToBeCopied, jarCopy);
+
+            manifestJarDepString += jarCopy.getName() + " ";
+        }
 //        manifestJarDepString += "\nTopic-config: " + theProject.getTopicConfigPackage() + "." + theProject.getName() + "TopicConfig";
-//        manifestJarDepString += "\n";
+        manifestJarDepString += "\n";
 
         String dinfoPath = projectDirectory.replace("\\", "/") + "debugger_buildinfo.ops_tmp";
         FileHelper.createAndWriteFile(dinfoPath, createdFiles);
