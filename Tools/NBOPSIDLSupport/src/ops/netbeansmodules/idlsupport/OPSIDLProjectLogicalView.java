@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JOptionPane;
+import ops.netbeansmodules.idlsupport.projectproperties.PropertiesDialog;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataFolder;
@@ -64,7 +66,7 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
     }
 
     /** This is the node you actually see in the Projects window for the project */
-    private static final class SourcesNode extends FilterNode {
+    private final class SourcesNode extends FilterNode {
 
         final OPSIDLProject project;
 
@@ -119,12 +121,25 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
                     project.build();
                 }
             };
+            actions[super.getActions(selected).length] = new AbstractAction("Properties") {
+
+                public void actionPerformed(ActionEvent e) {
+                    showProjectPropertiesDialog();
+                }
+
+
+            };
 
             return actions;
 
 
 
         }
+    }
+    private void showProjectPropertiesDialog()
+    {
+        PropertiesDialog propDialog = new PropertiesDialog(null, true, project.getProperties(), project.getProjectDirectory().getPath());
+        propDialog.setVisible(true);
     }
 
     @Override
