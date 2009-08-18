@@ -17,6 +17,7 @@ class __className :
 	public __baseClassName
 {
 public:
+   static std::string getTypeName(){return std::string("__packageName.__className");}
 	
 __declarations
     ///Default constructor.
