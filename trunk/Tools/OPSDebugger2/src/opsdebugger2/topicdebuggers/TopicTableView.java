@@ -21,6 +21,7 @@ public class TopicTableView extends javax.swing.JPanel implements Observer
 {
 
     Subscriber subscriber;
+    boolean suppressArrays;
 
     /** Creates new form TopicTableView */
     public TopicTableView(Subscriber subscriber)
@@ -32,6 +33,17 @@ public class TopicTableView extends javax.swing.JPanel implements Observer
         this.subscriber.addObserver(this);
     }
 
+    public synchronized boolean isSuppressArrays()
+    {
+        return suppressArrays;
+    }
+
+    public synchronized void setSuppressArrays(boolean suppressArrays)
+    {
+        this.suppressArrays = suppressArrays;
+    }
+
+
     public javax.swing.JTable getTable()
     {
         return table;
@@ -40,6 +52,11 @@ public class TopicTableView extends javax.swing.JPanel implements Observer
     public void setTable(javax.swing.JTable table)
     {
         this.table = table;
+    }
+
+    public synchronized  void setTimeBasedFilter(long timeBase)
+    {
+        subscriber.setTimeBasedFilterQoS(timeBase);
     }
 
     /** This method is called from within the constructor to
@@ -646,6 +663,10 @@ public class TopicTableView extends javax.swing.JPanel implements Observer
         {
             ex.printStackTrace();
         }
+        catch (ArrayIndexOutOfBoundsException ex)
+        {
+            System.out.println("To many elements in data to print them all...");
+        }
 
         try
         {
@@ -669,7 +690,7 @@ public class TopicTableView extends javax.swing.JPanel implements Observer
 
     }
 
-    private int printFields(Field[] fields, Object o, int index) throws IllegalAccessException
+    private int printFields(Field[] fields, Object o, int index) throws IllegalAccessException, ArrayIndexOutOfBoundsException
     {
         for (int i = 0; i < fields.length; i++)
         {
@@ -679,24 +700,30 @@ public class TopicTableView extends javax.swing.JPanel implements Observer
             if (!isBasicType(fields[i].get(o)))
             {
                 table.getModel().setValueAt("<HTML><b>" + fields[i].getName() + "</b></HTML>", index, 0);
-                table.getModel().setValueAt(fields[i].get(o), index, 1);
+                table.getModel().setValueAt(/*fields[i].get(o).toString()*/ "", index, 1);
                 index++;
                 if (fields[i].get(o) instanceof Vector<?>)
                 {
                     Vector<?> vec = (Vector<?>) fields[i].get(o);
 
                     int arrIndex = 0;
-                    for (Object elem : vec)
+
+                    if(!isSuppressArrays())
                     {
-                        table.getModel().setValueAt("" + arrIndex, index, 0);
-                        table.getModel().setValueAt(elem, index, 1);
-                        index++;
-                        if (!isBasicType(elem))
+                        for (Object elem : vec)
                         {
-                            index = printFields(elem.getClass().getFields(), elem, index);
+                            table.getModel().setValueAt("" + arrIndex, index, 0);
+                            table.getModel().setValueAt(elem, index, 1);
+                            index++;
+                            if (!isBasicType(elem))
+                            {
+                                index = printFields(elem.getClass().getFields(), elem, index);
+                            }
+                            arrIndex++;
+                            
                         }
-                        arrIndex++;
                     }
+
 
                 } 
                 else

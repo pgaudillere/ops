@@ -37,6 +37,7 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
     private DefaultComboBoxModel availableKeysComboModel;
     private PublisherMessageFilter publisherFilter;
     private DefaultComboBoxModel availablePublishersComboModel;
+    private TopicTableView tableView;
 
     /** Creates new form TopicInspectorPanel */
     public TopicInspectorPanel(Subscriber sub, String name)
@@ -61,7 +62,8 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
 
 
         topicNameLabel.setText(name);
-        tabbedPane1.add("Table view", new TopicTableView(getSubscriber()));
+        tableView = new TopicTableView(getSubscriber());
+        tabbedPane1.add("Table view", tableView);
         subscriber.addObserver(this);
     //tabbedPane1.add("Advanced", new TopicCompositeView(s, (JFrame)getParent()));
     //topicTreeView1.setSubscriber(s);
@@ -102,6 +104,10 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
         publisherFilterField = new javax.swing.JTextField();
         availablePublishersComboBox = new javax.swing.JComboBox();
         applyPublisherFilterButton = new javax.swing.JButton();
+        suppressArraysCheckBox = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        timeBasedFilterTextField = new javax.swing.JTextField();
+        timeBasedFilterSetButton = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createTitledBorder("Subscriber"));
 
@@ -149,6 +155,25 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
             }
         });
 
+        suppressArraysCheckBox.setText("Suppress arrays");
+        suppressArraysCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                suppressArraysCheckBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Time Based Filter");
+
+        timeBasedFilterTextField.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        timeBasedFilterTextField.setText("0");
+
+        timeBasedFilterSetButton.setText("Set");
+        timeBasedFilterSetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                timeBasedFilterSetButtonActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -157,6 +182,7 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, tabbedPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                    .add(suppressArraysCheckBox)
                     .add(layout.createSequentialGroup()
                         .add(topicNameLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 191, Short.MAX_VALUE)
@@ -169,22 +195,28 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
                         .add(availableKeysComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 48, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(applyKeyFilterButton))
-                    .add(layout.createSequentialGroup()
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(jLabel2)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(publisherFilterField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 89, Short.MAX_VALUE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(availablePublishersComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 48, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(applyPublisherFilterButton)))
+                        .add(applyPublisherFilterButton))
+                    .add(layout.createSequentialGroup()
+                        .add(jLabel3)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(timeBasedFilterTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 97, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(timeBasedFilterSetButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 15, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, topicNameLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 15, Short.MAX_VALUE))
+                    .add(closeButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 17, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, topicNameLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 17, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(applyKeyFilterButton)
@@ -198,7 +230,14 @@ public class TopicInspectorPanel extends javax.swing.JPanel implements Observer
                     .add(publisherFilterField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(jLabel2))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 497, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(suppressArraysCheckBox)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(timeBasedFilterTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(timeBasedFilterSetButton))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(tabbedPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 452, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -289,6 +328,18 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
     }
 }//GEN-LAST:event_applyPublisherFilterButtonActionPerformed
 
+private void suppressArraysCheckBoxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_suppressArraysCheckBoxActionPerformed
+{//GEN-HEADEREND:event_suppressArraysCheckBoxActionPerformed
+    // TODO add your handling code here:
+    tableView.setSuppressArrays(suppressArraysCheckBox.isSelected());
+}//GEN-LAST:event_suppressArraysCheckBoxActionPerformed
+
+private void timeBasedFilterSetButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_timeBasedFilterSetButtonActionPerformed
+{//GEN-HEADEREND:event_timeBasedFilterSetButtonActionPerformed
+    // TODO add your handling code here:
+    tableView.setTimeBasedFilter(Long.parseLong(timeBasedFilterTextField.getText()));
+}//GEN-LAST:event_timeBasedFilterSetButtonActionPerformed
+
     public Subscriber getSubscriber()
     {
         return subscriber;
@@ -360,32 +411,32 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
 
 
 
-        String outString = "";
-
-        OPSObject oo = (OPSObject) arg;
-
-        outString += "publisherName = " + subscriber.getMessage().getPublisherName() + "\n";
-        outString += "publicationID = " + subscriber.getMessage().getPublicationID() + "\n";
-
-        //outString += "priority = " + oo.();
-
-
-        Field[] fields = arg.getClass().getFields();
-
-        for (int i = 0; i < fields.length; i++)
-        {
-            try
-            {
-                outString += fields[i].getName() + " = " + fields[i].get(arg) + "\n";
-            //tabel.getModel().setValueAt(fields[i].getName(), i + 2, 0);
-            //tabel.getModel().setValueAt(fields[i].get(arg), i + 2, 1);
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-                outString += "Error\n";
-            }
-
-        }
+//        String outString = "";
+//
+//        OPSObject oo = (OPSObject) arg;
+//
+//        outString += "publisherName = " + subscriber.getMessage().getPublisherName() + "\n";
+//        outString += "publicationID = " + subscriber.getMessage().getPublicationID() + "\n";
+//
+//        //outString += "priority = " + oo.();
+//
+//
+//        Field[] fields = arg.getClass().getFields();
+//
+//        for (int i = 0; i < fields.length; i++)
+//        {
+//            try
+//            {
+//                outString += fields[i].getName() + " = " + fields[i].get(arg) + "\n";
+//            //tabel.getModel().setValueAt(fields[i].getName(), i + 2, 0);
+//            //tabel.getModel().setValueAt(fields[i].get(arg), i + 2, 1);
+//            } catch (Exception e)
+//            {
+//                e.printStackTrace();
+//                outString += "Error\n";
+//            }
+//
+//        }
 
 
     //topicTableView1.updateUI();
@@ -407,9 +458,13 @@ private void applyPublisherFilterButtonActionPerformed(java.awt.event.ActionEven
     private javax.swing.JButton closeButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField keyFilterField;
     private javax.swing.JTextField publisherFilterField;
+    private javax.swing.JCheckBox suppressArraysCheckBox;
     private javax.swing.JTabbedPane tabbedPane1;
+    private javax.swing.JButton timeBasedFilterSetButton;
+    private javax.swing.JTextField timeBasedFilterTextField;
     private javax.swing.JLabel topicNameLabel;
     // End of variables declaration//GEN-END:variables
 }
