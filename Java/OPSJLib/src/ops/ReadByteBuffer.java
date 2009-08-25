@@ -58,11 +58,10 @@ public class ReadByteBuffer
         inBuffer.order(ByteOrder.LITTLE_ENDIAN);
     }
     
-    public static byte[] trimSegments(byte[] bytes, int segmentSize, int headerSize, byte[] result)
+    public static byte[] trimSegments(byte[] bytes, int segmentSize, int nrOfSegments, int headerSize, byte[] result)
     {
-        int nrOfSegments = bytes.length / segmentSize;
-        if(bytes.length % segmentSize != 0) nrOfSegments++;
-
+        //int nrOfSegments = bytes.length / segmentSize;
+        //if(bytes.length % segmentSize != 0) nrOfSegments++;
         //byte[] result = new byte[bytes.length - nrOfSegments*headerSize];
 
         

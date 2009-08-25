@@ -46,6 +46,7 @@ public class TopicHandler
     private int expectedFragment = 0;
     private int fragmentSize;
     private final byte[] bytes;
+    private byte[] headerBytes;
     private byte[] trimmedBytes;
     private int byteOffset = 0;
     private static int FRAGMENT_HEADER_SIZE = 14;
@@ -53,6 +54,7 @@ public class TopicHandler
     public TopicHandler(Topic t, Participant part)
     {
         bytes = new byte[t.getSampleMaxSize()];
+        headerBytes = new byte[FRAGMENT_HEADER_SIZE];
         trimmedBytes = new byte[t.getSampleMaxSize()];
         participant = part;
         topic = t;
@@ -95,7 +97,8 @@ public class TopicHandler
         {
             
             //System.arraycopy(bytes, expectedFragment*fragmentSize, by, 0, p.getLength());
-            ReadByteBuffer readBuf = new ReadByteBuffer(bytes, expectedFragment*fragmentSize, fragmentSize);
+//            ReadByteBuffer readBuf = new ReadByteBuffer(bytes, expectedFragment*fragmentSize, fragmentSize);
+            ReadByteBuffer readBuf = new ReadByteBuffer(headerBytes, 0, FRAGMENT_HEADER_SIZE);
 
             if (readBuf.checkProtocol())
             {
@@ -106,8 +109,8 @@ public class TopicHandler
                 {
                     //We have received a full message, let's deserialize it and send it to subscribers.
                     //First we trim the bytes to remove all fragment headers. Note, unlike in C++.
-                    ReadByteBuffer.trimSegments(bytes, fragmentSize, FRAGMENT_HEADER_SIZE, trimmedBytes);
-                    sendBytesToSubscribers(new ReadByteBuffer(trimmedBytes));
+                    //ReadByteBuffer.trimSegments(bytes, fragmentSize, nrOfFragments, FRAGMENT_HEADER_SIZE, trimmedBytes);
+                    sendBytesToSubscribers(new ReadByteBuffer(bytes));
                     expectedFragment = 0;
 
                 }
@@ -151,11 +154,12 @@ public class TopicHandler
         Thread thread = new Thread(new Runnable()
         {
 
+
             public void run()
             {
                 while (hasSubscribers)
                 {
-                    boolean recOK = transport.receive(bytes, expectedFragment*fragmentSize);
+                    boolean recOK = transport.receive(headerBytes, bytes, expectedFragment*(fragmentSize - FRAGMENT_HEADER_SIZE));
                 }
                 System.out.println("Leaving transport thread...");
 
