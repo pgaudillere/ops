@@ -21,7 +21,7 @@ public class OPSProjectProperties implements Serializable
     public boolean generateJava = true;
     public boolean buildJava = true;
     public String defaultOPSTopicConfigFile = "src/ops_config.xml";
-    public Vector<String> javaBuildJarDependencies = new Vector();
+    public Vector<JarDependency> javaBuildJarDependencies = new Vector<JarDependency>();
     public boolean generateOPSConfigClass = false;
     public boolean opsConfigClassNamespace = false;
     public boolean generateOPSConfigXMLFileFromSourceComments = false;
@@ -34,10 +34,10 @@ public class OPSProjectProperties implements Serializable
         buildJava = archiver.inout("buildJava", buildJava);
         defaultOPSTopicConfigFile = archiver.inout("defaultOPSTopicConfigFile", defaultOPSTopicConfigFile);
         generateOPSConfigClass = archiver.inout("generateOPSConfigClass", generateOPSConfigClass);
-        javaBuildJarDependencies = (Vector<String>) archiver.inoutSerializableList("javaBuildJarDependencies", javaBuildJarDependencies);
+        javaBuildJarDependencies = (Vector<JarDependency>) archiver.inoutSerializableList("javaBuildJarDependencies", javaBuildJarDependencies);
     }
 
-    static SerializableFactory getSerializableFactory()
+    public static SerializableFactory getSerializableFactory()
     {
         return new OPSProjectPropertiesFactory();
     }
@@ -51,6 +51,10 @@ public class OPSProjectProperties implements Serializable
             if (type.equals("ops.netbeansmodules.idlsupport.projectproperties.OPSProjectProperties"))
             {
                 return new OPSProjectProperties();
+            }
+            if(type.equals("ops.netbeansmodules.idlsupport.projectproperties.JarDependency"))
+            {
+                return new JarDependency();
             }
             return null;
         }

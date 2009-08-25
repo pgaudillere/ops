@@ -55,9 +55,14 @@ public class OPSConfigDataObject extends MultiDataObject
         {
             Exceptions.printStackTrace(ex);
             return new OPSConfigDataNode(this, Children.LEAF, getLookup());
-        } catch (IOException ex)
+        }
+        catch (IOException ex)
         {
             Exceptions.printStackTrace(ex);
+            return new OPSConfigDataNode(this, Children.LEAF, getLookup());
+        }
+        catch(NullPointerException e)
+        {
             return new OPSConfigDataNode(this, Children.LEAF, getLookup());
         }
     }

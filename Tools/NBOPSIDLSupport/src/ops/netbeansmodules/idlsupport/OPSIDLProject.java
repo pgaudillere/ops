@@ -4,8 +4,12 @@
  */
 package ops.netbeansmodules.idlsupport;
 
+import configlib.Serializable;
+import configlib.XMLArchiverOut;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 import javax.swing.Icon;
@@ -34,6 +38,8 @@ public class OPSIDLProject implements Project
 
     public static final String SRC_DIR = "src";
     public static final String TOPIC_CONFIG_DIR = "topicconfig";
+    public static final String PROJECT_DIR = "opsproject";
+    public static final String PROJECT_PROPFILE = "project.properties";
     private FileObject projectDir;
     private ProjectState state;
     LogicalViewProvider logicalView = new OPSIDLProjectLogicalView(this);
@@ -46,6 +52,19 @@ public class OPSIDLProject implements Project
     {
         this.projectDir = projectDir;
         this.state = state;
+    }
+    public void save()
+    {
+        try
+        {
+            File outFile = new File(getProjectDirectory().getPath() + "/" + PROJECT_DIR + "/" + PROJECT_PROPFILE);
+            XMLArchiverOut archiver = new XMLArchiverOut(new FileOutputStream(outFile));
+            archiver.inout("properties", getProperties());
+        }
+        catch (IOException ex)
+        {
+            Exceptions.printStackTrace(ex);
+        }
     }
 
     FileObject getSourceFolder(boolean create)
@@ -111,6 +130,11 @@ public class OPSIDLProject implements Project
                     });
         }
         return lkp;
+    }
+
+    void setProperties(OPSProjectProperties prop)
+    {
+        properties = prop;
     }
 
     private String getName()
@@ -182,8 +206,8 @@ public class OPSIDLProject implements Project
 
     private Properties loadProperties()
     {
-        FileObject fob = projectDir.getFileObject(OPSIDLProjectFactory.PROJECT_DIR +
-                "/" + OPSIDLProjectFactory.PROJECT_PROPFILE);
+        FileObject fob = projectDir.getFileObject(PROJECT_DIR +
+                "/" + PROJECT_PROPFILE);
         Properties properties = new NotifyProperties(state);
         if (fob != null)
         {
