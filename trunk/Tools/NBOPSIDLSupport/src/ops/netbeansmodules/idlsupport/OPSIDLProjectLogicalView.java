@@ -121,7 +121,7 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
                     project.build();
                 }
             };
-            actions[super.getActions(selected).length] = new AbstractAction("Properties") {
+            actions[super.getActions(selected).length] = new AbstractAction("Project Properties...") {
 
                 public void actionPerformed(ActionEvent e) {
                     showProjectPropertiesDialog();
@@ -138,7 +138,7 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
     }
     private void showProjectPropertiesDialog()
     {
-        PropertiesDialog propDialog = new PropertiesDialog(null, true, project.getProperties(), project.getProjectDirectory().getPath());
+        PropertiesDialog propDialog = new PropertiesDialog(null, true, project.getProperties(), project.getProjectDirectory().getPath(), project);
         propDialog.setVisible(true);
     }
 

@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
+import ops.netbeansmodules.idlsupport.projectproperties.JarDependency;
 import ops.netbeansmodules.util.FileHelper;
 import org.openide.util.Exceptions;
 import parsing.AbstractTemplateBasedIDLCompiler;
@@ -38,7 +39,7 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
     private static String CREATE_BODY_REGEX = "__createBody";
 
     String createdFiles = "";
-    private Vector<String> jarDependencies;
+    private Vector<JarDependency> jarDependencies;
 
 
     public void compileDataClasses(Vector<IDLClass> idlClasses, String projectDirectory)
@@ -344,7 +345,7 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         }
         return ret;
     }
-    public void setJarDependencies(Vector<String> jarDeps)
+    public void setJarDependencies(Vector<JarDependency> jarDeps)
     {
         this.jarDependencies = jarDeps;
 
@@ -356,11 +357,11 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
 
         String jarDepString = "";
         String manifestJarDepString = "Class-Path: ";
-        for (String string : jarDependencies)
+        for (JarDependency jarDep : jarDependencies)
         {
-            jarDepString += ";\"" + projectDir + "/" + string + "\"";
+            jarDepString += "\"" + projectDir + "/" + jarDep.path + "\";";
 
-            File jarToBeCopied = new File(projectDir + "/" + string);
+            File jarToBeCopied = new File(projectDir + "/" + jarDep.path + "");
             File jarCopy = new File(projectDir + "/" + "Generated" + "/" + jarToBeCopied.getName());
             jarCopy.createNewFile();
             FileHelper.copyFile(jarToBeCopied, jarCopy);
@@ -376,8 +377,8 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         String manFilePath = projectDirectory.replace("\\", "/") + "/manifest_adds.ops_tmp";
         FileHelper.createAndWriteFile(manFilePath, manifestJarDepString);
 
-        String execString = "javac -cp lib/OPSJLib.jar;lib/ConfigurationLib.jar " + jarDepString + " @" + "\"" + dinfoPath + "\"";
-        String  batFileText  = "@echo off\n";
+        String execString = "javac -cp " +  jarDepString + "lib/OPSJLib.jar;lib/ConfigurationLib.jar;" + " @" + "\"" + dinfoPath + "\"";
+        String  batFileText  = ";";//"@echo off\n";
                 batFileText += "echo Building Java..."  + "\n";
                 batFileText += execString + "\n";
 

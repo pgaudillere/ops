@@ -12,6 +12,7 @@ package ops.netbeansmodules.idlsupport.projectproperties;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import ops.netbeansmodules.idlsupport.OPSIDLProject;
 import ops.netbeansmodules.util.FileHelper;
 import ops.netbeansmodules.util.JarFileFilter;
 
@@ -23,9 +24,10 @@ public class PropertiesDialog extends javax.swing.JDialog
 {
     private OPSProjectProperties properties;
     private String currentDirectory;
+    private OPSIDLProject project;
 
     /** Creates new form PropertiesDialog */
-    public PropertiesDialog(java.awt.Frame parent, boolean modal, OPSProjectProperties properties, String currentDirectory)
+    public PropertiesDialog(java.awt.Frame parent, boolean modal, OPSProjectProperties properties, String currentDirectory, OPSIDLProject project)
     {
         super(parent, modal);
         initComponents();
@@ -39,6 +41,7 @@ public class PropertiesDialog extends javax.swing.JDialog
         defaultConfigFileTextField.setText(properties.defaultOPSTopicConfigFile);
 
         jarDepList.setListData(properties.javaBuildJarDependencies);
+        this.project = project;
         
 
 
@@ -84,6 +87,11 @@ public class PropertiesDialog extends javax.swing.JDialog
         okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle(org.openide.util.NbBundle.getMessage(PropertiesDialog.class, "PropertiesDialog.title")); // NOI18N
+        setIconImage(null);
+        setIconImages(null);
+        setLocationByPlatform(true);
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(org.openide.util.NbBundle.getMessage(PropertiesDialog.class, "PropertiesDialog.jPanel1.border.title"))); // NOI18N
 
@@ -286,6 +294,7 @@ public class PropertiesDialog extends javax.swing.JDialog
     {//GEN-HEADEREND:event_okButtonActionPerformed
         // TODO add your handling code here:
         applyNewProperties();
+        project.save();
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -301,7 +310,7 @@ public class PropertiesDialog extends javax.swing.JDialog
 
         if(result == JFileChooser.APPROVE_OPTION)
         {
-            properties.javaBuildJarDependencies.add(FileHelper.getRelativePath(new File(currentDirectory), new File(fc.getSelectedFile().getPath())));
+            properties.javaBuildJarDependencies.add(new JarDependency(FileHelper.unixSlashed(FileHelper.getRelativePath(new File(currentDirectory), new File(fc.getSelectedFile().getPath())))));
         }
         jarDepList.updateUI();
     }//GEN-LAST:event_addJarDepButtonActionPerformed

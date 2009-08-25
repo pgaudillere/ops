@@ -36,6 +36,7 @@ public class ProjectIDLCompiler
         {
             try
             {
+                javaCompiler.setJarDependencies(project.getProperties().javaBuildJarDependencies);
                 javaCompiler.buildAndJar(project.getProjectDirectory().getPath());
             } catch (IOException ex)
             {
