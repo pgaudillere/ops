@@ -50,7 +50,7 @@ public class Main {
     }
     private static void onNewChildData(ChildData childData)
     {
-        System.out.println("Wohooo!, New ChildData!");
+        System.out.println("Wohooo!, New ChildData!" + childData.i);
     }
 
 
