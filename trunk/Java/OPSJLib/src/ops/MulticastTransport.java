@@ -31,6 +31,7 @@ import java.net.NoRouteToHostException;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.nio.ByteBuffer;
 
 /**
  *
@@ -42,6 +43,8 @@ public class MulticastTransport implements Transport
     int port;
     InetAddress ipAddress;
     private Event newBytesEvent = new Event();
+
+    byte[] tempBytes = new byte[StaticManager.MAX_SIZE];
     /** Creates a new instance of MulticastTransport */
     public MulticastTransport(String ip, int port, String localInterface)
     {
@@ -105,6 +108,34 @@ public class MulticastTransport implements Transport
     {
         return receive(b, 0);
     }
+    public boolean receive(byte[] headerBytes, byte[] bytes, int offset)
+    {
+
+        
+        DatagramPacket p = new DatagramPacket(tempBytes, 0, StaticManager.MAX_SIZE);
+        try
+        {
+
+            multicastSocket.receive(p);
+            
+            ByteBuffer nioBuf = ByteBuffer.wrap(tempBytes);
+            nioBuf.get(headerBytes, 0, headerBytes.length);
+            nioBuf.get(bytes, offset, p.getLength() - headerBytes.length);
+            
+            newBytesEvent.fireEvent(p);
+            return true;
+        }
+        catch (SocketTimeoutException ex)
+        {
+            return false;
+        }
+        catch (IOException ex)
+        {
+            return false;
+        }
+
+
+    }
     @Deprecated
     public void send(byte[] b)
     {
@@ -115,7 +146,7 @@ public class MulticastTransport implements Transport
             DatagramPacket datagramPacket = new DatagramPacket(b, b.length, ipAddress,this.port);
 
             multicastSocket.send(datagramPacket);
-            //multicastSocket.send(new DatagramPacket("snopp".getBytes(), "snopp".getBytes().length, ipAddress,this.port));
+          
         }
         catch(NoRouteToHostException nrte)
         {
