@@ -47,7 +47,7 @@ public class OPSIDLProjectFactory implements ProjectFactory
             }
             catch (FormatException ex)
             {
-                Exceptions.printStackTrace(ex);
+                //This is OK, we dont have a config yet
             }
             catch (IOException ex)
             {

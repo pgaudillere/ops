@@ -16,6 +16,7 @@ import ops.Topic;
 import org.openide.nodes.AbstractNode;
 import org.openide.nodes.Children;
 import org.openide.nodes.Node;
+import org.openide.util.actions.SystemAction;
 
 /**
  *
@@ -28,10 +29,10 @@ class OPSDomainNode extends AbstractNode
     {
 
         Vector<Node> nodeVector = new Vector<Node>();
-        for (Topic topic : domain.getTopics())
-        {
-            nodeVector.add(OPSTopicNode.createTopicNode(topic));
-        }
+        //for (Topic topic : domain.getTopics())
+        //{
+          //  nodeVector.add(OPSTopicNode.createTopicNode(topic));
+        //}
         Children children = new Children.Array();
         children.add(nodeVector.toArray(new Node[0]));
         return new OPSDomainNode(children, domain);
@@ -62,6 +63,18 @@ class OPSDomainNode extends AbstractNode
                         Topic topic = new Topic(topicToCreate, 1000, "Hatt.hatt", "234.4.5.6");
                         domain.getTopics().add(topic);
                     }
+                }
+
+            }
+        });
+        actions.add(new AbstractAction("Open Topic Tool...") {
+
+            public void actionPerformed(ActionEvent e)
+            {
+                for (Topic topic : domain.getTopics())
+                {
+                    System.out.println("" + topic);
+
                 }
 
             }

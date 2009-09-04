@@ -45,7 +45,7 @@ namespace ops
         virtual int getPort() = 0;
         virtual std::string getAddress() = 0;
 
-		static Sender* create(std::string localInterface = "0.0.0.0", int ttl = 1, int outSocketBufferSize = 16000000);
+		static Sender* create(std::string localInterface = "0.0.0.0", int ttl = 1, __int64 outSocketBufferSize = 16000000);
 		static Sender* createTCPServer(std::string ip, int port, IOService* ioService);
 
         virtual ~Sender()

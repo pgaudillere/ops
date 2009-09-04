@@ -39,6 +39,7 @@ namespace ops
         void setParticipantID(std::string partID);
 		std::string getParticipantID();
 		void setDomainID(std::string domID);
+		void setTransport(std::string transp);
 		std::string getDomainID();
 
         std::string getName();
@@ -50,6 +51,13 @@ namespace ops
 		void setSampleMaxSize(int size);
         int getPort();
 		void serialize(ArchiverInOut* archiver);
+
+		__int64 getOutSocketBufferSize();
+		void setOutSocketBufferSize(__int64 size);
+		__int64 getInSocketBufferSize();
+		void setInSocketBufferSize(__int64 size);
+
+
 
 		static std::string TRANSPORT_MC;
 		static std::string TRANSPORT_TCP;
@@ -70,6 +78,8 @@ namespace ops
 		__int64 deadline;
 		__int64 minSeparation;
 		std::string transport;
+		__int64 outSocketBufferSize;
+		__int64 inSocketBufferSize;
         
 
 		

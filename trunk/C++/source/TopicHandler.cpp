@@ -39,7 +39,7 @@ namespace ops
 
 		if(top.getTransport() == Topic::TRANSPORT_MC)
 		{
-			receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService, mcDomain->getLocalInterface(), mcDomain->getInSocketBufferSize());
+			receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService, mcDomain->getLocalInterface(), top.getInSocketBufferSize());
 		}
 		else if(top.getTransport() == Topic::TRANSPORT_TCP)
 		{
@@ -69,7 +69,7 @@ namespace ops
 			
 			if(byteSizePair.size == -5)
 			{
-				BasicError err("Connection was lost but is no reconnected.");
+				BasicError err("Connection was lost but is now reconnected.");
 				participant->reportError(&err);
 			}
 			else
@@ -95,6 +95,12 @@ namespace ops
 			int nrOfFragments = tBuf.ReadInt();
 			int currentFragment = tBuf.ReadInt();
 
+			if(currentFragment != (nrOfFragments - 1) && byteSizePair.size != OPSConstants::PACKET_MAX_SIZE)
+			{
+				BasicError err("Debug: Received broken package.");
+				participant->reportError(&err);
+			}
+
 			currentMessageSize += byteSizePair.size;// - tBuf.GetSize();
 
 			if(currentFragment != expectedSegment)
@@ -103,6 +109,7 @@ namespace ops
 				{
 					BasicError err("Segment Error, sample will be lost.");
 					participant->reportError(&err);
+					firstReceived = false;
 				}
 				expectedSegment = 0;
 				currentMessageSize = 0;

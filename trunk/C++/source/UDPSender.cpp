@@ -25,11 +25,14 @@
 
 #include "UDPSender.h"
 #include "TimeHelper.h"
+#include <iostream>
+#include "Participant.h"
+#include "BasicError.h"
 
 namespace ops
 {
     using boost::asio::ip::udp;
-	UDPSender::UDPSender(std::string localInterface, int ttl, int outSocketBufferSize)
+	UDPSender::UDPSender(std::string localInterface, int ttl, __int64 outSocketBufferSize)
            
     {
 		boost::asio::ip::address ipAddr(boost::asio::ip::address_v4::from_string(localInterface));
@@ -38,9 +41,18 @@ namespace ops
         //localEndpoint = new boost::asio::ip::udp::endpoint(udp::v4(), 0);
         socket = new boost::asio::ip::udp::socket(io_service, localEndpoint->protocol());
 
-		boost::asio::socket_base::send_buffer_size option(outSocketBufferSize);
-		socket->set_option(option);
-
+		if(outSocketBufferSize > 0)
+		{
+			boost::asio::socket_base::send_buffer_size option(outSocketBufferSize);
+			boost::system::error_code ec;
+			ec = socket->set_option(option, ec);
+			socket->get_option(option);
+			if(ec != 0 || option.value() != outSocketBufferSize)
+			{
+				//std::cout << "Socket buffer size could not be set" << std::endl;
+				Participant::reportStaticError(&ops::BasicError("Error in UDPSender::UDPSender(): Socket buffer size could not be set"));
+			}
+		}
 		boost::asio::ip::multicast::hops ttlOption(ttl);
 		socket->set_option(ttlOption);
 
@@ -74,6 +86,7 @@ namespace ops
         }
         catch (...)
         {
+			Participant::reportStaticError(&ops::BasicError("Exception in UDPSender::sendTo(): Error when sending udp message."));
             return false;
         }
 

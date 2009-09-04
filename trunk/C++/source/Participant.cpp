@@ -20,6 +20,7 @@
 
 #include "Participant.h"
 #include "SingleThreadPool.h"
+#include "MultiThreadPool.h"
 #include "TopicHandler.h"
 #include "OPSObjectFactoryImpl.h"
 
@@ -75,6 +76,7 @@ namespace ops
 		aliveDeadlineTimer->addListener(this);
 
 		threadPool = new SingleThreadPool();
+		//threadPool = new MultiThreadPool();
 		threadPool->addRunnable(this);
 		threadPool->start();
 	}
@@ -94,6 +96,17 @@ namespace ops
 	void Participant::reportError(Error* err)
 	{
 		notifyNewEvent(err);
+	}
+
+	void Participant::reportStaticError(Error* err)
+	{
+		std::map<std::string, Participant*>::iterator it = instances.begin();
+		while(it !=instances.end())
+		{
+			it->second->notifyNewEvent(err);
+			it++;
+		}
+		
 	}
 
 	void Participant::cleanUpTopicHandlers()

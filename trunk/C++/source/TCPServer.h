@@ -38,6 +38,8 @@
 #include <boost/array.hpp>
 #include "BoostIOServiceImpl.h"
 #include "boost/bind.hpp"
+#include "Participant.h"
+#include "BasicError.h"
 
 namespace ops
 {
@@ -53,6 +55,9 @@ namespace ops
 			endpoint = new boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), serverPort);
 			acceptor = new boost::asio::ip::tcp::acceptor(*ioService, *endpoint);
 			sock = new boost::asio::ip::tcp::socket(*ioService);
+
+			
+
 			acceptor->async_accept(*sock, boost::bind(&TCPServer::handleAccept, this, boost::asio::placeholders::error));
 
 		}
@@ -76,6 +81,7 @@ namespace ops
 				}
 				catch(std::exception& e)
 				{
+					std::cout << "Socket closed, exception in TCPServer::sendTo()" << std::endl;
 					connected = false;
 					connectedSockets[i]->close();
 
@@ -124,6 +130,15 @@ namespace ops
 
 			if(!error)
 			{
+				boost::asio::socket_base::send_buffer_size option(16000000);
+				boost::system::error_code ec;
+				ec = sock->set_option(option, ec);
+				sock->get_option(option);
+				if(ec != 0 || option.value() != 16000000)
+				{
+					//std::cout << "Socket buffer size could not be set" << std::endl;
+					Participant::reportStaticError(&ops::BasicError("Error in TCPServer::TCPServer(): Socket buffer size could not be set"));
+				}
 				std::cout << "accept ok" << std::endl;
 				connectedSockets.push_back(sock);
 				sock = new boost::asio::ip::tcp::socket(*ioService);

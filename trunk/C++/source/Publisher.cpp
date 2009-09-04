@@ -30,7 +30,10 @@ namespace ops
 		key(""),
 		priority(0), 
 		currentPublicationID(0), 
-		memMap(t.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE)
+		memMap(t.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE),
+		sleepEverySendPacket(100000),
+		sendSleepTime(1),
+		sleepOnSendFailed(true)
 	{
 		Participant* participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
 		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getConfig()->getDomain(topic.getDomainID()));
@@ -38,7 +41,7 @@ namespace ops
 		{
 			if(topic.getTransport() == Topic::TRANSPORT_MC)
 			{
-				udpSender = Sender::create(mcDomain->getLocalInterface(), mcDomain->getTimeToLive(), mcDomain->getOutSocketBufferSize());
+				udpSender = Sender::create(mcDomain->getLocalInterface(), mcDomain->getTimeToLive(), topic.getOutSocketBufferSize());
 			}
 			else if(topic.getTransport() == Topic::TRANSPORT_TCP)
 			{
@@ -121,8 +124,16 @@ namespace ops
 		for(int i = 0; i < buf.getNrOfSegments(); i++)
 		{
 			int segSize = buf.getSegmentSize(i);
-			udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
-			//TimeHelper::sleep(1);
+			bool sendOK = udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
+			if(!sendOK)
+			{
+				TimeHelper::sleep(sendSleepTime);
+				udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
+			}
+			else if(i % sleepEverySendPacket == 0 )
+			{
+				TimeHelper::sleep(sendSleepTime);
+			}
 		}
 		
 		//udpSender->sendTo(bytes, buf.GetSize(), topic.GetDomainAddress(), topic.GetPort());

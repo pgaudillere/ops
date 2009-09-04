@@ -28,6 +28,9 @@
 #include "boost/bind.hpp"
 #include "ByteBuffer.h"
 #include "BoostIOServiceImpl.h"
+#include <iostream>
+#include "Participant.h"
+#include "BasicError.h"
 
 namespace ops
 {
@@ -36,7 +39,7 @@ namespace ops
 	class MulticastReceiver : public Receiver
 	{
 	public:
-		MulticastReceiver(std::string mcAddress, int bindPort, IOService* ioServ, std::string localInterface = "0.0.0.0", int inSocketBufferSizent = 16000000): 
+		MulticastReceiver(std::string mcAddress, int bindPort, IOService* ioServ, std::string localInterface = "0.0.0.0", __int64 inSocketBufferSizent = 16000000): 
 		  max_length(65535),
 		  cancelled(false)
 		{
@@ -55,9 +58,24 @@ namespace ops
 			sock = new boost::asio::ip::udp::socket(*ioService);
 
 
+			
 			sock->open(localEndpoint->protocol());
-			boost::asio::socket_base::receive_buffer_size option(inSocketBufferSizent);
-			sock->set_option(option);
+				
+			if(inSocketBufferSizent > 0)
+			{
+				boost::asio::socket_base::receive_buffer_size option(inSocketBufferSizent);
+				boost::system::error_code ec;
+				ec = sock->set_option(option, ec);
+				sock->get_option(option);
+				if(ec != 0 || option.value() != inSocketBufferSizent)
+				{
+					//std::cout << "Socket buffer size could not be set" << std::endl;
+					Participant::reportStaticError(&ops::BasicError("Socket buffer size could not be set"));
+				}
+			}
+			//boost::asio::socket_base::receive_buffer_size option(inSocketBufferSizent);
+			//sock->set_option(option);
+			
 
 
 			sock->set_option(boost::asio::ip::udp::socket::reuse_address(true));
@@ -130,7 +148,9 @@ namespace ops
 				return;
 			}
 			//notifyNewEvent(data);
-			printf("___________handleReadError__________\n");
+			//printf("___________handleReadError__________\n");
+			Participant::reportStaticError(&ops::BasicError("Error in MulticastReceiver::handleReadError()"));
+			
 			sock->async_receive(
 				boost::asio::buffer(data, max_length), 
 				boost::bind(&MulticastReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
@@ -153,6 +173,7 @@ namespace ops
 			}
 			catch(...)
 			{
+				Participant::reportStaticError(&ops::BasicError("Exception in MulticastReceiver::receive()"));
 				return -1;
 			}
 

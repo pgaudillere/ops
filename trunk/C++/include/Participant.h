@@ -49,6 +49,7 @@ namespace ops
 		static std::map<std::string, Participant*> instances;
 		static Participant* getInstance(std::string domainID);
 		static Participant* getInstance(std::string domainID, std::string participantID);
+		static void reportStaticError(Error* err);
 
 		void addTypeSupport(ops::SerializableFactory* typeSupport);
 

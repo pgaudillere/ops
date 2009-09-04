@@ -25,7 +25,7 @@
 namespace ops
 {
 
-	Sender* Sender::create(std::string localInterface, int ttl, int outSocketBufferSize)
+	Sender* Sender::create(std::string localInterface, int ttl, __int64 outSocketBufferSize)
 	{
 		return new UDPSender(localInterface, ttl, outSocketBufferSize);
 	}

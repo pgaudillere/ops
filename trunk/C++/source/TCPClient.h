@@ -31,6 +31,8 @@
 #include <boost/array.hpp>
 #include "BoostIOServiceImpl.h"
 #include "boost/bind.hpp"
+#include "Participant.h"
+#include "BasicError.h"
 
 namespace ops
 {
@@ -46,8 +48,12 @@ namespace ops
 
 			sock = new boost::asio::ip::tcp::socket(*ioService);
 
+			
+
 			boost::system::error_code error = boost::asio::error::host_not_found;
 			sock->async_connect(*endpoint, boost::bind(&TCPClient::handleConnect, this, boost::asio::placeholders::error));
+
+
 
 
 		}
@@ -57,12 +63,34 @@ namespace ops
 			{
 				//connect again
 				connected = false;
-				std::cout << "connection failed tcp asynch" << std::endl;
+				//std::cout << "connection failed tcp asynch" << std::endl;
+				Participant::reportStaticError(&ops::BasicError("connection failed tcp asynch"));
 				sock->async_connect(*endpoint, boost::bind(&TCPClient::handleConnect, this, boost::asio::placeholders::error));
 			}
 			else
 			{
 				connected = true;
+
+				boost::asio::socket_base::receive_buffer_size option(16000000);
+				boost::system::error_code ec;
+				ec = sock->set_option(option, ec);
+				sock->get_option(option);
+				if(ec != 0 || option.value() != 16000000)
+				{
+					//std::cout << "Socket buffer size could not be set" << std::endl;
+					Participant::reportStaticError(&ops::BasicError("TCPClient::TCPClient(): Socket buffer size could not be set"));
+				}
+
+				//Disable Nagle algorithm
+				
+				boost::asio::ip::tcp::no_delay option2(true);
+				sock->set_option(option2);
+				//if(sockOptErr != 0)
+				//{
+					//std::cout << "Failed to disable Nagle algorithm." << std::endl;
+					//Participant::reportStaticError(&ops::BasicError("Failed to disable Nagle algorithm."));
+				//}
+
 				std::cout << "connected tcp asynch" << std::endl;
 				notifyNewEvent(BytesSizePair("", -5)); //Connection was down but has been reastablished.
 			}
@@ -116,7 +144,8 @@ namespace ops
 			else
 			{
 				//handleReadError(error);
-				printf("Error \n");
+				//printf("Error \n");
+				Participant::reportStaticError(&ops::BasicError("Error in receive."));
 				notifyNewEvent(BytesSizePair("", -1));
 				
 				//Close the socket and try to connect again
@@ -147,8 +176,9 @@ namespace ops
 				}
 				else
 				{
+					
+					notifyNewEvent(BytesSizePair(data, accumulatedSize));
 					accumulatedSize = 0;
-					notifyNewEvent(BytesSizePair(data, nrBytesReceived));
 				}
 
 			}

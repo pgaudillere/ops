@@ -41,6 +41,16 @@ public class OPSConfigDataObject extends MultiDataObject
     }
 
     @Override
+    public void setModified(boolean arg0)
+    {
+        super.setModified(arg0);
+        System.out.println("Set modiefied called on OPSConfigDataObject " + arg0);
+
+
+
+    }
+
+    @Override
     protected Node createNodeDelegate()
     {
         try
@@ -49,6 +59,7 @@ public class OPSConfigDataObject extends MultiDataObject
             Children.Array children = new Children.Array();
             children.add(new Node[]{OPSConfigNode.createOPSConfigNode(opsConfig)});
             DataNode dNode = new OPSConfigDataNode(this, children, getLookup());
+
             return dNode;
         }
         catch (FormatException ex)
@@ -80,6 +91,8 @@ class OPSConfigDataNode extends DataNode
         super(dObject, children, lookup);
 
     }
+
+
 
     @Override
     public Action[] getActions(boolean arg0)
