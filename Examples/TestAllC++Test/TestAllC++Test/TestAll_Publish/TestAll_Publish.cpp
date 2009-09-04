@@ -16,12 +16,29 @@
 #include "Receiver.h"
 #include "Sender.h"
 
-int main(int argc, char* args)
+int main(int argc, const char* args[])
 {
+	int mainSleep = 100;
+	int nrOfFloats = 500000;
+	int sleepEveryNrPackets = 100000;
+	int sendSleepTime = 1;
+
+	if(argc > 3)
+	{
+		sscanf(args[1],"%i", &mainSleep);
+		sscanf(args[2],"%i", &nrOfFloats);
+		sscanf(args[3],"%i", &sleepEveryNrPackets);
+		sscanf(args[4],"%i", &sendSleepTime);
+	}
+	else
+	{
+		std::cout << "Ignoring arguments (must be > 3) arguments should be: " << "mainSleep, nrOfFloats, sleepEveryNrPackets, sendSleepTime." << std::endl;
+
+	}
 
 	
 	
-	//timeBeginPeriod(1);
+	timeBeginPeriod(1);
 	using namespace TestAll;
 	using namespace ops;
 
@@ -31,6 +48,9 @@ int main(int argc, char* args)
 
 	ops::Participant* participant = Participant::getInstance("TestAllDomain");
 	participant->addTypeSupport(new TestAll::TestAllTypeFactory());
+
+	ErrorWriter* errorWriter = new ErrorWriter(std::cout);
+	participant->addListener(errorWriter);
 
 	/*Sleep(2000);
 	ops::Sender* tcpServer = ops::Sender::createTCPServer("", 1342, participant->getIOService());
@@ -63,6 +83,8 @@ int main(int argc, char* args)
 	//Create a publisher on that topic
 	ChildDataPublisher pub(topic);
 	pub.setName("TestAllPublisher");
+	pub.sendSleepTime = sendSleepTime;
+	pub.sleepEverySendPacket = sleepEveryNrPackets;
 
 	Topic baseTopic = participant->createTopic("BaseTopic");
 
@@ -109,7 +131,7 @@ int main(int argc, char* args)
 
 	//return 0;
 
-	for(int i = 0; i < 500000; i++)
+	for(int i = 0; i < nrOfFloats; i++)
 	{
 		data.fs.push_back(i);
 	}
@@ -164,12 +186,11 @@ int main(int argc, char* args)
 			basePub.write(&baseData);
 		}
 
-		Sleep(100);
-		if(dataClone->i > 100)
-		{
-			//break;
-		}
+		Sleep(mainSleep);
+		
 	}
+
+	timeEndPeriod(1);
 
 	
 	delete participant;

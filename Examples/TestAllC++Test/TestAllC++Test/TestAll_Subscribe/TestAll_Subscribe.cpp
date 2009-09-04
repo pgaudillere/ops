@@ -98,11 +98,8 @@ public:
 			sub->numReservedMessages();
 
 			sub->getData(&data);
-
-			TestAll::ChildData data2 ;
-			data2 = data;
-
-			std::cout << data.i << " From: " << sub->getMessage()->getPublisherName() << std::endl;
+	
+			//std::cout << data.i << " From: " << sub->getMessage()->getPublisherName() << std::endl;
 
 
 			//data = (TestAll::ChildData*)sub->getMessage()->getData();
@@ -135,16 +132,16 @@ public:
 			//If you dont want to keep track of data yourself, you can use the history deque from the subscriber, its max size is set by sub->setHistoryMaxSize() in constructor.
 			//std::cout << "Buffer size: " << sub->getHistory().size() << std::endl;
 
-			/*
 			
-			if(data == NULL) return;
-			if(data->i != (lastPacket + 1))
+			
+			//if(data == NULL) return;
+			if(data.i != (lastPacket + 1))
 			{
 				packagesLost++;
 			}
-			lastPacket = data->i;
-			std::cout << data->baseText << " "  << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl;
-		*/
+			lastPacket = data.i;
+			std::cout << data.baseText << " "  << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << "          \r";// << std::endl;
+		
 		}
 		else
 		{

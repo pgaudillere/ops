@@ -75,7 +75,14 @@ private:
     std::string key;
     char priority;
 
+	
     void IncCurrentPublicationID();
+
+public:
+	//Send behaivior parameters
+	__int64 sendSleepTime;
+	int sleepEverySendPacket;
+	bool sleepOnSendFailed;
 
 
 };

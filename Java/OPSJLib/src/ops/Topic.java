@@ -37,6 +37,9 @@ public class Topic<T> extends OPSObject
     private int sampleMaxSize = StaticManager.MAX_SIZE;
     private String participantID;
     private String domainID;
+    int outSocketBufferSize;
+    int inSocketBufferSize;
+    int transport;
 
     /** Creates a new instance of Topic */
     public Topic(String name, int port, String typeID, String domainAddress)
@@ -66,7 +69,7 @@ public class Topic<T> extends OPSObject
     @Override
     public String toString()
     {
-        return name;
+        return name + " type = " + typeID + " port = " + port;
     }
 
     public int getReplyPort()
@@ -145,11 +148,16 @@ public class Topic<T> extends OPSObject
         port = archive.inout("port", port);
         domainAddress = archive.inout("address", domainAddress);
 
+        outSocketBufferSize = archive.inout("outSocketBufferSize", outSocketBufferSize);
+        inSocketBufferSize = archive.inout("inSocketBufferSize", inSocketBufferSize);
+
+
         int tSampleMaxSize = getSampleMaxSize();
 		tSampleMaxSize= archive.inout("sampleMaxSize", tSampleMaxSize);
 		setSampleMaxSize(tSampleMaxSize);
 
-        //sampleMaxSize will be ignored for now.
+        transport = archive.inout("transport", transport);
+        
     }
 
     void setDomainID(String domainID)
@@ -162,5 +170,7 @@ public class Topic<T> extends OPSObject
         this.participantID = participantID;
     }
 
+
+
     
-};
+}

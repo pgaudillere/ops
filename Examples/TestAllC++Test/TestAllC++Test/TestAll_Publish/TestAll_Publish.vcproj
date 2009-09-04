@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OPSCppLib_vc90_MDd.lib"
+				AdditionalDependencies="OPSCppLib_vc90_MDd.lib winmm.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(SolutionDir)..\..\..\C++\lib&quot;;&quot;C:\Program Files\boost\boost_1_38\lib&quot;"
 				GenerateDebugInformation="true"

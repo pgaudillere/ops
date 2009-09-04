@@ -15,7 +15,9 @@ namespace ops
 		reliable(false),
 		sampleMaxSize(OPSConstants::PACKET_MAX_SIZE),
 		deadline(OPSConstants::MAX_DEADLINE_TIMEOUT),
-		minSeparation(0)
+		minSeparation(0),
+		inSocketBufferSize(-1),
+		outSocketBufferSize(-1)
 	{
 		appendType(std::string("Topic"));
 
@@ -29,7 +31,9 @@ namespace ops
 		reliable(false),
 		sampleMaxSize(OPSConstants::PACKET_MAX_SIZE),
 		deadline(OPSConstants::MAX_DEADLINE_TIMEOUT),
-		minSeparation(0)
+		minSeparation(0),
+		inSocketBufferSize(-1),
+		outSocketBufferSize(-1)
 	{
 		appendType(std::string("Topic"));
 
@@ -64,6 +68,10 @@ namespace ops
 	{
 		domainAddress = domainAddr;
 	}
+	void Topic::setTransport(std::string transp)
+	{
+		transport = transp;
+	}
 	std::string Topic::getDomainAddress()
 	{
 		return domainAddress;
@@ -92,6 +100,23 @@ namespace ops
 		return transport;
 	}
 
+	__int64 Topic::getOutSocketBufferSize()
+	{
+		return outSocketBufferSize;
+	}
+	void Topic::setOutSocketBufferSize(__int64 size)
+	{
+		outSocketBufferSize = size;
+	}
+	__int64 Topic::getInSocketBufferSize()
+	{
+		return inSocketBufferSize;
+	}
+	void Topic::setInSocketBufferSize(__int64 size)
+	{
+		inSocketBufferSize = size;
+	}
+
 	void Topic::serialize(ArchiverInOut* archiver)
 	{
 		OPSObject::serialize(archiver);
@@ -99,6 +124,10 @@ namespace ops
 		archiver->inout(std::string("dataType"), typeID);
 		archiver->inout(std::string("port"), port);		
 		archiver->inout(std::string("address"), domainAddress);
+
+		archiver->inout(std::string("outSocketBufferSize"), outSocketBufferSize);
+		archiver->inout(std::string("inSocketBufferSize"), inSocketBufferSize);
+	
 
 		//Limit this value 
 		int tSampleMaxSize = getSampleMaxSize();
@@ -112,7 +141,7 @@ namespace ops
 		}
 		else if (transport != TRANSPORT_TCP)
 		{
-			throw ops::ConfigException("Transport in topic must be either 'multicast', 'TCP' or left blank( = multicast).");
+			throw ops::ConfigException("Transport in topic must be either 'multicast', 'tcp' or left blank( = multicast).");
 		}
 	}
 

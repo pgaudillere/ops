@@ -36,7 +36,7 @@ namespace ops
         ///and a dynamically allocated local port.
 		///This class accepts synchronous write operations through sendTo().
 		///This class dispatches HeartBeats comming in to its attached Listener<HeartBeat>:s.
-        UDPSender(std::string localInterface = "0.0.0.0", int ttl = 1, int outSocketBufferSize = 16000000);
+        UDPSender(std::string localInterface = "0.0.0.0", int ttl = 1, __int64 outSocketBufferSize = 16000000);
         ~UDPSender();
         
         ///Override from Sender
