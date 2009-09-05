@@ -30,7 +30,11 @@ public class XMLArchiverOut implements ArchiverInOut
     
     private int currentTabDepth = 0;
     private boolean writType = true;
+    private boolean writeXMLHeader = true;
 
+    public XMLArchiverOut()
+    {
+    }
 
     public XMLArchiverOut(OutputStream os) throws IOException
     {
@@ -40,11 +44,21 @@ public class XMLArchiverOut implements ArchiverInOut
     public XMLArchiverOut(OutputStream os, boolean writeXMLHeader) throws IOException
     {
         this.os = os;
+        this.writeXMLHeader = writeXMLHeader;
         if(writeXMLHeader)
         {
             os.write(HEADER.getBytes());
         }
         
+    }
+
+    public void setOutputStream(OutputStream os) throws IOException
+    {
+        this.os = os;
+        if(writeXMLHeader)
+        {
+            os.write(HEADER.getBytes());
+        }
     }
     
     public void put(String name, byte v) throws IOException
@@ -81,6 +95,16 @@ public class XMLArchiverOut implements ArchiverInOut
     {
         String typeAdd = writType ? TYPE_ADD_STRING : "";
         putXMLLeaf(name, "" + v, typeAdd); 
+    }
+
+    public boolean getWriteXMLHeader()
+    {
+        return writeXMLHeader;
+    }
+
+    public void setWriteXMLHeader(boolean writeXMLHeader)
+    {
+        this.writeXMLHeader = writeXMLHeader;
     }
     
     
