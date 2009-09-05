@@ -31,6 +31,11 @@ public class XMLArchiverIn implements ArchiverInOut
     private Stack<Node> nodeStack = new Stack<Node>();
     private SerializableCompositeFactory factory = new SerializableCompositeFactory();
 
+    public XMLArchiverIn()
+    {
+
+    }
+
     public XMLArchiverIn(InputStream is) throws FormatException
     {
         try
@@ -75,6 +80,30 @@ public class XMLArchiverIn implements ArchiverInOut
             throw new FormatException("Caused by underlying IOException: " + ex.getMessage());
         }
     }
+
+    public void setInputStream(InputStream is) throws FormatException
+    {
+        try
+        {
+            this.is = is;
+            DOMParser parser = new DOMParser();
+
+            // Parse the document.
+            parser.parse(new InputSource(is));
+            // Obtain the document.
+            doc = parser.getDocument();
+
+            currentNode = doc;
+        } catch (SAXException ex)
+        {
+            throw new FormatException("Caused by underlying SAXException: " + ex.getMessage());
+        } catch (IOException ex)
+        {
+            throw new FormatException("Caused by underlying IOException: " + ex.getMessage());
+        }
+    }
+
+
 
     public byte getByte(String name)
     {
@@ -180,9 +209,12 @@ public class XMLArchiverIn implements ArchiverInOut
             if (nodes.item(i).getNodeName().equals("element") && n == ittElement)
             {
                 return nodes.item(i);
-            } else if (nodes.item(i).getNodeName().equals("element"))
+            } else
             {
-                ittElement++;
+                if (nodes.item(i).getNodeName().equals("element"))
+                {
+                    ittElement++;
+                }
             }
         }
 
