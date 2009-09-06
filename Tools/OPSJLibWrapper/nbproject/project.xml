@@ -11,14 +11,17 @@
                     <build-prerequisite/>
                     <compile-dependency/>
                     <run-dependency>
-                        <specification-version>1.0</specification-version>
+                        <implementation-version/>
                     </run-dependency>
                 </dependency>
             </module-dependencies>
             <public-packages>
                 <package>ops</package>
                 <package>ops.archiver</package>
+                <package>ops.jarsearch</package>
+                <package>ops.jarsearch.util</package>
                 <package>ops.mains</package>
+                <package>ops.opsreflection</package>
                 <package>ops.protocol</package>
                 <package>test</package>
             </public-packages>
