@@ -34,7 +34,7 @@ import ops.Topic;
 public class OPSFactory
 {
     OPSFactoryConfig factoryConfig = new OPSFactoryConfig();
-    JarSearcher jarSearcher = new JarSearcher();
+    JarSearcher jarSearcher = new JarSearcher(OPSObject.class.getClassLoader());
     private String domainID;
     private Participant participant;
 
