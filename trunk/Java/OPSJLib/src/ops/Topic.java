@@ -69,7 +69,7 @@ public class Topic<T> extends OPSObject
     @Override
     public String toString()
     {
-        return name + " type = " + typeID + " port = " + port;
+        return name;
     }
 
     public int getReplyPort()
