@@ -22,9 +22,17 @@ import java.util.jar.JarFile;
  */
 public class JarSearcher
 {
-    URLClassLoader classLoader = new URLClassLoader(new URL[0]);
+    URLClassLoader classLoader = null;
     Vector<URL> urls = new Vector();
     Vector<JarFile> jars = new Vector<JarFile>();
+    ClassLoader parentClassLoader;
+
+    public JarSearcher(ClassLoader parentClassLoader)
+    {
+        this.parentClassLoader = parentClassLoader;
+        classLoader = new URLClassLoader(new URL[0], parentClassLoader);
+
+    }
 
     public void addJar(File jarFile) throws MalformedURLException, IOException
     {
@@ -32,7 +40,7 @@ public class JarSearcher
         jars.add(newJarFile);
         String s1 = "file:///" + FileHelper.unixSlashed(jarFile.getAbsolutePath());
         urls.add(new URL(s1));
-        classLoader = new URLClassLoader(urls.toArray(new URL[0]));
+        classLoader = new URLClassLoader(urls.toArray(new URL[0]), parentClassLoader);
     }
     public Class loadClass(String className) throws ClassNotFoundException
     {
