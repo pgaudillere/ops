@@ -7,5 +7,4 @@ Under _OPS_HOME_/Examples, you will find an example called *!TestAll* and a corr
 
 Open *TestAllC++Test.sln* under *TestAllC++Test* and build and run it to see that your OPS installation works correctly for C++.
 If you have boost in another place than "C:\Program Files\boost_1_38",
-
 make sure to alter the include and library directories to make the sample compile alright.
