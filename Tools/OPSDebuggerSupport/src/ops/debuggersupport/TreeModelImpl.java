@@ -8,6 +8,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 import ops.OPSObject;
@@ -25,7 +26,7 @@ import org.openide.util.Exceptions;
 public class TreeModelImpl implements TreeModel
 {
 
-    private Object object;
+    //private Object object;
     ArrayList<ModelListener> modelListeners = new ArrayList<ModelListener>();
     private NameValuePair root = new NameValuePair("Field", "");
     private Subscriber subscriber;
@@ -49,8 +50,20 @@ public class TreeModelImpl implements TreeModel
 
     public void setObject(Object object)
     {
-        this.object = object;
-        root.value = object;
+        //this.object = object;
+
+        if(root.value == null)
+        {
+            root.value = object;
+            //root.clear();
+
+            populateNode(root);
+        }
+        else
+        {
+            updateNode(root, object);
+        }
+
         ModelEvent event = new ModelEvent.NodeChanged(this, root);
         for (ModelListener modelListener : modelListeners)
         {
@@ -69,47 +82,29 @@ public class TreeModelImpl implements TreeModel
     {
 
         NameValuePair nvp = (NameValuePair) parent;
-
-        ArrayList children = new ArrayList();
-        Field[] fields = nvp.value.getClass().getFields();
-
-        if(parent == root)
+        if(from == 0 && to == nvp.children.size() )
         {
-            children.add(new NameValuePair("publicationID", subscriber.getMessage().getPublicationID()));
-            children.add(new NameValuePair("key", ((OPSObject)root.value).getKey()));
-            children.add(new NameValuePair("publisherName", subscriber.getMessage().getPublisherName()));
+            return nvp.children.toArray();
+        }
+        else
+        {
+            System.out.println("WARNING, list copy required!");
+            return Arrays.copyOfRange(nvp.children.toArray(), from, to);
         }
 
-        for (int i = from; i < to; i++)
-        {
-            Field field = fields[i];
-            try
-            {
-                children.add(new NameValuePair(field.getName(), field.get(nvp.value)));
-            } catch (IllegalArgumentException ex)
-            {
-                Exceptions.printStackTrace(ex);
-            } catch (IllegalAccessException ex)
-            {
-                Exceptions.printStackTrace(ex);
-            }
-
-        }
-           
-        return children.toArray();
     }
 
     public boolean isLeaf(Object node)
     {
         NameValuePair fvp = (NameValuePair) node;
-        return isBasicType(fvp.value);
+        return fvp.children.size() == 0;
     }
 
 
     public int getChildrenCount(Object parent) throws UnknownTypeException
     {
         NameValuePair nvp = (NameValuePair) parent;
-        return nvp.value.getClass().getFields().length;
+        return nvp.children.size();
     }
 
     public void addModelListener(ModelListener modelListener)
@@ -140,5 +135,57 @@ public class TreeModelImpl implements TreeModel
         {
             return false;
         }
+    }
+
+    private void populateNode(NameValuePair parent)
+    {
+        NameValuePair nvp = (NameValuePair) parent;
+
+        ArrayList<NameValuePair> children = new ArrayList();
+        Field[] fields = nvp.value.getClass().getFields();
+
+        if(parent == root)
+        {
+            parent.add(new NameValuePair("publicationID", subscriber.getMessage().getPublicationID()));
+            parent.add(new NameValuePair("key", ((OPSObject)root.value).getKey()));
+            parent.add(new NameValuePair("publisherName", subscriber.getMessage().getPublisherName()));
+        }
+
+        for (int i = 0; i < fields.length; i++)
+        {
+            Field field = fields[i];
+            try
+            {
+                NameValuePair child = new NameValuePair(field.getName(), field.get(nvp.value));
+                if(!isBasicType(child.value))
+                    populateNode(child);
+                parent.add(child);
+            } catch (IllegalArgumentException ex)
+            {
+                Exceptions.printStackTrace(ex);
+            } catch (IllegalAccessException ex)
+            {
+                Exceptions.printStackTrace(ex);
+            }
+
+        }
+
+    }
+
+    private void updateNode(NameValuePair node, Object value)
+    {
+        if(isBasicType(value))
+        {
+            node.value = value;
+        }
+        else
+        {
+            for (NameValuePair child : node.children)
+            {
+                updateNode(child, value);//Note, add field to each NmaeValuePair
+            }
+        }
+
+
     }
 }
