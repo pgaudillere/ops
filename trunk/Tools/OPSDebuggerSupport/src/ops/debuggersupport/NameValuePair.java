@@ -4,6 +4,7 @@
  */
 package ops.debuggersupport;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 /**
@@ -15,13 +16,16 @@ class NameValuePair
 
     public String name;
     public Object value;
+    public boolean expanded;
 
     ArrayList<NameValuePair> children = new ArrayList();
+    public Field field;
 
-    public NameValuePair(String name, Object get)
+    public NameValuePair(String name, Object get, Field field)
     {
         this.name = name;
         this.value = get;
+        this.field = field;
     }
 
     public boolean remove(Object o)

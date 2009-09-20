@@ -3,6 +3,7 @@ java.lang.Object
 ops.debuggersupport.TreeExpansionModelImpl
 org.netbeans.spi.viewmodel.TreeExpansionModel
 org.netbeans.spi.viewmodel.UnknownTypeException
+ops.debuggersupport.NameValuePair
 ||:ops.debuggersupport.OPSDebuggerTopComponent
 java.lang.Class
 org.netbeans.spi.viewmodel.Models$CompoundModel
