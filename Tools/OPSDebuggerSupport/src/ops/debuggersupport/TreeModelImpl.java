@@ -28,7 +28,7 @@ public class TreeModelImpl implements TreeModel
 
     //private Object object;
     ArrayList<ModelListener> modelListeners = new ArrayList<ModelListener>();
-    private NameValuePair root = new NameValuePair("Field", "");
+    private NameValuePair root = new NameValuePair("Field", null, null);
     private Subscriber subscriber;
 
 
@@ -146,9 +146,9 @@ public class TreeModelImpl implements TreeModel
 
         if(parent == root)
         {
-            parent.add(new NameValuePair("publicationID", subscriber.getMessage().getPublicationID()));
-            parent.add(new NameValuePair("key", ((OPSObject)root.value).getKey()));
-            parent.add(new NameValuePair("publisherName", subscriber.getMessage().getPublisherName()));
+            parent.add(new NameValuePair("publicationID", subscriber.getMessage().getPublicationID(), null));
+            parent.add(new NameValuePair("key", ((OPSObject)root.value).getKey(), null));
+            parent.add(new NameValuePair("publisherName", subscriber.getMessage().getPublisherName(), null));
         }
 
         for (int i = 0; i < fields.length; i++)
@@ -156,7 +156,7 @@ public class TreeModelImpl implements TreeModel
             Field field = fields[i];
             try
             {
-                NameValuePair child = new NameValuePair(field.getName(), field.get(nvp.value));
+                NameValuePair child = new NameValuePair(field.getName(), field.get(nvp.value), field);
                 if(!isBasicType(child.value))
                     populateNode(child);
                 parent.add(child);
@@ -180,10 +180,46 @@ public class TreeModelImpl implements TreeModel
         }
         else
         {
-            for (NameValuePair child : node.children)
+            
+            for (int i = 0; i < node.children.size(); i++)
             {
-                updateNode(child, value);//Note, add field to each NmaeValuePair
+                NameValuePair child = node.children.get(i);
+                try
+                {
+                    if(node == root)
+                    {
+                        switch(i)
+                        {
+                            case 0:
+                                updateNode(child, subscriber.getMessage().getPublicationID());
+                                break;
+                            case 1:
+                                updateNode(child, subscriber.getMessage().getTopLevelKey());
+                                break;
+                            case 2:
+                                updateNode(child, subscriber.getMessage().getPublisherName());
+                                break;
+                            default:
+                                updateNode(child, child.field.get(value));
+                                
+                        }
+                    }
+                    else
+                    {
+                        updateNode(child, child.field.get(value));
+                    }
+                     //Note, add field to each NmaeValuePair
+                } catch (IllegalArgumentException ex)
+                {
+                    Exceptions.printStackTrace(ex);
+                } catch (IllegalAccessException ex)
+                {
+                    Exceptions.printStackTrace(ex);
+                }
+                
             }
+
+            
         }
 
 

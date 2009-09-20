@@ -27,7 +27,7 @@ public class NodeModelImpl implements NodeModel
     public String getIconBase(Object node)
     {
 
-        return "file";
+        return "ops/debuggersupport/opsidlicon.GIF";
     }
 
     public String getShortDescription(Object node)

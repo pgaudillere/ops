@@ -18,18 +18,22 @@ class TreeExpansionModelImpl implements TreeExpansionModel
     {
     }
 
-    public boolean isExpanded(Object arg0) throws UnknownTypeException
+    public boolean isExpanded(Object obj) throws UnknownTypeException
     {
-        return true;
+        NameValuePair nvp = (NameValuePair) obj;
+        return nvp.expanded;
     }
 
-    public void nodeExpanded(Object arg0)
+    public void nodeExpanded(Object obj)
     {
+        NameValuePair nvp = (NameValuePair) obj;
+        nvp.expanded = true;
         
     }
 
-    public void nodeCollapsed(Object arg0)
+    public void nodeCollapsed(Object obj)
     {
-        
+        NameValuePair nvp = (NameValuePair) obj;
+        nvp.expanded = false;
     }
 }
