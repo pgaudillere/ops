@@ -588,6 +588,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\ParticipantInfoData.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Publisher.h"
 				>
 			</File>
@@ -661,6 +665,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TopicHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\TopicInfoData.h"
 				>
 			</File>
 			<File

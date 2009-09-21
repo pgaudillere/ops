@@ -17,32 +17,51 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef ops_TopicInfoData_h
+#define	ops_TopicInfoData_h
 
-#ifndef ops_ReceiverH
-#define ops_ReceiverH
-
-#include <string>
-#include "Notifier.h"
-#include "IOService.h" 
-#include "BytesSizePair.h"
-
+#include "OPSObject.h"
 
 namespace ops
 {
-	class Receiver : public Notifier<BytesSizePair>
+	class TopicInfoData : public OPSObject
 	{
 	public:
-		virtual ~Receiver() {}
+		TopicInfoData()
+		{
+			appendType(std::string("TopicInfoData"));
+		}
 
-		static Receiver* create(std::string ip, int bindPort, IOService* ioService, std::string localInterface = "0.0.0.0", __int64 inSocketBufferSize = 16000000);
-		static Receiver* createTCPClient(std::string ip, int port, IOService* ioService);
-		static Receiver* createUDPReceiver(int port);
 		
-		//void setReceiveBuffer(char* bytes, int bufSize);
-		virtual void asynchWait(char* bytes, int size) = 0;
-		virtual void stop() = 0;
+		void serialize(ArchiverInOut* archiver)
+		{
+			OPSObject::serialize(archiver);
 
+			archiver->inout(std::string("name"), name);
+			archiver->inout(std::string("type"), type);
+			archiver->inout(std::string("transport"), transport);
+			archiver->inout(std::string("address"), address);
+			archiver->inout(std::string("port"), port);
+			archiver->inout(std::string("keys"), keys);
+			//archiver->inout(std::string("filters"), filters);
+			
+			
+		}
+		virtual ~TopicInfoData(){}
+
+	public:
+		std::string name;
+		std::string type;
+		int transport;
+		std::string address;
+		int port;
+		std::vector<std::string> keys;
+		//std::vector<OPSObject*> filters;
+		
 		
 	};
+
+
 }
+
 #endif

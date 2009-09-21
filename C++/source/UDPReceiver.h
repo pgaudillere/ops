@@ -51,6 +51,8 @@ namespace ops
         {
             return ipaddress;
     	}
+		virtual void asynchWait(char* bytes, int size) {};
+		virtual void stop() {};
         
     private:
         int port;

@@ -220,7 +220,7 @@ namespace ops
         //index += 4;
         
     }
-    void ByteBuffer::WriteLong(long long& l)
+    void ByteBuffer::WriteLong(__int64& l)
     {
 		#ifndef NETWORK_BYTE_ORDER
 			ByteSwap((unsigned char*)&l, 8);

@@ -247,6 +247,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\source\TCPClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\source\TCPClient.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\source\TCPServer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\source\Thread.cpp"
 				>
 			</File>

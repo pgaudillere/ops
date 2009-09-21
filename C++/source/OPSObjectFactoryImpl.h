@@ -24,6 +24,7 @@
 #include "Topic.h"
 #include "DefaultOPSConfigImpl.h"
 #include "MulticastDomain.h"
+#include "ParticipantInfoData.h"
 
 #include <boost/algorithm/string/split.hpp> 
 #include <boost/algorithm/string/Classification.hpp>
@@ -51,6 +52,10 @@ public:
 		if(type == ("MulticastDomain"))
         {
             return new MulticastDomain();
+        }
+		if(type == ("ParticipantInfoData"))
+        {
+            return new ParticipantInfoData();
         }
         return NULL;
     }

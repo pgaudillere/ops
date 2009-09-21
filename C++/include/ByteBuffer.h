@@ -107,7 +107,7 @@ namespace ops
         void WriteShort(__int16& i);
         ///Writes the 8 bytes making up l to the buffer and increments index by 8.
         ///Byte order is swaped before writing takes place.
-        void WriteLong(long long& l);
+        void WriteLong(__int64& l);
         ///Writes the 8 bytes making up d to the buffer and increments index by 4.
         ///Byte order is swaped before writing takes place.
         void WriteDouble(double& d);
