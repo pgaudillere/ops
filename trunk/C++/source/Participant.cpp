@@ -23,6 +23,7 @@
 #include "MultiThreadPool.h"
 #include "TopicHandler.h"
 #include "OPSObjectFactoryImpl.h"
+//#include "UDPReceiver.h"
 
 
 namespace ops
@@ -72,6 +73,9 @@ namespace ops
 		//Should trow?
 		config = OPSConfig::getConfig();
 
+		//partInfoPub = NULL;
+		//udpRec = Receiver::createUDPReceiver(0);
+
 		aliveDeadlineTimer = DeadlineTimer::create(ioService);
 		aliveDeadlineTimer->addListener(this);
 
@@ -79,12 +83,26 @@ namespace ops
 		//threadPool = new MultiThreadPool();
 		threadPool->addRunnable(this);
 		threadPool->start();
+
+		
+		
+	}
+	ops::Topic Participant::createParticipantInfoTopic()
+	{
+		ops::Topic infoTopic("ops.bit.ParticipantInfoTopic", 9494, "ops.ParticipantInfoData", ((MulticastDomain*)config->getDomain(domainID))->getDomainAddress());
+		infoTopic.setDomainID(domainID);
+		infoTopic.setParticipantID(participantID);
+		infoTopic.setTransport(Topic::TRANSPORT_MC);
+		
+		return infoTopic;
 	}
 	Participant::~Participant()
 	{
 		SafeLock lock(&serviceMutex);
+		//delete partInfoPub;
 		aliveDeadlineTimer->cancel();
 		delete ioService;
+
 
 	}
 
@@ -134,6 +152,20 @@ namespace ops
 		SafeLock lock(&serviceMutex);
 		cleanUpTopicHandlers();
 		aliveDeadlineTimer->start(aliveTimeout);
+		//SafeLock lock2(&garbageLock);
+		//if(partInfoPub == NULL)
+		//{
+		//	//Setup publisher if none exist
+		//	partInfoData.languageImplementation = "c++";
+		//	partInfoData.id = participantID;
+		//	partInfoData.domain = domainID;
+		//	partInfoData.ips.push_back(((UDPReceiver*)udpRec)->getAddress());
+		//	partInfoData.mc_udp_port = ((UDPReceiver*)udpRec)->getPort();
+		//	
+		//	partInfoPub = new Publisher(createParticipantInfoTopic());
+		//}
+		//partInfoPub->writeOPSObject(&partInfoData);
+
 	}
 
 	void Participant::addTypeSupport(ops::SerializableFactory* typeSupport)
@@ -158,6 +190,7 @@ namespace ops
 		if(topicHandlerInstances.find(top.getName()) == topicHandlerInstances.end())
 		{
 			topicHandlerInstances[top.getName()] = new TopicHandler(top, this);
+			partInfoData.subscribeTopics.push_back(top.getName());
 
 		}
 		return topicHandlerInstances[top.getName()];

@@ -40,6 +40,10 @@ namespace ops
 		{
 			appendType(std::string("MulticastDomain"));
 		}
+		std::string getDomainAddress()
+		{
+			return domainAddress;
+		}
 		virtual std::vector<Topic* > getTopics()
 		{
 			for(unsigned int i = 0 ; i < topics.size(); i++)

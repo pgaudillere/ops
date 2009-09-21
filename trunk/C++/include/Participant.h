@@ -32,7 +32,10 @@
 #include "OPSObjectFactory.h"
 #include "DeadlineTimer.h"
 #include "Error.h"
-
+//#include "Publisher.h"
+#include "ParticipantInfoData.h"
+//#include "Receiver.h"
+//
 
 
 namespace ops
@@ -50,6 +53,7 @@ namespace ops
 		static Participant* getInstance(std::string domainID);
 		static Participant* getInstance(std::string domainID, std::string participantID);
 		static void reportStaticError(Error* err);
+		ops::Topic createParticipantInfoTopic();
 
 		void addTypeSupport(ops::SerializableFactory* typeSupport);
 
@@ -88,6 +92,12 @@ namespace ops
 		IOService* ioService;
 		ThreadPool* threadPool;
 		DeadlineTimer* aliveDeadlineTimer;
+
+		//Publisher* partInfoPub;
+		ParticipantInfoData partInfoData;
+
+		//Receiver* udpRec;
+
 
 		///By Singelton, one TopicHandler per Topic (name) on this Participant
 		std::map<std::string, TopicHandler*> topicHandlerInstances;

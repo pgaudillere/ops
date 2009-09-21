@@ -21,6 +21,7 @@
 #include "Receiver.h"
 #include "MulticastReceiver.h"
 #include "TCPClient.h"
+#include "UDPReceiver.h"
 
 namespace ops
 {
@@ -31,6 +32,10 @@ namespace ops
 	Receiver* Receiver::createTCPClient(std::string ip, int port, IOService* ioService)
 	{
 		return new TCPClient(ip, port, ioService);
+	}
+	Receiver* Receiver::createUDPReceiver(int port)
+	{
+		return new UDPReceiver(port);
 	}
 
 }
