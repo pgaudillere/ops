@@ -27,7 +27,7 @@
                     </element>
                     <element type = "Topic">
                         <name>BaseTopic</name>
-                        <port>6687</port>
+                        <port>6689</port>
                         <dataType>TestAll.BaseData</dataType>
                         <transport>tcp</transport>
                         <address>127.0.0.1</address>
