@@ -62,8 +62,8 @@ namespace ops
 
     void Subscriber::start()
     {
-		topicHandler = participant->getTopicHandler(topic);
-    	topicHandler->addListener(this);
+		receiveDataHandler = participant->getReceiveDataHandler(topic);
+    	receiveDataHandler->addListener(this);
 		deadlineTimer->addListener(this);
 		deadlineTimer->start(deadlineTimeout);
 		started= true;
@@ -71,10 +71,10 @@ namespace ops
     }
 	void Subscriber::stop()
 	{
-		topicHandler->aquireMessageLock();
-		topicHandler->removeListener(this);
-		topicHandler->releaseMessageLock();
-		participant->releaseTopicHandler(topic);
+		receiveDataHandler->aquireMessageLock();
+		receiveDataHandler->removeListener(this);
+		receiveDataHandler->releaseMessageLock();
+		participant->releaseReceiveDataHandler(topic);
 		deadlineTimer->removeListener(this);
 		deadlineTimer->cancel();
 		started = false;
@@ -320,11 +320,11 @@ namespace ops
 
 	bool Subscriber::aquireMessageLock()
 	{
-		return topicHandler->aquireMessageLock();
+		return receiveDataHandler->aquireMessageLock();
 	}
 	void Subscriber::releaseMessageLock()
 	{
-		topicHandler->releaseMessageLock();
+		receiveDataHandler->releaseMessageLock();
 	}
 	OPSMessage* Subscriber::getMessage()
 	{

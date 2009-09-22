@@ -21,7 +21,7 @@
 #include "Participant.h"
 #include "SingleThreadPool.h"
 #include "MultiThreadPool.h"
-#include "TopicHandler.h"
+#include "ReceiveDataHandler.h"
 #include "OPSObjectFactoryImpl.h"
 #include "UDPReceiver.h"
 #include "BasicError.h"
@@ -75,7 +75,7 @@ namespace ops
 		config = OPSConfig::getConfig();
 
 		partInfoPub = NULL;
-		udpRec = Receiver::createUDPReceiver(0);
+		udpRec = Receiver::createUDPReceiver(0, ioService);
 
 		aliveDeadlineTimer = DeadlineTimer::create(ioService);
 		aliveDeadlineTimer->addListener(this);
@@ -129,30 +129,30 @@ namespace ops
 		
 	}
 
-	void Participant::cleanUpTopicHandlers()
+	void Participant::cleanUpReceiveDataHandlers()
 	{
 		SafeLock lock(&garbageLock);
 ///LA
-		for(int i = garbageTopicHandlers.size() - 1; i >= 0; i--)
+		for(int i = garbageReceiveDataHandlers.size() - 1; i >= 0; i--)
 		{
-			if (garbageTopicHandlers[i]->numReservedMessages() == 0) {
-				delete garbageTopicHandlers[i];
-				std::vector<TopicHandler*>::iterator iter = garbageTopicHandlers.begin() + i;
-				garbageTopicHandlers.erase(iter);
+			if (garbageReceiveDataHandlers[i]->numReservedMessages() == 0) {
+				delete garbageReceiveDataHandlers[i];
+				std::vector<ReceiveDataHandler*>::iterator iter = garbageReceiveDataHandlers.begin() + i;
+				garbageReceiveDataHandlers.erase(iter);
 			}
 		}
-		////for(unsigned int i = 0; i < garbageTopicHandlers.size(); i++)
+		////for(unsigned int i = 0; i < garbageReceiveDataHandlers.size(); i++)
 		////{
-		////	garbageTopicHandlers[i]->stop();
-		////	delete garbageTopicHandlers[i];
+		////	garbageReceiveDataHandlers[i]->stop();
+		////	delete garbageReceiveDataHandlers[i];
 		////}
-		////garbageTopicHandlers.clear();
+		////garbageReceiveDataHandlers.clear();
 ///LA
 	}
 	void Participant::onNewEvent(Notifier<int>* sender, int message)
 	{
 		SafeLock lock(&serviceMutex);
-		cleanUpTopicHandlers();
+		cleanUpReceiveDataHandlers();
 		aliveDeadlineTimer->start(aliveTimeout);
 		SafeLock lock2(&garbageLock);
 		if(partInfoPub == NULL)
@@ -185,74 +185,74 @@ namespace ops
 		return topic;
 	}
 
-	///By Singelton, one TopicHandler per Topic (Name)
-	TopicHandler* Participant::getTopicHandler(Topic top)
+	///By Singelton, one ReceiveDataHandler per Topic (Name)
+	ReceiveDataHandler* Participant::getReceiveDataHandler(Topic top)
 	{
 		SafeLock lock(&garbageLock);
-		if(topicHandlerInstances.find(top.getName()) != topicHandlerInstances.end())
+		if(receiveDataHandlerInstances.find(top.getName()) != receiveDataHandlerInstances.end())
 		{
-			//If we already have a TopicHandler for this topic, return it.
-			return topicHandlerInstances[top.getName()]; 
+			//If we already have a ReceiveDataHandler for this topic, return it.
+			return receiveDataHandlerInstances[top.getName()]; 
 			
 		}
 		else if(top.getTransport() == Topic::TRANSPORT_MC)
 		{	
-			TopicHandler* newTopicHandler = NULL;
-			//Check if there isnt already a multicast configured TopicHandler on tops port. If not create one.
-			if(multicastTopicHandlerInstances.find(top.getPort()) == multicastTopicHandlerInstances.end())
+			ReceiveDataHandler* newReceiveDataHandler = NULL;
+			//Check if there isnt already a multicast configured ReceiveDataHandler on tops port. If not create one.
+			if(multicastReceiveDataHandlerInstances.find(top.getPort()) == multicastReceiveDataHandlerInstances.end())
 			{
-				newTopicHandler = new TopicHandler(top, this);
-				multicastTopicHandlerInstances[top.getPort()] = newTopicHandler;
+				newReceiveDataHandler = new ReceiveDataHandler(top, this);
+				multicastReceiveDataHandlerInstances[top.getPort()] = newReceiveDataHandler;
 				
 
 			}
 			partInfoData.subscribeTopics.push_back(top.getName());
-			topicHandlerInstances[top.getName()] = newTopicHandler;
-			return multicastTopicHandlerInstances[top.getPort()]; 
+			receiveDataHandlerInstances[top.getName()] = newReceiveDataHandler;
+			return multicastReceiveDataHandlerInstances[top.getPort()]; 
 		}
 		else if(top.getTransport() == Topic::TRANSPORT_TCP)
 		{	
-			TopicHandler* newTopicHandler = NULL;
-			//Check if there isnt already a tcp configured TopicHandler on tops port. If not create one.
-			if(tcpTopicHandlerInstances.find(top.getPort()) == tcpTopicHandlerInstances.end())
+			ReceiveDataHandler* newReceiveDataHandler = NULL;
+			//Check if there isnt already a tcp configured ReceiveDataHandler on tops port. If not create one.
+			if(tcpReceiveDataHandlerInstances.find(top.getPort()) == tcpReceiveDataHandlerInstances.end())
 			{
-				newTopicHandler = new TopicHandler(top, this);
-				tcpTopicHandlerInstances[top.getPort()] = newTopicHandler;
+				newReceiveDataHandler = new ReceiveDataHandler(top, this);
+				tcpReceiveDataHandlerInstances[top.getPort()] = newReceiveDataHandler;
 				
 			}
 			partInfoData.subscribeTopics.push_back(top.getName());
-			topicHandlerInstances[top.getName()] = newTopicHandler;
-			return tcpTopicHandlerInstances[top.getPort()];
+			receiveDataHandlerInstances[top.getName()] = newReceiveDataHandler;
+			return tcpReceiveDataHandlerInstances[top.getPort()];
 		}
 		else //For now we can not handle more transports
 		{
 			//Signal an error by returning NULL.
-			reportError(&BasicError("Creation of TopicHandler failed. Topic = " + top.getName()));
+			reportError(&BasicError("Creation of ReceiveDataHandler failed. Topic = " + top.getName()));
 			return NULL;
 		}
 		
 	}
-	void Participant::releaseTopicHandler(Topic top)
+	void Participant::releaseReceiveDataHandler(Topic top)
 	{
 		SafeLock lock(&garbageLock);
-		if(topicHandlerInstances.find(top.getName()) != topicHandlerInstances.end())
+		if(receiveDataHandlerInstances.find(top.getName()) != receiveDataHandlerInstances.end())
 		{
-			TopicHandler* topHandler = topicHandlerInstances[top.getName()];
+			ReceiveDataHandler* topHandler = receiveDataHandlerInstances[top.getName()];
 			if(topHandler->getNrOfListeners() == 0)
 			{
-				//Time to mark this topicHandler as garbage.
-				topicHandlerInstances.erase(topicHandlerInstances.find(top.getName()));
+				//Time to mark this receiveDataHandler as garbage.
+				receiveDataHandlerInstances.erase(receiveDataHandlerInstances.find(top.getName()));
 ///LA
 				topHandler->stop();
 ///LA
-				garbageTopicHandlers.push_back(topHandler);
+				garbageReceiveDataHandlers.push_back(topHandler);
 				if(top.getTransport() == Topic::TRANSPORT_MC)
 				{
-					multicastTopicHandlerInstances.erase(multicastTopicHandlerInstances.find(top.getPort()));
+					multicastReceiveDataHandlerInstances.erase(multicastReceiveDataHandlerInstances.find(top.getPort()));
 				}
 				else if(top.getTransport() == Topic::TRANSPORT_TCP)
 				{
-					tcpTopicHandlerInstances.erase(tcpTopicHandlerInstances.find(top.getPort()));
+					tcpReceiveDataHandlerInstances.erase(tcpReceiveDataHandlerInstances.find(top.getPort()));
 				}
 
 			}
