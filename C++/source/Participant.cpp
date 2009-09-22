@@ -23,7 +23,8 @@
 #include "MultiThreadPool.h"
 #include "TopicHandler.h"
 #include "OPSObjectFactoryImpl.h"
-//#include "UDPReceiver.h"
+#include "UDPReceiver.h"
+#include "BasicError.h"
 
 
 namespace ops
@@ -73,8 +74,8 @@ namespace ops
 		//Should trow?
 		config = OPSConfig::getConfig();
 
-		//partInfoPub = NULL;
-		//udpRec = Receiver::createUDPReceiver(0);
+		partInfoPub = NULL;
+		udpRec = Receiver::createUDPReceiver(0);
 
 		aliveDeadlineTimer = DeadlineTimer::create(ioService);
 		aliveDeadlineTimer->addListener(this);
@@ -99,9 +100,10 @@ namespace ops
 	Participant::~Participant()
 	{
 		SafeLock lock(&serviceMutex);
-		//delete partInfoPub;
+		delete partInfoPub;
 		aliveDeadlineTimer->cancel();
 		delete ioService;
+		delete udpRec;
 
 
 	}
@@ -152,19 +154,19 @@ namespace ops
 		SafeLock lock(&serviceMutex);
 		cleanUpTopicHandlers();
 		aliveDeadlineTimer->start(aliveTimeout);
-		//SafeLock lock2(&garbageLock);
-		//if(partInfoPub == NULL)
-		//{
-		//	//Setup publisher if none exist
-		//	partInfoData.languageImplementation = "c++";
-		//	partInfoData.id = participantID;
-		//	partInfoData.domain = domainID;
-		//	partInfoData.ips.push_back(((UDPReceiver*)udpRec)->getAddress());
-		//	partInfoData.mc_udp_port = ((UDPReceiver*)udpRec)->getPort();
-		//	
-		//	partInfoPub = new Publisher(createParticipantInfoTopic());
-		//}
-		//partInfoPub->writeOPSObject(&partInfoData);
+		SafeLock lock2(&garbageLock);
+		if(partInfoPub == NULL)
+		{
+			//Setup publisher if none exist
+			partInfoData.languageImplementation = "c++";
+			partInfoData.id = participantID;
+			partInfoData.domain = domainID;
+			partInfoData.ips.push_back(((UDPReceiver*)udpRec)->getAddress());
+			partInfoData.mc_udp_port = ((UDPReceiver*)udpRec)->getPort();
+			
+			partInfoPub = new Publisher(createParticipantInfoTopic());
+		}
+		partInfoPub->writeOPSObject(&partInfoData);
 
 	}
 
@@ -187,13 +189,48 @@ namespace ops
 	TopicHandler* Participant::getTopicHandler(Topic top)
 	{
 		SafeLock lock(&garbageLock);
-		if(topicHandlerInstances.find(top.getName()) == topicHandlerInstances.end())
+		if(topicHandlerInstances.find(top.getName()) != topicHandlerInstances.end())
 		{
-			topicHandlerInstances[top.getName()] = new TopicHandler(top, this);
-			partInfoData.subscribeTopics.push_back(top.getName());
-
+			//If we already have a TopicHandler for this topic, return it.
+			return topicHandlerInstances[top.getName()]; 
+			
 		}
-		return topicHandlerInstances[top.getName()];
+		else if(top.getTransport() == Topic::TRANSPORT_MC)
+		{	
+			TopicHandler* newTopicHandler = NULL;
+			//Check if there isnt already a multicast configured TopicHandler on tops port. If not create one.
+			if(multicastTopicHandlerInstances.find(top.getPort()) == multicastTopicHandlerInstances.end())
+			{
+				newTopicHandler = new TopicHandler(top, this);
+				multicastTopicHandlerInstances[top.getPort()] = newTopicHandler;
+				
+
+			}
+			partInfoData.subscribeTopics.push_back(top.getName());
+			topicHandlerInstances[top.getName()] = newTopicHandler;
+			return multicastTopicHandlerInstances[top.getPort()]; 
+		}
+		else if(top.getTransport() == Topic::TRANSPORT_TCP)
+		{	
+			TopicHandler* newTopicHandler = NULL;
+			//Check if there isnt already a tcp configured TopicHandler on tops port. If not create one.
+			if(tcpTopicHandlerInstances.find(top.getPort()) == tcpTopicHandlerInstances.end())
+			{
+				newTopicHandler = new TopicHandler(top, this);
+				tcpTopicHandlerInstances[top.getPort()] = newTopicHandler;
+				
+			}
+			partInfoData.subscribeTopics.push_back(top.getName());
+			topicHandlerInstances[top.getName()] = newTopicHandler;
+			return tcpTopicHandlerInstances[top.getPort()];
+		}
+		else //For now we can not handle more transports
+		{
+			//Signal an error by returning NULL.
+			reportError(&BasicError("Creation of TopicHandler failed. Topic = " + top.getName()));
+			return NULL;
+		}
+		
 	}
 	void Participant::releaseTopicHandler(Topic top)
 	{
@@ -209,6 +246,14 @@ namespace ops
 				topHandler->stop();
 ///LA
 				garbageTopicHandlers.push_back(topHandler);
+				if(top.getTransport() == Topic::TRANSPORT_MC)
+				{
+					multicastTopicHandlerInstances.erase(multicastTopicHandlerInstances.find(top.getPort()));
+				}
+				else if(top.getTransport() == Topic::TRANSPORT_TCP)
+				{
+					tcpTopicHandlerInstances.erase(tcpTopicHandlerInstances.find(top.getPort()));
+				}
 
 			}
 		}

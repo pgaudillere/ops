@@ -29,7 +29,7 @@ namespace ops
 	public:
 		ParticipantInfoData()
 		{
-			appendType(std::string("ParticipantInfoData"));
+			appendType(std::string("ops.ParticipantInfoData"));
 		}
 
 		

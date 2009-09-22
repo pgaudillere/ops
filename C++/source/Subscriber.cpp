@@ -82,6 +82,21 @@ namespace ops
 	}
 	void Subscriber::onNewEvent(Notifier<OPSMessage*>* sender, OPSMessage* message)
 	{
+		//Perform a number of checks on incomming data to be sure we want to deliver it to the application layer
+
+		//Check that this message is delivered on the same topic as this Subscriber use
+		if(message->getTopicName() != topic.getName())
+		{
+			return;
+		}
+		//Check that the type of the delivered data can be interpreted as the type we expect in this Subscriber
+		else if(message->getData()->getTypeString().find(topic.getTypeID()) == std::string::npos)
+		{
+			return;
+		}
+
+		//OK, we passed the basic checks, lets go on and filter on data content...
+
 		OPSObject* o = message->getData();		
     	if(applyFilterQoSPolicies(o))
         {
