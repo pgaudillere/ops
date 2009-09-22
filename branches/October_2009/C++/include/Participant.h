@@ -32,9 +32,10 @@
 #include "OPSObjectFactory.h"
 #include "DeadlineTimer.h"
 #include "Error.h"
-//#include "Publisher.h"
+#include "Publisher.h"
 #include "ParticipantInfoData.h"
-//#include "Receiver.h"
+#include "Receiver.h"
+
 //
 
 
@@ -93,14 +94,21 @@ namespace ops
 		ThreadPool* threadPool;
 		DeadlineTimer* aliveDeadlineTimer;
 
-		//Publisher* partInfoPub;
+		Publisher* partInfoPub;
 		ParticipantInfoData partInfoData;
 
-		//Receiver* udpRec;
+		//Receiver used to get a unigue port/id for this participant on the current machine
+		Receiver* udpRec;
 
 
 		///By Singelton, one TopicHandler per Topic (name) on this Participant
 		std::map<std::string, TopicHandler*> topicHandlerInstances;
+
+		///By Singelton, one TopicHandler on multicast transport per port
+		std::map<int, TopicHandler*> multicastTopicHandlerInstances;
+
+		///By Singelton, one TopicHandler on tcp transport per port
+		std::map<int, TopicHandler*> tcpTopicHandlerInstances;
 
 		//Garbage vector for TopicHandlers, these can safely be deleted.
 		std::vector<TopicHandler*> garbageTopicHandlers;

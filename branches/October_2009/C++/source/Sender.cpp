@@ -21,6 +21,7 @@
 #include "Sender.h"
 #include "UDPSender.h"
 #include "TCPServer.h"
+#include <map>
 
 namespace ops
 {
@@ -31,7 +32,15 @@ namespace ops
 	}
 	Sender* Sender::createTCPServer(std::string ip, int port, IOService* ioService)
 	{
-		return new TCPServer(ip, port, ioService);
+		static std::map<int, TCPServer*> tcpSenderInstances;
+
+		TCPServer* newInstance = NULL;
+		if(tcpSenderInstances.find(port) == tcpSenderInstances.end())
+		{
+			newInstance = new TCPServer(ip, port, ioService);
+			tcpSenderInstances[port] = newInstance;
+		}
+		return tcpSenderInstances[port];
 	}
 
 

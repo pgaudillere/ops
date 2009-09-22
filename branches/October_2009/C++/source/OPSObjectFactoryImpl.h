@@ -53,7 +53,7 @@ public:
         {
             return new MulticastDomain();
         }
-		if(type == ("ParticipantInfoData"))
+		if(type == ("ops.ParticipantInfoData"))
         {
             return new ParticipantInfoData();
         }

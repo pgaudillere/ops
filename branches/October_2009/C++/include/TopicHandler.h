@@ -60,6 +60,22 @@ namespace ops
 			return messageReferenceHandler.size();
 		}
 ///LA
+		////To be used only by creator of TopicHandler instance
+		//int getReservations()
+		//{
+		//	return reservations;
+		//}
+		////To be used only by creator of TopicHandler instance
+		//void reserve()
+		//{
+		//	reservations ++;
+
+		//}
+		////To be used only by creator of TopicHandler instance
+		//void unreserver()
+		//{
+		//	reservations --;
+		//}
 
 	protected:
 		///Override from Listener
@@ -92,6 +108,9 @@ namespace ops
 		
 		int expectedSegment;
 		bool firstReceived;
+
+		////How many subscribers use this instance. This will be used to check if it is ok to delete this TopicHandler.
+		//int reservations;
 
 
 	};
