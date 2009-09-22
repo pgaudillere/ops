@@ -17,32 +17,59 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef ops_SendDataHandler_h
+#define	ops_SendDataHandler_h
 
-#ifndef ops_ReceiverH
-#define ops_ReceiverH
-
-#include <string>
-#include "Notifier.h"
-#include "IOService.h" 
-#include "BytesSizePair.h"
-
+#include "Participant.h"
+#include <map>
+#include "Sender.h"
+#include "OPSObject.h"
+#include "Lockable.h"
 
 namespace ops
 {
-	class Receiver : public Notifier<BytesSizePair>
+	class SendDataHandler
 	{
 	public:
-		virtual ~Receiver() {}
+		SendDataHandler(Participant* part)
+		{
+			this->participant = part;
+			
+			
+		}
+		bool sendData(OPSObject* o)
+		{
+			//Deserialize data here
+			
+			SafeLock lock(&mutex);
+			//Loop all senders and send data here
+		}
+		void addSink(std::string ip, int port)
+		{
+			//Create sender here
+			
+			SafeLock lock(&mutex);
+			//Add sender here
+		}
+		void removeSink(std::string ip, int port)
+		{
+			//Find sender to delete here
 
-		static Receiver* create(std::string ip, int bindPort, IOService* ioService, std::string localInterface = "0.0.0.0", __int64 inSocketBufferSize = 16000000);
-		static Receiver* createTCPClient(std::string ip, int port, IOService* ioService);
-		static Receiver* createUDPReceiver(int port, IOService* ioService);
-		
-		//void setReceiveBuffer(char* bytes, int bufSize);
-		virtual void asynchWait(char* bytes, int size) = 0;
-		virtual void stop() = 0;
+			SafeLock lock(&mutex);
+			//Remove, stop and delete sender here
 
-		
+		}
+
+		virtual ~SendDataHandler(){}
+
+	private:
+		Participant* participant;
+		std::map<std::string, Sender*> senders;
+		Lockable mutex;
+
 	};
+
+
 }
+
 #endif

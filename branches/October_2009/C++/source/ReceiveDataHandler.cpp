@@ -18,14 +18,14 @@
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "TopicHandler.h"
+#include "ReceiveDataHandler.h"
 #include "BasicError.h" 
 #include "MulticastDomain.h"
 
 namespace ops
 {
 	///Constructor.
-	TopicHandler::TopicHandler(Topic top, Participant* part) :
+	ReceiveDataHandler::ReceiveDataHandler(Topic top, Participant* part) :
 		expectedSegment(0),
 		memMap(top.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1, OPSConstants::PACKET_MAX_SIZE),
 		firstReceived(false),
@@ -50,7 +50,7 @@ namespace ops
 
 	}
 	///Destructor
-	TopicHandler::~TopicHandler()
+	ReceiveDataHandler::~ReceiveDataHandler()
 	{
 		delete receiver;
 	}
@@ -59,7 +59,7 @@ namespace ops
 	
 	///Override from Listener
 	///Called whenever the receiver has new data.
-	void TopicHandler::onNewEvent(Notifier<BytesSizePair>* sender, BytesSizePair byteSizePair)
+	void ReceiveDataHandler::onNewEvent(Notifier<BytesSizePair>* sender, BytesSizePair byteSizePair)
 	{
 		if(byteSizePair.size <= 0)
 		{
@@ -175,23 +175,23 @@ namespace ops
 		}
 
 	}
-	void TopicHandler::stop()
+	void ReceiveDataHandler::stop()
 	{
 		receiver->removeListener(this);
 		receiver->stop();
 	}
 
-	bool TopicHandler::aquireMessageLock()
+	bool ReceiveDataHandler::aquireMessageLock()
 	{
 		return messageLock.lock();
 	}
-	void TopicHandler::releaseMessageLock()
+	void ReceiveDataHandler::releaseMessageLock()
 	{
 		messageLock.unlock();
 	}
 
 
-	void TopicHandler::calculateAndSetSpareBytes(ByteBuffer &buf, int segmentPaddingSize)
+	void ReceiveDataHandler::calculateAndSetSpareBytes(ByteBuffer &buf, int segmentPaddingSize)
 	{
 		//We must calculate how many unserialized segment headers we have and substract that total header size from the size of spareBytes.
 		int nrOfSerializedBytes = buf.GetSize();

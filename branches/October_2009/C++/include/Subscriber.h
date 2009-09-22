@@ -33,7 +33,7 @@
 #include "ThreadPool.h"
 #include "Listener.h"
 #include "OPSMessage.h"
-#include "TopicHandler.h"
+#include "ReceiveDataHandler.h"
 #include "DeadlineTimer.h"
 //#include <boost/asio.hpp>
 //#include <boost/date_time/posix_time/posix_time.hpp>
@@ -85,12 +85,12 @@ public:
 	OPSMessage* getMessage();
 
 ///LA
-	///Returns the number of reserved messages in the underlying TopicHandler
+	///Returns the number of reserved messages in the underlying ReceiveDataHandler
 	///This value is the total nr for this topic on this participant not only
 	///for this subscriber.
 	int numReservedMessages()
 	{
-		return topicHandler->numReservedMessages();
+		return receiveDataHandler->numReservedMessages();
 	}
 ///LA
 
@@ -137,8 +137,8 @@ private:
 	///The Participant to which this Subscriber belongs.
 	Participant* participant;
 
-	///TopicHandler delivering new data samples to this Subscriber
-	TopicHandler* topicHandler;
+	///ReceiveDataHandler delivering new data samples to this Subscriber
+	ReceiveDataHandler* receiveDataHandler;
 
 	///The Topic this Subscriber subscribes to.
     Topic topic;
@@ -146,7 +146,7 @@ private:
 	///Name of this subscriber
     std::string name;
 
-	///Receiver side filters that will be applied to data from topicHandler before delivery to application layer.
+	///Receiver side filters that will be applied to data from receiveDataHandler before delivery to application layer.
     std::list<FilterQoSPolicy*> filterQoSPolicies;
 
 	std::deque<OPSMessage*> messageBuffer;

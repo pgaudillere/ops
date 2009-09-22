@@ -42,7 +42,7 @@
 namespace ops
 {
 	//Forward declaration..
-	class TopicHandler;
+	class ReceiveDataHandler;
 
 	class Participant : Runnable, Listener<int>, public Notifier<Error*>
 	{
@@ -66,7 +66,7 @@ namespace ops
 
 		//Deadline listener callback
 		void onNewEvent(Notifier<int>* sender, int message);
-		void cleanUpTopicHandlers();
+		void cleanUpReceiveDataHandlers();
 
 
 		IOService* getIOService()
@@ -101,22 +101,22 @@ namespace ops
 		Receiver* udpRec;
 
 
-		///By Singelton, one TopicHandler per Topic (name) on this Participant
-		std::map<std::string, TopicHandler*> topicHandlerInstances;
+		///By Singelton, one ReceiveDataHandler per Topic (name) on this Participant
+		std::map<std::string, ReceiveDataHandler*> receiveDataHandlerInstances;
 
-		///By Singelton, one TopicHandler on multicast transport per port
-		std::map<int, TopicHandler*> multicastTopicHandlerInstances;
+		///By Singelton, one ReceiveDataHandler on multicast transport per port
+		std::map<int, ReceiveDataHandler*> multicastReceiveDataHandlerInstances;
 
-		///By Singelton, one TopicHandler on tcp transport per port
-		std::map<int, TopicHandler*> tcpTopicHandlerInstances;
+		///By Singelton, one ReceiveDataHandler on tcp transport per port
+		std::map<int, ReceiveDataHandler*> tcpReceiveDataHandlerInstances;
 
-		//Garbage vector for TopicHandlers, these can safely be deleted.
-		std::vector<TopicHandler*> garbageTopicHandlers;
+		//Garbage vector for ReceiveDataHandlers, these can safely be deleted.
+		std::vector<ReceiveDataHandler*> garbageReceiveDataHandlers;
 		ops::Lockable garbageLock;
 
 		//Visible to friends only
-		TopicHandler* getTopicHandler(Topic top);
-		void releaseTopicHandler(Topic top);
+		ReceiveDataHandler* getReceiveDataHandler(Topic top);
+		void releaseReceiveDataHandler(Topic top);
 
 		//Mutex for ioService, used to shutdown safely
 		Lockable serviceMutex;

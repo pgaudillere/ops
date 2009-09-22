@@ -18,8 +18,8 @@
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ops_TopicHandler_h
-#define ops_TopicHandler_h
+#ifndef ops_ReceiveDataHandler_h
+#define ops_ReceiveDataHandler_h
 
 #include <string>
 #include <map>
@@ -40,14 +40,14 @@
 
 namespace ops
 {
-	class TopicHandler : public Notifier<OPSMessage*>, Listener<BytesSizePair>
+	class ReceiveDataHandler : public Notifier<OPSMessage*>, Listener<BytesSizePair>
 	{
 	public:
 		
 		///Constructor.
-		TopicHandler(Topic top, Participant* part);
+		ReceiveDataHandler(Topic top, Participant* part);
 		///Destructor
-		virtual ~TopicHandler();
+		virtual ~ReceiveDataHandler();
 
 		bool aquireMessageLock();
 		void releaseMessageLock();
@@ -60,18 +60,18 @@ namespace ops
 			return messageReferenceHandler.size();
 		}
 ///LA
-		////To be used only by creator of TopicHandler instance
+		////To be used only by creator of ReceiveDataHandler instance
 		//int getReservations()
 		//{
 		//	return reservations;
 		//}
-		////To be used only by creator of TopicHandler instance
+		////To be used only by creator of ReceiveDataHandler instance
 		//void reserve()
 		//{
 		//	reservations ++;
 
 		//}
-		////To be used only by creator of TopicHandler instance
+		////To be used only by creator of ReceiveDataHandler instance
 		//void unreserver()
 		//{
 		//	reservations --;
@@ -92,7 +92,7 @@ namespace ops
 		///Preallocated MemoryMap for receiving data
 		MemoryMap memMap;
 
-		//The Participant to which this TopicHandler belongs.
+		//The Participant to which this ReceiveDataHandler belongs.
 		Participant* participant;
 
 		///Current OPSMessage, valid until next sample arrives.
@@ -109,7 +109,7 @@ namespace ops
 		int expectedSegment;
 		bool firstReceived;
 
-		////How many subscribers use this instance. This will be used to check if it is ok to delete this TopicHandler.
+		////How many subscribers use this instance. This will be used to check if it is ok to delete this ReceiveDataHandler.
 		//int reservations;
 
 
