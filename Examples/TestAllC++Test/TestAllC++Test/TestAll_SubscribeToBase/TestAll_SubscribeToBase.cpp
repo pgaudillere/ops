@@ -27,7 +27,7 @@ class BaseTypeFactory : public ops::SerializableFactory
 class Main : ops::DataListener, ops::DeadlineMissedListener
 {
 public:
-	TestAll::BaseDataSubscriber* baseSub;
+	ops::Subscriber* baseSub;
 	TestAll::BaseDataPublisher* basePub;
 
 public:
@@ -43,30 +43,33 @@ public:
 		ErrorWriter* errorWriter = new ErrorWriter(std::cout);
 		participant->addListener(errorWriter);
 
-		Topic topic = participant->createTopic("ChildTopic");
+		Topic topic = participant->createParticipantInfoTopic();
 
 		//Create a BaseSubscriber on that topic.
-		baseSub = new BaseDataSubscriber(topic);
-		baseSub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
+		baseSub = new Subscriber(topic);
+		//baseSub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		baseSub->setDeadlineQoS(10000);		
 		baseSub->addDataListener(this);
 		baseSub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		baseSub->start();
 
-		basePub = new BaseDataPublisher(topic);
-		basePub->setName("BasePublisher");
-
+		//basePub = new BaseDataPublisher(topic);
+		//basePub->setName("BasePublisher");
 
 	}
 	///Override from ops::DataListener, called whenever new data arrives.
 	void onNewData(ops::DataNotifier* subscriber)
 	{
-		TestAll::BaseData* data;
+		/*TestAll::BaseData* data;
 		data = (TestAll::BaseData*)baseSub->getMessage()->getData();
 		if(data == NULL) return;
 		std::cout << data->baseText << " " << baseSub->getMessage()->getPublicationID() << " From: " << baseSub->getMessage()->getPublisherName() << std::endl;
 		data->setKey("relay");
-		basePub->write(data);
+		basePub->write(data);*/
+		std::cout << "Data received!" << std::endl;
+
+		std::cout << ((ops::ParticipantInfoData*)baseSub->getMessage()->getData())->ips[0] << ":" <<((ops::ParticipantInfoData*)baseSub->getMessage()->getData())->mc_udp_port << std::endl;
+	
 	
 	}
 	///Override from ops::DeadlineMissedListener, called if no new data has arrived within deadlineQoS.
