@@ -596,6 +596,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\ParticipantInfoDataListener.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Publisher.h"
 				>
 			</File>
