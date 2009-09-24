@@ -21,6 +21,7 @@
 #define	ops_ParticipantInfoData_h
 
 #include "OPSObject.h"
+#include "TopicInfoData.h"
 
 namespace ops
 {
@@ -40,13 +41,13 @@ namespace ops
 			archiver->inout(std::string("name"), name);
 			archiver->inout(std::string("domain"), domain);
 			archiver->inout(std::string("id"), id);
-			archiver->inout(std::string("ips"), ips);
+			archiver->inout(std::string("ip"), ip);
 			archiver->inout(std::string("languageImplementation"), languageImplementation);
 			archiver->inout(std::string("opsVersion"), opsVersion);
 			archiver->inout(std::string("mc_udp_port"), mc_udp_port);
 			archiver->inout(std::string("mc_tcp_port"), mc_tcp_port);
-			archiver->inout(std::string("subscribeTopics"), subscribeTopics);
-			archiver->inout(std::string("publishTopics"), publishTopics);
+			archiver->inout<TopicInfoData>(std::string("subscribeTopics"), subscribeTopics, TopicInfoData());
+			archiver->inout<TopicInfoData>(std::string("publishTopics"), publishTopics, TopicInfoData());
 			archiver->inout(std::string("knownTypes"), knownTypes);
 			
 		}
@@ -56,14 +57,14 @@ namespace ops
 		std::string name;
 		std::string id;
 		std::string domain;
-		std::vector<std::string> ips;
+		std::string ip;
 		std::string languageImplementation;
 		std::string opsVersion;
 		int mc_udp_port;
 		int mc_tcp_port;
 
-		std::vector<std::string> subscribeTopics;
-		std::vector<std::string> publishTopics;
+		std::vector<TopicInfoData> subscribeTopics;
+		std::vector<TopicInfoData> publishTopics;
 		std::vector<std::string> knownTypes;
 		
 	};

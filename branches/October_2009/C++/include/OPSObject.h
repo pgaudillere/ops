@@ -73,6 +73,8 @@ namespace ops
 		//static void deleteObjectVector(OPSObject* start);
         OPSObject();
         virtual ~OPSObject();
+
+
         
     };
 }
