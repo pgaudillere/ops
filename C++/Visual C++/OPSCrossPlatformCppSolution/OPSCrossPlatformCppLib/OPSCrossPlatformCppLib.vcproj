@@ -370,6 +370,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ParticipantInfoDataListener.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Publisher.cpp"
 				>
 			</File>

@@ -161,7 +161,7 @@ namespace ops
 			partInfoData.languageImplementation = "c++";
 			partInfoData.id = participantID;
 			partInfoData.domain = domainID;
-			partInfoData.ips.push_back(((UDPReceiver*)udpRec)->getAddress());
+			partInfoData.ip= ((UDPReceiver*)udpRec)->getAddress();
 			partInfoData.mc_udp_port = ((UDPReceiver*)udpRec)->getPort();
 			
 			partInfoPub = new Publisher(createParticipantInfoTopic());
@@ -206,7 +206,7 @@ namespace ops
 				
 
 			}
-			partInfoData.subscribeTopics.push_back(top.getName());
+			partInfoData.subscribeTopics.push_back(TopicInfoData(top));
 			receiveDataHandlerInstances[top.getName()] = newReceiveDataHandler;
 			return multicastReceiveDataHandlerInstances[top.getPort()]; 
 		}
@@ -220,7 +220,7 @@ namespace ops
 				tcpReceiveDataHandlerInstances[top.getPort()] = newReceiveDataHandler;
 				
 			}
-			partInfoData.subscribeTopics.push_back(top.getName());
+			partInfoData.subscribeTopics.push_back(TopicInfoData(top));
 			receiveDataHandlerInstances[top.getName()] = newReceiveDataHandler;
 			return tcpReceiveDataHandlerInstances[top.getPort()];
 		}

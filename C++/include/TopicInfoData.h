@@ -21,6 +21,7 @@
 #define	ops_TopicInfoData_h
 
 #include "OPSObject.h"
+#include "Topic.h"
 
 namespace ops
 {
@@ -30,6 +31,16 @@ namespace ops
 		TopicInfoData()
 		{
 			appendType(std::string("TopicInfoData"));
+		}
+		TopicInfoData(Topic& topic)
+		{
+			appendType(std::string("TopicInfoData"));
+			name = topic.getName();
+			type = topic.getTypeID();
+			transport = topic.getTransport();
+			address = topic.getDomainAddress();
+			port = topic.getPort();
+			//keys;
 		}
 
 		
@@ -52,7 +63,7 @@ namespace ops
 	public:
 		std::string name;
 		std::string type;
-		int transport;
+		std::string transport;
 		std::string address;
 		int port;
 		std::vector<std::string> keys;
