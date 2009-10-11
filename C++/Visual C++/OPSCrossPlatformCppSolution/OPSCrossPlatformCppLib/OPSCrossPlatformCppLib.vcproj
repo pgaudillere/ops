@@ -326,6 +326,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\McUdpSendDataHandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\MulticastDomain.h"
 				>
 			</File>
@@ -387,10 +391,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\Reservable.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\SendDataHandler.cpp"
 				>
 			</File>
 			<File

@@ -20,107 +20,16 @@
 #ifndef ops_SendDataHandler_h
 #define	ops_SendDataHandler_h
 
-#include "Participant.h"
-#include <map>
-#include "Sender.h"
-#include "OPSObject.h"
-#include "Lockable.h"
-
+#include "Topic.h"
 namespace ops
 {
-	
+	//Interface
 	class SendDataHandler
 	{
 	public:
-		SendDataHandler(Participant* part)
-		{
-			this->participant = part;
-			
-			
-		}
-		bool sendData(OPSObject* o, std::string& topic)
-		{
-			//Deserialize data here
-			
-			SafeLock lock(&mutex);
-			//Loop all senders and send data here
-		}
-		void addSink(std::string& topic, std::string& ip, int& port)
-		{
-			//Create sender here
-
-			IpPortPair ipPort(ip, port);
-			if(topicSinkMap.find(topic) == topicSinkMap.end())
-			{
-				//We have no sinks for this topic. Lets add one
-				std::map<IpPortPair, IpPortPair, CompIpPortPair> newIpPortMap;
-				newIpPortMap[ipPort] = ipPort;
-
-				SafeLock lock(&mutex);
-				topicSinkMap[topic] = newIpPortMap;
-
-				return;		
-			}
-			else
-			{
-				//We already have sinks for this topic lets just add the new sink 
-
-				SafeLock lock(&mutex);
-				topicSinkMap[topic][ipPort] = ipPort;
-
-				return;
-
-			}
-
-			
-		}
-		void removeSink(std::string& topic, std::string& ip, int& port)
-		{
-			//Find sender to delete here
-
-			SafeLock lock(&mutex);
-			//Remove, stop and delete sender here
-
-		}
-
-		virtual ~SendDataHandler(){}
-
-	private:
-		Participant* participant;
-		std::map<std::string, Sender*> senders;
-		
-		Lockable mutex;
-
-		class IpPortPair
-		{
-		public:
-			IpPortPair(std::string ip, int port)
-			{
-				this->ip = ip;
-				this->port = port;
-			}
-			IpPortPair()
-			{
-
-			}
-			std::string ip;
-			int port;
-		};
-		class CompIpPortPair
-		{
-		public:
-			bool operator()(const IpPortPair &ip1, const IpPortPair &ip2) const
-			{
-				return ( ip1.ip == ip2.ip && ip1.port == ip2.port );
-			}
-		};
-		
-
-		std::map<std::string, std::map<IpPortPair, IpPortPair, CompIpPortPair> > topicSinkMap;
+		virtual bool sendData(char* buf, int bufSize, Topic& topic) = 0;
 
 	};
-
-
 }
 
 #endif

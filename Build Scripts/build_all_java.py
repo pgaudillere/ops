@@ -5,7 +5,7 @@ toolsPath = "../Tools/"
 libsPath = "../Libs/"
 javaPath = "../Java/"
 antCmd = "ant -autoproxy -buildfile "
-java_home_cmd = "set JAVA_HOME=C:/Program/Java/jdk1.6.0_13\n"
+#java_home_cmd = "set JAVA_HOME=C:/Program/Java/jdk1.6.0_13\n"
 
 #First, build all basic jar-files
 if(os.system(antCmd + libsPath + "ConfigurationLib/build.xml") != 0):

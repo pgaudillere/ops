@@ -47,7 +47,7 @@ namespace ops
         void addDataListener(DataListener* listener);
         
         //Destructor:
-        ~DataNotifier();
+        virtual ~DataNotifier();
     };
 }
 #endif
