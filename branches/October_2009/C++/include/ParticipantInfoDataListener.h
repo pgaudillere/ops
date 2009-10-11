@@ -20,11 +20,12 @@
 #ifndef ops_ParticipantInfoDataListener_h
 #define	ops_ParticipantInfoDataListener_h
 
-#include "DataListener.h"
+#include "DataNotifier.h"
 #include "Participant.h"
 #include "BasicError.h"
 #include "ParticipantInfoData.h"
 #include "SendDataHandler.h"
+#include "Subscriber.h"
 
 namespace ops
 {
@@ -44,7 +45,7 @@ namespace ops
 				ParticipantInfoData* partInfo = dynamic_cast<ParticipantInfoData*>(sub->getMessage()->getData());
 				if(partInfo)
 				{
-					sendDataHandler->
+					//Do an add sink here
 				}
 				else
 				{

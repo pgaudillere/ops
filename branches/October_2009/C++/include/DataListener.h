@@ -21,7 +21,7 @@
 #ifndef ops_DataListenerH
 #define ops_DataListenerH
 
-#include "DataNotifier.h"
+//#include "DataNotifier.h"
 #include "OPSObject.h"
 
 namespace ops
