@@ -25,6 +25,8 @@
 #include "OPSObjectFactoryImpl.h"
 #include "UDPReceiver.h"
 #include "BasicError.h"
+#include "McUdpSendDataHandler.h"
+//#include "ParticipantInfoDataSubscriber.h"
 
 
 namespace ops
@@ -165,6 +167,14 @@ namespace ops
 			partInfoData.mc_udp_port = ((UDPReceiver*)udpRec)->getPort();
 			
 			partInfoPub = new Publisher(createParticipantInfoTopic());
+
+			udpSendDataHandler = new McUdpSendDataHandler();
+			partInfoListener = new ParticipantInfoDataListener(udpSendDataHandler);
+
+			partInfoSub = new Subscriber(createParticipantInfoTopic());
+			partInfoSub->addDataListener(partInfoListener);
+
+			partInfoSub->start();
 		}
 		partInfoPub->writeOPSObject(&partInfoData);
 

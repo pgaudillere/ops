@@ -20,23 +20,25 @@
 #ifndef ops_McUdpSendDataHandler_h
 #define	ops_McUdpSendDataHandler_h
 
+
+//#include "Participant.h"
 #include "SendDataHandler.h"
-#include "Participant.h"
 #include <map>
 #include "Sender.h"
 #include "OPSObject.h"
 #include "Lockable.h"
 #include "MemoryMap.h"
+#include <iostream>
 
 namespace ops
 {
 	
-	class McUdpSendDataHandler
+	class McUdpSendDataHandler : public SendDataHandler
 	{
 	public:
-		McUdpSendDataHandler(Participant* part)
+		McUdpSendDataHandler(/*Participant* part*/)
 		{
-			this->participant = part;
+			//this->participant = part;
 		}
 		bool sendData(char* buf, int bufSize, Topic& topic)
 		{
@@ -45,30 +47,32 @@ namespace ops
 			std::map<IpPortPair, IpPortPair, CompIpPortPair> topicSinks = topicSinkMap[topic.getName()];
 			std::map<IpPortPair, IpPortPair, CompIpPortPair>::iterator it;
 			
+			bool result = true;
 			//Loop all senders and send data here
 			for(it = topicSinks.begin(); it != topicSinks.end(); it++ )
 			{
-				sender->sendTo(buf, bufSize, it->second.ip, it->first.port);
+				result &= sender->sendTo(buf, bufSize, it->second.ip, it->first.port);
 			}
 
-			
+			return result;
 		}
-		void addSink(Topic& topic, std::string& ip, int& port)
+		void addSink(std::string& topic, std::string& ip, int& port)
 		{
 			
+			//TODO: decide what class will handle serialization.
 			//First, check if the MemoryMap we have allocated is big enough to deal with this topic.	
-			int nrSegs = topic.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1;
-			if(memMap->getNrOfSegments() < nrSegs)
-			{
-				//We need a bigger memMap to take care of serialization for data sent on this topic.
-				SafeLock lock(&mutex);
-				delete memMap;
-				memMap = new MemoryMap(nrSegs, OPSConstants::PACKET_MAX_SIZE);
-			}			
+			//int nrSegs = topic.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1;
+			//if(memMap->getNrOfSegments() < nrSegs)
+			//{
+			//	//We need a bigger memMap to take care of serialization for data sent on this topic.
+			//	SafeLock lock(&mutex);
+			//	delete memMap;
+			//	memMap = new MemoryMap(nrSegs, OPSConstants::PACKET_MAX_SIZE);
+			//}			
 			
 			//Secondly, check if we already have any sink for this topic, if not add a new sink map for this topic.
 			IpPortPair ipPort(ip, port);
-			if(topicSinkMap.find(topic.getName()) == topicSinkMap.end())
+			if(topicSinkMap.find(topic) == topicSinkMap.end())
 			{
 				//We have no sinks for this topic. Lets add a new sink map
 				std::map<IpPortPair, IpPortPair, CompIpPortPair> newIpPortMap;
@@ -77,7 +81,9 @@ namespace ops
 				newIpPortMap[ipPort] = ipPort;
 
 				SafeLock lock(&mutex);
-				topicSinkMap[topic.getName()] = newIpPortMap;
+				topicSinkMap[topic] = newIpPortMap;
+
+				std::cout << topic << " added as sink" << std::endl;
 
 				return;		
 			}
@@ -85,7 +91,7 @@ namespace ops
 			{
 				//We already have a map of sinks for this topic lets just add the new sink to the map.
 				SafeLock lock(&mutex);
-				topicSinkMap[topic.getName()][ipPort] = ipPort;
+				topicSinkMap[topic][ipPort] = ipPort;
 
 				return;
 
@@ -98,14 +104,14 @@ namespace ops
 			//Find sender to delete here
 
 			SafeLock lock(&mutex);
-			//Remove, stop and delete sender here
+			//TODO: Remove, stop and delete sender here
 
 		}
 
 		virtual ~McUdpSendDataHandler(){}
 
 	private:
-		Participant* participant;
+		//Participant* participant;
 		std::map<std::string, Sender*> senders;
 		Sender* sender;
 

@@ -21,6 +21,7 @@
 #include "ReceiveDataHandler.h"
 #include "BasicError.h" 
 #include "MulticastDomain.h"
+#include "Participant.h"
 
 namespace ops
 {
