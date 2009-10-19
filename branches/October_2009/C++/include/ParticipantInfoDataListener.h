@@ -21,10 +21,10 @@
 #define	ops_ParticipantInfoDataListener_h
 
 #include "DataNotifier.h"
-#include "Participant.h"
-#include "BasicError.h"
+//#include "Participant.h"
+//#include "BasicError.h"
 #include "ParticipantInfoData.h"
-#include "SendDataHandler.h"
+#include "McUdpSendDataHandler.h"
 #include "Subscriber.h"
 
 namespace ops
@@ -32,10 +32,10 @@ namespace ops
 	class ParticipantInfoDataListener : public DataListener
 	{
 	public:
-		ParticipantInfoDataListener(SendDataHandler* sndDataHandler, Participant* part)
+		ParticipantInfoDataListener(SendDataHandler* sndDataHandler/*, Participant* part*/)
 		{
 			this->sendDataHandler = sndDataHandler;
-			this->participant = part;
+			//this->participant = part;
 		}
 		void onNewData(DataNotifier* notifier)
 		{
@@ -45,16 +45,20 @@ namespace ops
 				ParticipantInfoData* partInfo = dynamic_cast<ParticipantInfoData*>(sub->getMessage()->getData());
 				if(partInfo)
 				{
-					//Do an add sink here
+					for(unsigned int i = 0; i < partInfo->subscribeTopics.size(); i ++)
+					{
+						//Do an add sink here
+						((McUdpSendDataHandler*)sendDataHandler)->addSink(partInfo->subscribeTopics[i].name, partInfo->ip, partInfo->mc_udp_port);
+					}
 				}
 				else
 				{
-					participant->reportError(&BasicError("ParticipantInfoDataListener::onNewData(): Data could not be cast as expected."));
+					//participant->reportError(&BasicError("ParticipantInfoDataListener::onNewData(): Data could not be cast as expected."));
 				}
 			}
 			else
 			{
-				participant->reportError(&BasicError("ParticipantInfoDataListener::onNewData(): Subscriber could not be cast as expected."));
+				//participant->reportError(&BasicError("ParticipantInfoDataListener::onNewData(): Subscriber could not be cast as expected."));
 			}
 		}
 		virtual ~ParticipantInfoDataListener()
@@ -64,7 +68,7 @@ namespace ops
 
 	private:
 		SendDataHandler* sendDataHandler;
-		Participant* participant;
+		//Participant* participant;
 		
 		
 	};

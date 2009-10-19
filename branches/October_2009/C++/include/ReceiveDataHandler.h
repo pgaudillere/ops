@@ -32,14 +32,15 @@
 #include "Notifier.h"
 #include "Listener.h"
 #include <iostream>
-#include "Participant.h"
 #include "BytesSizePair.h"
 #include "ReferenceHandler.h"
 
 
 
 namespace ops
-{
+{	//Forward declaration
+	class Participant;
+	
 	class ReceiveDataHandler : public Notifier<OPSMessage*>, Listener<BytesSizePair>
 	{
 	public:

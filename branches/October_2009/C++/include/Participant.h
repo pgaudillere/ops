@@ -35,6 +35,8 @@
 #include "Publisher.h"
 #include "ParticipantInfoData.h"
 #include "Receiver.h"
+#include "ParticipantInfoDataListener.h"
+#include "SendDataHandler.h"
 
 //
 
@@ -120,6 +122,10 @@ namespace ops
 		Publisher* partInfoPub;
 		///The ParticipantInfoData that partInfoPub will publish periodically
 		ParticipantInfoData partInfoData;
+
+		SendDataHandler* udpSendDataHandler;
+		///
+		ParticipantInfoDataListener* partInfoListener;
 
 		Subscriber* partInfoSub;
 
