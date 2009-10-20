@@ -17,35 +17,58 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef ops_TCPSendDataHandler_h
+#define	ops_TCPSendDataHandler_h
 
+
+//#include "Participant.h"
+#include "SendDataHandler.h"
+#include "Lockable.h"
 #include "Sender.h"
-#include "UDPSender.h"
-#include "TCPServer.h"
-#include <map>
+#include "IOService.h"
+
 
 namespace ops
 {
-
-	Sender* Sender::create(std::string localInterface, int ttl, __int64 outSocketBufferSize)
+	
+	class TCPSendDataHandler : public SendDataHandler
 	{
-		return new UDPSender(localInterface, ttl, outSocketBufferSize, true);
-	}
-	Sender* Sender::createUDPSender(std::string localInterface, int ttl, __int64 outSocketBufferSize)
-	{
-		return new UDPSender(localInterface, ttl, outSocketBufferSize, false);
-	}
-	Sender* Sender::createTCPServer(std::string ip, int port, IOService* ioService)
-	{
-		static std::map<int, TCPServer*> tcpSenderInstances;
-
-		TCPServer* newInstance = NULL;
-		if(tcpSenderInstances.find(port) == tcpSenderInstances.end())
+	public:
+		TCPSendDataHandler(Topic& topic, IOService* ioService)
 		{
-			newInstance = new TCPServer(ip, port, ioService);
-			tcpSenderInstances[port] = newInstance;
+			
+			sender = Sender::createTCPServer(topic.getDomainAddress(), topic.getPort(), ioService);
 		}
-		return tcpSenderInstances[port];
-	}
+		bool sendData(char* buf, int bufSize, Topic& topic)
+		{
+			SafeLock lock(&mutex);
+			//We dont "sendTo" but rather lets the server (sender) send to all conncted clients.
+			bool result = true;
+			if(sender)
+			{
+				result = sender->sendTo(buf, bufSize, "", 0);
+			}
+			return result;
+		}
+	
+
+		virtual ~TCPSendDataHandler()
+		{
+			SafeLock lock(&mutex);
+			delete sender;
+			sender = NULL;
+		}
+
+	private:
+
+		Sender* sender;
+		Lockable mutex;
+
+		
+
+	};
 
 
 }
+
+#endif

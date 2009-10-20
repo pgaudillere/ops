@@ -26,6 +26,8 @@
 #include "UDPReceiver.h"
 #include "BasicError.h"
 #include "McUdpSendDataHandler.h"
+#include "McSendDataHandler.h"
+#include "TCPSendDataHandler.h"
 //#include "ParticipantInfoDataSubscriber.h"
 
 
@@ -75,17 +77,30 @@ namespace ops
 		}
 		//Should trow?
 		config = OPSConfig::getConfig();
-
+		
+		//------------Will be created when need------
 		partInfoPub = NULL;
-		udpRec = Receiver::createUDPReceiver(0, ioService);
+		udpSendDataHandler = NULL;
+		//-------------------------------------------
 
+		//------------Setup udpReceiveDataHandler-----
+		Topic topic("__", 0, "__","__"); //TODO: this is just a dummy construction, we should inject receiver int ReceiveDataHandler instead.
+		topic.setParticipantID(participantID);
+		topic.setTransport(Topic::TRANSPORT_UDP);
+		udpReceiveDataHandler = new ReceiveDataHandler(topic, this);
+		//--------------------------------------------
+		
+		//------------Create timer for peridic events-
 		aliveDeadlineTimer = DeadlineTimer::create(ioService);
 		aliveDeadlineTimer->addListener(this);
+		//--------------------------------------------
 
-		threadPool = new SingleThreadPool();
-		//threadPool = new MultiThreadPool();
+		//------------Create thread pool--------------
+		//threadPool = new SingleThreadPool();
+		threadPool = new MultiThreadPool();
 		threadPool->addRunnable(this);
 		threadPool->start();
+		//--------------------------------------------
 
 		
 		
@@ -159,22 +174,17 @@ namespace ops
 		SafeLock lock2(&garbageLock);
 		if(partInfoPub == NULL)
 		{
+
 			//Setup publisher if none exist
 			partInfoData.languageImplementation = "c++";
 			partInfoData.id = participantID;
 			partInfoData.domain = domainID;
-			partInfoData.ip= ((UDPReceiver*)udpRec)->getAddress();
-			partInfoData.mc_udp_port = ((UDPReceiver*)udpRec)->getPort();
+			partInfoData.ip= ((UDPReceiver*)udpReceiveDataHandler->getReceiver())->getAddress();
+			partInfoData.mc_udp_port = ((UDPReceiver*)udpReceiveDataHandler->getReceiver())->getPort();
 			
 			partInfoPub = new Publisher(createParticipantInfoTopic());
 
-			udpSendDataHandler = new McUdpSendDataHandler();
-			partInfoListener = new ParticipantInfoDataListener(udpSendDataHandler);
-
-			partInfoSub = new Subscriber(createParticipantInfoTopic());
-			partInfoSub->addDataListener(partInfoListener);
-
-			partInfoSub->start();
+			
 		}
 		partInfoPub->writeOPSObject(&partInfoData);
 
@@ -192,10 +202,12 @@ namespace ops
 		topic.setParticipantID(participantID);
 		topic.setDomainID(domainID);
 		
+		
 		return topic;
 	}
 
 	///By Singelton, one ReceiveDataHandler per Topic (Name)
+	//TODO: Delegate to factory class
 	ReceiveDataHandler* Participant::getReceiveDataHandler(Topic top)
 	{
 		SafeLock lock(&garbageLock);
@@ -234,6 +246,12 @@ namespace ops
 			receiveDataHandlerInstances[top.getName()] = newReceiveDataHandler;
 			return tcpReceiveDataHandlerInstances[top.getPort()];
 		}
+		else if(top.getTransport() == Topic::TRANSPORT_UDP)
+		{	
+			partInfoData.subscribeTopics.push_back(TopicInfoData(top));
+			receiveDataHandlerInstances[top.getName()] = udpReceiveDataHandler;
+			return udpReceiveDataHandler;
+		}
 		else //For now we can not handle more transports
 		{
 			//Signal an error by returning NULL.
@@ -241,7 +259,9 @@ namespace ops
 			return NULL;
 		}
 		
-	}
+	}//end getReceiveDataHandler
+
+	//TODO: Delegate to factory class
 	void Participant::releaseReceiveDataHandler(Topic top)
 	{
 		SafeLock lock(&garbageLock);
@@ -268,7 +288,57 @@ namespace ops
 			}
 		}
 		
+	}//end releaseReceiveDataHandler
+
+	//TODO: Delegate to factory class
+	SendDataHandler* Participant::getSendDataHandler(Topic top)
+	{
+
+		if(top.getTransport() == Topic::TRANSPORT_MC)
+		{
+			return new McSendDataHandler(top, ((MulticastDomain*)config->getDomain(domainID))->getLocalInterface(), 1); //TODO: make ttl configurable.
+		}
+		else if(top.getTransport() == Topic::TRANSPORT_UDP)
+		{
+			if(udpSendDataHandler == NULL)
+			{
+				udpSendDataHandler = new McUdpSendDataHandler();
+				partInfoListener = new ParticipantInfoDataListener(udpSendDataHandler, this);
+
+				partInfoSub = new Subscriber(createParticipantInfoTopic());
+				partInfoSub->addDataListener(partInfoListener);
+
+				partInfoSub->start();
+			}
+			return udpSendDataHandler;
+		}
+		else if(top.getTransport() == Topic::TRANSPORT_TCP)
+		{
+			if(tcpSendDataHandlers.find(top.getName()) == tcpSendDataHandlers.end() )
+			{
+				SendDataHandler* newSendDataHanler = new TCPSendDataHandler(top, getIOService());
+				tcpSendDataHandlers[top.getName()] = newSendDataHanler;
+				return newSendDataHanler;
+			}
+			else
+			{
+				return tcpSendDataHandlers[top.getName()];
+			}			
+
+		}
+		else
+		{
+			return NULL;
+		}
+
 	}
 
+	//TODO: Delegate to factory class
+	void Participant::releaseSendDataHandler(Topic top)
+	{
+		
+
+
+	}
 
 }

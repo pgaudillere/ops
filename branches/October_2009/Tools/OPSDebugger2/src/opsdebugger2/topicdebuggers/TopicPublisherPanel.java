@@ -7,9 +7,13 @@ package opsdebugger2.topicdebuggers;
 
 import java.lang.reflect.Field;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import ops.OPSObject;
 import ops.Publisher;
-
 
 /**
  *
@@ -25,6 +29,7 @@ public class TopicPublisherPanel extends javax.swing.JPanel implements Runnable
     double publishRate = 1.0;
     public Observable closeEvent = new CloseEvent();
     private double currentPubSample;
+    ScriptEngine engine;
 
     /** Creates new form TopicPublisherPanel */
     public TopicPublisherPanel(Publisher p, OPSObject obj)
@@ -33,9 +38,12 @@ public class TopicPublisherPanel extends javax.swing.JPanel implements Runnable
         this.obj = obj;
 
         initComponents();
-        topicNameLabel.setText("" + p.getTopic().getName()+ " on " + p.getTopic().getDomainAddress() + ":" + p.getTopic().getPort());
+        topicNameLabel.setText("" + p.getTopic().getName() + " on " + p.getTopic().getDomainAddress() + ":" + p.getTopic().getPort());
 
         createTable(obj);
+
+         ScriptEngineManager manager = new ScriptEngineManager();
+         engine = manager.getEngineByExtension("js");
 
         Thread t = new Thread(this);
         t.start();
@@ -510,6 +518,9 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
         table.getModel().setValueAt(publisher.getCurrentPublicationID(),
                 2, 1);
 
+        engine.put("__i", publisher.getCurrentPublicationID());
+       
+
         Field[] fields = oo.getClass().getFields();
         try
         {
@@ -534,14 +545,9 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
     private int readFields(Field[] fields, Object o, int index) throws IllegalAccessException
     {
 
-
-
-
-
-
-
         for (int i = 0; i < fields.length; i++)
         {
+            engine.put("__y", 0);
             try
             {
 
@@ -575,7 +581,16 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
 //                                    Function fu = Function.parseFunction((String) table.getModel().getValueAt(index, 1));
 //                                    double val = fu.eval(currentPubSample); 
 //                                    fields[i].setDouble(o, val);
-                                double val = Double.parseDouble((String) table.getModel().getValueAt(index, 1));
+                                String script = (String) table.getModel().getValueAt(index, 1);
+                                try
+                                {
+                                    engine.eval(script);
+                                }
+                                catch (ScriptException ex)
+                                {
+                                    //ok, dosent work output will be zero
+                                }
+                                Double val = (Double) engine.get("__y");
                                 fields[i].setDouble(o, val);
 //                                }
 //                                catch (ParseException e)

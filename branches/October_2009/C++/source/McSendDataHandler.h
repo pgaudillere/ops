@@ -17,35 +17,50 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef ops_McSendDataHandler_h
+#define	ops_McSendDataHandler_h
+
+
+//#include "Participant.h"
+#include "SendDataHandler.h"
 
 #include "Sender.h"
-#include "UDPSender.h"
-#include "TCPServer.h"
-#include <map>
+#include "OPSObject.h"
+
 
 namespace ops
 {
-
-	Sender* Sender::create(std::string localInterface, int ttl, __int64 outSocketBufferSize)
+	
+	class McSendDataHandler : public SendDataHandler
 	{
-		return new UDPSender(localInterface, ttl, outSocketBufferSize, true);
-	}
-	Sender* Sender::createUDPSender(std::string localInterface, int ttl, __int64 outSocketBufferSize)
-	{
-		return new UDPSender(localInterface, ttl, outSocketBufferSize, false);
-	}
-	Sender* Sender::createTCPServer(std::string ip, int port, IOService* ioService)
-	{
-		static std::map<int, TCPServer*> tcpSenderInstances;
-
-		TCPServer* newInstance = NULL;
-		if(tcpSenderInstances.find(port) == tcpSenderInstances.end())
+	public:
+		McSendDataHandler(Topic& topic, std::string localInterface, int ttl)
 		{
-			newInstance = new TCPServer(ip, port, ioService);
-			tcpSenderInstances[port] = newInstance;
+			//this->participant = part;
+			sender = Sender::create(localInterface, ttl, topic.getOutSocketBufferSize());
 		}
-		return tcpSenderInstances[port];
-	}
+		bool sendData(char* buf, int bufSize, Topic& topic)
+		{
+			
+			bool result = sender->sendTo(buf, bufSize, topic.getDomainAddress(), topic.getPort());
+			return result;
+		}
+	
+
+		virtual ~McSendDataHandler()
+		{
+			delete sender;
+		}
+
+	private:
+
+		Sender* sender;
+
+		
+
+	};
 
 
 }
+
+#endif

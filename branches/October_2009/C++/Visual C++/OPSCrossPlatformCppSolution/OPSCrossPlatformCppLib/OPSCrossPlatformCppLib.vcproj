@@ -326,6 +326,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\McSendDataHandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\McUdpSendDataHandler.h"
 				>
 			</File>
@@ -411,6 +415,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\TCPClient.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\TCPSendDataHandler.h"
 				>
 			</File>
 			<File

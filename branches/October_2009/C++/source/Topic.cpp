@@ -139,7 +139,7 @@ namespace ops
 		{
 			transport = TRANSPORT_MC;
 		}
-		else if (transport != TRANSPORT_TCP)
+		else if (transport != TRANSPORT_TCP && transport != TRANSPORT_UDP)
 		{
 			throw ops::ConfigException("Transport in topic must be either 'multicast', 'tcp' or left blank( = multicast).");
 		}
