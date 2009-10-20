@@ -32,7 +32,7 @@
 namespace ops
 {
     using boost::asio::ip::udp;
-	UDPSender::UDPSender(std::string localInterface, int ttl, __int64 outSocketBufferSize)
+	UDPSender::UDPSender(std::string localInterface, int ttl, __int64 outSocketBufferSize, bool multicastSocket)
            
     {
 		boost::asio::ip::address ipAddr(boost::asio::ip::address_v4::from_string(localInterface));
@@ -53,14 +53,18 @@ namespace ops
 				Participant::reportStaticError(&ops::BasicError("Error in UDPSender::UDPSender(): Socket buffer size could not be set"));
 			}
 		}
-		boost::asio::ip::multicast::hops ttlOption(ttl);
-		socket->set_option(ttlOption);
 
-///LA
-		boost::asio::ip::address_v4 local_interface = boost::asio::ip::address_v4::from_string(localInterface);
-		boost::asio::ip::multicast::outbound_interface ifOption(local_interface);
-		socket->set_option(ifOption);
-///LA
+		if(multicastSocket)
+		{
+			boost::asio::ip::multicast::hops ttlOption(ttl);
+			socket->set_option(ttlOption);
+
+	///LA
+			boost::asio::ip::address_v4 local_interface = boost::asio::ip::address_v4::from_string(localInterface);
+			boost::asio::ip::multicast::outbound_interface ifOption(local_interface);
+			socket->set_option(ifOption);
+	///LA
+		}
 
 		boost::asio::socket_base::non_blocking_io command(true);
 		socket->io_control(command);

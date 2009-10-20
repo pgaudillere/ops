@@ -61,6 +61,10 @@ namespace ops
 			return messageReferenceHandler.size();
 		}
 ///LA
+		Receiver* getReceiver()
+		{
+			return receiver;
+		}
 		////To be used only by creator of ReceiveDataHandler instance
 		//int getReservations()
 		//{

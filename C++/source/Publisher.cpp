@@ -36,22 +36,25 @@ namespace ops
 		sleepOnSendFailed(true)
 	{
 		Participant* participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
-		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getConfig()->getDomain(topic.getDomainID()));
-		if(mcDomain != NULL)
-		{
-			if(topic.getTransport() == Topic::TRANSPORT_MC)
-			{
-				udpSender = Sender::create(mcDomain->getLocalInterface(), mcDomain->getTimeToLive(), topic.getOutSocketBufferSize());
-			}
-			else if(topic.getTransport() == Topic::TRANSPORT_TCP)
-			{
-				udpSender = Sender::createTCPServer(topic.getDomainAddress(), topic.getPort(), participant->getIOService());
-			}
-		}
-		else
-		{
-			//TODO: decide upon exceptions, application will crash...
-		}
+
+		sendDataHandler = participant->getSendDataHandler(topic);
+
+		//MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getConfig()->getDomain(topic.getDomainID()));
+		//if(mcDomain != NULL)
+		//{
+		//	if(topic.getTransport() == Topic::TRANSPORT_MC)
+		//	{
+		//		udpSender = Sender::create(mcDomain->getLocalInterface(), mcDomain->getTimeToLive(), topic.getOutSocketBufferSize());
+		//	}
+		//	else if(topic.getTransport() == Topic::TRANSPORT_TCP)
+		//	{
+		//		udpSender = Sender::createTCPServer(topic.getDomainAddress(), topic.getPort(), participant->getIOService());
+		//	}
+		//}
+		//else
+		//{
+		//	//TODO: decide upon exceptions, application will crash...
+		//}
 		//bytes = new char[Participant::PACKET_MAX_SIZE];		
 		message.setPublisherName(name);
 		message.setTopicName(topic.getName());
@@ -59,7 +62,7 @@ namespace ops
 	}
 	Publisher::~Publisher()
 	{
-		delete udpSender;
+		delete sendDataHandler;
 		//delete bytes;
 	}
 
@@ -124,11 +127,11 @@ namespace ops
 		for(int i = 0; i < buf.getNrOfSegments(); i++)
 		{
 			int segSize = buf.getSegmentSize(i);
-			bool sendOK = udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
+			bool sendOK = sendDataHandler->sendData(buf.getSegment(i), segSize, topic);
 			if(!sendOK)
 			{
 				TimeHelper::sleep(sendSleepTime);
-				udpSender->sendTo(buf.getSegment(i), segSize, topic.getDomainAddress(), topic.getPort());
+				sendDataHandler->sendData(buf.getSegment(i), segSize, topic);
 			}
 			else if(i % sleepEverySendPacket == 0 )
 			{

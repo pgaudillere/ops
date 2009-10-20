@@ -28,7 +28,10 @@
 #include "OPSObject.h"
 #include "Lockable.h"
 #include "MemoryMap.h"
+#include "TimeHelper.h"
 #include <iostream>
+#include <sstream>
+#include <stack>
 
 namespace ops
 {
@@ -39,19 +42,37 @@ namespace ops
 		McUdpSendDataHandler(/*Participant* part*/)
 		{
 			//this->participant = part;
+			sender = Sender::createUDPSender();
 		}
 		bool sendData(char* buf, int bufSize, Topic& topic)
 		{
 			SafeLock lock(&mutex);
 
-			std::map<IpPortPair, IpPortPair, CompIpPortPair> topicSinks = topicSinkMap[topic.getName()];
-			std::map<IpPortPair, IpPortPair, CompIpPortPair>::iterator it;
+			std::map<std::string, IpPortPair> topicSinks = topicSinkMap[topic.getName()];
+			std::map<std::string, IpPortPair>::iterator it;
 			
 			bool result = true;
-			//Loop all senders and send data here
+			//Loop all sinks and send data here, loop backwards to be able to remove items while looping.
+			
+			std::stack<std::string> sinksToDelete;
+
 			for(it = topicSinks.begin(); it != topicSinks.end(); it++ )
 			{
-				result &= sender->sendTo(buf, bufSize, it->second.ip, it->first.port);
+				//Check if this sink is alive
+				if(it->second.isAlive())
+				{
+					result &= sender->sendTo(buf, bufSize, it->second.ip, it->second.port);
+				}
+				else //Remove it.
+				{
+					std::cout << " removing " << it->second.getKey() << std::endl; 
+					sinksToDelete.push(it->second.getKey());
+				}
+			}
+			while(!sinksToDelete.empty())
+			{
+				topicSinkMap[topic.getName()].erase(topicSinkMap[topic.getName()].find(sinksToDelete.top()));
+				sinksToDelete.pop();
 			}
 
 			return result;
@@ -59,6 +80,7 @@ namespace ops
 		void addSink(std::string& topic, std::string& ip, int& port)
 		{
 			
+			SafeLock lock(&mutex);
 			//TODO: decide what class will handle serialization.
 			//First, check if the MemoryMap we have allocated is big enough to deal with this topic.	
 			//int nrSegs = topic.getSampleMaxSize() / OPSConstants::PACKET_MAX_SIZE + 1;
@@ -75,44 +97,47 @@ namespace ops
 			if(topicSinkMap.find(topic) == topicSinkMap.end())
 			{
 				//We have no sinks for this topic. Lets add a new sink map
-				std::map<IpPortPair, IpPortPair, CompIpPortPair> newIpPortMap;
+				std::map<std::string, IpPortPair> newIpPortMap;
 
 				//And add the new sink to the map.
-				newIpPortMap[ipPort] = ipPort;
+				newIpPortMap[ipPort.getKey()] = ipPort;
 
-				SafeLock lock(&mutex);
+				
 				topicSinkMap[topic] = newIpPortMap;
 
-				std::cout << topic << " added as sink" << std::endl;
+				std::cout << topic << " added as new sink " << ipPort.getKey() << std::endl;
 
 				return;		
 			}
 			else
 			{
-				//We already have a map of sinks for this topic lets just add the new sink to the map.
-				SafeLock lock(&mutex);
-				topicSinkMap[topic][ipPort] = ipPort;
 
-				return;
+				if(topicSinkMap[topic].find(ipPort.getKey()) == topicSinkMap[topic].end())
+				{
+
+					//We already have a map of sinks for this topic lets just add the new sink to the map.
+					topicSinkMap[topic][ipPort.getKey()] = ipPort;
+					std::cout << topic << " added to sink" << ipPort.getKey() << std::endl;
+
+					return;
+				}
+				else //this sink is already registred with this topic
+				{
+					topicSinkMap[topic][ipPort.getKey()].feedWatcdog();
+					return;
+				}
 
 			}
 
 			
 		}
-		void removeSink(std::string& topic, std::string& ip, int& port)
-		{
-			//Find sender to delete here
-
-			SafeLock lock(&mutex);
-			//TODO: Remove, stop and delete sender here
-
-		}
+		
 
 		virtual ~McUdpSendDataHandler(){}
 
 	private:
 		//Participant* participant;
-		std::map<std::string, Sender*> senders;
+		//std::map<std::string, Sender*> senders;
 		Sender* sender;
 
 		MemoryMap* memMap;
@@ -126,25 +151,34 @@ namespace ops
 			{
 				this->ip = ip;
 				this->port = port;
+				this->lastTimeAlive = TimeHelper::currentTimeMillis();
 			}
 			IpPortPair()
 			{
 
 			}
+			bool isAlive()
+			{
+				return (TimeHelper::currentTimeMillis() - lastTimeAlive) < ALIVE_TIMEOUT;
+			}
+			void feedWatcdog()
+			{
+				lastTimeAlive = TimeHelper::currentTimeMillis();
+			}
+			std::string getKey()
+			{
+				std::stringstream ss;
+				ss << ip << ":" << port;
+				return ss.str();
+			}
 			std::string ip;
 			int port;
+			__int64 lastTimeAlive;
+			const static int ALIVE_TIMEOUT = 3000;
 		};
-		class CompIpPortPair
-		{
-		public:
-			bool operator()(const IpPortPair &ip1, const IpPortPair &ip2) const
-			{
-				return ( ip1.ip == ip2.ip && ip1.port == ip2.port );
-			}
-		};
-		
 
-		std::map<std::string, std::map<IpPortPair, IpPortPair, CompIpPortPair> > topicSinkMap;
+		std::map<std::string, std::map<std::string, IpPortPair> > topicSinkMap;
+		
 
 	};
 

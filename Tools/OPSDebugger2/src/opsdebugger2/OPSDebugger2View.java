@@ -74,7 +74,10 @@ public class OPSDebugger2View extends FrameView
                 String homeDir = "";
                 BufferedReader br = new BufferedReader(new InputStreamReader(fis));
                 homeDir = br.readLine();
-                projectFileChooser.setCurrentDirectory(new File(homeDir));
+                if(homeDir != null)
+                    projectFileChooser.setCurrentDirectory(new File(homeDir));
+                else
+                    projectFileChooser.setCurrentDirectory(new File(""));
 
             } catch (IOException ex)
             {

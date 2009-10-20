@@ -49,6 +49,7 @@ namespace ops
 	class Participant : Runnable, Listener<int>, public Notifier<Error*>
 	{
 		friend class Subscriber;
+		friend class Publisher;
 	public:
 
 		///By Singelton, one Participant per participantID
@@ -124,6 +125,9 @@ namespace ops
 		ParticipantInfoData partInfoData;
 
 		SendDataHandler* udpSendDataHandler;
+
+		std::map<std::string, SendDataHandler*> tcpSendDataHandlers;
+
 		///
 		ParticipantInfoDataListener* partInfoListener;
 
@@ -149,6 +153,10 @@ namespace ops
 		///Visible to friends only
 		ReceiveDataHandler* getReceiveDataHandler(Topic top);
 		void releaseReceiveDataHandler(Topic top);
+
+		///Visible to friends only
+		SendDataHandler* getSendDataHandler(Topic top);
+		void releaseSendDataHandler(Topic top);
 
 		///Mutex for ioService, used to shutdown safely
 		Lockable serviceMutex;

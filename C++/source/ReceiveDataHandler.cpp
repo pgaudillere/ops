@@ -46,6 +46,10 @@ namespace ops
 		{
 			receiver = Receiver::createTCPClient(top.getDomainAddress(), top.getPort(), ioService); 
 		}
+		else if(top.getTransport() == Topic::TRANSPORT_UDP)
+		{
+			receiver = Receiver::createUDPReceiver(0, ioService); 
+		}
 		receiver->addListener(this);
 		receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 
