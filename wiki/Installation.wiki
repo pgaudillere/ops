@@ -51,7 +51,7 @@
    not work, it is probably because you have not put your Java JDK on your path correctly 
    and it will output something like "javac is not a command or program"
 
-   
+   <wiki:video url="http://www.youtube.com/watch?v=AxutJA2-DNQ"/>
 
    You can read more about the OPS IDL Builder [IDLCompilerTutorial here].
 
