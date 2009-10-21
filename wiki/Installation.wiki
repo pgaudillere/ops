@@ -23,19 +23,19 @@
 
    After unpacking the zip files, make sure your directory structure look as follows:
 
-   - OPS_DIR
-        - C++
-           - include
-           - lib
-           - source
-        - Examples
-           - TestAll
-           - TestAllC++Test
-           - TestAllJavaTest
-        - Java
-        - Tools
-           - OPS Debugger
-           - OPS IDL Builder
+   * OPS_DIR
+        * C++
+           * include
+           * lib
+           * source
+        * Examples
+           * TestAll
+           * TestAllC++Test
+           * TestAllJavaTest
+        * Java
+        * Tools
+           * OPS Debugger
+           * OPS IDL Builder
 
    ----
    Or, go [BuildInstructions here], if you are interested in building OPS 
