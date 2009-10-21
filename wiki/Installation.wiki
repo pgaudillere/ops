@@ -20,6 +20,23 @@
    binaries for the languages you want to use OPS with. You will also need the
    latest Tools. Unpack all the zip files you downloaded directly under a common 
    director (E.g. C:\OPS\, this directory will be refered to as OPS_DIR from here on).
+
+   After unpacking the zip files, make sure your directory structure look as follows:
+
+   - OPS_DIR
+        - C++
+           - include
+           - lib
+           - source
+        - Examples
+           - TestAll
+           - TestAllC++Test
+           - TestAllJavaTest
+        - Java
+        - Tools
+           - OPS Debugger
+           - OPS IDL Builder
+
    ----
    Or, go [BuildInstructions here], if you are interested in building OPS 
    from source.
