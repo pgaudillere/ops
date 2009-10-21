@@ -33,7 +33,7 @@
    Or, go [BuildInstructions here], if you are interested in building OPS 
    from source.
    ----
-==Run the IDL Builder and build TestAll example project==
+==Run the IDL Builder and build !TestAll example project==
    Open OPS IDL Builder, from OPS_DIR\Tools\OPS IDL Builder\bin\ops_idl_builder_nb.exe
    Use the OPS IDL Builder to open TestAll sample IDL project (File->Open
    Project...browse to OPS_DIR\Examples\!TestAll, check open as main project and
@@ -51,7 +51,7 @@
    not work, it is probably because you have not put your Java JDK on your path correctly 
    and it will output something like "javac is not a command or program".
 
-   (Note, click the video to see on you tube in fullscreen)
+   (Note, click the video to see it on you tube in fullscreen)
 
    <wiki:video url="http://www.youtube.com/watch?v=AxutJA2-DNQ"/>
 
