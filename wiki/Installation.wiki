@@ -37,5 +37,23 @@
    Open OPS IDL Builder, from OPS_DIR\Tools\OPS IDL Builder\bin\ops_idl_builder_nb.exe
    Use the OPS IDL Builder to open TestAll sample IDL project (File->Open
    Project...browse to OPS_DIR\Examples\TestAll, check open as main project and
-   click Open Project.). Read more about the OPS IDL Builder [IDLCompilerTutorial here].
+   click Open Project.). 
+
+   Once open, expand "TestAll" and "testall" package folder and checkout the IDL files    
+   making up this example.
+
+   When ready, build the project by hitting the blue build hammer or right click your 
+   project and select "Build".
+
+   When you build your project, a dos prompt will pop up showing you the progress of 
+   building java jar files. This output is quite verbose and it can be hard to see if it 
+   succeds or not. Checkout the following video to se what it should look like. If it does 
+   not work, it is probably because you have not put your Java JDK on your path correctly 
+   and it will output something like "javac is not a command or program"
+
+   
+
+   You can read more about the OPS IDL Builder [IDLCompilerTutorial here].
+
+   
    
