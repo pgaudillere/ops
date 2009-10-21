@@ -10,9 +10,7 @@
    be sufficient to only have a Java runtime environment installed. It is strongly
    recommended to install a JDK though.
    If you do not have a JDK installed on your system follow these steps:
-   #	Download the latest JDK from java.sun.com, (Tip! Select a bundle with Netbeans and 
-        you are ready to open the sample Netbeans Java projects!) 
-        http://java.sun.com/javase/downloads/
+   #	Download the latest JDK from java.sun.com, (Tip! Select a bundle with Netbeans and you are ready to open the sample Netbeans Java projects!)       http://java.sun.com/javase/downloads/
    #	Install it, you will need administrator rights on your system.
    #	When installed, add the newly created directory
         "C:\Program Files\Java\jdk.jdk.version\bin" to your user environment variable
