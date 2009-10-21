@@ -178,6 +178,11 @@ public class OPSIDLProject implements Project
             io.select();
             io.getOut().println("Starting build of " + getName() + "...");
             iterateFiles(io);
+
+            if(projectIDLParser.getNrErrors() == 0)
+            {
+
+            }
             io.getOut().println("Build finished.");
         } catch (Exception ex)
         {

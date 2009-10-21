@@ -38,6 +38,8 @@ public class PropertiesDialog extends javax.swing.JDialog
         genJavaCheckBox.setSelected(properties.generateJava);
         buildJavaCheckBox.setSelected(properties.buildJava);
 
+        domainIDTextField.setText(properties.debugProjDomainID);
+        buildDebugProjectCheckBox.setSelected(properties.buildDebugProject);
         defaultConfigFileTextField.setText(properties.defaultOPSTopicConfigFile);
 
         jarDepList.setListData(properties.javaBuildJarDependencies);
@@ -53,6 +55,8 @@ public class PropertiesDialog extends javax.swing.JDialog
         properties.generateCpp = genCppCheckBox.isSelected();
         properties.generateJava = genJavaCheckBox.isSelected();
         properties.defaultOPSTopicConfigFile = defaultConfigFileTextField.getText();
+        properties.buildDebugProject = buildDebugProjectCheckBox.isSelected();
+        properties.debugProjDomainID = domainIDTextField.getText();
         
 
     }
@@ -82,6 +86,9 @@ public class PropertiesDialog extends javax.swing.JDialog
         defaultConfigFileTextField = new javax.swing.JTextField();
         changeDefaultConfigFileButton = new javax.swing.JButton();
         genConfigFromSourceCommentsCheckBox = new javax.swing.JCheckBox();
+        domainIDTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        buildDebugProjectCheckBox = new javax.swing.JCheckBox();
         jPanel4 = new javax.swing.JPanel();
         cancelButton = new javax.swing.JButton();
         okButton = new javax.swing.JButton();
@@ -181,6 +188,12 @@ public class PropertiesDialog extends javax.swing.JDialog
         genConfigFromSourceCommentsCheckBox.setText(org.openide.util.NbBundle.getMessage(PropertiesDialog.class, "PropertiesDialog.genConfigFromSourceCommentsCheckBox.text")); // NOI18N
         genConfigFromSourceCommentsCheckBox.setEnabled(false);
 
+        domainIDTextField.setText(org.openide.util.NbBundle.getMessage(PropertiesDialog.class, "PropertiesDialog.domainIDTextField.text")); // NOI18N
+
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(PropertiesDialog.class, "PropertiesDialog.jLabel2.text")); // NOI18N
+
+        buildDebugProjectCheckBox.setText(org.openide.util.NbBundle.getMessage(PropertiesDialog.class, "PropertiesDialog.buildDebugProjectCheckBox.text")); // NOI18N
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -189,16 +202,29 @@ public class PropertiesDialog extends javax.swing.JDialog
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(defaultConfigFileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(changeDefaultConfigFileButton))
-                    .addComponent(defaultConfigFileLabel)
-                    .addComponent(genConfigFromSourceCommentsCheckBox))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addComponent(buildDebugProjectCheckBox)
+                        .addContainerGap())
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addComponent(defaultConfigFileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(changeDefaultConfigFileButton))
+                                .addComponent(defaultConfigFileLabel)
+                                .addComponent(genConfigFromSourceCommentsCheckBox, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE))
+                            .addGap(31, 31, 31))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(domainIDTextField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+                            .addContainerGap()))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(buildDebugProjectCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(defaultConfigFileLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -206,7 +232,10 @@ public class PropertiesDialog extends javax.swing.JDialog
                     .addComponent(changeDefaultConfigFileButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(genConfigFromSourceCommentsCheckBox)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(domainIDTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         cancelButton.setText(org.openide.util.NbBundle.getMessage(PropertiesDialog.class, "PropertiesDialog.cancelButton.text")); // NOI18N
@@ -241,7 +270,7 @@ public class PropertiesDialog extends javax.swing.JDialog
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(okButton)
                     .addComponent(cancelButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -251,8 +280,8 @@ public class PropertiesDialog extends javax.swing.JDialog
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -266,7 +295,7 @@ public class PropertiesDialog extends javax.swing.JDialog
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -341,15 +370,18 @@ public class PropertiesDialog extends javax.swing.JDialog
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addJarDepButton;
+    private javax.swing.JCheckBox buildDebugProjectCheckBox;
     private javax.swing.JCheckBox buildJavaCheckBox;
     private javax.swing.JButton cancelButton;
     private javax.swing.JButton changeDefaultConfigFileButton;
     private javax.swing.JLabel defaultConfigFileLabel;
     private javax.swing.JTextField defaultConfigFileTextField;
+    private javax.swing.JTextField domainIDTextField;
     private javax.swing.JCheckBox genConfigFromSourceCommentsCheckBox;
     private javax.swing.JCheckBox genCppCheckBox;
     private javax.swing.JCheckBox genJavaCheckBox;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
