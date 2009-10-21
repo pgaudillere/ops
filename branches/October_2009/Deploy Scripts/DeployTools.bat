@@ -15,6 +15,10 @@ copy "..\Libs\ConfigurationLib\dist\ConfigurationLib.jar" "Tools\OPS IDL Builder
 mkdir "Tools\OPS IDL Builder\templates"
 copy "..\Tools\NBOPSIDLSupport\templates\*.tpl" "Tools\OPS IDL Builder\templates"
 
+mkdir "Tools\OPS Debugger"
+mkdir "Tools\OPS Debugger\lib"
+copy "..\ToolS\OPSDebugger2\dist\*.*" "Tools\OPS Debugger"
+copy "..\ToolS\OPSDebugger2\dist\lib\*.*" "Tools\OPS Debugger\lib"
 
 rem jar cvf OPS_Tools.jar deploy\OPS\Tools
 rem rename OPS_Tools.jar OPS_Tools.zip
