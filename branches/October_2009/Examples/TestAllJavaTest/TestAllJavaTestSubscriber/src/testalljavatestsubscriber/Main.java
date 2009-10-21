@@ -14,17 +14,13 @@ import java.util.logging.Logger;
 import ops.KeyFilterQoSPolicy;
 import ops.Participant;
 import ops.Topic;
-import ops.archiver.OPSObjectFactory;
 
 /**
- *
+ * Example showing how to subscribe to data on OPS from Java
  * @author angr
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args)
     {
         // TODO code application logic here
@@ -36,7 +32,6 @@ public class Main {
         Topic topic = participant.createTopic("ChildTopic");
 
         ChildDataSubscriber sub = new ChildDataSubscriber(topic);
-        sub.addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 
         sub.addObserver(new Observer() { public void update(Observable o, Object arg){onNewChildData((ChildData)arg);} });
 
@@ -53,10 +48,6 @@ public class Main {
         System.out.println("Wohooo!, New ChildData!" + childData.i);
     }
 
-
-
-
-
     private static void sleep(int i)
     {
         try
@@ -64,8 +55,7 @@ public class Main {
             Thread.sleep(i);
         }
         catch (InterruptedException ex)
-        {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        {          
         }
     }
 

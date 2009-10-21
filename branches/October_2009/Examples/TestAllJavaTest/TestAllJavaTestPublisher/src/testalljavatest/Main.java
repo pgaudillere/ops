@@ -7,16 +7,13 @@ package testalljavatest;
 
 import TestAll.ChildData;
 import TestAll.ChildDataPublisher;
-import TestAll.TestData;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ops.OPSConfig;
 import ops.Participant;
 import ops.Topic;
-import ops.archiver.OPSObjectFactory;
 
 /**
- *
+ * Example showing how to publish data on OPS from Java
  * @author angr
  */
 public class Main {
@@ -36,7 +33,7 @@ public class Main {
 
         ChildData data = new ChildData();
 
-        data.baseText = "Greetings from Java";
+        data.baseText = "Hello from Java";
         pub.setName("TestAll Java ChildPublisher");
 
         data.s = "TestString";
@@ -50,30 +47,12 @@ public class Main {
 
         data.ss.add("TestString in Array.");
 
-        TestData testData = new TestData();
-        testData.text = "Text in aggregated test data.";
-
-        TestData testData2 = new TestData();
-        testData2.text = "Text in aggregated test data 2.";
-
-        TestData testData3 = new TestData();
-        testData3.text = "Text in aggregated test data 3.";
-
-        data.test2 = testData;
-
-        data.test2s.add(testData2);
-        data.test2s.add(testData3);
-
-
-
         while (true)
         {
             data.i ++;
             pub.write(data);
             sleep(1000);
         }
-
-
 
     }
 
