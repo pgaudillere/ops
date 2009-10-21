@@ -23,7 +23,7 @@
 
    After unpacking the zip files, make sure your directory structure look as follows:
 
-    OPS_DIR
+    * OPS_DIR
         * C++
         * Examples
         * Java
