@@ -57,5 +57,13 @@
 
    You can read more about the OPS IDL Builder [IDLCompilerTutorial here].
 
-   
+==Use the OPS Debugger to get going with some Pub-Sub==
+
+  Open the OPS Debugger (double click OPS_DIR\Tools\OPS Debugger\OPSDebugger2.jar)
+  Once open, click "File->Open Project..." and browse to OPS_DIR\Examples\TestAll\DebugProject.xml
+  To the right you can now see the a drop down list with topics (ChildTopic in this case).
+  Drag the Topic from the tree view on Subscribers or Publishers to subscribe to or publish on the topic.
+  Watch this video to see how to get some action:
+
+  
    
