@@ -51,7 +51,7 @@
    not work, it is probably because you have not put your Java JDK on your path correctly 
    and it will output something like "javac is not a command or program".
 
-   (Note, click the video to see it on you tube in fullscreen)
+   (Note, click the video to see it on YouTube in fullscreen)
 
    <wiki:video url="http://www.youtube.com/watch?v=AxutJA2-DNQ"/>
 
