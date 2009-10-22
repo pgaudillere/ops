@@ -2,7 +2,7 @@
 ----
 =OPS – Installation (Windows XP)=
 
-==Set up your environment==
+==Set Up Your Environment==
    Make sure you have a Java SE Development Kit (JDK, version 5 or higher) installed on
    your system. The tools you use to create systems with OPS are all running in Java and
    use the Java compiler to generate pre-compiled code to use for debugging. If you know 
@@ -57,7 +57,7 @@
 
    You can read more about the OPS IDL Builder [IDLCompilerTutorial here].
 
-==Use the OPS Debugger to get going with some Pub-Sub==
+==Use the OPS Debugger to Get Going With Some Pub-Sub==
 
   Open the OPS Debugger (double click OPS_DIR\Tools\OPS Debugger\OPSDebugger2.jar)
   Once open, click "File->Open Project..." and browse to OPS_DIR\Examples\!TestAll\!DebugProject.xml
@@ -83,14 +83,14 @@
 
 ==Build and Run Java Examples ==
   ----
-  Note, this instruction assumes you have [http://www.netbeans.org Netbeans IDE] installed
+  Note, this instruction assumes you have [http://www.netbeans.org Netbeans IDE] installed.
   if you haven't, you can still use the soucres provided under OPS_DIR\TestAllJavaTest\src
   to build with whatever tool you like to use. Just make sure you link 
   OPS_DIR\Java\OPSJLib.jar.
   ----
   Open Netbeans IDE. Once open click File->Open Project... and browse to 
-  OPS_DIR\TestAllJavaTest
-  and open TestAllJavaTestPublisher and TestAllJavaTestSubscriber
+  OPS_DIR\!TestAllJavaTest
+  and open !TestAllJavaTestPublisher and !TestAllJavaTestSubscriber
   Build the projects and run them one by one (Right click project and select Run).
   In the ouput windows you should now see an indication that communication is working.
   Try starting the OPS Debugger and the C++ subscriber and publisher examples from above 
