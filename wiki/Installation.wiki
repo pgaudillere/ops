@@ -82,11 +82,11 @@
   (Video comming soon)
 
 ==Build and Run Java Examples ==
-----
+  ----
   Note, this instruction assumes you have [http://www.netbeans.org Netbeans IDE] installed
   if you haven't, you can still use the soucres provided under OPS_DIR\TestAllJavaTest\src
   to build with whatever tool you like to use. Just make sure you link OPS_DIR\Java\*.jar.
-----
+  ----
 
   
    
