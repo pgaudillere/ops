@@ -85,8 +85,17 @@
   ----
   Note, this instruction assumes you have [http://www.netbeans.org Netbeans IDE] installed
   if you haven't, you can still use the soucres provided under OPS_DIR\TestAllJavaTest\src
-  to build with whatever tool you like to use. Just make sure you link OPS_DIR\Java\*.jar.
+  to build with whatever tool you like to use. Just make sure you link 
+  OPS_DIR\Java\OPSJLib.jar.
   ----
+  Open Netbeans IDE. Once open click File->Open Project... and browse to 
+  OPS_DIR\TestAllJavaTest
+  and open TestAllJavaTestPublisher and TestAllJavaTestSubscriber
+  Build the projects and run them one by one (Right click project and select Run).
+  In the ouput windows you should now see an indication that communication is working.
+  Try starting the OPS Debugger and the C++ subscriber and publisher examples from above 
+  and see that they get and send data to Java and vice verca. 
 
+  If you've come this far, you are ready create some apps of your own!
   
    
