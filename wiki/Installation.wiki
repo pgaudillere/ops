@@ -33,7 +33,7 @@
    Or, go [BuildInstructions here], if you are interested in building OPS 
    from source.
    ----
-==Run the IDL Builder and build !TestAll example project==
+==Run the IDL Builder and Build !TestAll Example Project==
    Open OPS IDL Builder, from OPS_DIR\Tools\OPS IDL Builder\bin\ops_idl_builder_nb.exe
    Use the OPS IDL Builder to open !TestAll sample IDL project (File->Open
    Project...browse to OPS_DIR\Examples\!TestAll, check open as main project and
@@ -67,7 +67,7 @@
 
   <wiki:video url="http://www.youtube.com/watch?v=W3bupBA16VM"/>
 
-==Build and run C++ examples ==
+==Build and Run C++ Examples ==
   Now, open
   OPS_DIR\Examples\TestAllC++Test\TestAllC++Test\TestAllC++Test.sln
   with MS Visual Studio 2008 C++ Express or pro.
@@ -79,7 +79,14 @@
   linker warnings, this is a known issue.)
   When build succeds, hit run and both projects should open and start communicating. 
 
-  <wiki:video url="http://www.youtube.com/watch?v=W3bupBA16VM"/>
+  (Video comming soon)
+
+==Build and Run Java Examples ==
+----
+  Note, this instruction assumes you have [http://www.netbeans.org Netbeans IDE] installed
+  if you haven't, you can still use the soucres provided under OPS_DIR\TestAllJavaTest\src
+  to build with whatever tool you like to use. Just make sure you link OPS_DIR\Java\*.jar.
+----
 
   
    
