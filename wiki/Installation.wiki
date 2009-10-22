@@ -51,7 +51,7 @@
    not work, it is probably because you have not put your Java JDK on your path correctly 
    and it will output something like "javac is not a command or program".
 
-   (Note, click the video to see it on YouTube in fullscreen)
+   (Note, click the video to see it on !YouTube in fullscreen)
 
    <wiki:video url="http://www.youtube.com/watch?v=AxutJA2-DNQ"/>
 
@@ -96,6 +96,6 @@
   Try starting the OPS Debugger and the C++ subscriber and publisher examples from above 
   and see that they get and send data to Java and vice verca. 
 
-  If you've come this far, you are ready create some apps of your own!
+  If you've come this far, you are ready create some apps of your own, good luck!
   
    
