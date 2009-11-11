@@ -28,6 +28,10 @@ public class OPSProjectProperties implements Serializable
     public boolean generateOPSConfigXMLFileFromSourceComments = false;
     public boolean addChecksumToConfig = false;
     public String debugProjDomainID;
+    public String vsExampleTopicName = "";
+    public String vsExampleDataType = "";
+    public String vsExampleDomainID = "";
+    public boolean vsExampleEnabled = false;;
 
     public void serialize(ArchiverInOut archiver) throws IOException
     {
@@ -39,6 +43,10 @@ public class OPSProjectProperties implements Serializable
         defaultOPSTopicConfigFile = archiver.inout("defaultOPSTopicConfigFile", defaultOPSTopicConfigFile);
         generateOPSConfigClass = archiver.inout("generateOPSConfigClass", generateOPSConfigClass);
         javaBuildJarDependencies = (Vector<JarDependency>) archiver.inoutSerializableList("javaBuildJarDependencies", javaBuildJarDependencies);
+        vsExampleTopicName = archiver.inout("vsExampleTopicName", vsExampleTopicName);
+        vsExampleDataType = archiver.inout("vsExampleDataType", vsExampleDataType);
+        vsExampleDomainID = archiver.inout("vsExampleDomainID", vsExampleDomainID);
+        vsExampleEnabled = archiver.inout("vsExampleEnabled", vsExampleEnabled);
     }
 
     public static SerializableFactory getSerializableFactory()

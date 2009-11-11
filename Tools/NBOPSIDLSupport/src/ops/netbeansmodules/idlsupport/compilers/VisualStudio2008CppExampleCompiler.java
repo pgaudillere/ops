@@ -19,79 +19,24 @@ public class VisualStudio2008CppExampleCompiler extends AbstractTemplateBasedIDL
     public static String PROJ_NAME_REGEX = "__projectName";
     public static String TOPIC_NAME_REGEX = "__topicName";
     public static String DATA_TYPE_REGEX = "__dataType";
-    public static String SUB_CPP_PATH_REGEX = "__subCppPath";
-    public static String PUB_CPP_PATH_REGEX = "__pubCppPath";
+    public static String DOMAIN_ID_REGEX = "__domainName";
+    public static String INCLUDE_DATA_TYPE_PATH_REGEX = "__includeDataTypePath";
+
     public void compileVSCppExample(String projectDirectory, String projectName, OPSProjectProperties projProps)
     {
-        String subCppPath = "";
-        String pubCppPath = "";
-        String subProjPath = "";
-        String pubProjPath = "";
-        String slnPath = "";
+        String subCppPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_sub.cpp";
+        String pubCppPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_pub.cpp";
+        String subProjPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_sub.vcproj";
+        String pubProjPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_pub.vcproj";
+        String slnPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName + "/" + projProps.vsExampleTopicName + "_example.sln";
         String opsConfigPath = "";
         
-//        System.out.println("Visual Studio Solution File: " + projectDirectory);
-//
-//        setOutputFileName(projectDirectory + "/" + "Generated/Visual Studio Examples/" + projectName + "_VS2008_Example.sln");
-//        setTemplateFileName("templates/vs_sln.tpl");
-//        setTabString("    ");//Default is "\t"
-//
-//        String result = getTemplateText();
-//        result = result.replaceAll(PROJ_NAME_REGEX, projectName);
-//        result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
-//        saveOutputText(result);
-//
-//
-//        System.out.println("Visual Studio Subscriber Project File: " + projectDirectory);
-//
-//        setOutputFileName(projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName + "_Subscriber.vcproj");
-//        setTemplateFileName("templates/vs_sub_proj.tpl");
-//        setTabString("    ");//Default is "\t"
-//
-//        result = getTemplateText();
-//        result = result.replaceAll(PROJ_NAME_REGEX, projectName);
-//        result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
-//        result = result.replaceAll(DATA_TYPE_REGEX, projProps.vsExampleDataType);
-//        saveOutputText(result);
-//
-//
-//        System.out.println("Visual Studio Publisher Project File: " + projectDirectory);
-//
-//        setOutputFileName(projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName + "_Publisher.vcproj");
-//        setTemplateFileName("templates/vs_pub_proj.tpl");
-//        setTabString("    ");//Default is "\t"
-//
-//        result = getTemplateText();
-//        result = result.replaceAll(PROJ_NAME_REGEX, projectName);
-//        result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
-//        result = result.replaceAll(DATA_TYPE_REGEX, projProps.vsExampleDataType);
-//        saveOutputText(result);
-//
-//
-//        System.out.println("Visual Studio Subscriber cpp File: " + projectDirectory);
-//
-//        setOutputFileName(projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName + "_Subscriber.cpp");
-//        setTemplateFileName("templates/vs_sub_cpp.tpl");
-//        setTabString("    ");//Default is "\t"
-//
-//        result = getTemplateText();
-//        result = result.replaceAll(PROJ_NAME_REGEX, projectName);
-//        result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
-//        result = result.replaceAll(DATA_TYPE_REGEX, projProps.vsExampleDataType);
-//        saveOutputText(result);
-//
-//        System.out.println("Visual Studio Publisher cpp File: " + projectDirectory);
-//
-//        setOutputFileName(projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName + "_Publisher.cpp");
-//        setTemplateFileName("templates/vs_pub_cpp.tpl");
-//        setTabString("    ");//Default is "\t"
-//
-//        result = getTemplateText();
-//        result = result.replaceAll(PROJ_NAME_REGEX, projectName);
-//        result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
-//        result = result.replaceAll(DATA_TYPE_REGEX, projProps.vsExampleDataType);
-//        saveOutputText(result);
 
+        createFile(slnPath, "templates/vs_sln.tpl", projectName, projProps);
+        createFile(pubProjPath, "templates/vs_pub_proj.tpl", projectName, projProps);
+        createFile(subProjPath, "templates/vs_sub_proj.tpl", projectName, projProps);
+        createFile(pubCppPath, "templates/vs_pub_cpp.tpl", projectName, projProps);
+        createFile(subCppPath, "templates/vs_sub_cpp.tpl", projectName, projProps);
 
 
     }
@@ -109,5 +54,20 @@ public class VisualStudio2008CppExampleCompiler extends AbstractTemplateBasedIDL
     public String getName()
     {
         return "VisualStudio2008CppExampleCompiler";
+    }
+
+    private void createFile(String slnPath, String tplPath, String projectName, OPSProjectProperties projProps)
+    {
+        setOutputFileName(slnPath);
+        setTemplateFileName(tplPath);
+        setTabString("    "); //Default is "\t"
+        String result = getTemplateText();
+        result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
+        result = result.replaceAll(DATA_TYPE_REGEX, projProps.vsExampleDataType.replace(".", "::"));
+        result = result.replaceAll(INCLUDE_DATA_TYPE_PATH_REGEX, projProps.vsExampleDataType.replace(".", "/"));
+        result = result.replaceAll(DOMAIN_ID_REGEX, projProps.vsExampleDomainID);
+        result = result.replaceAll(PROJ_NAME_REGEX, projectName);
+        saveOutputText(result);
+
     }
 }
