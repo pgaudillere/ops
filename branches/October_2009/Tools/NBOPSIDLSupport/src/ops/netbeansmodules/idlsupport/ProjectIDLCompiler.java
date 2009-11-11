@@ -9,6 +9,7 @@ import java.util.Vector;
 import ops.netbeansmodules.idlsupport.compilers.CppCompiler;
 import ops.netbeansmodules.idlsupport.compilers.DebugProjectCompiler;
 import ops.netbeansmodules.idlsupport.compilers.JavaCompiler;
+import ops.netbeansmodules.idlsupport.compilers.VisualStudio2008CppExampleCompiler;
 import org.openide.util.Exceptions;
 import parsing.IDLClass;
 
@@ -22,6 +23,8 @@ public class ProjectIDLCompiler
     JavaCompiler javaCompiler = new JavaCompiler();
     CppCompiler cppCompiler = new CppCompiler();
     DebugProjectCompiler debugProjectCompiler = new DebugProjectCompiler();
+    VisualStudio2008CppExampleCompiler cppExampleCompiler = new VisualStudio2008CppExampleCompiler();
+
     OPSIDLProject project;
 
     public ProjectIDLCompiler(OPSIDLProject project)
@@ -58,6 +61,10 @@ public class ProjectIDLCompiler
         {
             debugProjectCompiler.createDebugProjectFile(project.getProjectDirectory().getPath(), project.getProjectDirectory().getName(), project.getProperties());
 
+        }
+        if(project.getProperties().vsExampleEnabled)
+        {
+            cppExampleCompiler.compileVSCppExample(project.getProjectDirectory().getPath(), project.getProjectDirectory().getName(), project.getProperties());
         }
 
 
