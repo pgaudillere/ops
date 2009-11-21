@@ -4,9 +4,13 @@
  */
 package ops.netbeansmodules.idlsupport.compilers;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import ops.netbeansmodules.idlsupport.projectproperties.JarDependency;
 import ops.netbeansmodules.idlsupport.projectproperties.OPSProjectProperties;
+import org.openide.util.Exceptions;
 import parsing.AbstractTemplateBasedIDLCompiler;
 import parsing.IDLClass;
 import parsing.TopicInfo;
@@ -32,19 +36,25 @@ public class DebugProjectCompiler extends AbstractTemplateBasedIDLCompiler
 
     public void createDebugProjectFile(String projectDirectory, String projectName, OPSProjectProperties projProps)
     {
-        System.out.println("Creating Debug Project File: " + projectDirectory);
-
-        setOutputFileName(projectDirectory + "/" + "DebugProject.xml");
-        setTemplateFileName("templates/debugproj.tpl");
-        setTabString("    ");//Default is "\t"
         //setEndlString("\n");//Default is "\r\n"
 
-        String result = getTemplateText();
-
-        result = result.replaceAll(DOMAIN_ID_REGEX, projProps.debugProjDomainID);
-        result = result.replaceAll(JAR_PATHS_REGEX, createJarPaths(projProps, projectName));
-
-        saveOutputText(result);
+        try
+        {
+            System.out.println("Creating Debug Project File: " + projectDirectory);
+            setOutputFileName(projectDirectory + "/" + "DebugProject.xml");
+            String resource = "/ops/netbeansmodules/idlsupport/templates/debugproj.tpl";
+            setTemplateTextFromResource(resource);
+            //setTemplateFileName("templates/debugproj.tpl");
+            setTabString("    "); //Default is "\t"
+            //setEndlString("\n");//Default is "\r\n"
+            String result = getTemplateText();
+            result = result.replaceAll(DOMAIN_ID_REGEX, projProps.debugProjDomainID);
+            result = result.replaceAll(JAR_PATHS_REGEX, createJarPaths(projProps, projectName));
+            saveOutputText(result);
+        } catch (IOException ex)
+        {
+            JOptionPane.showMessageDialog(null, "Generating Debug Project File failed with the following exception: " + ex.getMessage());
+        }
 
     }
 
@@ -64,5 +74,13 @@ public class DebugProjectCompiler extends AbstractTemplateBasedIDLCompiler
         }
 
         return ret;
+    }
+
+    protected void setTemplateTextFromResource(String resource) throws IOException
+    {
+        InputStream templateStream = this.getClass().getResourceAsStream(resource);
+        byte[] templateBytes = new byte[templateStream.available()];
+        templateStream.read(templateBytes);
+        setTemplateText(new String(templateBytes));
     }
 }

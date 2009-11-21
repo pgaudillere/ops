@@ -6,14 +6,18 @@ package ops.netbeansmodules.idlsupport;
 
 import configlib.Serializable;
 import configlib.XMLArchiverOut;
+import java.awt.Toolkit;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Properties;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import ops.netbeansmodules.idlsupport.projectproperties.OPSProjectProperties;
 import org.netbeans.api.project.Project;
 import org.netbeans.api.project.ProjectInformation;
@@ -21,6 +25,7 @@ import org.netbeans.spi.project.ActionProvider;
 import org.netbeans.spi.project.ProjectState;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.util.Exceptions;
 import org.openide.util.ImageUtilities;
 import org.openide.util.Lookup;
@@ -160,6 +165,7 @@ public class OPSIDLProject implements Project
                     byte[] textBytes = new byte[size];
                     fileObject.getInputStream().read(textBytes);
                     projectIDLParser.parse(fileObject.getName(), new String(textBytes), io);
+                    fileObject.getInputStream().close();
                     
                 } catch (IOException ex)
                 {
@@ -310,6 +316,11 @@ public class OPSIDLProject implements Project
 
         public Icon getIcon()
         {
+       
+
+                //JOptionPane.showMessageDialog(null, new File(this.getClass().getResource("/ops/netbeansmodules/idlsupport/test.txt").getFile()));
+             
+
             return new ImageIcon(ImageUtilities.loadImage(
                     "ops/netbeansmodules/idlsupport/opsprojecticon.GIF"));
         }
