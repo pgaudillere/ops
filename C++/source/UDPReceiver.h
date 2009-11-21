@@ -72,7 +72,7 @@ namespace ops
 				
 			if(inSocketBufferSizent > 0)
 			{
-				boost::asio::socket_base::receive_buffer_size option(inSocketBufferSizent);
+				boost::asio::socket_base::receive_buffer_size option((int)inSocketBufferSizent);
 				boost::system::error_code ec;
 				ec = sock->set_option(option, ec);
 				sock->get_option(option);

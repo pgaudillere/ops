@@ -43,7 +43,7 @@ namespace ops
 		bool ret = false;
 		SafeLock lock(this);
 
-		for (int i = 0; i < keyStrings.size(); i++)
+		for (unsigned int i = 0; i < keyStrings.size(); i++)
 		{
 			if(o->getKey() == keyStrings[i])
 			{
