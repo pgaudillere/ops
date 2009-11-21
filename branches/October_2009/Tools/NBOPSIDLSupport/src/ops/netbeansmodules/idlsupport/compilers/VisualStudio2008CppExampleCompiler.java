@@ -4,7 +4,10 @@
  */
 package ops.netbeansmodules.idlsupport.compilers;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import ops.netbeansmodules.idlsupport.projectproperties.OPSProjectProperties;
 import parsing.AbstractTemplateBasedIDLCompiler;
 import parsing.IDLClass;
@@ -32,12 +35,17 @@ public class VisualStudio2008CppExampleCompiler extends AbstractTemplateBasedIDL
         String opsConfigPath = "";
         
 
-        createFile(slnPath, "templates/vs_sln.tpl", projectName, projProps);
-        createFile(pubProjPath, "templates/vs_pub_proj.tpl", projectName, projProps);
-        createFile(subProjPath, "templates/vs_sub_proj.tpl", projectName, projProps);
-        createFile(pubCppPath, "templates/vs_pub_cpp.tpl", projectName, projProps);
-        createFile(subCppPath, "templates/vs_sub_cpp.tpl", projectName, projProps);
-
+        try
+        {
+            createFile(slnPath, "/ops/netbeansmodules/idlsupport/templates/vs_sln.tpl", projectName, projProps);
+            createFile(pubProjPath, "/ops/netbeansmodules/idlsupport/templates/vs_pub_proj.tpl", projectName, projProps);
+            createFile(subProjPath, "/ops/netbeansmodules/idlsupport/templates/vs_sub_proj.tpl", projectName, projProps);
+            createFile(pubCppPath, "/ops/netbeansmodules/idlsupport/templates/vs_pub_cpp.tpl", projectName, projProps);
+            createFile(subCppPath, "/ops/netbeansmodules/idlsupport/templates/vs_sub_cpp.tpl", projectName, projProps);
+        } catch (IOException iOException)
+        {
+            JOptionPane.showMessageDialog(null, "Generating Visual Studio Example failed with the following exception: " + iOException.getMessage());
+        }
 
     }
 
@@ -56,10 +64,12 @@ public class VisualStudio2008CppExampleCompiler extends AbstractTemplateBasedIDL
         return "VisualStudio2008CppExampleCompiler";
     }
 
-    private void createFile(String slnPath, String tplPath, String projectName, OPSProjectProperties projProps)
+    private void createFile(String slnPath, String tplPath, String projectName, OPSProjectProperties projProps) throws IOException
     {
         setOutputFileName(slnPath);
-        setTemplateFileName(tplPath);
+        String resource = tplPath;
+        setTemplateTextFromResource(resource);
+        //setTemplateFileName(tplPath);
         setTabString("    "); //Default is "\t"
         String result = getTemplateText();
         result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
@@ -69,5 +79,13 @@ public class VisualStudio2008CppExampleCompiler extends AbstractTemplateBasedIDL
         result = result.replaceAll(PROJ_NAME_REGEX, projectName);
         saveOutputText(result);
 
+    }
+
+    protected void setTemplateTextFromResource(String resource) throws IOException
+    {
+        InputStream templateStream = this.getClass().getResourceAsStream(resource);
+        byte[] templateBytes = new byte[templateStream.available()];
+        templateStream.read(templateBytes);
+        setTemplateText(new String(templateBytes));
     }
 }

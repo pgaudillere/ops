@@ -11,11 +11,11 @@ package ops.netbeansmodules.idlsupport.compilers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import ops.netbeansmodules.idlsupport.projectproperties.JarDependency;
 import ops.netbeansmodules.util.FileHelper;
-import org.openide.util.Exceptions;
 import parsing.AbstractTemplateBasedIDLCompiler;
 import parsing.IDLClass;
 import parsing.IDLField;
@@ -47,26 +47,20 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         createdFiles = "";
         this.idlClasses = idlClasses;
         this.projectDirectory = projectDirectory;
-        for (IDLClass iDLClass : idlClasses)
+        try
         {
-            compileDataClass(iDLClass);
-            compileSubscriber(iDLClass);
-            compilePublisher(iDLClass);
+            for (IDLClass iDLClass : idlClasses)
+            {
+                compileDataClass(iDLClass);
+                compileSubscriber(iDLClass);
+                compilePublisher(iDLClass);
 //            compileHelper(iDLClass);
+            }
+            compileTypeSupport(idlClasses, extractProjectName(projectDirectory));
+        } catch (IOException iOException)
+        {
+            JOptionPane.showMessageDialog(null, "Generating Java failed with the following exception: " + iOException.getMessage());
         }
-        compileTypeSupport(idlClasses, extractProjectName(projectDirectory));
-
-//        try
-//        {
-//            buildAndJar(createdFiles);
-//        }
-//        catch (IOException ex)
-//        {
-//            Exceptions.printStackTrace(ex);
-//        } catch (InterruptedException ex)
-//        {
-//            Exceptions.printStackTrace(ex);
-//        }
 
     }
 
@@ -75,38 +69,46 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
 
     }
 
-    void compileDataClass(IDLClass idlClass)
+    protected void setTemplateTextFromResource(String resource) throws IOException
     {
-        String className = idlClass.getClassName();
-        String baseClassName = "OPSObject";
-        if(idlClass.getBaseClassName() != null)
-        {
-            baseClassName = idlClass.getBaseClassName();
-        }
-        String packageName = idlClass.getPackageName();
+        InputStream templateStream = this.getClass().getResourceAsStream(resource);
+        byte[] templateBytes = new byte[templateStream.available()];
+        templateStream.read(templateBytes);
+        setTemplateText(new String(templateBytes));
+    }
 
-        String packageFilePart = packageName.replace(".", "/");
-        setOutputFileName(projectDirectory + JAVA_DIR + "/" + packageFilePart + "/" + className + ".java");
-        setTemplateFileName("templates/javatemplate.tpl");
-        setTabString("    ");//Default is "\t"
-        setEndlString("\n");//Default is "\r\n"
+    void compileDataClass(IDLClass idlClass) throws IOException
+    {
 
-        //Get the template file as a String
-        String templateText = getTemplateText();
+       
+            String className = idlClass.getClassName();
+            String baseClassName = "OPSObject";
+            if (idlClass.getBaseClassName() != null)
+            {
+                baseClassName = idlClass.getBaseClassName();
+            }
+            String packageName = idlClass.getPackageName();
+            String packageFilePart = packageName.replace(".", "/");
+            setOutputFileName(projectDirectory + JAVA_DIR + "/" + packageFilePart + "/" + className + ".java");
 
-        //Replace regular expressions in the template file.
-        templateText = templateText.replace(CLASS_NAME_REGEX, className);
-        templateText = templateText.replace(BASE_CLASS_NAME_REGEX, baseClassName);
-        templateText = templateText.replace(PACKAGE_NAME_REGEX, packageName);
-        templateText = templateText.replace(CONSTRUCTOR_BODY_REGEX, getConstructorBody(idlClass));
-        templateText = templateText.replace(DECLARATIONS_REGEX, getDeclarations(idlClass));
-        templateText = templateText.replace(SERIALIZE_REGEX, getSerialize(idlClass));
-
-
-        //Save the modified text to the output file.
-        saveOutputText(templateText);
-
-        createdFiles += "\"" + getOutputFileName() + "\"\n";
+            String resource = "/ops/netbeansmodules/idlsupport/templates/javatemplate.tpl";
+            setTemplateTextFromResource(resource);
+            //setTemplateFileName("templates/javatemplate.tpl");
+            setTabString("    "); //Default is "\t"
+            setEndlString("\n"); //Default is "\r\n"
+            //Get the template file as a String
+            String templateText = getTemplateText();
+            //Replace regular expressions in the template file.
+            templateText = templateText.replace(CLASS_NAME_REGEX, className);
+            templateText = templateText.replace(BASE_CLASS_NAME_REGEX, baseClassName);
+            templateText = templateText.replace(PACKAGE_NAME_REGEX, packageName);
+            templateText = templateText.replace(CONSTRUCTOR_BODY_REGEX, getConstructorBody(idlClass));
+            templateText = templateText.replace(DECLARATIONS_REGEX, getDeclarations(idlClass));
+            templateText = templateText.replace(SERIALIZE_REGEX, getSerialize(idlClass));
+            //Save the modified text to the output file.
+            saveOutputText(templateText);
+            createdFiles += "\"" + getOutputFileName() + "\"\n";
+        
 
     }
 
@@ -117,14 +119,16 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
 
 
 
-    private void compilePublisher(IDLClass idlClass)
+    private void compilePublisher(IDLClass idlClass) throws IOException
     {
         String className = idlClass.getClassName();
         String packageName = idlClass.getPackageName();
 
         String packageFilePart = packageName.replace(".", "/");
         setOutputFileName(projectDirectory + JAVA_DIR + "/" + packageFilePart + "/" + className + "Publisher.java");
-        setTemplateFileName("templates/javapublishertemplate.tpl");
+        String resource = "/ops/netbeansmodules/idlsupport/templates/javapublishertemplate.tpl";
+        setTemplateTextFromResource(resource);
+        //setTemplateFileName("templates/javapublishertemplate.tpl");
         setTabString("    ");//Default is "\t"
         setEndlString("\n");//Default is "\r\n"
 
@@ -141,14 +145,16 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         createdFiles += "\"" + getOutputFileName() + "\"\n";
     }
 
-    private void compileSubscriber(IDLClass idlClass)
+    private void compileSubscriber(IDLClass idlClass) throws IOException
     {
         String className = idlClass.getClassName();
         String packageName = idlClass.getPackageName();
 
         String packageFilePart = packageName.replace(".", "/");
         setOutputFileName(projectDirectory + JAVA_DIR + "/" + packageFilePart + "/" + className + "Subscriber.java");
-        setTemplateFileName("templates/javasubscribertemplate.tpl");
+        String resource = "/ops/netbeansmodules/idlsupport/templates/javasubscribertemplate.tpl";
+        setTemplateTextFromResource(resource);
+        //setTemplateFileName("templates/javasubscribertemplate.tpl");
         setTabString("    ");//Default is "\t"
         setEndlString("\n");//Default is "\r\n"
 
@@ -166,14 +172,16 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
 
     }
 
-    private void compileTypeSupport(Vector<IDLClass> idlClasses, String projectName)
+    private void compileTypeSupport(Vector<IDLClass> idlClasses, String projectName) throws IOException
     {
         String className = projectName + "TypeFactory";
         String packageName = projectName;
 
         String packageFilePart = packageName.replace(".", "/");
         setOutputFileName(projectDirectory + JAVA_DIR + "/" + projectName + "/" + className + ".java");
-        setTemplateFileName("templates/javatypefactorytemplate.tpl");
+         String resource = "/ops/netbeansmodules/idlsupport/templates/javatypefactorytemplate.tpl";
+        setTemplateTextFromResource(resource);
+        //setTemplateFileName("templates/javatypefactorytemplate.tpl");
         setTabString("    ");//Default is "\t"
         setEndlString("\n");//Default is "\r\n"
 
