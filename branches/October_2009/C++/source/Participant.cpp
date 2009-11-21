@@ -47,14 +47,21 @@ namespace ops
 		SafeLock lock(&creationMutex);
 		if(instances.find(participantID) == instances.end())
 		{
-			Participant* newInst = new Participant(domainID_, participantID);
-			Domain* tDomain = newInst->config->getDomain(domainID_);
-
-			if(tDomain != NULL)
+			try
 			{
-				instances[participantID] = newInst;
+				Participant* newInst = new Participant(domainID_, participantID);
+				Domain* tDomain = newInst->config->getDomain(domainID_);
+
+				if(tDomain != NULL)
+				{
+					instances[participantID] = newInst;
+				}
+				else
+				{
+					return NULL;
+				}
 			}
-			else
+			catch(...)
 			{
 				return NULL;
 			}
@@ -77,6 +84,10 @@ namespace ops
 		}
 		//Should trow?
 		config = OPSConfig::getConfig();
+		if(!config)
+		{
+			throw 1;
+		}
 		
 		//------------Will be created when need------
 		partInfoPub = NULL;
