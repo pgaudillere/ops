@@ -27,7 +27,7 @@ namespace ops
 {
 class SafeLock;
 
-
+//TODO: Make this class platform independant
 class Lockable
 {
 	friend class SafeLock;
@@ -69,7 +69,9 @@ public:
     }
 	virtual ~Lockable()
 	{
-    	CloseHandle(mutex);    	
+    	CloseHandle(mutex);  
+		
+		
 
     }
 

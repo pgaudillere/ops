@@ -81,7 +81,7 @@ namespace ops
 				}
 				catch(std::exception& e)
 				{
-					std::cout << "Socket closed, exception in TCPServer::sendTo()" << std::endl;
+					std::cout << "Socket closed, exception in TCPServer::sendTo():" << e.what() << std::endl;
 					connected = false;
 					connectedSockets[i]->close();
 

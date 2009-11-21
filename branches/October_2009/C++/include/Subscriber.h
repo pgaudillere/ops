@@ -150,7 +150,7 @@ private:
     std::list<FilterQoSPolicy*> filterQoSPolicies;
 
 	std::deque<OPSMessage*> messageBuffer;
-	int messageBufferMaxSize;
+	unsigned int messageBufferMaxSize;
 	void addToBuffer(OPSMessage* mess);
 
 	HANDLE filterQoSPolicyMutex;

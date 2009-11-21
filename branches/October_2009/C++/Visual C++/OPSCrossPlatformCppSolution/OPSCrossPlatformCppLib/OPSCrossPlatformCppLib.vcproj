@@ -462,10 +462,6 @@
 				>
 			</File>
 			<Filter
-				Name="boost"
-				>
-			</Filter>
-			<Filter
 				Name="xml"
 				>
 				<File
@@ -480,23 +476,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\include\ArchiverIn.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\ArchiverInOut.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\ArchiverOut.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\ByteBuffer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\ByteListener.h"
 				>
 			</File>
 			<File
@@ -525,10 +509,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\DeadlineTimer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\Deserializable.h"
 				>
 			</File>
 			<File
@@ -624,10 +604,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\ReceiveTransport.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\ReferenceHandler.h"
 				>
 			</File>
@@ -649,10 +625,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\Sender.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\SendTransport.h"
 				>
 			</File>
 			<File
@@ -693,10 +665,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\TopicInfoData.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\XMLArchiver.h"
 				>
 			</File>
 			<File
