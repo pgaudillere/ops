@@ -96,6 +96,12 @@
   Try starting the OPS Debugger and the C++ subscriber and publisher examples from above 
   and see that they get and send data to Java and vice verca. 
 
+  ----
+  Note, if you see a "Reference Problem" alert when opening the projects, click "Resolve"
+  and browse to the missing jar files (OPS_DIR\Java\OPSJLib.jar and 
+  OPS_DIR\Examples\TestAll\Generated\TestAll.jar)   
+  ----
+
   If you've come this far, you are ready create some apps of your own, good luck!
   
    
