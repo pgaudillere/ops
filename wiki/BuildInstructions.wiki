@@ -21,5 +21,9 @@
     "C++\Visual C++\OPSCrossPlatformCppSolution\OPSCrossPlatformCppSolution.sln" 
    with Visual Studio. If you didn't install boost to "C:\Program Files\boost\boost_1_38" you need to repoint your include directories.
   Build the solution and verify it compiles alright (you will have some warnings).
+ # ==Build OPS Core for Java with Netbeans 6.x ==
+   Open from Netbeans
+    "Java\OPSJLib" and "Libs\ConfigurationLib" 
+    First build ConfigurationLib and then OPSJLib both should compile without errors.
  # ==Next==
    Continue to the BuildingExamples page...
