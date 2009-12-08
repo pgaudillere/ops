@@ -16,7 +16,7 @@
       # Boost System
       # Boost Thread
     Hit next, and choose Installation Directory to be for example "C:\Program Files\boost\boost_1_38" and start installation.
- # ==Build OPS Core==
+ # ==Build OPS Core for C++ with Visual Studio ==
    Open 
     "C++\Visual C++\OPSCrossPlatformCppSolution\OPSCrossPlatformCppSolution.sln" 
    with Visual Studio. If you didn't install boost to "C:\Program Files\boost\boost_1_38" you need to repoint your include directories.
