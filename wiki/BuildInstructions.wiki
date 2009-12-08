@@ -23,8 +23,9 @@
   Build the solution and verify it compiles alright (you will have some warnings).
  # ==Build OPS Core for Java with Netbeans 6.x ==
    Open from Netbeans
+
     "Java\OPSJLib" and "Libs\!ConfigurationLib".
 
-    First build !ConfigurationLib and then OPSJLib both should compile without errors.
+   First build !ConfigurationLib and then OPSJLib both should compile without errors.
  # ==Next==
    Continue to the BuildingExamples page...
