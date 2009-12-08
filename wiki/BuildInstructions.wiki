@@ -26,8 +26,7 @@
    "Java\OPSJLib" and "Libs\!ConfigurationLib".
    First build !ConfigurationLib and then OPSJLib. Both should compile without errors.
  # ==Build OPS IDL Builder with Netbeans 6.7 ==
-   Open from Netbeans "Tools\OPS IDL Builder NB", make sure you check Open Required Projects and Open as main project. Right click the main project and select "Build All". This will build several projects and output quite a lot of text in the output window. Make sure you scroll to the bottom of the output window and verify it says "BUILD SUCCESSFUL".
-Try the OPS IDL Builder by choosing "Run" on the main project (OPS IDL Builder NB). 
+   Open from Netbeans "Tools\OPS IDL Builder NB", make sure you check Open Required Projects and Open as main project. Right click the main project and select "Build All". This will build several projects and output quite a lot of text in the output window. Make sure you scroll to the bottom of the output window and verify it says "BUILD SUCCESSFUL". Try the OPS IDL Builder by choosing "Run" on the main project (OPS IDL Builder NB). 
 
  # ==Next==
    Continue to the BuildingExamples page...
