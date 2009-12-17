@@ -394,6 +394,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\RequestReply.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Reservable.cpp"
 				>
 			</File>
@@ -605,6 +609,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\ReferenceHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\RequestReply.h"
 				>
 			</File>
 			<File
