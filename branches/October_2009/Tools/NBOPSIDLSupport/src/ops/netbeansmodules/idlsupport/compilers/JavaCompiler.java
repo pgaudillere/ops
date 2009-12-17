@@ -385,7 +385,7 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         String manFilePath = projectDirectory.replace("\\", "/") + "/manifest_adds.ops_tmp";
         FileHelper.createAndWriteFile(manFilePath, manifestJarDepString);
 
-        String execString = "javac -cp " +  jarDepString + "lib/OPSJLib.jar;lib/ConfigurationLib.jar;" + " @" + "\"" + dinfoPath + "\"";
+        String execString = "javac -cp " +  jarDepString + "build/cluster/modules/ext/OPSJLib.jar;ops_idl_builder_nb/modules/ext/OPSJLib.jar;build/cluster/modules/ext/ConfigurationLib.jar;ops_idl_builder_nb/modules/ext/ConfigurationLib.jar" + " @" + "\"" + dinfoPath + "\"";
         String  batFileText  = ";";//"@echo off\n";
                 batFileText += "echo Building Java..."  + "\n";
                 batFileText += execString + "\n";
