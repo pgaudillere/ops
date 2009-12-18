@@ -1,0 +1,48 @@
+#summary utkast till vad som ska ingå i utvecklingsdocen
+
+
+
+OPS 4
+Arkitektur
+Design
+Nya features
+Arv
+virtual
+getMessage
+config
+Participant
+multicast
+boost asio
+header files, public and private
+coding guidlines
+stora paket (begränsningar)
+threading
+threadpool
+protocol
+ConfigurationLib
+
+
+java lider av C++ optimerad kod (obs endast stora paket)
+varför inte NIO
+varför NIO.2
+
+varför ingen writeReliable
+RequestReply
+
+
+
+Verktyg
+
+Netbeans modules
+Compilers
+   exemplifiera med Java Compiler
+AbstractTemplateBasedIDLCompiler
+plugins till compilern - exempel generera UML till EA
+
+CompilerLib
+IDLParser
+java compiler compiler
+Debuggern
+Ny debuggern
+
+
