@@ -15,8 +15,8 @@ class CheesePublisher : public ops::Publisher
 {
     
 public:
-    CheesePublisher(ops::Topic<Cheese> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    CheesePublisher(ops::Topic t)
+        : ops::Publisher(t)
     {
 
 
