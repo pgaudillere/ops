@@ -27,11 +27,13 @@ public class VisualStudio2008CppExampleCompiler extends AbstractTemplateBasedIDL
 
     public void compileVSCppExample(String projectDirectory, String projectName, OPSProjectProperties projProps)
     {
-        String subCppPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_sub.cpp";
-        String pubCppPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_pub.cpp";
-        String subProjPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_sub.vcproj";
-        String pubProjPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName  + "/" + projProps.vsExampleTopicName + "_pub.vcproj";
-        String slnPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + projProps.vsExampleTopicName + "/" + projProps.vsExampleTopicName + "_example.sln";
+        String vsExampleTopicName = projProps.getPropertyValue("vsExampleTopicName", "");
+
+        String subCppPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + vsExampleTopicName  + "/" + vsExampleTopicName + "_sub.cpp";
+        String pubCppPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + vsExampleTopicName  + "/" + vsExampleTopicName + "_pub.cpp";
+        String subProjPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + vsExampleTopicName  + "/" + vsExampleTopicName + "_sub.vcproj";
+        String pubProjPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + vsExampleTopicName  + "/" + vsExampleTopicName + "_pub.vcproj";
+        String slnPath = projectDirectory + "/" + "Generated/Visual Studio Examples/" + vsExampleTopicName + "/" + vsExampleTopicName + "_example.sln";
         String opsConfigPath = "";
         
 
@@ -71,11 +73,17 @@ public class VisualStudio2008CppExampleCompiler extends AbstractTemplateBasedIDL
         setTemplateTextFromResource(resource);
         //setTemplateFileName(tplPath);
         setTabString("    "); //Default is "\t"
+
+        String vsExampleTopicName = projProps.getPropertyValue("vsExampleTopicName", "");
+        String vsExampleDataType = projProps.getPropertyValue("vsExampleDataType", "");
+        String vsExampleDomainID = projProps.getPropertyValue("vsExampleDomainID", "");
+        
+
         String result = getTemplateText();
-        result = result.replaceAll(TOPIC_NAME_REGEX, projProps.vsExampleTopicName);
-        result = result.replaceAll(DATA_TYPE_REGEX, projProps.vsExampleDataType.replace(".", "::"));
-        result = result.replaceAll(INCLUDE_DATA_TYPE_PATH_REGEX, projProps.vsExampleDataType.replace(".", "/"));
-        result = result.replaceAll(DOMAIN_ID_REGEX, projProps.vsExampleDomainID);
+        result = result.replaceAll(TOPIC_NAME_REGEX, vsExampleTopicName);
+        result = result.replaceAll(DATA_TYPE_REGEX, vsExampleDataType.replace(".", "::"));
+        result = result.replaceAll(INCLUDE_DATA_TYPE_PATH_REGEX, vsExampleDataType.replace(".", "/"));
+        result = result.replaceAll(DOMAIN_ID_REGEX, vsExampleDomainID);
         result = result.replaceAll(PROJ_NAME_REGEX, projectName);
         saveOutputText(result);
 

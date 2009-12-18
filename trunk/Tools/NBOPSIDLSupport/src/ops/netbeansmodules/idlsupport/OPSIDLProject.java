@@ -64,6 +64,7 @@ public class OPSIDLProject implements Project
         {
             File outFile = new File(getProjectDirectory().getPath() + "/" + PROJECT_DIR + "/" + PROJECT_PROPFILE);
             XMLArchiverOut archiver = new XMLArchiverOut(new FileOutputStream(outFile));
+            archiver.setWriteTypes(false);
             archiver.inout("properties", getProperties());
         }
         catch (IOException ex)

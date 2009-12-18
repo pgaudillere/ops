@@ -45,10 +45,10 @@ public class PropertiesDialog extends javax.swing.JDialog
         jarDepList.setListData(properties.javaBuildJarDependencies);
         this.project = project;
 
-        vsExampleEnableCheckBox.setSelected(properties.vsExampleEnabled);
-        vsExampleTopicTextField.setText(properties.vsExampleTopicName);
-        vsExampleDataTypeTextField.setText(properties.vsExampleDataType);
-        vsExampleDomainTextField.setText(properties.vsExampleDomainID);
+        vsExampleEnableCheckBox.setSelected(Boolean.parseBoolean(properties.getPropertyValue("vsExampleEnabled", "false")));
+        vsExampleTopicTextField.setText(properties.getPropertyValue("vsExampleTopicName", ""));
+        vsExampleDataTypeTextField.setText(properties.getPropertyValue("vsExampleDataType", ""));
+        vsExampleDomainTextField.setText(properties.getPropertyValue("vsExampleDomainID", ""));
 
 
     }
@@ -61,10 +61,13 @@ public class PropertiesDialog extends javax.swing.JDialog
         properties.defaultOPSTopicConfigFile = defaultConfigFileTextField.getText();
         properties.buildDebugProject = buildDebugProjectCheckBox.isSelected();
         properties.debugProjDomainID = domainIDTextField.getText();
-        properties.vsExampleEnabled = vsExampleEnableCheckBox.isSelected();
-        properties.vsExampleTopicName = vsExampleTopicTextField.getText();
-        properties.vsExampleDataType = vsExampleDataTypeTextField.getText();
-        properties.vsExampleDomainID = vsExampleDomainTextField.getText();
+
+
+        properties.setProperty(new Property("vsExampleTopicName", vsExampleTopicTextField.getText()));
+        properties.setProperty(new Property("vsExampleDataType", vsExampleDataTypeTextField.getText()));
+        properties.setProperty(new Property("vsExampleEnabled", vsExampleEnableCheckBox.isSelected() + ""));
+        properties.setProperty(new Property("vsExampleDomainID", vsExampleDomainTextField.getText()));
+       
     }
 
     /** This method is called from within the constructor to
