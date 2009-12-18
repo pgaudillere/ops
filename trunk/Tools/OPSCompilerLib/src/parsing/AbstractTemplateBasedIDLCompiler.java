@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package parsing;
-
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,42 +18,53 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractTemplateBasedIDLCompiler implements IDLCompiler
 {
+
     public static final String CLASS_NAME_REGEX = "__className";
     public static final String INCLUDES_REGEX = "__includes";
     public static final String PACKAGE_NAME_REGEX = "__packageName";
     protected String outputFileName;
     protected String templateFileName = "";
-
+    protected String templText = null;
     private String tabString = "\t";
     private String endlString = "\r\n";
 
     protected String getTemplateText()
     {
-        FileInputStream fis = null;
-        try
+        if (templText == null)
         {
-            fis = new FileInputStream(templateFileName);
-            String templateText;
-            byte[] inBytes = new byte[fis.available()];
-            fis.read(inBytes);
-            templateText = new String(inBytes);
-            return templateText;
-        } catch (IOException ex)
-        {
-            
-            return null;
-        } finally
-        {
+            FileInputStream fis = null;
             try
             {
-                fis.close();
+                fis = new FileInputStream(templateFileName);
+                byte[] inBytes = new byte[fis.available()];
+                fis.read(inBytes);
+                templText = new String(inBytes);
+                return templText;
             } catch (IOException ex)
             {
-                
+
                 return null;
+            } finally
+            {
+                try
+                {
+                    fis.close();
+                } catch (IOException ex)
+                {
+
+                    return null;
+                }
             }
         }
+        return templText;
     }
+
+    public void setTemplateText(String templText)
+    {
+        this.templText = templText;
+    }
+
+
 
     protected void saveOutputText(String templateText)
     {
@@ -67,7 +76,7 @@ public abstract class AbstractTemplateBasedIDLCompiler implements IDLCompiler
 
             outFilePath.mkdirs();
             outFile.createNewFile();
-            
+
 
             fos = new FileOutputStream(outFile);
             fos.write(templateText.getBytes());
@@ -130,10 +139,9 @@ public abstract class AbstractTemplateBasedIDLCompiler implements IDLCompiler
     {
         this.endlString = endlString;
     }
+
     protected String endl()
     {
         return endlString;
     }
-
-
 }

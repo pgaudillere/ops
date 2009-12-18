@@ -25,7 +25,7 @@
 #include "OPSMessage.h"
 #include "OPSArchiverOut.h"
 #include "Topic.h"
-#include "Sender.h"
+#include "SendDataHandler.h"
 #include "OPSConstants.h"
 #include "TimeHelper.h"
 #include <string>
@@ -64,7 +64,8 @@ private:
 
 	MemoryMap memMap;
 
-	Sender* udpSender;
+	SendDataHandler* sendDataHandler;
+	//Sender* udpSender;
 
 	OPSMessage message;
  

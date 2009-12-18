@@ -15,31 +15,24 @@ class PizzaDataSubscriber : public ops::Subscriber
 {
 
 public:
-    PizzaDataSubscriber(ops::Topic<PizzaData> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    PizzaDataSubscriber(ops::Topic t)
+        : ops::Subscriber(t)
     {
 
     }
 
     bool getData(PizzaData* d)
     {
-        bool ret = firstDataReceived;
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        *d = narrowedData;
-        return ret;
-    }
-    PizzaData getDataCopy()
-    {
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        return narrowedData;
+        if(!data) return false;
+        aquireMessageLock();
+		data->fillClone(d);
+		releaseMessageLock();
+        return true;
     }
 
-    ops::OPSObject* getDataReference()
+    PizzaData* getTypedDataReference()
     {
-        hasUnreadData = false;
-        return &narrowedData;
+        return (PizzaData*)getDataReference();
     }
 
     ~PizzaDataSubscriber(void)
@@ -48,14 +41,6 @@ public:
     }
 private:
     PizzaData narrowedData;
-protected:
-    //Override
-    void saveCopy(ops::OPSObject* o)
-    {
-        ops::SafeLock lock(this);
-        narrowedData = *((PizzaData*)o);
-    }
-
 
 };
 

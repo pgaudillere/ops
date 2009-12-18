@@ -18,8 +18,8 @@
 
 int main(int argc, const char* args[])
 {
-	int mainSleep = 100;
-	int nrOfFloats = 500000;
+	int mainSleep = 1;
+	int nrOfFloats = 500;
 	int sleepEveryNrPackets = 100000;
 	int sendSleepTime = 1;
 

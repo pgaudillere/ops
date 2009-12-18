@@ -62,7 +62,7 @@ namespace ops
 
 		}
 		
-		///Sends buf to any subscriber connected to this Sender, ip and port are discarded and can be left blank.
+		///Sends buf to any Receiver connected to this Sender, ip and port are discarded and can be left blank.
         virtual bool sendTo(char* buf, int size, const std::string& ip, int port)
 		{
 			//Send to anyone connected. Loop backwards to avoid problems when removing broken sockets
@@ -81,7 +81,7 @@ namespace ops
 				}
 				catch(std::exception& e)
 				{
-					std::cout << "Socket closed, exception in TCPServer::sendTo()" << std::endl;
+					std::cout << "Socket closed, exception in TCPServer::sendTo():" << e.what() << std::endl;
 					connected = false;
 					connectedSockets[i]->close();
 

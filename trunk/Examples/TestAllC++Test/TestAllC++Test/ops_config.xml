@@ -19,15 +19,14 @@
                         <name>ChildTopic</name>
                         <port>6689</port>
                         <dataType>TestAll.ChildData</dataType>
-                        <sampleMaxSize>2100000</sampleMaxSize>
-                        <transport>tcp</transport>
-                        <address>127.0.0.1</address>
+                        <!--<sampleMaxSize>2100000</sampleMaxSize>-->
+                        <transport>udp</transport>
                         <outSocketBufferSize>260000000</outSocketBufferSize>
                         <inSocketBufferSize>160000000</inSocketBufferSize>
                     </element>
                     <element type = "Topic">
                         <name>BaseTopic</name>
-                        <port>6687</port>
+                        <port>6689</port>
                         <dataType>TestAll.BaseData</dataType>
                         <transport>tcp</transport>
                         <address>127.0.0.1</address>

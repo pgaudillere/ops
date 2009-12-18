@@ -326,6 +326,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\McSendDataHandler.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\McUdpSendDataHandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\MulticastDomain.h"
 				>
 			</File>
@@ -370,11 +378,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ParticipantInfoDataListener.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Publisher.cpp"
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ReceiveDataHandler.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Receiver.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\RequestReply.cpp"
 				>
 			</File>
 			<File
@@ -402,6 +422,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\TCPSendDataHandler.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\TCPServer.h"
 				>
 			</File>
@@ -415,10 +439,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\Topic.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\TopicHandler.cpp"
 				>
 			</File>
 			<File
@@ -446,10 +466,6 @@
 				>
 			</File>
 			<Filter
-				Name="boost"
-				>
-			</Filter>
-			<Filter
 				Name="xml"
 				>
 				<File
@@ -464,23 +480,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\include\ArchiverIn.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\ArchiverInOut.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\ArchiverOut.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\ByteBuffer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\ByteListener.h"
 				>
 			</File>
 			<File
@@ -509,10 +513,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\DeadlineTimer.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\Deserializable.h"
 				>
 			</File>
 			<File
@@ -592,7 +592,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\ParticipantInfoDataListener.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\Publisher.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ReceiveDataHandler.h"
 				>
 			</File>
 			<File
@@ -600,11 +608,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\ReceiveTransport.h"
+				RelativePath="..\..\..\include\ReferenceHandler.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\ReferenceHandler.h"
+				RelativePath="..\..\..\include\RequestReply.h"
 				>
 			</File>
 			<File
@@ -620,11 +628,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\Sender.h"
+				RelativePath="..\..\..\include\SendDataHandler.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\SendTransport.h"
+				RelativePath="..\..\..\include\Sender.h"
 				>
 			</File>
 			<File
@@ -664,15 +672,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\TopicHandler.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\TopicInfoData.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\XMLArchiver.h"
 				>
 			</File>
 			<File

@@ -10,10 +10,8 @@
 
 #include "LHCData.h"
 #include "pizza/special/Cheese.h"
-#include "pizza/special/Cheese.h"
 
 
-//Nested namespaces opener.
 namespace pizza { namespace special {
 
 
@@ -21,6 +19,7 @@ class ExtraAllt :
 	public LHCData
 {
 public:
+   static std::string getTypeName(){return std::string("pizza.special.ExtraAllt");}
 	
 	///Does the order include extra cheese???
 	bool extraCheese;
@@ -39,39 +38,48 @@ public:
 	std::vector<float> floats;
 	std::vector<double> doubles;
 	std::vector<std::string> strings;
-	std::vector<pizza::special::Cheese*> cheeses;
+	std::vector<pizza::special::Cheese> cheeses;
 
-
+    ///Default constructor.
     ExtraAllt()
         : LHCData()
-		,extraCheese(false)
-		,nrOfMushRooms(0)
-		,meetQuality(0)
-		,timestamp(0)
-		,timeBakedHours(0)
-		,timeBakedSeconds(0)
-
+		, extraCheese(false), nrOfMushRooms(0), meetQuality(0), timestamp(0), timeBakedHours(0), timeBakedSeconds(0)
     {
         OPSObject::appendType(std::string("pizza.special.ExtraAllt"));
-		cheese = new pizza::special::Cheese();
+		cheese = new pizza::special::Cheese;
 
 
     }
-    virtual ~ExtraAllt(void)
+    ///Copy-constructor making full deep copy of a(n) ExtraAllt object.
+    ExtraAllt(const ExtraAllt& __c)
+       : LHCData()
+		, extraCheese(false), nrOfMushRooms(0), meetQuality(0), timestamp(0), timeBakedHours(0), timeBakedSeconds(0)
     {
-		delete cheese;
+        OPSObject::appendType(std::string("pizza.special.ExtraAllt"));
+		cheese = new pizza::special::Cheese;
+
+        __c.fillClone((ExtraAllt*)this);
 
     }
+    ///Assignment operator making full deep copy of a(n) ExtraAllt object.
+    ExtraAllt& operator = (const ExtraAllt& other)
+    {
+        other.fillClone(this);
+        return *this;
+    }
+
+    ///This method acceptes an ops::ArchiverInOut visitor which will serialize or deserialize an
+    ///instance of this class to a format dictated by the implementation of the ArchiverInout.
     void serialize(ops::ArchiverInOut* archive)
     {
 		LHCData::serialize(archive);
-		extraCheese = archive->inout(std::string("extraCheese"), extraCheese);
-		nrOfMushRooms = archive->inout(std::string("nrOfMushRooms"), nrOfMushRooms);
-		meetQuality = archive->inout(std::string("meetQuality"), meetQuality);
-		timestamp = archive->inout(std::string("timestamp"), timestamp);
-		timeBakedHours = archive->inout(std::string("timeBakedHours"), timeBakedHours);
-		timeBakedSeconds = archive->inout(std::string("timeBakedSeconds"), timeBakedSeconds);
-		description = archive->inout(std::string("description"), description);
+		archive->inout(std::string("extraCheese"), extraCheese);
+		archive->inout(std::string("nrOfMushRooms"), nrOfMushRooms);
+		archive->inout(std::string("meetQuality"), meetQuality);
+		archive->inout(std::string("timestamp"), timestamp);
+		archive->inout(std::string("timeBakedHours"), timeBakedHours);
+		archive->inout(std::string("timeBakedSeconds"), timeBakedSeconds);
+		archive->inout(std::string("description"), description);
 		cheese = (pizza::special::Cheese*) archive->inout(std::string("cheese"), cheese);
 		archive->inout(std::string("bools"), bools);
 		archive->inout(std::string("bytes"), bytes);
@@ -80,13 +88,51 @@ public:
 		archive->inout(std::string("floats"), floats);
 		archive->inout(std::string("doubles"), doubles);
 		archive->inout(std::string("strings"), strings);
-		archive->inout<pizza::special::Cheese*>(std::string("cheeses"), cheeses);
+		archive->inout<pizza::special::Cheese>(std::string("cheeses"), cheeses, pizza::special::Cheese());
+
+    }
+    //Returns a deep copy of this object.
+    virtual ops::OPSObject* clone()
+    {
+		ExtraAllt* ret = new ExtraAllt;
+		this->fillClone(ret);
+		return ret;
+
+    }
+
+    virtual void fillClone(ops::OPSObject* obj) const
+    {
+		ExtraAllt* narrRet = (ExtraAllt*)obj;
+		LHCData::fillClone(narrRet);
+		narrRet->extraCheese = extraCheese;
+		narrRet->nrOfMushRooms = nrOfMushRooms;
+		narrRet->meetQuality = meetQuality;
+		narrRet->timestamp = timestamp;
+		narrRet->timeBakedHours = timeBakedHours;
+		narrRet->timeBakedSeconds = timeBakedSeconds;
+		narrRet->description = description;
+		if(narrRet->cheese) delete narrRet->cheese;
+		narrRet->cheese = (pizza::special::Cheese*)cheese->clone();
+		narrRet->bools = bools;
+		narrRet->bytes = bytes;
+		narrRet->ints = ints;
+		narrRet->longs = longs;
+		narrRet->floats = floats;
+		narrRet->doubles = doubles;
+		narrRet->strings = strings;
+		narrRet->cheeses = cheeses;
+
+    }
+
+    ///Destructor: Note that all aggregated data and vectors are completely deleted.
+    virtual ~ExtraAllt(void)
+    {
+		if(cheese) delete cheese;
 
     }
     
 };
 
-//Close nested namespace
 }}
 
 

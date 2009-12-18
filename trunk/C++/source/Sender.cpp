@@ -21,17 +21,30 @@
 #include "Sender.h"
 #include "UDPSender.h"
 #include "TCPServer.h"
+#include <map>
 
 namespace ops
 {
 
 	Sender* Sender::create(std::string localInterface, int ttl, __int64 outSocketBufferSize)
 	{
-		return new UDPSender(localInterface, ttl, outSocketBufferSize);
+		return new UDPSender(localInterface, ttl, outSocketBufferSize, true);
+	}
+	Sender* Sender::createUDPSender(std::string localInterface, int ttl, __int64 outSocketBufferSize)
+	{
+		return new UDPSender(localInterface, ttl, outSocketBufferSize, false);
 	}
 	Sender* Sender::createTCPServer(std::string ip, int port, IOService* ioService)
 	{
-		return new TCPServer(ip, port, ioService);
+		static std::map<int, TCPServer*> tcpSenderInstances;
+
+		TCPServer* newInstance = NULL;
+		if(tcpSenderInstances.find(port) == tcpSenderInstances.end())
+		{
+			newInstance = new TCPServer(ip, port, ioService);
+			tcpSenderInstances[port] = newInstance;
+		}
+		return tcpSenderInstances[port];
 	}
 
 

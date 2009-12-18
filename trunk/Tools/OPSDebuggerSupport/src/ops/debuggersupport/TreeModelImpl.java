@@ -139,9 +139,9 @@ public class TreeModelImpl implements TreeModel
 
     private void populateNode(NameValuePair parent)
     {
-        NameValuePair nvp = (NameValuePair) parent;
+        NameValuePair nvp =  parent;
 
-        ArrayList<NameValuePair> children = new ArrayList();
+        ArrayList<NameValuePair> children = new ArrayList<NameValuePair>();
         Field[] fields = nvp.value.getClass().getFields();
 
         if(parent == root)

@@ -10,6 +10,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import ops.netbeansmodules.idlsupport.projectproperties.PropertiesDialog;
 import org.netbeans.spi.project.ui.LogicalViewProvider;
+import org.netbeans.spi.project.ui.support.CommonProjectActions;
 import org.openide.filesystems.FileObject;
 import org.openide.loaders.DataFolder;
 import org.openide.loaders.DataObjectNotFoundException;
@@ -96,29 +97,19 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
         @Override
         public Action[] getActions(boolean selected)
         {
-            Action[] actions = new Action[super.getActions(selected).length + 1];
+            Action[] actions = new Action[super.getActions(selected).length + 4];
 
             for (int i = 0; i < super.getActions(selected).length; i++)
             {
-//                if(super.getActions(selected)[i].getValue("props").equals("Properties"))
-//                {
-//                    super.getActions(selected)[i] = new AbstractAction("Properties") {
-//
-//                        public void actionPerformed(ActionEvent e) {
-//                            System.out.println("Properties action...");
-//                        }
-//                    };
-//                }
-//                System.out.println("" + super.getActions(selected)[i]);
                 actions[i] = super.getActions(selected)[i];
             }
-            actions[super.getActions(selected).length] = new AbstractAction("Build") {
+            actions[super.getActions(selected).length] = new AbstractAction("Build Project") {
 
                 public void actionPerformed(ActionEvent e) {
                     project.build();
                 }
             };
-            actions[super.getActions(selected).length] = new AbstractAction("Project Properties...") {
+            actions[super.getActions(selected).length + 1] = new AbstractAction("Project Properties...") {
 
                 public void actionPerformed(ActionEvent e) {
                     showProjectPropertiesDialog();
@@ -126,6 +117,9 @@ class OPSIDLProjectLogicalView implements LogicalViewProvider {
 
 
             };
+            actions[super.getActions(selected).length + 2] = CommonProjectActions.closeProjectAction();
+            actions[super.getActions(selected).length + 3] = CommonProjectActions.setAsMainProjectAction();
+
 
             return actions;
 

@@ -29,14 +29,14 @@
 namespace ops
 {
     ///A sender implementation that dispatches messages over ip based UDP.
-    class UDPSender : public Sender//, Notifier<const HeartBeat&>
+    class UDPSender : public Sender
     {
     public:
         ///Costructs a new UDPSender an binds its underlying socket to local host
         ///and a dynamically allocated local port.
 		///This class accepts synchronous write operations through sendTo().
-		///This class dispatches HeartBeats comming in to its attached Listener<HeartBeat>:s.
-        UDPSender(std::string localInterface = "0.0.0.0", int ttl = 1, __int64 outSocketBufferSize = 16000000);
+
+        UDPSender(std::string localInterface = "0.0.0.0", int ttl = 1, __int64 outSocketBufferSize = 16000000, bool multicastSocket = false);
         ~UDPSender();
         
         ///Override from Sender

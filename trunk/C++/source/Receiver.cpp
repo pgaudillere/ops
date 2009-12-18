@@ -33,9 +33,9 @@ namespace ops
 	{
 		return new TCPClient(ip, port, ioService);
 	}
-	Receiver* Receiver::createUDPReceiver(int port)
+	Receiver* Receiver::createUDPReceiver(int port, IOService* ioService)
 	{
-		return new UDPReceiver(port);
+		return new UDPReceiver(port, ioService);
 	}
 
 }
