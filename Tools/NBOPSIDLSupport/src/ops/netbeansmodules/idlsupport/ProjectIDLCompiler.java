@@ -62,7 +62,7 @@ public class ProjectIDLCompiler
             debugProjectCompiler.createDebugProjectFile(project.getProjectDirectory().getPath(), project.getProjectDirectory().getName(), project.getProperties());
 
         }
-        if(project.getProperties().vsExampleEnabled)
+        if(Boolean.parseBoolean(project.getProperties().getPropertyValue("vsExampleEnabled", "false")))
         {
             cppExampleCompiler.compileVSCppExample(project.getProjectDirectory().getPath(), project.getProjectDirectory().getName(), project.getProperties());
         }

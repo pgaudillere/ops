@@ -4,10 +4,13 @@
  */
 package ops.netbeansmodules.idlsupport.projectproperties;
 
+import com.sun.corba.se.impl.orbutil.GetPropertyAction;
 import configlib.ArchiverInOut;
 import configlib.Serializable;
 import configlib.SerializableFactory;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -31,7 +34,8 @@ public class OPSProjectProperties implements Serializable
     public String vsExampleTopicName = "";
     public String vsExampleDataType = "";
     public String vsExampleDomainID = "";
-    public boolean vsExampleEnabled = false;;
+    public boolean vsExampleEnabled = false;
+    private Vector<Property> properties = new Vector<Property>();
 
     public void serialize(ArchiverInOut archiver) throws IOException
     {
@@ -47,13 +51,59 @@ public class OPSProjectProperties implements Serializable
         vsExampleDataType = archiver.inout("vsExampleDataType", vsExampleDataType);
         vsExampleDomainID = archiver.inout("vsExampleDomainID", vsExampleDomainID);
         vsExampleEnabled = archiver.inout("vsExampleEnabled", vsExampleEnabled);
+        properties = (Vector<Property>) archiver.inoutSerializableList("properties", properties);
+    }
+
+    public void setProperty(Property p)
+    {
+        if (!existProperty(p.key))
+        {
+            properties.add(p);
+        } else
+        {
+            getProperty(p.key).value = p.value;
+        }
+    }
+
+    public String getPropertyValue(String key, String defaultValue)
+    {
+        for (Property property : properties)
+        {
+            if (property.key.equals(key))
+            {
+                return property.value;
+            }
+        }
+        return defaultValue;
+    }
+    public Property getProperty(String key)
+    {
+        for (Property property : properties)
+        {
+            if (property.key.equals(key))
+            {
+                return property;
+            }
+        }
+        return null;
+    }
+
+    public boolean existProperty(String key)
+    {
+        for (Property property : properties)
+        {
+            if (property.key.equals(key))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static SerializableFactory getSerializableFactory()
     {
         return new OPSProjectPropertiesFactory();
     }
-
 
     static class OPSProjectPropertiesFactory implements SerializableFactory
     {
@@ -64,9 +114,13 @@ public class OPSProjectProperties implements Serializable
             {
                 return new OPSProjectProperties();
             }
-            if(type.equals("ops.netbeansmodules.idlsupport.projectproperties.JarDependency"))
+            if (type.equals("ops.netbeansmodules.idlsupport.projectproperties.JarDependency"))
             {
                 return new JarDependency();
+            }
+            if (type.equals("ops.netbeansmodules.idlsupport.projectproperties.Property"))
+            {
+                return new Property();
             }
             return null;
         }

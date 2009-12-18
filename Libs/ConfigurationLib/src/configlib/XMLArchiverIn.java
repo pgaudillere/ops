@@ -155,19 +155,31 @@ public class XMLArchiverIn implements ArchiverInOut
 //    }
     public int getNrElements(String name)
     {
+
         nodeStack.push(currentNode);
-        currentNode = getNode(name);
-        NodeList nodes = currentNode.getChildNodes();
-        int size = 0;
-        for (int i = 0; i < nodes.getLength(); i++)
+        try
         {
-            if (nodes.item(i).getNodeName().equals("element"))
+            currentNode = getNode(name);
+            if(currentNode == null)
             {
-                size++;
+                return 0;
             }
+            NodeList nodes = currentNode.getChildNodes();
+            int size = 0;
+            for (int i = 0; i < nodes.getLength(); i++)
+            {
+                if (nodes.item(i).getNodeName().equals("element"))
+                {
+                    size++;
+                }
+            }
+            return size;
         }
-        currentNode = nodeStack.pop();
-        return size;
+        finally
+        {
+            currentNode = nodeStack.pop();
+        }
+        
 
     }
 //    public Deserializable getElement(String name, int i, Deserializable deserializable)
