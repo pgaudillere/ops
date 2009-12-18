@@ -7,7 +7,9 @@ package ops.netbeansmodules.idlsupport;
 import java.io.IOException;
 import java.util.Vector;
 import ops.netbeansmodules.idlsupport.compilers.CppCompiler;
+import ops.netbeansmodules.idlsupport.compilers.DebugProjectCompiler;
 import ops.netbeansmodules.idlsupport.compilers.JavaCompiler;
+import ops.netbeansmodules.idlsupport.compilers.VisualStudio2008CppExampleCompiler;
 import org.openide.util.Exceptions;
 import parsing.IDLClass;
 
@@ -20,6 +22,9 @@ public class ProjectIDLCompiler
 
     JavaCompiler javaCompiler = new JavaCompiler();
     CppCompiler cppCompiler = new CppCompiler();
+    DebugProjectCompiler debugProjectCompiler = new DebugProjectCompiler();
+    VisualStudio2008CppExampleCompiler cppExampleCompiler = new VisualStudio2008CppExampleCompiler();
+
     OPSIDLProject project;
 
     public ProjectIDLCompiler(OPSIDLProject project)
@@ -29,24 +34,39 @@ public class ProjectIDLCompiler
 
     public void compile(Vector<IDLClass> idlClasses)
     {
-        cppCompiler.compileDataClasses(idlClasses, project.getProjectDirectory().getPath() + "/Generated/");
-        javaCompiler.compileDataClasses(idlClasses, project.getProjectDirectory().getPath() + "/Generated/");
-
-        if (project.getProperties().buildJava)
+        if (project.getProperties().generateCpp)
         {
-            try
+            cppCompiler.compileDataClasses(idlClasses, project.getProjectDirectory().getPath() + "/Generated/");
+        }
+        if (project.getProperties().generateJava)
+        {
+            javaCompiler.compileDataClasses(idlClasses, project.getProjectDirectory().getPath() + "/Generated/");
+
+            if (project.getProperties().buildJava)
             {
-                javaCompiler.setJarDependencies(project.getProperties().javaBuildJarDependencies);
-                javaCompiler.buildAndJar(project.getProjectDirectory().getPath());
-            } catch (IOException ex)
-            {
-                Exceptions.printStackTrace(ex);
-            } catch (InterruptedException ex)
-            {
-                Exceptions.printStackTrace(ex);
+                try
+                {
+                    javaCompiler.setJarDependencies(project.getProperties().javaBuildJarDependencies);
+                    javaCompiler.buildAndJar(project.getProjectDirectory().getPath());
+                } catch (IOException ex)
+                {
+                    Exceptions.printStackTrace(ex);
+                } catch (InterruptedException ex)
+                {
+                    Exceptions.printStackTrace(ex);
+                }
             }
         }
-        
+        if(project.getProperties().buildDebugProject)
+        {
+            debugProjectCompiler.createDebugProjectFile(project.getProjectDirectory().getPath(), project.getProjectDirectory().getName(), project.getProperties());
+
+        }
+        if(project.getProperties().vsExampleEnabled)
+        {
+            cppExampleCompiler.compileVSCppExample(project.getProjectDirectory().getPath(), project.getProjectDirectory().getName(), project.getProperties());
+        }
+
 
     }
 }

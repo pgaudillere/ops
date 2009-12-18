@@ -62,8 +62,8 @@ namespace ops
 
     void Subscriber::start()
     {
-		topicHandler = participant->getTopicHandler(topic);
-    	topicHandler->addListener(this);
+		receiveDataHandler = participant->getReceiveDataHandler(topic);
+    	receiveDataHandler->addListener(this);
 		deadlineTimer->addListener(this);
 		deadlineTimer->start(deadlineTimeout);
 		started= true;
@@ -71,10 +71,10 @@ namespace ops
     }
 	void Subscriber::stop()
 	{
-		topicHandler->aquireMessageLock();
-		topicHandler->removeListener(this);
-		topicHandler->releaseMessageLock();
-		participant->releaseTopicHandler(topic);
+		receiveDataHandler->aquireMessageLock();
+		receiveDataHandler->removeListener(this);
+		receiveDataHandler->releaseMessageLock();
+		participant->releaseReceiveDataHandler(topic);
 		deadlineTimer->removeListener(this);
 		deadlineTimer->cancel();
 		started = false;
@@ -82,6 +82,21 @@ namespace ops
 	}
 	void Subscriber::onNewEvent(Notifier<OPSMessage*>* sender, OPSMessage* message)
 	{
+		//Perform a number of checks on incomming data to be sure we want to deliver it to the application layer
+
+		//Check that this message is delivered on the same topic as this Subscriber use
+		if(message->getTopicName() != topic.getName())
+		{
+			return;
+		}
+		//Check that the type of the delivered data can be interpreted as the type we expect in this Subscriber
+		else if(message->getData()->getTypeString().find(topic.getTypeID()) == std::string::npos)
+		{
+			return;
+		}
+
+		//OK, we passed the basic checks, lets go on and filter on data content...
+
 		OPSObject* o = message->getData();		
     	if(applyFilterQoSPolicies(o))
         {
@@ -305,11 +320,11 @@ namespace ops
 
 	bool Subscriber::aquireMessageLock()
 	{
-		return topicHandler->aquireMessageLock();
+		return receiveDataHandler->aquireMessageLock();
 	}
 	void Subscriber::releaseMessageLock()
 	{
-		topicHandler->releaseMessageLock();
+		receiveDataHandler->releaseMessageLock();
 	}
 	OPSMessage* Subscriber::getMessage()
 	{

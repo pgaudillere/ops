@@ -17,5 +17,5 @@ copy "..\C++\lib\*.*" "C++\lib"
 copy "C:\Program Files\boost\boost_1_38\lib\*.*" "C++\lib"
 
 
-jar cvf OPS_Core_Cpp.jar C++
-rename OPS_Core_Cpp.jar OPS_Core_Cpp.zip
+rem jar cvf OPS_Core_Cpp.jar C++
+rem rename OPS_Core_Cpp.jar OPS_Core_Cpp.zip

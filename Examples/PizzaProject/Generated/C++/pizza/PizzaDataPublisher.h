@@ -15,8 +15,8 @@ class PizzaDataPublisher : public ops::Publisher
 {
     
 public:
-    PizzaDataPublisher(ops::Topic<PizzaData> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    PizzaDataPublisher(ops::Topic t)
+        : ops::Publisher(t)
     {
 
 

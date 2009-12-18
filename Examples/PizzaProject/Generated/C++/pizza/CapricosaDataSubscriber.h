@@ -15,31 +15,24 @@ class CapricosaDataSubscriber : public ops::Subscriber
 {
 
 public:
-    CapricosaDataSubscriber(ops::Topic<CapricosaData> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    CapricosaDataSubscriber(ops::Topic t)
+        : ops::Subscriber(t)
     {
 
     }
 
     bool getData(CapricosaData* d)
     {
-        bool ret = firstDataReceived;
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        *d = narrowedData;
-        return ret;
-    }
-    CapricosaData getDataCopy()
-    {
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        return narrowedData;
+        if(!data) return false;
+        aquireMessageLock();
+		data->fillClone(d);
+		releaseMessageLock();
+        return true;
     }
 
-    ops::OPSObject* getDataReference()
+    CapricosaData* getTypedDataReference()
     {
-        hasUnreadData = false;
-        return &narrowedData;
+        return (CapricosaData*)getDataReference();
     }
 
     ~CapricosaDataSubscriber(void)
@@ -48,14 +41,6 @@ public:
     }
 private:
     CapricosaData narrowedData;
-protected:
-    //Override
-    void saveCopy(ops::OPSObject* o)
-    {
-        ops::SafeLock lock(this);
-        narrowedData = *((CapricosaData*)o);
-    }
-
 
 };
 

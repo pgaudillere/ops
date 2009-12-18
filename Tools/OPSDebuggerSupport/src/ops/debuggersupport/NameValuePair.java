@@ -18,7 +18,7 @@ class NameValuePair
     public Object value;
     public boolean expanded;
 
-    ArrayList<NameValuePair> children = new ArrayList();
+    ArrayList<NameValuePair> children = new ArrayList<NameValuePair>();
     public Field field;
 
     public NameValuePair(String name, Object get, Field field)

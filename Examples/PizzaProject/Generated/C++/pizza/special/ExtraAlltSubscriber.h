@@ -15,31 +15,24 @@ class ExtraAlltSubscriber : public ops::Subscriber
 {
 
 public:
-    ExtraAlltSubscriber(ops::Topic<ExtraAllt> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    ExtraAlltSubscriber(ops::Topic t)
+        : ops::Subscriber(t)
     {
 
     }
 
     bool getData(ExtraAllt* d)
     {
-        bool ret = firstDataReceived;
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        *d = narrowedData;
-        return ret;
-    }
-    ExtraAllt getDataCopy()
-    {
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        return narrowedData;
+        if(!data) return false;
+        aquireMessageLock();
+		data->fillClone(d);
+		releaseMessageLock();
+        return true;
     }
 
-    ops::OPSObject* getDataReference()
+    ExtraAllt* getTypedDataReference()
     {
-        hasUnreadData = false;
-        return &narrowedData;
+        return (ExtraAllt*)getDataReference();
     }
 
     ~ExtraAlltSubscriber(void)
@@ -48,14 +41,6 @@ public:
     }
 private:
     ExtraAllt narrowedData;
-protected:
-    //Override
-    void saveCopy(ops::OPSObject* o)
-    {
-        ops::SafeLock lock(this);
-        narrowedData = *((ExtraAllt*)o);
-    }
-
 
 };
 

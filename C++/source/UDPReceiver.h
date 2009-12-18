@@ -22,52 +22,200 @@
 #define ops_UDPReceiverH
 
 #include <string>
+#include "Participant.h"
 #include "Receiver.h"
-#include "ByteBuffer.h"
 #include <boost/asio.hpp>
-
-
+#include "boost/bind.hpp"
+#include "ByteBuffer.h"
+#include "BoostIOServiceImpl.h"
+#include <iostream>
+#include "Participant.h"
+#include "BasicError.h"
 
 namespace ops
 {
-    
+	using boost::asio::ip::udp;
+
 	class UDPReceiver : public Receiver
-    {
-    public:
-        
-        UDPReceiver(int bindPord);
-		UDPReceiver(int bindPord, std::string address);        
-		~UDPReceiver();
-        
-		int receive(char* buf, int size);
-		bool sendReply(char* buf, int size);
-		void setReceiveTimeout(int millis);
-        
-        int getPort()
-        {
-            return port;
-        }
-        std::string getAddress()
-        {
-            return ipaddress;
-    	}
-		virtual void asynchWait(char* bytes, int size) {};
-		virtual void stop() {};
-        
-    private:
-        int port;
-        std::string ipaddress;
+	{
+	public:
+		UDPReceiver(int bindPort, IOService* ioServ, std::string localInterface = "0.0.0.0", __int64 inSocketBufferSizent = 16000000): 
+		  max_length(65535),
+		  cancelled(false)
+		{
+			boost::asio::io_service* ioService = ((BoostIOServiceImpl*)ioServ)->boostIOService;
+			
+
+			if(localInterface == "0.0.0.0")
+			{
+				udp::resolver resolver(*ioService);
+				udp::resolver::query query(boost::asio::ip::host_name(),"");
+				udp::resolver::iterator it=resolver.resolve(query);
+				boost::asio::ip::address addr=(it++)->endpoint().address();
+				ipaddress = addr.to_string();
+				localEndpoint = new udp::endpoint(addr, bindPort);
+				
+			}
+			else
+			{
+				boost::asio::ip::address ipAddr(boost::asio::ip::address_v4::from_string(localInterface));
+				localEndpoint = new boost::asio::ip::udp::endpoint(ipAddr, bindPort);
+
+			}
+			
+
+			
+
+			sock = new boost::asio::ip::udp::socket(*ioService);
+
+			sock->open(localEndpoint->protocol());
+				
+			if(inSocketBufferSizent > 0)
+			{
+				boost::asio::socket_base::receive_buffer_size option((int)inSocketBufferSizent);
+				boost::system::error_code ec;
+				ec = sock->set_option(option, ec);
+				sock->get_option(option);
+				if(ec != 0 || option.value() != inSocketBufferSizent)
+				{
+					//std::cout << "Socket buffer size could not be set" << std::endl;
+					Participant::reportStaticError(&ops::BasicError("Socket buffer size could not be set"));
+				}
+			}
+
+			//Note, takes address even if in use.
+			sock->set_option(boost::asio::ip::udp::socket::reuse_address(true));
+			sock->bind(*localEndpoint);
+
+			//ipaddress = localEndpoint->address().to_string();
+			port = sock->local_endpoint().port();
+
+			
+
+		}
+
+		void asynchWait(char* bytes, int size)
+		{
+			data  = bytes;
+			max_length = size;
+			sock->async_receive(
+				boost::asio::buffer(data, max_length), 
+				boost::bind(&UDPReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+
+		}
+
+		void handle_receive_from(const boost::system::error_code& error,
+			size_t nrBytesReceived)
+		{
+			if(cancelled)
+			{
+				return;
+			}			
+			if (!error && nrBytesReceived > 0)
+			{
+				handleReadOK(data, nrBytesReceived);
+
+			}
+			else
+			{
+				handleReadError(error);
+			}
+			
+			
+		}
+		void handleReadOK(char* bytes_, int size)
+		{
+			notifyNewEvent(BytesSizePair(data, size));
+
+		}
+		void handleReadError(const boost::system::error_code& error)
+		{
+			
+			if(error.value() == BREAK_COMM_ERROR_CODE)
+			{
+				//Communcation has been canceled from stop, do not scedule new receive
+				return;
+			}
+
+			Participant::reportStaticError(&ops::BasicError("Error in UDPReceiver::handleReadError()"));
+			
+			sock->async_receive(
+				boost::asio::buffer(data, max_length), 
+				boost::bind(&UDPReceiver::handle_receive_from, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred));
+
+		}
+
+
+		~UDPReceiver()
+		{
+			delete sock;
+			delete localEndpoint;
+			//delete ioService;
+		}
+		int receive(char* buf, int size)
+		{
+			try
+			{
+				int nReceived = sock->receive_from(boost::asio::buffer(buf, size), lastEndpoint);
+				return nReceived;
+			}
+			catch(...)
+			{
+				Participant::reportStaticError(&ops::BasicError("Exception in UDPReceiver::receive()"));
+				return -1;
+			}
+
+		}
+		int available()
+		{
+			return sock->available();
+		}
+		bool sendReply(char* buf, int size)
+		{
+			try
+			{
+				sock->send_to(boost::asio::buffer(buf, size), lastEndpoint);
+				return true;
+			}
+			catch (...)
+			{
+				return false;
+			}
+		}
+		int getPort()
+		{
+			return port;
+		}
+		std::string getAddress()
+		{
+			return ipaddress;
+		}
+
+		///Override from Receiver
+		void stop()
+		{
+			boost::system::error_code error(BREAK_COMM_ERROR_CODE, boost::system::generic_category);
+			cancelled = true;
+			sock->cancel(error);
+			
+		}
+
+		
+	private:
+		int port;
+		std::string ipaddress;
 		boost::asio::ip::udp::socket* sock;
 		boost::asio::ip::udp::endpoint* localEndpoint;
 		boost::asio::ip::udp::endpoint lastEndpoint;
-		
-		
 		boost::asio::io_service* ioService;
 
+		int max_length; //enum { max_length = 65535 };
+		char* data;//[max_length];
+
+		static const int BREAK_COMM_ERROR_CODE = 345676;
+		bool cancelled;
 
 
-    };
+	};
 }
 #endif
-
-

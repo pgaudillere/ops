@@ -62,7 +62,7 @@ public:
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
-		sub->setDeadlineQoS(10000);
+		sub->setDeadlineQoS(10);
 		//sub->setTimeBasedFilterQoS(1000);
 		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		sub->addDataListener(this);
@@ -145,6 +145,7 @@ public:
 		}
 		else
 		{
+			//Sleep(100000);
 			TestAll::BaseData* data;
 			data = (TestAll::BaseData*)baseSub->getMessage()->getData();
 			if(data == NULL) return;

@@ -15,8 +15,8 @@ class ExtraAlltPublisher : public ops::Publisher
 {
     
 public:
-    ExtraAlltPublisher(ops::Topic<ExtraAllt> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    ExtraAlltPublisher(ops::Topic t)
+        : ops::Publisher(t)
     {
 
 

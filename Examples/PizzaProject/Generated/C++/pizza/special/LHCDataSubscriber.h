@@ -15,31 +15,24 @@ class LHCDataSubscriber : public ops::Subscriber
 {
 
 public:
-    LHCDataSubscriber(ops::Topic<LHCData> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    LHCDataSubscriber(ops::Topic t)
+        : ops::Subscriber(t)
     {
 
     }
 
     bool getData(LHCData* d)
     {
-        bool ret = firstDataReceived;
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        *d = narrowedData;
-        return ret;
-    }
-    LHCData getDataCopy()
-    {
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        return narrowedData;
+        if(!data) return false;
+        aquireMessageLock();
+		data->fillClone(d);
+		releaseMessageLock();
+        return true;
     }
 
-    ops::OPSObject* getDataReference()
+    LHCData* getTypedDataReference()
     {
-        hasUnreadData = false;
-        return &narrowedData;
+        return (LHCData*)getDataReference();
     }
 
     ~LHCDataSubscriber(void)
@@ -48,14 +41,6 @@ public:
     }
 private:
     LHCData narrowedData;
-protected:
-    //Override
-    void saveCopy(ops::OPSObject* o)
-    {
-        ops::SafeLock lock(this);
-        narrowedData = *((LHCData*)o);
-    }
-
 
 };
 

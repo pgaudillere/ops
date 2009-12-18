@@ -15,8 +15,8 @@ class CapricosaDataPublisher : public ops::Publisher
 {
     
 public:
-    CapricosaDataPublisher(ops::Topic<CapricosaData> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    CapricosaDataPublisher(ops::Topic t)
+        : ops::Publisher(t)
     {
 
 
