@@ -15,8 +15,8 @@ class VessuvioDataPublisher : public ops::Publisher
 {
     
 public:
-    VessuvioDataPublisher(ops::Topic<VessuvioData> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    VessuvioDataPublisher(ops::Topic t)
+        : ops::Publisher(t)
     {
 
 

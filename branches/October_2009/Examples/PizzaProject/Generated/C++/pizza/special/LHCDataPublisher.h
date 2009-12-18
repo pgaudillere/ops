@@ -15,8 +15,8 @@ class LHCDataPublisher : public ops::Publisher
 {
     
 public:
-    LHCDataPublisher(ops::Topic<LHCData> t)
-        : ops::Publisher(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    LHCDataPublisher(ops::Topic t)
+        : ops::Publisher(t)
     {
 
 

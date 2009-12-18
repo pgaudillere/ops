@@ -15,31 +15,24 @@ class CheeseSubscriber : public ops::Subscriber
 {
 
 public:
-    CheeseSubscriber(ops::Topic<Cheese> t)
-        : ops::Subscriber(ops::Topic<>(t.GetName(), t.GetPort(), t.GetTypeID(), t.GetDomainAddress()))
+    CheeseSubscriber(ops::Topic t)
+        : ops::Subscriber(t)
     {
 
     }
 
     bool getData(Cheese* d)
     {
-        bool ret = firstDataReceived;
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        *d = narrowedData;
-        return ret;
-    }
-    Cheese getDataCopy()
-    {
-        ops::SafeLock lock(this);
-        hasUnreadData = false;
-        return narrowedData;
+        if(!data) return false;
+        aquireMessageLock();
+		data->fillClone(d);
+		releaseMessageLock();
+        return true;
     }
 
-    ops::OPSObject* getDataReference()
+    Cheese* getTypedDataReference()
     {
-        hasUnreadData = false;
-        return &narrowedData;
+        return (Cheese*)getDataReference();
     }
 
     ~CheeseSubscriber(void)
@@ -48,14 +41,6 @@ public:
     }
 private:
     Cheese narrowedData;
-protected:
-    //Override
-    void saveCopy(ops::OPSObject* o)
-    {
-        ops::SafeLock lock(this);
-        narrowedData = *((Cheese*)o);
-    }
-
 
 };
 
