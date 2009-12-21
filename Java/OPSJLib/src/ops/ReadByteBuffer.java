@@ -20,8 +20,6 @@
 
 package ops;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -41,6 +39,7 @@ public class ReadByteBuffer
     //private DataInputStream dis;
 
     ByteBuffer inBuffer;
+
     
     /** Creates a new instance of ReadByteBuffer */
 //    public ReadByteBuffer(DataInputStream dis)
@@ -57,7 +56,7 @@ public class ReadByteBuffer
         inBuffer = ByteBuffer.wrap(buf, offset, length);
         inBuffer.order(ByteOrder.LITTLE_ENDIAN);
     }
-    
+    @Deprecated
     public static byte[] trimSegments(byte[] bytes, int segmentSize, int nrOfSegments, int headerSize, byte[] result)
     {
         //int nrOfSegments = bytes.length / segmentSize;
@@ -71,6 +70,11 @@ public class ReadByteBuffer
         }
         return result;
         
+    }
+
+    public final int position()
+    {
+        return inBuffer.position();
     }
         
     
@@ -97,7 +101,7 @@ public class ReadByteBuffer
     public List<Boolean> readbooleanArr() throws IOException
     {
         int size = readint();
-        Vector<Boolean> ret = new Vector<Boolean>();
+        Vector<Boolean> ret = new Vector<Boolean>(size);
         for (int i = 0; i < size ; i++)
         {
             ret.add(new Boolean(readboolean()));            
@@ -108,10 +112,11 @@ public class ReadByteBuffer
     {
         return inBuffer.get();
     }
-    public List<Byte> readbyteArr() throws IOException
+    public List<Byte> readbyteArr() throws IOException 
     {
         int size = readint();
-        Vector<Byte> ret = new Vector<Byte>();
+        Vector<Byte> ret = new Vector<Byte>(size);
+
         for (int i = 0; i < size ; i++)
         {
             ret.add(new Byte(readbyte()));            
@@ -125,7 +130,7 @@ public class ReadByteBuffer
     public List<Integer> readintArr() throws IOException
     {
         int size = readint();
-        Vector<Integer> ret = new Vector<Integer>();
+        Vector<Integer> ret = new Vector<Integer>(size);
         for (int i = 0; i < size ; i++)
         {
             ret.add(new Integer(readint()));            
@@ -139,7 +144,7 @@ public class ReadByteBuffer
     public List<Long> readlongArr() throws IOException
     {
         int size = readint();
-        Vector<Long> ret = new Vector<Long>();
+        Vector<Long> ret = new Vector<Long>(size);
         for (int i = 0; i < size ; i++)
         {
             ret.add(new Long(readlong()));            
@@ -153,7 +158,7 @@ public class ReadByteBuffer
     public List<Float> readfloatArr() throws IOException
     {
         int size = readint();
-        Vector<Float> ret = new Vector<Float>();
+        Vector<Float> ret = new Vector<Float>(size);
         for (int i = 0; i < size ; i++)
         {
             ret.add(new Float(readfloat()));            
@@ -167,7 +172,7 @@ public class ReadByteBuffer
     public List<Double> readdoubleArr() throws IOException
     {
         int size = readint();
-        Vector<Double> ret = new Vector<Double>();
+        Vector<Double> ret = new Vector<Double>(size);
         for (int i = 0; i < size ; i++)
         {
             ret.add(new Double(readdouble()));            
@@ -184,7 +189,7 @@ public class ReadByteBuffer
     public List<String> readstringArr() throws IOException
     {
         int size = readint();
-        Vector<String> ret = new Vector<String>();
+        Vector<String> ret = new Vector<String>(size);
         for (int i = 0; i < size ; i++)
         {
             ret.add(readstring());            

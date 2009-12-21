@@ -1,6 +1,7 @@
 
 package configlib;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class XMLArchiverOut implements ArchiverInOut
     private int currentTabDepth = 0;
     private boolean writType = true;
     private boolean writeXMLHeader = true;
+    private String rootTag;
 
     public XMLArchiverOut()
     {
@@ -50,6 +52,18 @@ public class XMLArchiverOut implements ArchiverInOut
             os.write(HEADER.getBytes());
         }
         
+    }
+
+    public XMLArchiverOut(OutputStream os, boolean writeXMLHeader, String rootTag) throws IOException
+    {
+        this.os = os;
+        this.writeXMLHeader = writeXMLHeader;
+        this.rootTag = rootTag;
+        if(writeXMLHeader)
+        {
+            os.write(HEADER.getBytes());
+        }
+
     }
 
     public void setOutputStream(OutputStream os) throws IOException

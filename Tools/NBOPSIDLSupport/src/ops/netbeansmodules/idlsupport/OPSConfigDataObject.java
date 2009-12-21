@@ -6,9 +6,9 @@ package ops.netbeansmodules.idlsupport;
 
 import configlib.exception.FormatException;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Vector;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -19,7 +19,6 @@ import org.openide.loaders.DataNode;
 import org.openide.loaders.DataObjectExistsException;
 import org.openide.loaders.MultiDataObject;
 import org.openide.loaders.MultiFileLoader;
-import org.openide.nodes.AbstractNode;
 import org.openide.nodes.CookieSet;
 import org.openide.nodes.Node;
 import org.openide.nodes.Children;
@@ -30,6 +29,7 @@ import org.openide.text.DataEditorSupport;
 public class OPSConfigDataObject extends MultiDataObject
 {
     private FileObject file;
+    private OPSConfig opsConfig;
 
     public OPSConfigDataObject(FileObject pf, MultiFileLoader loader) throws DataObjectExistsException, IOException
     {
@@ -45,8 +45,20 @@ public class OPSConfigDataObject extends MultiDataObject
     {
         super.setModified(arg0);
         System.out.println("Set modiefied called on OPSConfigDataObject " + arg0);
+    }
 
-
+    public void onConfigChange()
+    {
+        try
+        {
+            OPSConfig.saveConfig(opsConfig, FileUtil.toFile(file));
+        } catch (FileNotFoundException ex)
+        {
+            Exceptions.printStackTrace(ex);
+        } catch (IOException ex)
+        {
+            Exceptions.printStackTrace(ex);
+        }
 
     }
 
@@ -55,9 +67,9 @@ public class OPSConfigDataObject extends MultiDataObject
     {
         try
         {
-            OPSConfig opsConfig = OPSConfig.getConfig(FileUtil.toFile(file));
+            opsConfig = OPSConfig.getConfig(FileUtil.toFile(file));
             Children.Array children = new Children.Array();
-            children.add(new Node[]{OPSConfigNode.createOPSConfigNode(opsConfig)});
+            children.add(new Node[]{OPSConfigNode.createOPSConfigNode(opsConfig, this)});
             DataNode dNode = new OPSConfigDataNode(this, children, getLookup());
 
             return dNode;
@@ -86,9 +98,11 @@ public class OPSConfigDataObject extends MultiDataObject
 }
 class OPSConfigDataNode extends DataNode
 {
+    MultiDataObject multiDataObject;
     OPSConfigDataNode(MultiDataObject dObject, Children children, Lookup lookup)
     {
         super(dObject, children, lookup);
+        multiDataObject = dObject;
 
     }
 

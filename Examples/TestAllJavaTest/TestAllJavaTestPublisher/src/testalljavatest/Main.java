@@ -47,11 +47,15 @@ public class Main {
 
         data.ss.add("TestString in Array.");
 
+        for (int i = 0; i < 500000; i++)
+        {
+            data.fs.add((float)i);
+        }
         while (true)
         {
             data.i ++;
             pub.write(data);
-            sleep(1000);
+            sleep(100);
         }
 
     }

@@ -24,15 +24,15 @@ package ops;
  *
  * @author Anton Gravestam
  */
-public interface Transport
+public interface Receiver
 {
 
-    public boolean receive(byte[] bytes, int offset);
+    //public boolean receive(byte[] bytes, int offset);
     public boolean receive(byte[] headerBytes, byte[] bytes, int offset);
-    void setReceiveTimeout(int millis) throws CommException;
+    //void setReceiveTimeout(int millis) throws CommException;
     //void receive(byte[] b) throws ReceiveTimedOutException;
-    boolean receive(byte[] b);
-    void send(byte[] b);
+    //boolean receive(byte[] b);
+    //void send(byte[] b);
 
     Event getNewBytesEvent();
     

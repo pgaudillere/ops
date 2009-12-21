@@ -31,7 +31,6 @@ import java.util.Vector;
 public class MulticastDomain extends Domain
 {
     private String domainAddress = "";
-    private String localInterface = "0.0.0.0";
 
     public MulticastDomain()
     {
@@ -48,16 +47,6 @@ public class MulticastDomain extends Domain
     public void setDomainAddress(String domainAddress)
     {
         this.domainAddress = domainAddress;
-    }
-
-    public String getLocalInterface()
-    {
-        return localInterface;
-    }
-
-    public void setLocalInterface(String localInterface)
-    {
-        this.localInterface = localInterface;
     }
 
 
@@ -97,7 +86,7 @@ public class MulticastDomain extends Domain
     {
         super.serialize(archive);
         domainAddress = archive.inout("domainAddress", domainAddress);
-        localInterface = archive.inout("localInterface", localInterface);
+        
     }
 
 

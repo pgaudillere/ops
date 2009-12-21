@@ -32,6 +32,7 @@ public class Domain extends OPSObject
 {
     protected Vector<Topic> topics = new Vector<Topic>();
     private String domainID = "";
+    private String localInterface = "0.0.0.0";
 
     public Domain()
     {
@@ -83,6 +84,17 @@ public class Domain extends OPSObject
         super.serialize(archive);
         domainID = archive.inout("domainID", domainID);
         topics = (Vector<Topic>) archive.inoutSerializableList("topics", topics);
+        localInterface = archive.inout("localInterface", localInterface);
+    }
+
+    public String getLocalInterface()
+    {
+        return localInterface;
+    }
+
+    public void setLocalInterface(String localInterface)
+    {
+        this.localInterface = localInterface;
     }
 
 

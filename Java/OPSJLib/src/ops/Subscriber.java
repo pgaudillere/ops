@@ -19,7 +19,6 @@
 */
 package ops;
 
-import com.sun.org.apache.bcel.internal.generic.IFEQ;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +31,7 @@ import ops.protocol.OPSMessage;
  */
 public class Subscriber extends Observable 
 {
+    public Event deadlineEvent = new Event();
 
     private Topic topic;
     private String identity = "";
@@ -41,15 +41,10 @@ public class Subscriber extends Observable
     private OPSObject data;
     private long deadlineTimeout;
     private long lastDeadlineTime;
-    public Event deadlineEvent = new Event();
     private long timeLastDataForTimeBase;
     private long timeBaseMinSeparationTime;
-    public static final int SHARED = 0;
-    public static final int EXCLUSIVE = 1;
-    private int threadPolicy = SHARED;
     private boolean reliable;
-    private DataValidator dataValitator = new DefaultDataValidator();
-    private TopicHandler topicHandler;
+    private ReceiveDataHandler topicHandler;
     private Participant participant;
     private OPSMessage message;
 
@@ -57,20 +52,20 @@ public class Subscriber extends Observable
     {
         this.topic = t;
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
-        topicHandler = participant.getTopicHandler(t);
+        topicHandler = participant.getReceiveDataHandler(t);
     }
 
-    public void setDeadlineQoS(long timeout)
+    public synchronized void setDeadlineQoS(long timeout)
     {
         deadlineTimeout = timeout;
     }
 
-    public void setTimeBasedFilterQoS(long minSeparationTime)
+    public synchronized void setTimeBasedFilterQoS(long minSeparationTime)
     {
         timeBaseMinSeparationTime = minSeparationTime;
     }
 
-    public void start()
+    public synchronized void start()
     {
 
         lastDeadlineTime = System.currentTimeMillis();
@@ -80,12 +75,20 @@ public class Subscriber extends Observable
 
     }
 
-    public boolean stop()
+    public synchronized boolean stop()
     {
         return topicHandler.removeSubscriber(this);
     }
+    public synchronized boolean isDeadlineMissed()
+    {
+        if (System.currentTimeMillis() - lastDeadlineTime > deadlineTimeout)
+        {
+            return true;
+        }
+        return false;
+    }
 
-    protected void checkDeadline()
+    protected synchronized void checkDeadline()
     {
         if (System.currentTimeMillis() - lastDeadlineTime > deadlineTimeout)
         {
@@ -95,25 +98,17 @@ public class Subscriber extends Observable
 
     }
 
-    public boolean isReliable()
+    public synchronized boolean isReliable()
     {
         return reliable;
     }
 
-    public String getIdentity()
+    public synchronized String getIdentity()
     {
         return identity;
     }
 
-//    public void setIdentity(String identity)
-//    {
-//        this.identity = identity;
-//        if (subscriberHandler != null)
-//        {
-//            subscriberHandler.updateReliableIdentities();
-//        }
-//    }
-    protected void notifyNewOPSObject(OPSObject o)
+    protected synchronized void notifyNewOPSObject(OPSObject o)
     {
 
         if (applyFilterQoSPolicies(o))
@@ -147,7 +142,7 @@ public class Subscriber extends Observable
         }
     }
 
-    public void addFilterQoSPolicy(FilterQoSPolicy qosPolicy)
+    public synchronized void addFilterQoSPolicy(FilterQoSPolicy qosPolicy)
     {
         synchronized (this)
         {
@@ -155,7 +150,7 @@ public class Subscriber extends Observable
         }
     }
 
-    public void removeFilterQoSPolicy(FilterQoSPolicy qosPolicy)
+    public synchronized void removeFilterQoSPolicy(FilterQoSPolicy qosPolicy)
     {
         synchronized (this)
         {
@@ -163,7 +158,7 @@ public class Subscriber extends Observable
         }
     }
 
-    void notifyNewOPSMessage(OPSMessage message)
+    synchronized void notifyNewOPSMessage(OPSMessage message)
     {
         if(messageFilters.applyFilter(message))
         {
@@ -187,53 +182,33 @@ public class Subscriber extends Observable
         return true;
     }
 
-    public ArrayList<FilterQoSPolicy> getFilterQoSPolicies()
+    public synchronized ArrayList<FilterQoSPolicy> getFilterQoSPolicies()
     {
         return filterQoSPolicies;
     }
 
-    public int getThreadPolicy()
-    {
-        return threadPolicy;
-    }
-
-    public void setThreadPolicy(int threadPolicy)
-    {
-        this.threadPolicy = threadPolicy;
-    }
-
-    public DataValidator getDataValitator()
-    {
-        return dataValitator;
-    }
-
-    public void setDataValitator(DataValidator dataValitator)
-    {
-        this.dataValitator = dataValitator;
-    }
-
-    public OPSMessage getMessage()
+    public synchronized OPSMessage getMessage()
     {
         return message;
     }
     
 
-    public OPSObject getData()
+    public synchronized OPSObject getData()
     {
         return data;
     }
 
-    public void removeFilter(MessageFilter filter)
+    public synchronized void removeFilter(MessageFilter filter)
     {
         messageFilters.removeFilter(filter);
     }
 
-    public void addFilter(MessageFilter filter)
+    public synchronized void addFilter(MessageFilter filter)
     {
         messageFilters.addFilter(filter);
     }
 
-    public MessageFilterSet getMessageFilters()
+    public synchronized MessageFilterSet getMessageFilters()
     {
         return messageFilters;
     }
