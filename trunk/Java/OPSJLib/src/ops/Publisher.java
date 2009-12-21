@@ -20,8 +20,6 @@
 package ops;
 
 import java.io.IOException;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ops.archiver.OPSArchiverOut;
@@ -34,49 +32,23 @@ import ops.protocol.OPSMessage;
 public class Publisher 
 {
     private Topic topic;
-    private Transport transport;
     private int currentPublicationID = 1;
     private String name = "";
-    
-    private static boolean WRITE_RELIABLE = true;
-    private static boolean WRITE_UNRELIABLE = false;
     private String key = "";
-    
     private int reliableWriteNrOfResends = 1;
     private int reliableWriteTimeout = 1000;
-
     private byte[] bytes;
     private Participant participant;
+    private final SendDataHandler sendDataHandler;
 
-
-    public Publisher(Topic topic)
+    public Publisher(Topic topic) throws CommException
     {
         this.topic = topic;
-        bytes = new byte[StaticManager.MAX_SIZE];
-        
-//        try
-//        {
-//            transport = SendTransport.getDefaultSendTransport(topic.getDomainAddress());
+        bytes = new byte[topic.getSampleMaxSize()];
             
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
-        
-        MulticastDomain domain = (MulticastDomain) participant.getConfig().getDomain(topic.getDomainID());
-        
-        transport = new MulticastTransport(topic.getDomainAddress(), topic.getPort(), domain.getLocalInterface());
-//        }
-//        catch (SocketException se)
-//        {
-//            //throw new CommException("Caused by SocketException: " + se.getMessage());
-//        }
-//        catch (UnknownHostException ue)
-//        {
-//            //throw new CommException("Caused by UnknownHostException: " + ue.getMessage());
-//        }
-//        catch(Exception e)
-//        {
-//            //throw new CommException("Caused by Exception: " + e.getMessage());
-//
-//        }
+        sendDataHandler = participant.getSendDataHandler(topic);
+
     }
     protected void write(OPSObject o)
     {
@@ -100,7 +72,8 @@ public class Publisher
             OPSArchiverOut archiverOut = new OPSArchiverOut(buf);
         
             archiverOut.inout("message", message);
-            transport.send(archiverOut.getBytes());
+            //transport.send(archiverOut.getBytes());
+            sendDataHandler.sendData(bytes, buf.position(), topic);
         }
         catch (IOException ex)
         {
@@ -110,53 +83,6 @@ public class Publisher
         incCurrentPublicationID();
         
         
-    }
-    
-    protected AckData writeReliable(OPSObject o, String destination) throws CommException
-    {
-        
-//        try
-//        {
-//            o.publicationID = currentPublicationID;
-//            o.publisherName = name;
-//            o.setKey(key);
-//            incCurrentPublicationID();
-//            WriteByteBuffer buf = new WriteByteBuffer();
-//            OPSObjectHelper.writeHeader(buf.getDos());
-//            buf.write(topic.getName());
-//
-//            buf.write(WRITE_RELIABLE);
-//            buf.write(destination);
-//            buf.write(name + ":" + transport.getSocketInterfaceID());
-//            buf.write(currentPublicationID);
-//
-//
-//            buf.write(o, objectHelper);
-//
-//            for (int i = 0; i < reliableWriteNrOfResends; i++)
-//            {
-//                AckData ack = null;
-//                try
-//                {
-//                    ack = transport.sendWithAck(buf.getBytes(), topic.getName(), destination, reliableWriteTimeout);
-//                    return ack;
-//                }
-//                catch (CommException commException)
-//                {
-//                    //Try again while i < nrResends
-//                }
-//            }
-//            throw new CommException("Write failed.");
-//
-//
-//        }
-//        catch (IOException ex) //May be thrown by writeHeader
-//        {
-//            //TODO: Severe Error handling
-//            throw new CommException("Cuased by IOException:" + ex.getMessage());
-//        }
-        
-        return null;
     }
     
     public void writeAsOPSObject(OPSObject o)

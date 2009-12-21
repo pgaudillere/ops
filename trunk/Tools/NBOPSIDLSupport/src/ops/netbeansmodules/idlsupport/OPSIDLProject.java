@@ -179,6 +179,9 @@ public class OPSIDLProject implements Project
     {
         
         try {
+
+            
+
             InputOutput io = IOProvider.getDefault().getIO("OPS Build - " + getName(), false);
             //io.getOut().reset();
             io.getOut().reset();

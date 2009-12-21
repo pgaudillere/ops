@@ -1,23 +1,22 @@
 /**
-*
-* Copyright (C) 2006-2009 Anton Gravestam.
-*
-* This file is part of OPS (Open Publish Subscribe).
-*
-* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
+ *
+ * Copyright (C) 2006-2009 Anton Gravestam.
+ *
+ * This file is part of OPS (Open Publish Subscribe).
+ *
+ * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
 
-* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public License
-* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
-*/
-
+ * OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ops;
 
 import configlib.ArchiverInOut;
@@ -28,7 +27,12 @@ import java.io.IOException;
  * @author Owe
  */
 public class Topic<T> extends OPSObject
-{   
+{
+
+    public static final String TRANSPORT_MC = "multicast";
+    public static final String TRANSPORT_TCP = "tcp";
+    public static final String TRANSPORT_UDP = "udp";
+    
     private String name = "";
     private int port = -1;
     private int replyPort = 0;
@@ -37,9 +41,9 @@ public class Topic<T> extends OPSObject
     private int sampleMaxSize = StaticManager.MAX_SIZE;
     private String participantID;
     private String domainID;
-    int outSocketBufferSize;
-    int inSocketBufferSize;
-    int transport;
+    private int outSocketBufferSize;
+    private int inSocketBufferSize;
+    private String transport;
 
     /** Creates a new instance of Topic */
     public Topic(String name, int port, String typeID, String domainAddress)
@@ -50,8 +54,9 @@ public class Topic<T> extends OPSObject
         this.domainAddress = domainAddress;
         this.sampleMaxSize = StaticManager.MAX_SIZE;
         appendType("Topic");
-        
+
     }
+
     public Topic()
     {
         appendType("Topic");
@@ -66,6 +71,7 @@ public class Topic<T> extends OPSObject
     {
         this.domainAddress = domainAddress;
     }
+
     @Override
     public String toString()
     {
@@ -129,14 +135,13 @@ public class Topic<T> extends OPSObject
 
     public void setSampleMaxSize(int size)
     {
-        if(size < StaticManager.MAX_SIZE)
-		{
-			sampleMaxSize = StaticManager.MAX_SIZE;
-		}
-		else
-		{
-			sampleMaxSize = size;
-		}
+        if (size < StaticManager.MAX_SIZE)
+        {
+            sampleMaxSize = StaticManager.MAX_SIZE;
+        } else
+        {
+            sampleMaxSize = size;
+        }
     }
 
     @Override
@@ -151,13 +156,16 @@ public class Topic<T> extends OPSObject
         outSocketBufferSize = archive.inout("outSocketBufferSize", outSocketBufferSize);
         inSocketBufferSize = archive.inout("inSocketBufferSize", inSocketBufferSize);
 
-
         int tSampleMaxSize = getSampleMaxSize();
-		tSampleMaxSize= archive.inout("sampleMaxSize", tSampleMaxSize);
-		setSampleMaxSize(tSampleMaxSize);
+        tSampleMaxSize = archive.inout("sampleMaxSize", tSampleMaxSize);
+        setSampleMaxSize(tSampleMaxSize);
 
         transport = archive.inout("transport", transport);
-        
+        if(transport.equals(""))
+        {
+            transport = TRANSPORT_MC;
+        }
+
     }
 
     void setDomainID(String domainID)
@@ -170,7 +178,33 @@ public class Topic<T> extends OPSObject
         this.participantID = participantID;
     }
 
+    public int getInSocketBufferSize()
+    {
+        return inSocketBufferSize;
+    }
 
+    public void setInSocketBufferSize(int inSocketBufferSize)
+    {
+        this.inSocketBufferSize = inSocketBufferSize;
+    }
 
-    
+    public int getOutSocketBufferSize()
+    {
+        return outSocketBufferSize;
+    }
+
+    public void setOutSocketBufferSize(int outSocketBufferSize)
+    {
+        this.outSocketBufferSize = outSocketBufferSize;
+    }
+
+    public String getTransport()
+    {
+        return transport;
+    }
+
+    public void setTransport(String transport)
+    {
+        this.transport = transport;
+    }
 }

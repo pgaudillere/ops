@@ -32,14 +32,14 @@ import ops.protocol.OPSMessage;
  *
  * @author angr
  */
-public class TopicHandler
+public class ReceiveDataHandler
 {
 
     private boolean hasSubscribers;
-    private boolean hasPublishers;
-    private HashMap<String, MessageBuffer> messageBuffers = new HashMap<String, MessageBuffer>();
+    //private boolean hasPublishers;
+    //private HashMap<String, MessageBuffer> messageBuffers = new HashMap<String, MessageBuffer>();
     private Topic topic;
-    private Transport transport;
+    private Receiver transport;
     private Vector<Subscriber> subscribers = new Vector<Subscriber>();
     private ObserverImpl bytesListener = new ObserverImpl();
     private Participant participant;
@@ -47,20 +47,21 @@ public class TopicHandler
     private int fragmentSize;
     private final byte[] bytes;
     private byte[] headerBytes;
-    private byte[] trimmedBytes;
-    private int byteOffset = 0;
+    private int bytesReceived;
+    //private byte[] trimmedBytes;
+    //private int byteOffset = 0;
     private static int FRAGMENT_HEADER_SIZE = 14;
 
-    public TopicHandler(Topic t, Participant part)
+    public ReceiveDataHandler(Topic t, Participant part)
     {
         bytes = new byte[t.getSampleMaxSize()];
         headerBytes = new byte[FRAGMENT_HEADER_SIZE];
-        trimmedBytes = new byte[t.getSampleMaxSize()];
+        //trimmedBytes = new byte[t.getSampleMaxSize()];
         participant = part;
         topic = t;
         MulticastDomain domain = (MulticastDomain) participant.getConfig().getDomain(topic.getDomainID());
         fragmentSize = StaticManager.MAX_SIZE;
-        transport = new MulticastTransport(t.getDomainAddress(), t.getPort(), domain.getLocalInterface());
+        transport = new MulticastReceiver(t.getDomainAddress(), t.getPort(), domain.getLocalInterface(), t.getInSocketBufferSize());
 
 
     }
@@ -95,6 +96,7 @@ public class TopicHandler
     {
         try
         {
+            bytesReceived += p.getLength() - headerBytes.length;
             
             //System.arraycopy(bytes, expectedFragment*fragmentSize, by, 0, p.getLength());
 //            ReadByteBuffer readBuf = new ReadByteBuffer(bytes, expectedFragment*fragmentSize, fragmentSize);
@@ -108,10 +110,9 @@ public class TopicHandler
                 if(currentFragment == (nrOfFragments - 1) && currentFragment == expectedFragment)
                 {
                     //We have received a full message, let's deserialize it and send it to subscribers.
-                    //First we trim the bytes to remove all fragment headers. Note, unlike in C++.
-                    //ReadByteBuffer.trimSegments(bytes, fragmentSize, nrOfFragments, FRAGMENT_HEADER_SIZE, trimmedBytes);
                     sendBytesToSubscribers(new ReadByteBuffer(bytes));
                     expectedFragment = 0;
+                    bytesReceived = 0;
 
                 }
                 else if(currentFragment == expectedFragment)
@@ -123,6 +124,7 @@ public class TopicHandler
                     //Sample will be lost here, add error handling
                     System.out.println("___________________Fragment error, sample lost__________________");
                     expectedFragment = 0;
+                    bytesReceived = 0;
                 }
             }
 
@@ -142,6 +144,14 @@ public class TopicHandler
         OPSArchiverIn archiverIn = new OPSArchiverIn(readBuf);
         OPSMessage message = null;
         message = (OPSMessage) archiverIn.inout("message", message);
+
+        //readBuf.inBuffer.asCharBuffer().
+        System.out.println("Bytes received = " + bytesReceived);
+        System.out.println("Bytes read     = " + readBuf.position());
+
+        //TODO: null check
+        //TODO: handle sparebytes
+        //TODO: error checking
         for (Subscriber subscriber : subscribers)
         {
             subscriber.notifyNewOPSMessage(message);
@@ -153,7 +163,6 @@ public class TopicHandler
 
         Thread thread = new Thread(new Runnable()
         {
-
 
             public void run()
             {
@@ -179,28 +188,4 @@ public class TopicHandler
 
 
 
-    //                if(nrOfFragments == 1)
-//                {
-//                    sendBytesToSubscribers(readBuf);
-//                    return;
-//                }
-//                else if(messageBuffers.containsKey(messID))
-//                {
-//                    MessageBuffer messBuf = messageBuffers.get(messID);
-//                    messBuf.addFragment(currentFragment, bytes, messID.length() + 8 + 6);
-//                    if(messBuf.isComplete())
-//                    {
-//                        ReadByteBuffer tBuf = new ReadByteBuffer(messBuf.getBytes());
-//                        sendBytesToSubscribers(tBuf);
-//                        messageBuffers.remove(messID);
-//                        return;
-//                    }
-//                }
-//                else
-//                {
-//                    MessageBuffer tBuf = new MessageBuffer(nrOfFragments);
-//                    tBuf.addFragment(currentFragment, bytes, messID.length() + 8 + 6);
-//                    messageBuffers.put(messID, tBuf);
-//
-//                }
 }

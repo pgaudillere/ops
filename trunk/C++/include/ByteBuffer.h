@@ -63,13 +63,8 @@ namespace ops
 		///Utility method for swaping byte order of basic types (int float etc.)
         void ByteSwap(unsigned char * b, int n);
 
-		
-
 		void readNewSegment();
-		
-
 		void WriteBytes(std::vector<char>& out, int offset, int length);
-
 		void ReadBytes(std::vector<char>& out, int offset, int length);
      
     public:

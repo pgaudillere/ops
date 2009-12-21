@@ -21,10 +21,12 @@ package ops;
 
 import configlib.ArchiverInOut;
 import configlib.XMLArchiverIn;
+import configlib.XMLArchiverOut;
 import configlib.exception.FormatException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 import ops.archiver.OPSObjectFactory;
@@ -61,6 +63,16 @@ public class OPSConfig extends OPSObject
         newConfig = (OPSConfig) archiverIn.inout("ops_config", newConfig);
 
         return newConfig;
+    }
+    public static void saveConfig(OPSConfig conf, File configFile) throws FileNotFoundException, IOException
+    {
+        FileOutputStream fos = new FileOutputStream(configFile);
+        XMLArchiverOut archiverOut = new XMLArchiverOut(fos, false);
+        fos.write("<root xmlns=ops>\n".getBytes());
+            archiverOut.inout("ops_config", conf);
+        fos.write("\n</root>".getBytes());
+
+
     }
     //------------------------------
     private Vector<Domain> domains = new Vector<Domain>();

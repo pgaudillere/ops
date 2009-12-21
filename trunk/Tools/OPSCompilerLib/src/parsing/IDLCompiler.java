@@ -1,7 +1,6 @@
 package parsing;
 
 import java.util.Vector;
-import javax.swing.JPanel;
 
 /**
  *

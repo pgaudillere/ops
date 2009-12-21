@@ -65,6 +65,13 @@ public class WriteByteBuffer
         return result;
     }
 
+    public final int position()
+    {
+        return outBuffer.position();
+    }
+
+
+
     private void write(byte[] bytes, int start, int size)
     {
         outBuffer.put(bytes, start, size);

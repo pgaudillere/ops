@@ -29,10 +29,10 @@ class OPSDomainNode extends AbstractNode
     {
 
         Vector<Node> nodeVector = new Vector<Node>();
-        //for (Topic topic : domain.getTopics())
-        //{
-          //  nodeVector.add(OPSTopicNode.createTopicNode(topic));
-        //}
+        for (Topic topic : domain.getTopics())
+        {
+            nodeVector.add(OPSTopicNode.createTopicNode(topic));
+        }
         Children children = new Children.Array();
         children.add(nodeVector.toArray(new Node[0]));
         return new OPSDomainNode(children, domain);
@@ -62,6 +62,7 @@ class OPSDomainNode extends AbstractNode
                     {
                         Topic topic = new Topic(topicToCreate, 1000, "Hatt.hatt", "234.4.5.6");
                         domain.getTopics().add(topic);
+                        ((OPSConfigNode)getParentNode()).notifyNewTopic();
                     }
                 }
 
