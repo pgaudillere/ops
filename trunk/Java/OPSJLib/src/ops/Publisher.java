@@ -60,14 +60,14 @@ public class Publisher
         message.setTopicName(topic.getName());
         message.setPublisherName(name);
 
-        WriteByteBuffer buf = new WriteByteBuffer(bytes);
+        WriteByteBuffer buf = new WriteByteBuffer(bytes, StaticManager.MAX_SIZE);
         try
         {
 
-            buf.writeProtocol();
+            //buf.writeProtocol();
             //buf.write("");
-            buf.write(1);
-            buf.write(0);
+            //buf.write(1);
+            //buf.write(0);
 
             OPSArchiverOut archiverOut = new OPSArchiverOut(buf);
         

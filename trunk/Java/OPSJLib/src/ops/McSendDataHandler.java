@@ -34,7 +34,7 @@ public class McSendDataHandler implements SendDataHandler
         for (int i = 0; i < nrSegmentsNeeded; i++)
         {
             //If this is the last element, only send the bytes that remains, otherwise send a full package.
-            int sizeToSend = (i == nrSegmentsNeeded - 1) ? bytes.length - (int)(size / StaticManager.MAX_SIZE) * StaticManager.MAX_SIZE : StaticManager.MAX_SIZE;
+            int sizeToSend = (i == nrSegmentsNeeded - 1) ? size - (int)(size / StaticManager.MAX_SIZE) * StaticManager.MAX_SIZE : StaticManager.MAX_SIZE;
             if(!sender.sendTo(bytes, i * StaticManager.MAX_SIZE, sizeToSend, t.getDomainAddress(), t.getPort()))
             {
                 return false;
