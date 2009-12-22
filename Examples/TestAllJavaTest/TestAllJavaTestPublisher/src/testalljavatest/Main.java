@@ -47,7 +47,7 @@ public class Main {
 
         data.ss.add("TestString in Array.");
 
-        for (int i = 0; i < 500000; i++)
+        for (int i = 0; i < 500; i++)
         {
             data.fs.add((float)i);
         }

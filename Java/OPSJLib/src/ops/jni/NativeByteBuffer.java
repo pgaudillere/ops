@@ -11,6 +11,10 @@ package ops.jni;
  */
 public class NativeByteBuffer
 {
+    static
+    {
+        System.loadLibrary("NativeByteBuffer");
+    }
     private final int segmentSize;
 
 
@@ -19,7 +23,7 @@ public class NativeByteBuffer
         this.segmentSize = segmentSize;
         initialize(buffer, segmentSize);
     }
-    private native int getPosition();
+    public native int getPosition();
     private native void initialize(byte[] buffer, int segmentSize);
     
     public native void writeByte(byte b);

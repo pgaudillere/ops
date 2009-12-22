@@ -19,7 +19,7 @@
 int main(int argc, const char* args[])
 {
 	int mainSleep = 1;
-	int nrOfFloats = 500;
+	int nrOfFloats = 1000;
 	int sleepEveryNrPackets = 100000;
 	int sendSleepTime = 1;
 
