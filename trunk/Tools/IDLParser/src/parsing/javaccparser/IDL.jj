@@ -225,7 +225,10 @@ void member_list() :
 {
   "extends" tName = idl_type() {extendsEvent.fireEvent(tName);} "{"( member() )+ "}"
 |
+LOOKAHEAD(2)
+(
   "{" ( member() )+ "}"
+)
 
 }
 
@@ -235,14 +238,17 @@ void member() :
 {String typeName = ""; String fieldName = "";String comment = ""; String tComment = ""; }
 {
   {currentIDLField = new IDLField(fieldName, "");}
-  typeName = type_spec() fieldName = declarators() ";"
+
+  typeName = type_spec() fieldName = declarators(currentIDLField) ";"
   {
-    if(fieldName.contains("[]"))
+    if(fieldName.contains("[") && fieldName.contains("]"))
     {
-        typeName = typeName.trim() + "[]";
-        fieldName = fieldName.replace("[]", "").trim();
+        typeName = typeName.trim() + fieldName.substring(fieldName.indexOf("["), fieldName.indexOf("]") + 1);
+        fieldName = fieldName.replace("[", "").trim();
+        fieldName = fieldName.replace("]", "").trim();
         //currentIDLField.setArray(true);
     }
+    
     currentIDLField.setName(fieldName);
     currentIDLField.setType(typeName);
     fieldDeclareEvent.fireEvent(currentIDLField);
@@ -250,6 +256,7 @@ void member() :
 |
     comment = <ANOTATION>.image
     {commentEvent.fireEvent(comment);}
+
 
 
 }
@@ -262,14 +269,27 @@ String identifier() :
 
 }
 
-String declarators() :
-{String ret = "";}
+String declarators(IDLField currentIDLField) :
+{String ret = "";
+ String size = ""; }
 {
+
   ret = declarator()
   {return ret;}
 |
-   "[" "]" ret = declarator()
-  {return "[] " + ret;}
+   "[" [ size = <DECIMALINT>.image ] "]" ret = declarator()
+  {
+     if(!size.equals(""))
+     {
+        currentIDLField.setArraySize(Integer.parseInt(size));
+     }
+
+     return "[" + size + "] " + ret;}
+
+
+
+
+
 }
 
 /* Production 35 */
@@ -296,18 +316,20 @@ String type_spec() :
 String simple_type_spec() :
 {String ret = "";}
 {
+
   ret = base_type_spec()
+
   {return ret;}
+
 
 }
 
 String complex_type_spec() :
 {String ret = "";}
 {
-LOOKAHEAD(2)
-(
+
     (ret = base_type_spec() fixed_array_size())
-)
+
 
 {return ret;}
 }

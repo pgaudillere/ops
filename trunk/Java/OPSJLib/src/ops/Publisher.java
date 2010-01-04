@@ -20,6 +20,7 @@
 package ops;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import ops.archiver.OPSArchiverOut;
@@ -38,6 +39,7 @@ public class Publisher
     private int reliableWriteNrOfResends = 1;
     private int reliableWriteTimeout = 1000;
     private byte[] bytes;
+    private ByteBuffer buffer;
     private Participant participant;
     private final SendDataHandler sendDataHandler;
 
@@ -45,6 +47,7 @@ public class Publisher
     {
         this.topic = topic;
         bytes = new byte[topic.getSampleMaxSize()];
+        buffer = ByteBuffer.allocateDirect(topic.getSampleMaxSize());
             
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
         sendDataHandler = participant.getSendDataHandler(topic);
@@ -60,7 +63,7 @@ public class Publisher
         message.setTopicName(topic.getName());
         message.setPublisherName(name);
 
-        WriteByteBuffer buf = new WriteByteBuffer(bytes, StaticManager.MAX_SIZE);
+        WriteByteBuffer buf = new WriteByteBuffer(buffer, StaticManager.MAX_SIZE);
         try
         {
 
@@ -69,11 +72,20 @@ public class Publisher
             //buf.write(1);
             //buf.write(0);
 
+            buffer.position(0);
             OPSArchiverOut archiverOut = new OPSArchiverOut(buf);
         
             archiverOut.inout("message", message);
+
+            buf.finish();
+            int sizeToSend = buffer.position();
+
             //transport.send(archiverOut.getBytes());
-            sendDataHandler.sendData(bytes, buf.position(), topic);
+            buffer.position(0);
+            buffer.get(bytes);
+            sendDataHandler.sendData(bytes,sizeToSend, topic);
+            //sendDataHandler.sendData(buffer.array(), buf.position(), topic);
+
         }
         catch (IOException ex)
         {

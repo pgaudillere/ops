@@ -10,6 +10,9 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.NetworkInterface;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -42,7 +45,18 @@ class MulticastSender implements Sender
     {
         try
         {
-            InetAddress ipAddress = InetAddress.getByName(ip);
+            return this.sendTo(bytes, offset, size, InetAddress.getByName(ip), port);
+        } catch (UnknownHostException ex)
+        {
+            return false;
+        }
+
+    }
+    public boolean sendTo(byte[] bytes, int offset, int size, InetAddress ipAddress, int port)
+    {
+        try
+        {
+
             DatagramPacket datagramPacket = new DatagramPacket(bytes, offset, size, ipAddress, port);
 
             multicastSocket.send(datagramPacket);

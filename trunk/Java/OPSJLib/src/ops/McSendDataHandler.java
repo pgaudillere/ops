@@ -6,6 +6,7 @@
 package ops;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  *
@@ -14,19 +15,21 @@ import java.io.IOException;
 public class McSendDataHandler implements SendDataHandler
 {
     private Sender sender;
+    private final InetAddress sinkIP;
     
 
     public McSendDataHandler(Topic t, String localInterface) throws IOException
     {
         //TODO:
         sender = new MulticastSender(0, localInterface, 0, t.getOutSocketBufferSize());
+        sinkIP = InetAddress.getByName(t.getDomainAddress());
 
     }
 
 
     public boolean sendData(byte[] bytes, int size, Topic t)
     {
-        int nrSegmentsNeeded = (int)(size / t.getSampleMaxSize()) ;
+        int nrSegmentsNeeded = (int)(size / StaticManager.MAX_SIZE) ;
         if(size % StaticManager.MAX_SIZE != 0)
         {
             nrSegmentsNeeded ++;
@@ -35,7 +38,7 @@ public class McSendDataHandler implements SendDataHandler
         {
             //If this is the last element, only send the bytes that remains, otherwise send a full package.
             int sizeToSend = (i == nrSegmentsNeeded - 1) ? size - (nrSegmentsNeeded - 1) * StaticManager.MAX_SIZE : StaticManager.MAX_SIZE;
-            if(!sender.sendTo(bytes, i * StaticManager.MAX_SIZE, sizeToSend, t.getDomainAddress(), t.getPort()))
+            if(!sender.sendTo(bytes, i * StaticManager.MAX_SIZE, sizeToSend, sinkIP, t.getPort()))
             {
                 return false;
             }
