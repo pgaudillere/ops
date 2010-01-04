@@ -140,7 +140,7 @@ public class WriteByteBuffer
 
     public void write(int v) throws IOException
     {
-        write(ByteBuffer.allocate(4).putInt(v).array(), 0, 4);
+        write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(v).array(), 0, 4);
         //getDos().writeInt(v);
         //outBuffer.putInt(v);
     }
@@ -157,7 +157,7 @@ public class WriteByteBuffer
 
     public void write(byte v) throws IOException
     {
-        write(ByteBuffer.allocate(1).put(v).array(), 0, 1);
+        write(ByteBuffer.allocate(1).order(ByteOrder.LITTLE_ENDIAN).put(v).array(), 0, 1);
         //outBuffer.put(v);
     }
 
@@ -172,7 +172,7 @@ public class WriteByteBuffer
 
     public void write(long v) throws IOException
     {
-        write(ByteBuffer.allocate(8).putLong(v).array(), 0, 8);
+        write(ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(v).array(), 0, 8);
         //getDos().writeLong(v);
         //outBuffer.putLong(v);
     }
@@ -188,7 +188,7 @@ public class WriteByteBuffer
 
     public void write(float v) throws IOException
     {
-        write(ByteBuffer.allocate(4).putFloat(v).array(), 0, 4);
+        write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putFloat(v).array(), 0, 4);
         //outBuffer.putFloat(v);
     }
 
@@ -209,7 +209,7 @@ public class WriteByteBuffer
 
     public void write(double v) throws IOException
     {
-        write(ByteBuffer.allocate(8).putDouble(v).array(), 0, 8);
+        write(ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putDouble(v).array(), 0, 8);
         //outBuffer.putDouble(v);
     }
 
