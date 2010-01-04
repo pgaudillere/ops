@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -41,11 +42,14 @@ public class WriteByteBuffer
     private final int segmentSize;
     private int nextSegmentAt;
     private int currentSegment;
+    //private ByteBuffer tempByteBuffer;
 
     /** Creates a new instance of WriteByteBuffer */
-    public WriteByteBuffer(byte[] bytes, int segmentSize)
+    public WriteByteBuffer(/*byte[] bytes*/ByteBuffer buffer, int segmentSize)
     {
-        outBuffer = ByteBuffer.wrap(bytes);
+        outBuffer = buffer;//ByteBuffer.wrap(bytes);
+
+        //tempByteBuffer = ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN);
         outBuffer.order(ByteOrder.LITTLE_ENDIAN); //Only default value, this should be dynamic in future OPS
         this.segmentSize = segmentSize;
         nextSegmentAt = 0;
@@ -74,6 +78,35 @@ public class WriteByteBuffer
     }
 
     /**
+     * This method must be called to finish byte buffers consisting of more then one segment.
+     * It will fill in the corrcect nrOfSegments in all segments.
+     */
+    public void finish() throws IOException
+    {
+
+        int oldPosition = outBuffer.position();
+        try
+        {
+
+            int currentPosition = 6; //Size of header
+
+            int nrOfSegments = currentSegment;
+            for (int i = 0; i < nrOfSegments; i++)
+            {
+                currentSegment = i + 1;
+                nextSegmentAt = currentSegment * segmentSize;
+                outBuffer.position(currentPosition);
+                write(nrOfSegments);
+                currentPosition += segmentSize;
+
+            }
+        } finally
+        {
+            outBuffer.position(oldPosition);
+        }
+    }
+
+    /**
      * Method that recursivly writes bytes to the undelying ByteBuffer inserting headers where needed.
      * @param bytes, byte[] to be written
      * @param start, offset in bytes
@@ -87,7 +120,7 @@ public class WriteByteBuffer
             outBuffer.put(bytes, start, length);
         } else
         {
-            
+
             outBuffer.put(bytes, start, bytesLeftInSegment);
             nextSegmentAt = outBuffer.position() + segmentSize;
             writeNewSegment();
@@ -140,7 +173,14 @@ public class WriteByteBuffer
 
     public void write(int v) throws IOException
     {
-        write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(v).array(), 0, 4);
+        if (nextSegmentAt - outBuffer.position() < 8)
+        {
+            write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(v).array(), 0, 4);
+        } else
+        {
+            outBuffer.putInt(v);
+        }
+
         //getDos().writeInt(v);
         //outBuffer.putInt(v);
     }
@@ -157,7 +197,14 @@ public class WriteByteBuffer
 
     public void write(byte v) throws IOException
     {
-        write(ByteBuffer.allocate(1).order(ByteOrder.LITTLE_ENDIAN).put(v).array(), 0, 1);
+        if (nextSegmentAt - outBuffer.position() < 8)
+        {
+
+            write(ByteBuffer.allocate(1).order(ByteOrder.LITTLE_ENDIAN).put(v).array(), 0, 1);
+        } else
+        {
+            outBuffer.put(v);
+        }
         //outBuffer.put(v);
     }
 
@@ -172,7 +219,16 @@ public class WriteByteBuffer
 
     public void write(long v) throws IOException
     {
-        write(ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(v).array(), 0, 8);
+        if (nextSegmentAt - outBuffer.position() < 8)
+        {
+            write(ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putLong(v).array(), 0, 8);
+        } else
+        {
+            outBuffer.putLong(v);
+        }
+
+
+
         //getDos().writeLong(v);
         //outBuffer.putLong(v);
     }
@@ -188,7 +244,15 @@ public class WriteByteBuffer
 
     public void write(float v) throws IOException
     {
-        write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putFloat(v).array(), 0, 4);
+        if (nextSegmentAt - outBuffer.position() < 4)
+        {
+            write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putFloat(v).array(), 0, 4);
+        } else
+        {
+            outBuffer.putFloat(v);
+        }
+
+
         //outBuffer.putFloat(v);
     }
 
@@ -209,7 +273,14 @@ public class WriteByteBuffer
 
     public void write(double v) throws IOException
     {
-        write(ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putDouble(v).array(), 0, 8);
+        if (nextSegmentAt - outBuffer.position() < 8)
+        {
+            write(ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN).putDouble(v).array(), 0, 8);
+        } else
+        {
+            outBuffer.putDouble(v);
+        }
+
         //outBuffer.putDouble(v);
     }
 

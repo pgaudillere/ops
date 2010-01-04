@@ -23,6 +23,7 @@ public class IDLField
     private boolean _static;
     private boolean array;
     private boolean _abstract;
+    private int arraySize;
     
     /** Creates a new instance of IDLField */
     public IDLField(String name, String type, String comment, String value)
@@ -52,6 +53,19 @@ public class IDLField
     {
         return name;
     }
+
+    public int getArraySize()
+    {
+        return arraySize;
+    }
+
+    public void setArraySize(int arraySize)
+    {
+        this.arraySize = arraySize;
+    }
+
+
+    
 
     public void setName(String name)
     {
