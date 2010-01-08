@@ -1,7 +1,7 @@
 Given a IDL project FooProject with a data type FooData used by a topic FooTopic on a domain FooDomain this is how you set up a subscrption and receive data:
 
 == Java ==
-There are two basic ways of subscribing to data in OPS, by regestering a listener that will benotified when new data arrives, or by polling the subscriber for data at any time.
+There are two basic ways of subscribing to data in OPS, by regestering a listener that will be notified when new data arrives, or by polling the subscriber for data.
 
 No matter what way you use to receive the data the setup of a subscription is always the same and look as follows:
 
@@ -13,4 +13,17 @@ Topic topic = participant.createTopic("FooTopic");
 
 FooDataSubscriber sub = new FooDataSubscriber(topic);
 
+sub.start();
+
+}}}
+
+If we want to poll the subscriber for data the most simple approach we can have is:
+
+{{{
+FooData data = null;
+data = sub.getData();
+if(data != null)
+{
+    //Do something with the data
+}
 }}}
