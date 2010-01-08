@@ -1,4 +1,25 @@
 It is simple to create your own filters for receiver side filtering of incomming data and have it work just like the KeyFilterQoSPolicy.
 
-Say you want to create a filter which accepts all publication on keys that start with a certain prefix. This is how you can do it Java (C++ works more or less the same way):
+Say you want to create a filter which accepts all publication on keys that start with a certain prefix. This is how you can do it Java (C++ works more or less the same way, unless you cannot declare the filter inline in the same way):
 
+{{{
+String keyPrefix = "fooPrefix";
+
+sub.addFilterQoSPolicy(new FilterQoSPolicy() 
+{
+   public boolean applyFilter(OPSObject o)
+   {
+      if(o.getKey().startsWith(fooPrefix))
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+});
+
+}}}
+
+Of course you are not restricted to use only key, lets say if FooData has a string field fooText, you could have used that one instead if you cast the OPSObject o to FooData.
