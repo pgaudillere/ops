@@ -98,13 +98,13 @@ In case 1. The field would be declared the same way in C++ as in IDL:
 
 {{{SampleData childData;}}}
 
-And thus have its default constructor called on creation of the container class construction.
+And thus have its default constructor called on creation of the container class.
 
-Case 2. on the other hand would generate a pointer field like this:
+Case 2. on the other hand would generate a pointer declaration like this:
 
 {{{SampleData* childData;}}}
 
-Which then allows the implemation of the pointer to be decided and changed by the user dunamically. 
+Which then allows the implemation of the pointer to be decided and changed by the user dynamically. 
 
 
 
