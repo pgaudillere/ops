@@ -69,3 +69,12 @@ sub.deadlineEvent.addObserver(new Observer()
 });
 
 }}}
+
+Or of course just:
+
+{{{
+if(sub.isDeadlineMissed())
+{
+   //React!
+}
+}}}
