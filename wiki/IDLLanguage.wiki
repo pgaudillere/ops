@@ -83,11 +83,28 @@ As we saw in the sample above it is possible to declare fields of another user d
 This is of course OK, but it does not give us much more then saving a few lines of IDL.
 What we normally would like to do when using inheritance is to have some sort of polymorfism. And the natural way to do that would seem to be to declare the field of the base type:
 
+1.
 {{{SampleData childData;}}}
 
-While this is a valid declaration it does not give us the oppertunity to fill in the field with child data because OPS tries to use static memory allocation as often as possible. To  tell the OPS code generators to allow for dynamic memory allocation and thus support for polymorfism the keyword virtual is used like this:
+While this is a valid declaration it does not give us the oppertunity to use the field as  a ChildData. This because OPS tries to use static memory allocation as often as possible and this type of declaration will generate code (if allowed by the target language) that allocates the field on the stack rather than on the heap and thus not allow it to change implementation dynamically . 
+To tell the OPS code generators to allow for dynamic memory allocation and support for polymorfism the keyword virtual is used like this:
 
+2.
 {{{virtual SampleData childData;}}}
+
+To clearify things a bit let us see what the two ways of declaring a field would affect the code generation in C++.
+
+In case 1. The field would be declared the same way in C++ as in IDL:
+
+{{{SampleData childData;}}}
+
+And thus have its default constructor called on creation of the container class construction.
+
+Case 2. on the other hand would generate a pointer field like this:
+
+{{{SampleData* childData;}}}
+
+Which then allows the implemation of the pointer to be decided and changed by the user dunamically. 
 
 
 
