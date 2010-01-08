@@ -34,4 +34,7 @@ No matter wheather you use polling or a listener, you willl only be able to get 
 myKeyFilter.setKey("my_other_key");
 }}}
 
+On the publisher side, all that is required is to set the key on the data to be published:
+
+
 The example above is in Java, but the same apply to C++.
