@@ -39,7 +39,7 @@ class MyDeadlineListener : public ops::DeadlineMissedListener
    {
        s->deadlineMissedEvent.addDeadlineMissedListener(this);
    } 
-   ///Override from ops::DataListener
+   ///Override from ops::DeadlineMissedListener
    void onDeadlineMissed(ops::DeadlineMissedEvent*)
    {
        //React to deadline missed
@@ -55,3 +55,5 @@ and in addition to your init code above register this listener with the subscrib
 MyDeadlineListener dListener(&sub);
 
 }}}
+
+In Java we use the same approach but by using Observer:
