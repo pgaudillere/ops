@@ -1,0 +1,39 @@
+{{{
+
+package weatherstation;
+
+class BasicWeatherData
+{
+    double temprature;
+}
+
+}}}
+
+{{{
+package weatherstation;
+
+class ExtendedWeatherData extends BasicWeatherData
+{
+    virtual WindData windData;
+    double humidity;
+
+}
+}}}
+
+{{{
+package weatherstation;
+
+class WindData
+{
+    double speed;
+
+}
+}}}
+
+{{{
+
+}}}
+
+{{{
+
+}}}
