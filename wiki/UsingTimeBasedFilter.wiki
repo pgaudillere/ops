@@ -2,10 +2,12 @@ Another useful feature when subscribing to a topic is to use something called Ti
 
 This saves both CPU power and simplifies your data handling.
 
-Setting up a Time Based Filter QoS is easy and is done in the same way in both C++ and Java. The following shows how subscribe to a topic and only get samples at a maximum rate of 1Hz:
+Setting up a Time Based Filter QoS is easy and is done in the same way in both C++ and Java. The following shows how to tell the subscriber to only get samples at a maximum rate of 1Hz:
 
 {{{
 sub.setTimeBasedFilterQoS(1000) //Minimum separation between to samples in milliseconds
 }}}
 
 Setting the Time Based Filter QoS applies to both polling and listener appraoches  (See SubscribingToTopic).
+
+The Time Based Filter QoS can be updated at any time.
