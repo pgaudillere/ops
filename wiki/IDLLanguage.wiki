@@ -125,6 +125,8 @@ and
 
 2. {{{/* This is an ended comment, max one line though... */}}}
 
+More than just beeing two ways of accomplishing the same thing, comment as in 1. stays in IDL and will not be visible in the generated code while commnts like in 2. will be.
+
 
 
 
