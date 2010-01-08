@@ -7,7 +7,14 @@ There are two basic ways of subscribing to data in OPS, by regestering a listene
 In Java, no matter what way you use to receive the data the setup of a subscription is always the same and look as follows:
 
 {{{
+//Get a participant reference, this is your entry point to OPS
 Participant participant = Participant.getInstance("FooDomain");
+if(participant == null)
+{
+    //Report error
+    return;
+}
+//Add suppoert for serializing/unserialazing our data types
 participant.addTypeSupport(new FooProject.FooProjectTypeFactory());
 
 Topic topic = participant.createTopic("FooTopic");
