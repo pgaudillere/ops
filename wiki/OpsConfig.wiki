@@ -43,9 +43,9 @@ elements of _MulticastDomain_ contains:
  * *topics*, a list of Topic
 
 elements of _Topic_ contains:
- * *name*
- * *port*
- * *dataType*
- * *inSocketBufferSize* (optional)
- * *outSocketBufferSize* (optional)
- * *address* (optional)
+ * *name*, name of the topic as a string, shall be unique within the domain
+ * *port*, the port that should be used to communicate on this topic
+ * *dataType*, the parent data type that samples on this topic must be (samples must be of this type or extend this type)
+ * *inSocketBufferSize* (optional), changes the underlying sockets buffer size if possible
+ * *outSocketBufferSize* (optional) changes the underlying sockets buffer size if possible
+ * *address* (optional), overrides the domainAddress and lets this topic coomunicate on another multicast address
