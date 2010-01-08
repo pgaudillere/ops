@@ -34,7 +34,7 @@
 
 *ops_config*, this node contains a list of Domains called domains.
 
-*domains*, contains a list of Domain implementations (only MulticastDomain is valid at this point)
+*domains*, contains a list of Domain implementations (only !MulticastDomain is valid at this point)
 
 elements of _!MulticastDomain_ contains:
  * *domainID*, which uniquely identifies a domain name in form of a string
