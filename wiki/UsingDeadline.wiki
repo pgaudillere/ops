@@ -70,7 +70,7 @@ sub.deadlineEvent.addObserver(new Observer()
 
 }}}
 
-Or of course just:
+Or again, of course just:
 
 {{{
 if(sub.isDeadlineMissed())
