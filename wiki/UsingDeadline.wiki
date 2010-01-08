@@ -42,7 +42,7 @@ class MyDeadlineListener : public ops::DeadlineMissedListener
    ///Override from ops::DeadlineMissedListener
    void onDeadlineMissed(ops::DeadlineMissedEvent*)
    {
-       //React to deadline missed
+       //React on deadline missed
     
    } 
 
