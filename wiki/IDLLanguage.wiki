@@ -65,7 +65,7 @@ class SampleData
 }
 }}}
 
-This yields the following in [SampleDataCpp C++] and [SampleDataJava Java].
+This yields the following generated code in [SampleDataCpp C++] and [SampleDataJava Java].
 
 == Inheritance ==
 
