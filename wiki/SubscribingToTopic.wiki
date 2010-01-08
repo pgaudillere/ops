@@ -24,8 +24,22 @@ FooData data = null;
 data = sub.getData();
 if(data != null)
 {
-    //Do something with the data
+    //Do something with the data...
 }
 }}}
 
 Data will be null until we receive any data.
+
+If we want to use a listener approach we can use Java's Observer classes in the following way:
+
+{{{
+sub.addObserver(new Observer() 
+{ 
+    public void update(Observable o, Object arg)
+    {
+        FooData data = (FooData)arg;
+        //Do something with the data...
+    } 
+});
+
+}}}
