@@ -26,6 +26,7 @@ Below is a simple such file with only one domain and one topic specified:
                         <sampleMaxSize>60000</sampleMaxSize>
                         <inSocketBufferSize>1000000</inSocketBufferSize>
                         <outSocketBufferSize>1000000</outSocketBufferSize>
+                        <transport>multicast</transport>
                         <address>234.5.6.9</address>
                     </element>
                     <!-- TODO: Add more topics here... -->
@@ -56,4 +57,5 @@ elements of _Topic_ contains:
  * *dataType*, the parent data type that samples on this topic must be (samples must be of this type or extend this type)
  * *inSocketBufferSize* (optional), changes the underlying sockets buffer size if possible
  * *outSocketBufferSize* (optional) changes the underlying sockets buffer size if possible
+ * *transport* (optional), configures which transport to be used for this topic. multicast is default and the only transport fully supported. Others include tcp and udp which exist as experimental implementations.
  * *address* (optional), overrides the domainAddress and lets this topic comunicate on its own multicast address
