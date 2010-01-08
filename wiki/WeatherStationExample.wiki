@@ -59,7 +59,7 @@ class ExtendedWindData extends BasicWindData
                     <element type = "Topic">
                         <name>WeatherTopic</name>
                         <port>6686</port>
-                        <dataType>weatherstation.WeatherData</dataType>
+                        <dataType>weatherstation.BasicWeatherData</dataType>
                     </element>
                     <!-- TODO: Add more topics here... -->
                 </topics>
@@ -68,5 +68,6 @@ class ExtendedWindData extends BasicWindData
         </domains>
     </ops_config>
 </root>
+
 
 }}}
