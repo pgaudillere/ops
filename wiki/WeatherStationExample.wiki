@@ -23,7 +23,7 @@ class ExtendedWeatherData extends BasicWeatherData
 {{{
 package weatherstation;
 
-class WindData
+class BasicWindData
 {
     double speed;
 
@@ -31,9 +31,11 @@ class WindData
 }}}
 
 {{{
+package weatherstation;
 
-}}}
-
-{{{
+class ExtendedWindData extends BasicWindData
+{
+    double direction;
+}
 
 }}}
