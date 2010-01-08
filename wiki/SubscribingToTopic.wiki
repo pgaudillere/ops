@@ -86,7 +86,8 @@ class MyListener : public ops::DataListener
        fooSub = s;
        fooSub->addDataListener(this);
    } 
-   void onNewData(DataNotifier* sub)
+   ///Override from ops::DataListener
+   void onNewData(ops::DataNotifier*)
    {
       FooData data;
       if(fooSub->getData(&data)
