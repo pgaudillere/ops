@@ -110,6 +110,8 @@ Arrays are treated in the same manner, to declare an array of object whos implem
 
 {{{virtual SampleData[] childDatas;}}}
 
+To see a useful situation when how and why to use inheritance in OPS, have a look at the WeatherStationExample.
+
 
 
  
