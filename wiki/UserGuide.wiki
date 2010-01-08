@@ -17,9 +17,9 @@ Add your content here.  Format your content with:
   * [SubscribingToTopic Subscribing]
   * [PublishingOnTopic Publishing]
   * [UsingKeys Using Keys]
-  * QoS
-    * Deadline
-    * Time Based Filter
+  * Quality of Services
+    * [UsingDeadline Using Deadline QoS]
+    * [UsingTimeBasedFilter Time Based Filter QoS]
   * Transports
     * Multicast
     * TCP
