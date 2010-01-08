@@ -39,7 +39,7 @@
 elements of _!MulticastDomain_ contains:
  * *domainID*, which uniquely identifies a domain name in form of a string
  * *domainAddress*, a multicast ip address which the domain shall use to communicate. domainAddress must be the same for all domain with the same domainID
- * *localInterface* (optional) defines which local ip interface on which the domain participants shall communicate. If this tag is omitted, the first interface found on the system will be used.
+ * *localInterface* (optional) defines which local ip interface on which the domain participants shall communicate. If this tag is omitted, the first interface found on the system will be used. Especially if 127.0.0.1 (localinterface) is used communication will stay on the local machine only.
  * *topics*, a list of Topic
 
 elements of _Topic_ contains:
