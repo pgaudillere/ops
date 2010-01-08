@@ -36,7 +36,7 @@
 
 *domains*, contains a list of Domain implementations (only MulticastDomain is valid at this point)
 
-elements of !_MulticastDomain_ contains:
+elements of _!MulticastDomain_ contains:
  * *domainID*, which uniquely identifies a domain name in form of a string
  * *domainAddress*, a multicast ip address which the domain shall use to communicate. domainAddress must be the same for all domain with the same domainID
  * *localInterface* (optional) defines which local ip interface on which the domain participants shall communicate. If this tag is omitted, the first interface found on the system will be used.
