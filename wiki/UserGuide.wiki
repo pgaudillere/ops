@@ -12,7 +12,7 @@ Add your content here.  Format your content with:
   * [SimpleCpp Simple Example]
   * [IDLLanguage IDL]
   * [OpsConfig Topic Config]
-  * IDL Builder
+  * [IDLCompilerTutorial IDL Builder]
   * Subscribing
     * Java
     * C++
