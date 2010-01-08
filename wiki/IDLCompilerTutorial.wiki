@@ -1,7 +1,7 @@
 #summary This section describes how and why you use the IDL Compiler to create the outline for a distributed OPS project.
 [Installation] [SimpleCpp Examples] [BuildInstructions]
 ----
-= The IDL Compiler Basics = 
+= The IDL Builder Basics = 
 == What is IDL? ==
 IDL stands for Interface Definition Language and is a common name for programming language neutral languages used in middlewares to enable support for multiple programming languages (E.g. C++ and Java).
 In OPS the IDL language is very simple and is only used to define data classes (i.e. structs). Once a data class is defined in IDL, it can be “compiled” into the desired target programming languages that will be used in your distributed application.
@@ -105,5 +105,3 @@ The IDL Compiler is also where you define your topics on which you will publish 
 See what the OPS IDL Builder looks like and how to create a new project here:
 
 <wiki:video url="http://www.youtube.com/watch?v=UsdjMwTUV3s"/>
-
-
