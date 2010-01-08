@@ -27,3 +27,5 @@ if(data != null)
     //Do something with the data
 }
 }}}
+
+Data will be null until we receive any data.
