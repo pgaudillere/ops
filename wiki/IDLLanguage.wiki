@@ -39,7 +39,7 @@ Or as IDL code example:
 
 {{{
 package samples;
-class SamplData
+class SampleData
 {
    boolean boo;
    byte b;
@@ -68,8 +68,25 @@ In addition to the simple approach above OPS IDL also support inheritance to som
 
 {{{
 package samples;
-class SampleData extends BaseSampleData
+class ChildData extends SampleData
 {
 
 }
 }}}
+
+Which in this case makes child data extend all fields from SampleData.
+
+As we saw in the sample above it is possible to declare fields of another user defined type, for example we could declare a field of our new type as follows:
+{{{ChildData childData;}}}
+
+This is of course OK, but it does not give us much more then saving a few lines of IDL.
+What we normally would like to do when using inheritance is to have some sort of polymorfism. And the natural way to do that would seem to be to declare the field of the base type:
+{{{SampleData childData;}}}
+
+While this is a valid declaration it does not give us the oppertunity to fill in the field with child data because OPS tries to use static memory allocation as often as possible. To  tell the OPS code generators to allow for dynamic memory allocation and thus support for polymorfism the keyword virtual is used like this:
+
+{{{virtual SampleData childData;}}}
+
+
+
+ 
