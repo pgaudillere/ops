@@ -65,6 +65,8 @@ class SampleData
 }
 }}}
 
+This yields the following in [C++ SampleDataCpp] and [Java SampleDataJava].
+
 == Inheritance ==
 
 In addition to the simple approach above OPS IDL also support inheritance to some extent. A class can extend one other class (multiple inheritance is not supported):
