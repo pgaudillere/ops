@@ -43,3 +43,64 @@ sub.addObserver(new Observer()
 });
 
 }}}
+
+
+== Java ==
+There are two basic ways of subscribing to data in OPS, by regestering a listener that will be notified when new data arrives, or by polling the subscriber for data.
+
+No matter what way you use to receive the data the setup of a subscription is always the same and look as follows:
+
+{{{
+Participant* participant = Participant::getInstance("FooDomain");
+participant->addTypeSupport(new FooProject::FooProjectTypeFactory());
+
+Topic topic = participant->createTopic("FooTopic");
+
+FooDataSubscriber sub(topic);
+
+sub.start();
+
+}}}
+
+If we want to poll the subscriber for data the most simple approach we can have is:
+
+{{{
+FooData data;
+if(sub.getData(&data);
+{
+    //Do something with the data...
+}
+}}}
+
+getData will return false until we receive any data.
+
+If we want to use a listener approach we can use OPS' DataListener and DataNotifier classes by creating a listener class in the following way:
+
+{{{
+
+class MyListener : public ops::DataListener
+{
+   FooDataSubscriber* fooSub;
+   MyListener(FooDataSubscriber s)
+   {
+       fooSub = s;
+   } 
+   void onNewData(DataNotifier* sub)
+   {
+      FooData data;
+      if(sub.getData(&data);
+      {
+          //Do something with the data...
+      }    
+   } 
+
+}
+}}}
+
+and in addition to your init code above register this listener with the subscriber
+
+{{{
+MyListener listener;
+sub.addDataListener(&listener);
+
+}}}
