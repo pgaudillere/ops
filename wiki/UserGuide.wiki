@@ -10,8 +10,8 @@ This page is the official user guide for OPS
 Add your content here.  Format your content with:
   * [BasicConcepts Concepts]
   * [SimpleCpp Simple Example]
-  * IDL
-  * Topic Config
+  * [IDLLanguage IDL]
+  * [OpsConfig Topic Config]
   * IDL Builder
   * Subscribing
     * Java
