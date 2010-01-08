@@ -9,7 +9,7 @@ This page is the official user guide for OPS
 
 Add your content here.  Format your content with:
   * [BasicConcepts Concepts]
-  * Simple Example
+  * [SimpleCpp Simple Example]
   * IDL
   * Topic Config
   * IDL Builder
