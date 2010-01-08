@@ -106,6 +106,10 @@ Case 2. on the other hand would generate a pointer declaration like this:
 
 Which then allows the implemation of the pointer to be decided and changed by the user dynamically. 
 
+Arrays are treated in the same manner, to declare an array of object whos implementation is unknown at compile time use the folloeing approach:
+
+{{{virtual SampleData[] childDatas;}}}
+
 
 
  
