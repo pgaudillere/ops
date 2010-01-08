@@ -117,6 +117,16 @@ To see a useful situation when how and why to use inheritance in OPS, have a loo
 
 == Comments ==
 
+Two types of comments are allowed in OPS IDL:
+
+1. {{{//This is a comment for the rest of the line...}}}
+
+and
+
+2. {/*This is an ended comment, max one line though...*/}
+
+
+
 
 
  
