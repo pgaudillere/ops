@@ -1,0 +1,16 @@
+Given a IDL project FooProject with a data type FooData used by a topic FooTopic on a domain FooDomain this is how you set up a subscrption and receive data:
+
+== Java ==
+There are two basic ways of subscribing to data in OPS, by regestering a listener that will benotified when new data arrives, or by polling the subscriber for data at any time.
+
+No matter what way you use to receive the data the setup of a subscription is always the same and look as follows:
+
+{{{
+Participant participant = Participant.getInstance("FooDomain");
+participant.addTypeSupport(new FooProject.FooProjectTypeFactory());
+
+Topic topic = participant.createTopic("FooTopic");
+
+FooDataSubscriber sub = new FooDataSubscriber(topic);
+
+}}}
