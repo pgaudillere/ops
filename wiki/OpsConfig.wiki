@@ -1,3 +1,9 @@
+To make any OPS application work, you need to have OPS configuration file either on your run directory (assumed in all examples) or point it out specifically when creating a Participant (not fully supported yet).
+
+The OPS config file configures the Topics and tie them to data types and transport mechanisms.
+
+Below is a simple such file with only one domain and one topic specified: 
+
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -31,6 +37,8 @@
 </root>
 
 }}}
+
+The elements of the configuration files are futher described below, note that some are optional and can be omitted.
 
 *ops_config*, this node contains a list of Domains called domains (only ! DefaultOPSConfigImpl is valid at this point).
 
