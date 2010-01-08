@@ -30,7 +30,7 @@ if(data != null)
 
 Data will be null until we receive any data.
 
-If we want to use a listener approach we can use Java's Observer classes in the following way:
+If we want to use a listener approach we can use Java's Observer classes in the following way (in this example the Observer is implemented inline):
 
 {{{
 sub.addObserver(new Observer() 
