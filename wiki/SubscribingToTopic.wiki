@@ -84,11 +84,12 @@ class MyListener : public ops::DataListener
    MyListener(FooDataSubscriber* s)
    {
        fooSub = s;
+       fooSub->addDataListener(this);
    } 
    void onNewData(DataNotifier* sub)
    {
       FooData data;
-      if(fooSub.getData(&data)
+      if(fooSub->getData(&data)
       {
           //Do something with the data...
       }    
@@ -100,7 +101,6 @@ class MyListener : public ops::DataListener
 and in addition to your init code above register this listener with the subscriber
 
 {{{
-MyListener listener;
-sub.addDataListener(&listener);
+MyListener listener(&sub);
 
 }}}
