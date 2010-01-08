@@ -1,6 +1,6 @@
 It is simple to create your own filters for receiver side filtering of incomming data and have it work just like the KeyFilterQoSPolicy.
 
-Say you want to create a filter which accepts all publication on keys that start with a certain prefix. This is how you can do it Java (C++ works more or less the same way, unless you cannot declare the filter inline in the same way):
+Say you want to create a filter which accepts all publication on keys that start with a certain prefix. This is how you can do it Java using your own FilterQoSPolicy implementation (C++ works more or less the same way, unless you cannot declare the filter inline in the same way):
 
 {{{
 String keyPrefix = "fooPrefix";
