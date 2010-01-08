@@ -10,7 +10,7 @@ The OPS IDL language resembles very simplified Java and is due to its minimalist
 
 {{{
 package samples;
-class SamplData
+class SampleData
 {
 
 }
@@ -60,6 +60,16 @@ class SamplData
    double[] doubles;
    string[] strings;
    UserData[] uDatas; 
+
+}
+}}}
+
+In addition to the simple approach above OPS IDL also support inheritance to some extent. A class can extend one other class (multiple inheritance is not supported):
+
+{{{
+package samples;
+class SampleData extends BaseSampleData
+{
 
 }
 }}}
