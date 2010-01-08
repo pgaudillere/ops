@@ -56,4 +56,16 @@ MyDeadlineListener dListener(&sub);
 
 }}}
 
-In Java we use the same approach but by using Observer:
+In Java we have the same approach but by using Observer:
+
+{{{
+//Adding a deadline Observer inline
+sub.deadlineEvent.addObserver(new Observer() {
+
+   public void update(Observable o, Object arg)
+   {
+      //React on deadline missed
+   }
+});
+
+}}}
