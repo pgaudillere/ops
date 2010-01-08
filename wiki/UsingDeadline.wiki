@@ -1,0 +1,3 @@
+When setting up a subscription you can set a deadline timeout with tells the OPS core at which rate you expects to get data on a certain topic. If this deadline is not met, i.e. no sample is published within your deadline, you can get notified by an event or hy having method isDeadlineMissed() return false.
+
+This is how you do it, examplified in C++:
