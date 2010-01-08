@@ -48,4 +48,4 @@ elements of _Topic_ contains:
  * *dataType*, the parent data type that samples on this topic must be (samples must be of this type or extend this type)
  * *inSocketBufferSize* (optional), changes the underlying sockets buffer size if possible
  * *outSocketBufferSize* (optional) changes the underlying sockets buffer size if possible
- * *address* (optional), overrides the domainAddress and lets this topic coomunicate on another multicast address
+ * *address* (optional), overrides the domainAddress and lets this topic comunicate on its own multicast address
