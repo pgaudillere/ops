@@ -16,8 +16,6 @@ Add your content here.  Format your content with:
   * [IDLCompilerTutorial IDL Builder]
   * [SubscribingToTopic Subscribing]
   * [PublishingOnTopic Publishing]
-    * Java
-    * C++
   * Keys
   * QoS
     * Deadline
