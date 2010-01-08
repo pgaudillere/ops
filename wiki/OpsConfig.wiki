@@ -46,5 +46,6 @@ elements of _Topic_ contains:
  * *name*
  * *port*
  * *dataType*
- * * inSocketBufferSize* (optional)
- * * outSocketBufferSize* (optional)
+ * *inSocketBufferSize* (optional)
+ * *outSocketBufferSize* (optional)
+ * *address* (optional)
