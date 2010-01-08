@@ -78,3 +78,5 @@ if(sub.isDeadlineMissed())
    //React!
 }
 }}}
+
+You can change the value of the Deadline QoS at any time.
