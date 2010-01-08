@@ -9,6 +9,7 @@ This page is the official user guide for OPS
 
 Add your content here.  Format your content with:
   * [BasicConcepts Concepts]
+  * Installation
   * [SimpleCpp Simple Example]
   * [IDLLanguage IDL]
   * [OpsConfig Topic Config]
