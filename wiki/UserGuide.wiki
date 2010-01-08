@@ -20,6 +20,7 @@ Add your content here.  Format your content with:
   * Quality of Services
     * [UsingDeadline Using Deadline QoS]
     * [UsingTimeBasedFilter Time Based Filter QoS]
+    * [PluginFilterQoS  Custom Filter QoS Policies]
   * Transports
     * Multicast
     * TCP
