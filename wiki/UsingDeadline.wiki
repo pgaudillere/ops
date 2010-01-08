@@ -30,3 +30,28 @@ if(sub.isDeadlineMissed())
 }}}
 
 or you can do it by regisering a listener like this:
+
+{{{
+
+class MyDeadlineListener : public ops::DeadlineMissedListener
+{
+   MyListener(FooDataSubscriber* s)
+   {
+       s->deadlineMissedEvent.addDeadlineMissedListener(this);
+   } 
+   ///Override from ops::DataListener
+   void onDeadlineMissed(ops::DeadlineMissedEvent*)
+   {
+       //React to deadline missed
+    
+   } 
+
+}
+}}}
+
+and in addition to your init code above register this listener with the subscriber
+
+{{{
+MyDeadlineListener dListener(&sub);
+
+}}}
