@@ -5,9 +5,9 @@
 This page is the official user guide for OPS 
 
 
-= Details =
+= Content =
 
-Add your content here.  Format your content with:
+The User Guide is under construction, please report issues:
   * [BasicConcepts Concepts]
   * [Installation]
   * [SimpleCpp Simple Example]
