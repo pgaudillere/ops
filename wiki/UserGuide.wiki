@@ -28,6 +28,6 @@ The User Guide is under construction, please report issues:
     * [IDLCompilerTutorial IDL Builder]
   * Advanced Features
     * Sending Large Messages > 60000 bytes
-    * Memory Managment
+    * [AdvancedReferenceHandling Memory Managment]
     * Threading
-    * Error Logging
+    * [Error Handling HandlingErrors]
