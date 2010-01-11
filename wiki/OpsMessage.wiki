@@ -1,0 +1,3 @@
+When data is sent over OPS, it is always packaged in something called Message. Message is just like your own data types you define in IDL also an OPSObject. The message in turn has an OPSObject field called _data_ which is the actual data of the IDL type you defined in your topic configuration.
+
+When you receive data with a subscriber you can choose to access the data sample directly or, you can access the Message, which holds some important meta information about the publication, such as *publicationID*, *publisherName* and *key*.   
