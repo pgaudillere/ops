@@ -26,3 +26,8 @@ The User Guide is under construction, please report issues:
   * Tools
     * [OPSDebugger OPS Debugger]
     * [IDLCompilerTutorial IDL Builder]
+  * Advanced Features
+    * Sending Large Messages > 60000 bytes
+    * Memory Managment
+    * Threading
+    * Error Logging
