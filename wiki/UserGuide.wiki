@@ -30,5 +30,5 @@ The User Guide is under construction, please report issues:
     * Sending Large Messages > 60000 bytes
     * [AdvancedReferenceHandling Memory Managment]
     * Threading
-    * [Error Handling HandlingErrors]
+    * [HandlingErrors Error Handling]
     * Request Reply
