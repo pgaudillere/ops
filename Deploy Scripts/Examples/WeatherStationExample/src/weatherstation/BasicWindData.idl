@@ -1,0 +1,7 @@
+package weatherstation;
+
+class BasicWindData
+{
+    double speed;
+
+}
