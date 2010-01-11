@@ -1,2 +1,12 @@
-
 The basics of OPS shall go here...
+
+
+What is it?
+
+What problems does it solve?
+
+What are the key concepts of understanding?
+
+Who uses it?
+
+Realtime systems without being realtime???
