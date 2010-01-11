@@ -22,4 +22,4 @@ ErrorWriter errorWriter(std::cout);
 participant->addListener(&errorWriter);
 }}}
 
-The above code can be used to have errors printed to the console.
+The above code will have all errors reported printed to the console with a timestamp.
