@@ -16,6 +16,7 @@ The User Guide is under construction, please report issues:
   * [SubscribingToTopic Subscribing]
   * [PublishingOnTopic Publishing]
   * [UsingKeys Using Keys]
+  * Naming Conventions
   * Quality of Services
     * [UsingDeadline Deadline QoS]
     * [UsingTimeBasedFilter Time Based Filter QoS]
