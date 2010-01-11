@@ -5,7 +5,7 @@ When you receive data with a subscriber you can choose to access the data direct
 There are three properties of an OPSMessage of vital importance:
 
 *publicationID* accessed by getter getPublicationID()
-   a 64-bit integervalue which is increased for each by a write on a publisher
+   a 64-bit integervalue which is increased for each write on a publisher
 *publisherName* accessed by getter getPublisherName()
    name of the publisher, set by Publisher.setName()
 *topLevelKey* accessed by getter getTopLevelKey()
