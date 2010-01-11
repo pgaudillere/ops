@@ -22,4 +22,4 @@ sub.addFilterQoSPolicy(new FilterQoSPolicy()
 
 }}}
 
-Of course you are not restricted to use only key, lets say if FooData has a string field fooText, you could have used that one instead if you cast the OPSObject o to FooData, or use what ever you like criteria for having the filter accept the data.
+Of course you are not restricted to use only key, lets say if FooData has a string field fooText, you could have used that one instead if you cast the OPSObject o to FooData, or use what ever you like criteria for having the filter accept or reject the data.
