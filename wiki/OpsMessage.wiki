@@ -16,6 +16,6 @@ Or similar in C++:
 
 {{{
 OPSMessage* message = sub.getMessage();
-std::cout << "Publication " << message->getPublicationID() << " from " << message->getPublisherName();
+std::cout << "Publication " << message->getPublicationID() << " from " << message->getPublisherName() << std::endl;
 
 }}}
