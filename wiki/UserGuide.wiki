@@ -17,7 +17,7 @@ The User Guide is under construction, please report issues:
   * [PublishingOnTopic Publishing]
   * [UsingKeys Using Keys]
   * Quality of Services
-    * [UsingDeadline Using Deadline QoS]
+    * [UsingDeadline Deadline QoS]
     * [UsingTimeBasedFilter Time Based Filter QoS]
     * [PluginFilterQoS  Custom Filter QoS Policies]
   * Transports
