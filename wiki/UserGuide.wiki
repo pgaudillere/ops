@@ -27,6 +27,7 @@ The User Guide is under construction, please report issues:
     * [OPSDebugger OPS Debugger]
     * [IDLCompilerTutorial IDL Builder]
   * Advanced Features
+    * [OpsMessage Understanding OPSObject and OPSMessage]
     * Sending Large Messages > 60000 bytes
     * [AdvancedReferenceHandling Memory Managment]
     * Threading
