@@ -1,0 +1,20 @@
+
+It is possible to be notified if an error occurs in any of the OPS core threads.
+the ops::Participant class accepts ops::Listener<ops::Error*> which will be notified with an ops::Error when an error occurs. The following shows how to implement a listener:
+
+{{{
+class ErrorWriter : public Listener<Error*>
+{
+public:
+
+	void onNewEvent(Notifier<Error*>* notifier, Error* error)
+	{
+		// do something with error
+                error->getErrorCode();
+                error->getMessage();
+	}
+
+	};
+
+
+}}}
