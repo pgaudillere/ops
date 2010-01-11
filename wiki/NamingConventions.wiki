@@ -1,9 +1,7 @@
-
 There are a few naming conventions, or guidelines, for data types and topics which are useful and helps keeping concepts clear.
 
-# IDL classes name should en with Data
+ # IDL classes name should en with Data
   E.g. If you want a data type for temprature you should call it TempratureData rather then Temprature.
   This prevents you from mixing IDL data types with application code and class. Keeping with the temprature example it is likely that you would have a class Temprature in your domain model with attached methods, e.g. getAsKelvin(). Thus using TempratureData clearly separates the data you want to communicate over OPS from your domain classes.
-
-# Topic names should end with Topic. This clearly states that this is a topic and not a data type, something that is often mixed up when you are new to pub-sub.
+ # Topic names should end with Topic. This clearly states that this is a topic and not a data type, something that is often mixed up when you are new to pub-sub.
   Moreover, if you have Topics with a 1:1 relationship with a data type you should use the data type prefix (removing the Data in the end) and add Topic as suffix. I.e. if you have a TempratureData and only one Topic for that data type, you should call it TempratureTopic. Note however that it is encouraged to reuse data types for different topic, E.g. you could have a EngineTempratureTopic and OutdoorTempratureTopic on the same data type TempratureData if you were to model a car control system. 
