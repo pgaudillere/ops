@@ -13,7 +13,6 @@ The User Guide is under construction, please report issues:
   * [SimpleCpp Simple Example]
   * [IDLLanguage IDL]
   * [OpsConfig Topic Config]
-  * [IDLCompilerTutorial IDL Builder]
   * [SubscribingToTopic Subscribing]
   * [PublishingOnTopic Publishing]
   * [UsingKeys Using Keys]
@@ -24,3 +23,6 @@ The User Guide is under construction, please report issues:
   * Transports
     * Multicast
     * TCP
+  * Tools
+    * [OPSDebugger OPS Debugger]
+    * [IDLCompilerTutorial IDL Builder]
