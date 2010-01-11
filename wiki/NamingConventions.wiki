@@ -1,6 +1,6 @@
 There are a few naming conventions, or guidelines, for data types and topics which are useful and helps keeping concepts clear.
 
- # IDL classes name should en with *Data*
+ # IDL classes' name should end with *Data*
   E.g. If you want a data type for temprature you should call it TempratureData rather then Temprature.
   This prevents you from mixing IDL data types with application code and class. Keeping with the temprature example it is likely that you would have a class Temprature in your domain model with attached methods, e.g. getAsKelvin(). Thus using TempratureData clearly separates the data you want to communicate over OPS from your domain classes.
  # Topic names should end with *Topic*. 
