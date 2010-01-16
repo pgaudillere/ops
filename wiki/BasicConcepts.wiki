@@ -1,5 +1,7 @@
 The basics of OPS shall go here...
 
+http://ops.googlecode.com/svn/wiki/pub_sub_overview.jpg
+
 = Important concepts =
 *Topic* – A topic is a user defined string/name that serves as the association between Publishers and Subscribers.
 
