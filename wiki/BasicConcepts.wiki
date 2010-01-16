@@ -1,3 +1,8 @@
+= Introduction =
+
+This document describes OPS (Open Publish-Subscribe) which is a middleware aimed to facilitate message based communication in software systems. It offers a typed topic publish-subscribe model which allows for asynchronous, efficient and type secure communication between processes running on multiple platforms written in multiple programming languages.  
+
+
 = Principles =
 
  * Participants (i.e. applications residing in computer nodes) publish and subscribe on Typed topics
