@@ -1,4 +1,4 @@
-Principles
+= Principles =
 
  * Participants (Node) publish and subscribe on Typed topics
  * Decentralized architecture, no central service/single point of failure
