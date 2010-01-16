@@ -41,8 +41,6 @@ What is it?
  * Language and platform heterogeneity 
 
 
-What are the key concepts of understanding?
-
 Who uses it?
 
 = Pub/sub middleware in distributed control systems =
