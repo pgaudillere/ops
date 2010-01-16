@@ -24,6 +24,18 @@ What is it?
 
 What problems does it solve?
 
+ * Information availability 
+ * Low coupling
+ * Redundancy support
+ * Software reuse
+ * Task isolation
+ * Efficient dissemination of high level data
+ * Open architecture
+ * Well defined interfaces – data/hardware abstractions
+ * Different hardware configurations → same software
+ * Language and platform heterogeneity 
+
+
 What are the key concepts of understanding?
 
 Who uses it?
