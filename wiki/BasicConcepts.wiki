@@ -22,7 +22,7 @@ that can be communicated by publishers and subscribers. IDL is a meta language w
 
 What is it?
 
-What problems does it solve?
+= What problems does it solve? =
 
  * Information availability 
  * Low coupling
