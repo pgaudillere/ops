@@ -6,6 +6,7 @@ The basics of OPS shall go here...
 *Publisher* – a Publisher writes data on a certain Topic. 
 
 *Subscriber* – a Subscriber subscribes to a Topic and receives data when a publisher on the same Topic writes data.
+
 *Participant* – a Participant is an application/program that uses the OPS by having subscribers and/or publishers.
 
 *Domain* – Participants that can connect to each other through publishers and subscribers belong to the same Domain. A Domain is defined by a multicast ip address (e.g. 235.35.35.1). By using different Domains two instances of a system can run alongside each other without interfering.
