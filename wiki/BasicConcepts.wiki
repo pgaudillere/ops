@@ -45,4 +45,6 @@ What are the key concepts of understanding?
 
 Who uses it?
 
+http://ops.googlecode.com/svn/wiki/control_system_example.jpg
+
 Realtime systems without being realtime???
