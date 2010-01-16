@@ -45,6 +45,8 @@ What are the key concepts of understanding?
 
 Who uses it?
 
+= Pub/sub middleware in distributed control systems =
+
 http://ops.googlecode.com/svn/wiki/control_system_example.jpg
 
 Realtime systems without being realtime???
