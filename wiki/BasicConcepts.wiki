@@ -1,5 +1,15 @@
 The basics of OPS shall go here...
 
+= Important concepts =
+*Topic* – A topic is a user defined string/name that serves as the association between Publishers and Subscribers.
+*Publisher* – a Publisher writes data on a certain Topic. 
+*Subscriber* – a Subscriber subscribes to a Topic and receives data when a publisher on the same Topic writes data.
+*Participant* – a Participant is an application/program that uses the OPS by having subscribers and/or publishers.
+*Domain* – Participants that can connect to each other through publishers and subscribers belong to the same Domain. A Domain is defined by a multicast ip address (e.g. 235.35.35.1). By using different Domains two instances of a system can run alongside each other without interfering.
+*IDL* – Interface Definition Language (IDL) is the language used to define data classes that can be communicated by publishers and subscribers. IDL is a meta language which is compiled, or translated, into various target programming languages (e.g. Java, C++, C# and Ada).
+*Data classes* – Data classes is what is communicated between publishers and subscribers. Notice the difference between Data classes and Topics. Each Topic can have only one Data class associated with it, but a Data class can be used by many Topics.
+
+
 
 What is it?
 
