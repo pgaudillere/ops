@@ -85,7 +85,7 @@ As we saw in the sample above it is possible to declare fields of another user d
 
 {{{ChildData childData;}}}
 
-This is of course OK, but it does not give us much more then saving a few lines of IDL.
+This is of course OK, but the inheritance does not give us much more then saving a few lines of IDL.
 What we normally would like to do when using inheritance is to have some sort of polymorfism. And the natural way to do that would seem to be to declare the field of the base type:
 
 1.
