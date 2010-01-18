@@ -10,7 +10,7 @@ The communication model of OPS is a typed topic publish-subscribe model. That me
  * Participants (i.e. applications residing in computer nodes) publish and subscribe on Typed topics
  * Decentralized architecture, no central service/single point of failure
  * Asynchronous messaging with Quality of Services 
- * Networking and protocol complexity is hidden from the participants
+ * Networking and protocol complexity is hidden from application developers
  
 http://ops.googlecode.com/svn/wiki/pub_sub_overview.jpg
 
