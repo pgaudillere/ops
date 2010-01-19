@@ -34,6 +34,7 @@ that can be communicated by publishers and subscribers. IDL is a meta language w
 = What Does It Do =
 
  * *Information availability* - high level data available across the network.
+
  * *Low coupling* - hides the implementations of publishers and subscribers from each other and introduces no synchronous dependencies between them.
 
  * *Redundancy support* - Makes redundancy simple through use of parallel publishers of same data.
