@@ -132,7 +132,7 @@ MyListener listener(&sub);
 
 }}}
 
-It is also possible to have an application thread wait for incomming data and poll it as soon as data is available, the following lines will wait for data for 1000 milliseconds and return a data (!null) only if a new sample arrives within the timeout:
+It is also possible to have an application thread wait for incomming data and poll it as soon as data is available, the following lines will wait for data for 1000 milliseconds and return true only if a new sample arrives within the timeout:
 
 {{{
 
