@@ -33,16 +33,16 @@ that can be communicated by publishers and subscribers. IDL is a meta language w
 
 = What problems does it solve? =
 
- * Information availability 
- * Low coupling
- * Redundancy support
- * Software reuse
- * Task isolation
- * Efficient dissemination of high level data
- * Open architecture
- * Well defined interfaces – data/hardware abstractions
- * Different hardware configurations → same software
- * Language and platform heterogeneity 
+ * *Information availability* - OPS makes high level data available across the network using anonymous.
+ * *Low coupling*
+ * *Redundancy support*
+ * *Software reuse*
+ * *Task isolation*
+ * *Efficient dissemination of high level data*
+ * *Open architecture*
+ * *Well defined interfaces* – data/hardware abstractions
+ * *Different hardware configurations → same software*
+ * *Language and platform heterogeneity*
 
 
 Who uses it?
