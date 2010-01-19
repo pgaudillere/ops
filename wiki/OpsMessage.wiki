@@ -18,7 +18,7 @@ In Java:
 
 {{{
 OPSMessage message = sub.getMessage();
-System.out.println("Publication " + message.getPublicationID() + " from " + message.getPublisherName());
+System.out.println("Publication " + message.getPublicationID() + " from " + message.getPublisherName() + " on key = " + message.getTopLevelKey());
 
 }}}
 
@@ -26,6 +26,6 @@ Or similar in C++:
 
 {{{
 OPSMessage* message = sub.getMessage();
-std::cout << "Publication " << message->getPublicationID() << " from " << message->getPublisherName() << std::endl;
+std::cout << "Publication " << message->getPublicationID() << " from " << message->getPublisherName() << " on key = " << message->getPublicationID() << std::endl;
 
 }}}
