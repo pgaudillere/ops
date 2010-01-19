@@ -14,7 +14,7 @@ if(participant == null)
     //Report error
     return;
 }
-//Add suppoert for serializing/unserialazing our data types
+//Add support for serializing/unserialazing our data types
 participant.addTypeSupport(new FooProject.FooProjectTypeFactory());
 
 Topic topic = participant.createTopic("FooTopic");
