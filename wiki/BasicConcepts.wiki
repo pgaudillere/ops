@@ -30,7 +30,7 @@ http://ops.googlecode.com/svn/wiki/pub_sub_overview.jpg
  * *Data classes* – Data classes is what is communicated between publishers and subscribers. Notice the difference between Data classes and Topics. Each Topic can have only one Data class associated with it, but a Data class can be used by many Topics.
 
 
-= What Does It Do =
+= What Problems Does It Solve? =
 
  * *Information availability* - high level data available across the network.
 
