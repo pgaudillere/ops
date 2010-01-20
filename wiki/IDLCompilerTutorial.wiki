@@ -102,7 +102,7 @@ The IDL Compiler is also where you define your topics on which you will publish 
 
 }}}
 
-http://code.google.com/p/ops/source/browse/trunk/C%2B%2B/source/Topic.cpp
+
 
 See what the OPS IDL Builder looks like and how to create a new project here:
 
