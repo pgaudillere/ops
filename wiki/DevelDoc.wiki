@@ -3,7 +3,7 @@
 
 Domain Model (As seen by OPS)
 
-http://ops.googlecode.com/svn/wiki/pub_sub_overview.JPG
+http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
 OPS 4
 
