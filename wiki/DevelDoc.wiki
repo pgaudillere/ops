@@ -1,6 +1,9 @@
 #summary utkast till vad som ska ingå i utvecklingsdocen
 
 
+Domain Model (As seen by OPS)
+
+http://ops.googlecode.com/svn/wiki/pub_sub_overview.JPG
 
 OPS 4
 
