@@ -3,22 +3,39 @@
 
 
 OPS 4
+
 Arkitektur
+
 Design
+
 Nya features
+
 Arv
+
 virtual
+
 getMessage
+
 config
+
 Participant
+
 multicast
+
 boost asio
+
 header files, public and private
+
 coding guidlines
+
 stora paket (begränsningar)
+
 threading
+
 threadpool
+
 protocol
+
 ConfigurationLib
 
 
@@ -44,5 +61,3 @@ IDLParser
 java compiler compiler
 Debuggern
 Ny debuggern
-
-
