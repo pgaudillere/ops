@@ -1,7 +1,7 @@
 #summary utkast till vad som ska ingå i utvecklingsdocen
 
 
-Domain Model (As seen by OPS)
+ = Publish Subscribe Domain Model Used by OPS) =
 
 http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
