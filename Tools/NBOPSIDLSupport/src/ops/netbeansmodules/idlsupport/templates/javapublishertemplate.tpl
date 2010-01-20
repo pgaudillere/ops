@@ -11,7 +11,7 @@ import ops.AckData;
 
 public class __classNamePublisher extends Publisher 
 {
-    public __classNamePublisher(Topic<__className> t) 
+    public __classNamePublisher(Topic<__className> t) throws ops.CommException
     {
         super(t);
     }
