@@ -29,6 +29,8 @@ http://ops.googlecode.com/svn/wiki/pub_sub_overview.jpg
 
  * *Data classes* – Data classes is what is communicated between publishers and subscribers. Notice the difference between Data classes and Topics. Each Topic can have only one Data class associated with it, but a Data class can be used by many Topics.
 
+http://ops.googlecode.com/svn/wiki/domain_model_overview.jpg
+
 
 = What Problems Does It Solve? =
 
