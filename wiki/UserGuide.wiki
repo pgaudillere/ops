@@ -22,8 +22,8 @@ The User Guide is under construction, please report issues:
     * [UsingTimeBasedFilter Time Based Filter QoS]
     * [PluginFilterQoS  Custom Filter QoS Policies]
   * Setting Up Transports
-    * Multicast
-    * TCP
+    * [MulticastTransport Multicast]
+    * [TcpTransport TCP]
   * Using OPS Tools
     * [OPSDebugger OPS Debugger]
     * [IDLCompilerTutorial IDL Builder]
