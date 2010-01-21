@@ -11,23 +11,23 @@ The User Guide is under construction, please report issues:
   * [BasicConcepts Concepts]
   * [Installation]
   * [SimpleCpp Simple Example]
-  * [IDLLanguage IDL]
-  * [OpsConfig Topic Config]
-  * [SubscribingToTopic Subscribing]
-  * [PublishingOnTopic Publishing]
+  * [IDLLanguage Defining Data Types in IDL]
+  * [OpsConfig Defining Topic and Configuration]
+  * [SubscribingToTopic Subscribing to Topics]
+  * [PublishingOnTopic Publishing on Topics]
   * [UsingKeys Using Keys]
-  * [NamingConventions Naming Conventions]
-  * Quality of Services
+  * [NamingConventions Convenient Naming Conventions]
+  * Defining Behavior Through Quality of Services
     * [UsingDeadline Deadline QoS]
     * [UsingTimeBasedFilter Time Based Filter QoS]
     * [PluginFilterQoS  Custom Filter QoS Policies]
-  * Transports
+  * Setting Up Transports
     * Multicast
     * TCP
-  * Tools
+  * Using OPS Tools
     * [OPSDebugger OPS Debugger]
     * [IDLCompilerTutorial IDL Builder]
-  * Advanced Features
+  * Advanced Concepts and Features
     * [OpsMessage Understanding OPSObject and OPSMessage]
     * Sending Large Messages > 60000 bytes
     * [AdvancedReferenceHandling Memory Managment]
