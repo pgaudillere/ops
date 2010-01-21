@@ -2,6 +2,6 @@
 
 = Multicast Transport =
 
----
+ ----
 _Note, this is the default transport of OPS 4 and is the only one fully supported by all platforms (i.e. Java and C++)._
----
+ ----
