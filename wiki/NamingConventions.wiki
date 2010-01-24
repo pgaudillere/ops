@@ -1,3 +1,6 @@
+
+= Naming Conventions =
+
 There are a few naming conventions, or guidelines, for data types and topics which are useful and helps keeping concepts clear.
 
  # IDL classes' name should end with *Data*
