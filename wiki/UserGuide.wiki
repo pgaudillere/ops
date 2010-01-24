@@ -40,7 +40,7 @@ The User Guide is under construction, please report issues:
     * [IDLCompilerTutorial IDL Builder]
   * Advanced Concepts and Features
     * [OpsMessage Understanding OPSObject and OPSMessage]
-    * Sending Large Messages > 60000 bytes
+    * [LargeMessages Sending Large Messages > 60000 bytes]
     * Using Publisher Name
     * [AdvancedReferenceHandling Memory Managment]
     * Threading
