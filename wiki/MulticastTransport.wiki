@@ -73,4 +73,4 @@ In addition to name, port, address and data type, the configuration of FooTopic3
 
 The sampleMaxSize parameter tells OPS what it can expect as the maximum size of a data sample of the given topic. This will influence how much memory OPS use for data buffers. OPS will not accept publications of messages larger then the value in bytes specified by sampleMaxSize. See also SendingLargeMessages. 
 
-See also, OpsConfig
+See also, [OpsConfig Topic Config].
