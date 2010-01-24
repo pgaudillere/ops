@@ -13,3 +13,51 @@ When you create a subscriber and start it, OPS will add a multicast membership t
 In the same way, a publisher will setup a multicast communication with the parameters of your topic and when ever you issue a write on the publisher serialize the data into bytes and send them with UDP messages to the multicast address/port of the topic.
 
 Let's have a look at the topic config file and how it can be used to control the OPS traffic  for the Multicast Transport:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Description:
+ A template ops_config.xml file, this file shall be put on run directory of all applications that wants to use these topics.
+-->
+<root>
+    <ops_config type = "DefaultOPSConfigImpl">
+        <domains>
+            <element type = "MulticastDomain">
+                <domainID>FooDomain</domainID>
+                <domainAddress>234.5.6.8</domainAddress>
+                <localInterface>127.0.0.1</localInterface>
+                <topics>
+                    
+                    <element type = "Topic">
+                        <name>FooTopic1</name>
+                        <port>7000</port>
+                        <dataType>foopackage.FooData</dataType>
+                    </element>
+
+                    <element type = "Topic">
+                        <name>FooTopic2</name>
+                        <port>7001</port>
+                        <dataType>foopackage.FooData</dataType>
+                        <address>234.5.6.9</address>
+                    </element>
+
+                    <element type = "Topic">
+                        <name>FooTopic3</name>
+                        <port>7002</port>
+                        <dataType>foopackage.FooData</dataType>
+                        <sampleMaxSize>60000</sampleMaxSize>
+                        <inSocketBufferSize>1000000</inSocketBufferSize>
+                        <outSocketBufferSize>1000000</outSocketBufferSize>
+                        <transport>multicast</transport>
+                        <address>234.5.6.9</address>
+                    </element>
+                    <!-- TODO: Add more topics here... -->
+                </topics>
+            </element>
+
+        </domains>
+    </ops_config>
+</root>
+
+}}}
