@@ -7,9 +7,9 @@ String keyPrefix = "fooPrefix";
 
 sub.addFilterQoSPolicy(new FilterQoSPolicy() 
 {
-   public boolean applyFilter(OPSObject o)
+   public boolean applyFilter(OPSMessage m)
    {
-      if(o.getKey().startsWith(fooPrefix))
+      if(m.getTopLevelKey().startsWith(fooPrefix))
       {
          return true;
       }
