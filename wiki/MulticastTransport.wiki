@@ -44,7 +44,7 @@ Let's have a look at the topic config file and how it can be used to control the
 
                     <element type = "Topic">
                         <name>FooTopic3</name>
-                        <port>7002</port>
+                        <port>7001</port>
                         <dataType>foopackage.FooData</dataType>
                         <sampleMaxSize>60000</sampleMaxSize>
                         <inSocketBufferSize>1000000</inSocketBufferSize>
@@ -61,3 +61,13 @@ Let's have a look at the topic config file and how it can be used to control the
 </root>
 
 }}}
+
+In the file above we have defined three different topics FooTopic1, FooTopic2 and FooTopic3. They all have the same data type, but differs in configuration of the communication. FooTopic1 has the minimal set of configuration allowed for a topic, name, port and dataType. FooTopic1 had no address explicitly set and will thus be communicated over the multicast address specified by the domainAddress,and on the port 7000. 
+
+FooTopic2 has a address field specified to another multicast address then the domain address and this will override the domain address for FooTopic2 which will be communicated on 234.5.6.9/7001 in this case.
+
+FooTopic3 has the same address/port combination as FooTopic2 which is perfectly valid but will yield a receiver side filtering in applications if there exist a subscriber for one but not the other of the topics. It is often a good idea to only use the same address/port combination for topics that go hand in hand. I.e. if an application subscribes to one of the topics, it is likley that it also subscribes to the other. Moreover, to save ports (which is a limited resource of the operating system) it can be a good idea to have the same address/port combination for topics with low rates and sample sizes.
+
+In addition to name, port, address and data type, the configuration of FooTopic3 also specifies other parameters that affect the MulticastTransport. inSocketBufferSize and outSocketBufferSize tells OPS to try to set the buffer sizes of the underlying sockets to the specified value. The maximum values for these settings depend on the platform. And OPS will report and error but continue if the buffer size can not be adjusted.
+
+The sampleMax size parameter tells OPS what it can expect as the maximum size of a data sample of the given topic. This will influence how much memory OPS use for data buffers. OPS will not accept publications of messages larger then the value in bytes specified by sampleMax. See also SendingLargeMessages. 
