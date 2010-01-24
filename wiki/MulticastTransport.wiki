@@ -72,3 +72,5 @@ FooTopic3 has the same address/port combination as FooTopic2 which is perfectly 
 In addition to name, port, address and data type, the configuration of FooTopic3 also specifies other parameters that affect the MulticastTransport. inSocketBufferSize and outSocketBufferSize tells OPS to try to set the buffer sizes of the underlying sockets to the specified value. The maximum values for these settings depend on the platform and OPS will only report and error but continue if the buffer size can not be adjusted to the specified value.
 
 The sampleMaxSize parameter tells OPS what it can expect as the maximum size of a data sample of the given topic. This will influence how much memory OPS use for data buffers. OPS will not accept publications of messages larger then the value in bytes specified by sampleMaxSize. See also SendingLargeMessages. 
+
+See also, OpsConfig
