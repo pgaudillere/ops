@@ -32,7 +32,7 @@ The User Guide is under construction, please report issues:
     * [UsingDeadline Deadline QoS]
     * [UsingTimeBasedFilter Time Based Filter QoS]
     * [PluginFilterQoS  Custom Filter QoS Policies]
-  * Setting Up Transports
+  * Transports
     * [MulticastTransport Multicast]
     * [TcpTransport TCP]
   * Using OPS Tools
