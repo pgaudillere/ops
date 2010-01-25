@@ -8,7 +8,7 @@ The TCP Transport of OPS is based on TCP/IP as opposed to Muticast Transport whi
 
 The TCP transport can be useful in network environments with high IP package losses and/or for communicating over the Internet. 
 
-When using TCP Transport, a topic can only have one publisher but any number of subscribers to the topic.
+When using TCP Transport, a topic can only have one publisher but any number of subscribers to a topic.
 
 To use the TCP transport for a topic, this is how to setup your [OpsConfig Topic Config] file:
 
