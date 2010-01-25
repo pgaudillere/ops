@@ -16,6 +16,7 @@ class HelloData
     string helloString;
 }
 }}}
+http://code.google.com/p/ops/source/browse/trunk/Deploy%20Scripts/Examples/HelloWorld/src/hello/HelloData.idl
 
 OK, so now we have a Data class to carry a string where we can put our Hello World message.
 
@@ -50,8 +51,100 @@ Now we also need a Topic to publish our Data class on. We define the Topic in a 
     </ops_config>
 </root>
 }}}
+http://code.google.com/p/ops/source/browse/trunk/Deploy%20Scripts/Examples/HelloWorld/src/ops_config.xml
 
 As you can see we specify one Topic called HelloTopic and attach this Topic to a Domain that we call HelloDomain. We choose a port (12000) and a domainAddress (234.5.6.8) to communicate on.
 
+We have now defined a language programming language independent interface for sending Hello World messages, and we can go on to implement a Publisher:
+
+In Java
+{{{
+package helloworldjavaimpl;
+
+import hello.HelloData;
+import hello.HelloDataPublisher;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import ops.CommException;
+import ops.Participant;
+
+public class MainPublish
+{
+
+    public static void main(String[] args)
+    {
+        try
+        {
+            Participant participant = Participant.getInstance("HelloDomain");
+            participant.addTypeSupport(new HelloWorld.HelloWorldTypeFactory());
+            HelloDataPublisher publisher = new HelloDataPublisher(participant.createTopic("HelloTopic"));
+
+            HelloData data = new HelloData();
+            data.helloString = "Hello World From Java!!!";
+            while(true)
+            {
+                publisher.write(data);
+                Thread.sleep(1000);
+            }
+            
+        } catch (InterruptedException ex)
+        {
+            Logger.getLogger(MainPublish.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (CommException ex)
+        {
+            Logger.getLogger(MainPublish.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+}
+}}}
+
+And in C++
+{{{
+
+#include <ops.h>
+#include "hello/HelloDataPublisher.h"
+#include "HelloWorld/HelloWorldTypeFactory.h"
+#include <iostream>
+#include <windows.h>
+
+int main(int argc, const char* args[])
+{
+	using namespace ops;
+
+	ops::Participant* participant = Participant::getInstance("HelloDomain");
+	if(!participant)
+	{
+		std::cout << "Create participant failed. do you have ops_config.xml on your rundirectory?" << std::endl;
+		Sleep(10000); exit(1);
+	}
+
+	participant->addTypeSupport(new HelloWorld::HelloWorldTypeFactory());
+
+	Topic topic = participant->createTopic("HelloTopic");
+
+	hello::HelloDataPublisher pub(topic);
+	pub.setName("HelloTopicPublisher"); //Optional identity of the publisher
+
+	hello::HelloData data;
+
+	data.helloString = "Hello World From C++!!";
+
+	int mainSleep = 1000;
+	while(true)
+	{
+		pub.write(&data);
+		std::cout << "Writing data"  <<  std::endl;
+		Sleep(mainSleep);
+		
+	}
+
+	return 0;
+}
+
+
+
+
+}}}
 
 
