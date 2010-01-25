@@ -60,8 +60,7 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
  * *Language and platform heterogeneity* - Create distributed system that span across various operating systems and programming languages using the ones best sited for your particular problem.
 
-* *Different hardware configurations → same software* - Make your software components independent of where they and their dependencies are physically running.
-
+ * *Different hardware configurations → same software* - Make your software components independent of where they and their dependencies are physically running.
 
  * *Redundancy support* - Makes redundancy simple through use of parallel publishers of same data.
 
