@@ -11,7 +11,7 @@ The User Guide is under construction, please report issues:
   * [SubscribingToTopic Subscribing to Topics]
   * [PublishingOnTopic Publishing on Topics]
   * [UsingKeys Using Keys]
-  * [NamingConventions Convenient Naming Conventions]
+  * [NamingConventions Naming Conventions]
   * Defining Behavior Through Quality of Services
     * [UsingDeadline Deadline QoS]
     * [UsingTimeBasedFilter Time Based Filter QoS]
