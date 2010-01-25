@@ -1,9 +1,9 @@
 == Hello World Example ==
 
 
-This page will show you how to write an application that sends a Hello World message with OPS. It will guide you through the steps of writing a Data class in IDL, defining a Topic configuration and implement publishers and subscribers in both C++ and Java.
+This page will show you how to write an application that sends a Hello World message with OPS. It will guide you through the steps of writing a Data class in IDL, defining a Topic configuration and implement publish and subscribe code in both C++ and Java.
 
-Make sure you have understand the [BasicConcepts Basic Concepts] before continuing.
+Make sure you have understand the [BasicConcepts Basic Concepts] of OPS before continuing.
 
 First we need a Data type to carry our Hello World message. We define this Data class using OPS IDL (See also [IDLLanguage IDL Language] and [DLCompilerTutorial OPS IDL Builder]):
 
@@ -144,5 +144,3 @@ int main(int argc, const char* args[])
 }
 }}}
 http://code.google.com/p/ops/source/browse/trunk/Deploy%20Scripts/Examples/HelloWorldWithKeyCppImpl/HelloTopic_pub.cpp
-
-
