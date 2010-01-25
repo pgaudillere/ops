@@ -55,7 +55,7 @@ http://code.google.com/p/ops/source/browse/trunk/Deploy%20Scripts/Examples/Hello
 
 As you can see we specify one Topic called HelloTopic and attach this Topic to a Domain that we call HelloDomain. We choose a port (12000) and a domainAddress (234.5.6.8) to communicate on.
 
-We have now defined a language programming language independent interface for sending Hello World messages, and we can go on to implement a Publisher:
+We have now defined a programming language independent interface for sending Hello World messages, and we can go on to implement a Publisher:
 
 In Java
 {{{
