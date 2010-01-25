@@ -107,8 +107,8 @@ namespace ops
 		//--------------------------------------------
 
 		//------------Create thread pool--------------
-		//threadPool = new SingleThreadPool();
-		threadPool = new MultiThreadPool();
+		threadPool = new SingleThreadPool();
+		//threadPool = new MultiThreadPool();
 		threadPool->addRunnable(this);
 		threadPool->start();
 		//--------------------------------------------
