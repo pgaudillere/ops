@@ -1,8 +1,4 @@
 <wiki:toc max_depth="1" />
-
-= User Guide =
-
-The User Guide is under construction, please report issues:
   * [BasicConcepts Concepts]
   * [Installation]
   * [SimpleCpp Simple Example]
@@ -11,7 +7,7 @@ The User Guide is under construction, please report issues:
   * [SubscribingToTopic Subscribing to Topics]
   * [PublishingOnTopic Publishing on Topics]
   * [UsingKeys Using Keys]
-  * [NamingConventions Naming Conventions]
+  * [NamingConventions Convenient Naming Conventions]
   * Defining Behavior Through Quality of Services
     * [UsingDeadline Deadline QoS]
     * [UsingTimeBasedFilter Time Based Filter QoS]
