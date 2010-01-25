@@ -67,11 +67,11 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
  * *Redundancy support* - Makes redundancy simple through use of parallel publishers of same data.
 
 
-Who uses it?
+= Who uses it?=
 
 As stated earlier, OPS primarily targets distributed real-time and embedded (DRE) systems and distributed control systems (DCS).
 
-= Pub/sub middleware in distributed control systems =
+== Pub/sub middleware in distributed control systems ==
 
 http://ops.googlecode.com/svn/wiki/control_system_example.jpg
 
