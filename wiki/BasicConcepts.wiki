@@ -55,6 +55,7 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 * *Task isolation* - Facilitates isolation of e.g. time critical tasks through asynchronous communication and platform and language heterogeneity.
 
  * *Open architecture* - Make your interfaces available to anyone without letting them in to your code.
+
  * *Well defined interfaces* – data/hardware abstractions
 
  * *Language and platform heterogeneity* - Create distributed system that span across various operating systems and programming languages using the ones best sited for your particular problem.
