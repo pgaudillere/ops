@@ -98,6 +98,7 @@ public class MainPublish
     }
 }
 }}}
+http://code.google.com/p/ops/source/browse/trunk/Deploy%20Scripts/Examples/HelloWorldJavaImpl/src/helloworldjavaimpl/MainPublish.java
 
 And in C++
 {{{
@@ -141,10 +142,7 @@ int main(int argc, const char* args[])
 
 	return 0;
 }
-
-
-
-
 }}}
+http://code.google.com/p/ops/source/browse/trunk/Deploy%20Scripts/Examples/HelloWorldWithKeyCppImpl/HelloTopic_pub.cpp
 
 
