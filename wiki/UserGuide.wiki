@@ -21,11 +21,11 @@ http://openjdk.org
 The User Guide is under construction, please report issues:
   * [BasicConcepts Concepts]
   * [Installation]
-  * [SimpleCpp Simple Example]
   * [IDLLanguage Defining Data Types in IDL]
   * [OpsConfig Defining Topic and Configuration]
   * [SubscribingToTopic Subscribing to Topics]
   * [PublishingOnTopic Publishing on Topics]
+  * [HelloWorldExample Hello World Example]
   * [UsingKeys Using Keys]
   * [NamingConventions Convenient Naming Conventions]
   * Defining Behavior Through Quality of Services
