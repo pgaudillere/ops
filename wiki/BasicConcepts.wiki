@@ -35,7 +35,7 @@ http://ops.googlecode.com/svn/wiki/pub_sub_overview.jpg
 == UML ==
 The UML diagram below gives a graphical representation of the domain model and should be read as:
 
-_Data_ is sent on _Topics_. _Publishers_ publishes _Data_ on _Topics_. _Subscribers_ subscribes to _Topics_. _Topics_ belong to _Domains_. A_Participant_ participates in _Domain_ by communicating over _Transports_.
+_Data_ is sent on _Topics_. _Publishers_ publishes _Data_ on _Topics_. _Subscribers_ subscribes to _Topics_. _Topics_ belong to _Domains_. A _Participant_ participates in _Domains_ by communicating over _Transports_.
 
 http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
