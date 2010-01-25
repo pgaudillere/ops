@@ -7,7 +7,6 @@ package ops;
 
 import configlib.ArchiverInOut;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  *
@@ -20,8 +19,6 @@ public class Reply extends OPSObject
     public boolean requestAccepted = false;
     public String message = "";
     
-
-    static UUID uuid = UUID.randomUUID();
     @Override
     public void serialize(ArchiverInOut archive) throws IOException
     {
