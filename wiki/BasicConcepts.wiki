@@ -48,20 +48,21 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
  * *Low coupling* - hides the implementations of publishers and subscribers from each other and introduces no synchronous dependencies between them.
 
- * *Redundancy support* - Makes redundancy simple through use of parallel publishers of same data.
+ * *Efficient dissemination of high level data* - High performance communication of data with low latency and high throughput.
 
  * *Software reuse* - Makes it easy to build pre-compiled deployable software components with well defined interfaces without having linking dependencies between components.
 
- * *Task isolation* - Facilitates isolation of e.g. time critical tasks through asynchronous communication and platform and language heterogeneity.
-
- * *Efficient dissemination of high level data* - High performance communication of data with low latency and high throughput.
+* *Task isolation* - Facilitates isolation of e.g. time critical tasks through asynchronous communication and platform and language heterogeneity.
 
  * *Open architecture* - Make your interfaces available to anyone without letting them in to your code.
  * *Well defined interfaces* – data/hardware abstractions
 
- * *Different hardware configurations → same software* - Make your software components independent of where they and their dependencies are physically running.
-
  * *Language and platform heterogeneity* - Create distributed system that span across various operating systems and programming languages using the ones best sited for your particular problem.
+
+* *Different hardware configurations → same software* - Make your software components independent of where they and their dependencies are physically running.
+
+
+ * *Redundancy support* - Makes redundancy simple through use of parallel publishers of same data.
 
 
 Who uses it?
