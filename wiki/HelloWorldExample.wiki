@@ -5,7 +5,7 @@ This page will show you how to write an application that sends a Hello World mes
 
 Make sure you have understand the [BasicConcepts Basic Concepts] of OPS before continuing.
 
-First we need a Data type to carry our Hello World message. We define this Data class using OPS IDL (See also [IDLLanguage IDL Language] and [DLCompilerTutorial OPS IDL Builder]):
+First we need a Data type to carry our Hello World message. We define this Data class using OPS IDL (See also [IDLLanguage IDL Language] and [IDLCompilerTutorial OPS IDL Builder]):
 
 {{{
 package hello;
