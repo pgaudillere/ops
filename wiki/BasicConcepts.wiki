@@ -77,6 +77,8 @@ The following UML diagram shows a typical usage in a DCS. Note the important rol
 
 The components in the diagram are independent executables running on any number of machines connected to the same embedded network. 
 
+(Antennas with balls (--O) indicates publishing and antennas with arcs (--C) indicates susbscribing)
+
 http://ops.googlecode.com/svn/wiki/control_system_example.jpg
 
 Realtime systems without being realtime???
