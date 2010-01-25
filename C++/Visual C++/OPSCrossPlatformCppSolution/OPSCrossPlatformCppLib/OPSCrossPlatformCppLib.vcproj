@@ -612,6 +612,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\include\Reply.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\Request.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\include\RequestReply.h"
 				>
 			</File>
