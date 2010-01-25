@@ -1,6 +1,6 @@
 = Publisher Name =
 
-Even though the anonymous principle of OPS is often desirable, there are cases where who (or what) published a certain sample can be of interest.
+Even though the anonymous principle of OPS is often desirable, there are cases where which publisher that published a certain sample can be of interest.
 
 For such cases OPS has a meta field sent with all [OpsMessage OPSMessages] called publisherName. This field can be used for identifying what publisher published a certain sample. This is also a useful feature for debugging (see [OpsDebugger]) even if the publisherName remains anonymous from a application perspective.
 
