@@ -52,7 +52,7 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
  * *Software reuse* - Makes it easy to build pre-compiled deployable software components with well defined interfaces without having linking dependencies between components.
 
-* *Task isolation* - Facilitates isolation of e.g. time critical tasks through asynchronous communication and platform and language heterogeneity.
+ * *Task isolation* - Facilitates isolation of e.g. time critical tasks through asynchronous communication and platform and language heterogeneity.
 
  * *Open architecture* - Make your interfaces available to anyone without letting them in to your code.
 
