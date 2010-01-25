@@ -272,6 +272,6 @@ int main(int argc, char* args)
 }
 }}}
 
-Once again if you are not following have a look at [SubscribingToTopics Subscribing To Topics]
+Once again if you are not following have a look at [SubscribingToTopic Subscribing To Topics]
 
 Thats all code needed to publish and subscribe to Hello World messages to and from C++ and Java. To build and run this example, check out [Installation] download the Examples.
