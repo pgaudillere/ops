@@ -41,7 +41,7 @@ The User Guide is under construction, please report issues:
   * Advanced Concepts and Features
     * [OpsMessage Understanding OPSObject and OPSMessage]
     * [LargeMessages Sending Large Messages > 60000 bytes]
-    * Using Publisher Name
+    * [PublisherName Using Publisher Name]
     * [AdvancedReferenceHandling Memory Managment]
     * Threading
     * [HandlingErrors Error Handling]
