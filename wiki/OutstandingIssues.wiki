@@ -1,5 +1,4 @@
 
-
 = Outstanding Issues=
 
 OPS is far from complete. Outstanding Issues and shortcomings include:
@@ -12,4 +11,6 @@ OPS is far from complete. Outstanding Issues and shortcomings include:
  * OPS need more users
  * Java Performance could improve, it is now suffering a bit from C++ optimizations, this is especially true for large messages.
 
+To solve these Issues and make OPS better help is required, please file Issue reports and send in Patches.
 
+Use the Issue tab above.
