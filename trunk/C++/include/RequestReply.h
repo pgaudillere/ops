@@ -24,6 +24,8 @@
 #include "Topic.h"
 #include "Subscriber.h"
 #include "Publisher.h"
+#include "KeyFilterQoSPolicy.h"
+#include <sstream>
 
 
 namespace ops
@@ -33,19 +35,37 @@ namespace ops
     class RequestReply
     {
     public:
-		RequestReply(Topic reqTopic, Topic repTopic)		  
+		RequestReply(Topic reqTopic, Topic repTopic, std::string key_) :keyFilter(key_), key(key_)	  
 		{
 			sub = new Subscriber(repTopic);
+			sub->addFilterQoSPolicy(&keyFilter);
+
 			pub = new Publisher(reqTopic);
 			sub->start();
 
 		}
-	    RepType* request(ReqType* req)
+	    RepType* request(ReqType* req, int timeout)
 		{
-			pub.write(req);
-			if(sub->waitForNewData(1000/*timeout*/))
+			static int reqInt = 0;
+			reqInt ++;
+			req->setKey(key);
+			std::stringstream ss;
+			ss << key << reqInt;
+			req->requestId = ss.str(); 
+			
+			__int64 requestStartTime = TimeHelper::currentTimeMillis();
+			sub->getDataReference();
+			pub->writeOPSObject(req);
+			while(TimeHelper::currentTimeMillis() - requestStartTime < timeout)
 			{
-				return (RepType*)sub->getMessage.getDataReference();
+				
+				if(sub->waitForNewData(timeout - (TimeHelper::currentTimeMillis() - requestStartTime)))
+				{
+					if(((RepType*)sub->getMessage()->getData())->requestId == req->requestId)
+					{
+						return (RepType*)sub->getMessage()->getData()->clone();
+					}
+				}
 			}
 			return NULL;
 
@@ -58,6 +78,8 @@ namespace ops
 	private:
 		Subscriber* sub;
 		Publisher* pub;
+		KeyFilterQoSPolicy keyFilter;
+		std::string key;
         
     };
 }

@@ -18,24 +18,27 @@
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ops_RequestH
-#define ops_RequestH
+#ifndef ops_ReplyH
+#define ops_ReplyH
 
 #include "OPSObject.h"
 
 namespace ops
 {
-class Request : public OPSObject
+class Reply : public OPSObject
 {
 public:
 	std::string requestId;
+	bool requestAccepted;
+	std::string message;	
 
 	void serialize(ops::ArchiverInOut* archiver)
 	{
 		OPSObject::serialize(archiver);
-		archiver->inout("requestId", requestId);
+		archiver->inout(std::string("requestId"), requestId);
+		archiver->inout(std::string("requestAccepted"), requestAccepted);
+		archiver->inout(std::string("message"), message);
 	}
-	
 
 };
 }
