@@ -1,5 +1,4 @@
-
-Threading and Event Callbacks
+= Threading and Event Callbacks =
 
 The threading model of OPS differs a bit between C++ and Java implementations and will therefore be described one by one in the follower of this page:
 
