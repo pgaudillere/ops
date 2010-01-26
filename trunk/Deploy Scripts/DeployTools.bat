@@ -12,9 +12,6 @@ mkdir "Tools\OPS IDL Builder\lib"
 copy "..\Java\OPSJLib\dist\OPSJLib.jar" "Tools\OPS IDL Builder\lib"
 copy "..\Libs\ConfigurationLib\dist\ConfigurationLib.jar" "Tools\OPS IDL Builder\lib"
 
-mkdir "Tools\OPS IDL Builder\templates"
-copy "..\Tools\NBOPSIDLSupport\templates\*.tpl" "Tools\OPS IDL Builder\templates"
-
 mkdir "Tools\OPS Debugger"
 mkdir "Tools\OPS Debugger\lib"
 copy "..\ToolS\OPSDebugger2\dist\*.*" "Tools\OPS Debugger"
