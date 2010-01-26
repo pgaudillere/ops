@@ -5,15 +5,6 @@
         <folder name="Build">
             <file name="ops-netbeansmodules-idlsupport-GenerateCode.instance"/>
         </folder>
-        <folder name="Window">
-            <file name="ops-netbeansmodules-topictool-TopicToolAction.instance">
-                <attr name="SystemFileSystem.localizingBundle" stringvalue="ops.netbeansmodules.idlsupport.Bundle"/>
-                <attr name="component" methodvalue="ops.netbeansmodules.topictool.TopicToolTopComponent.findInstance"/>
-                <attr name="displayName" bundlevalue="ops.netbeansmodules.topictool.Bundle#CTL_TopicToolAction"/>
-                <attr name="iconBase" stringvalue="ops/netbeansmodules/idlsupport/opsprojecticonxml.GIF"/>
-                <attr name="instanceCreate" methodvalue="org.openide.windows.TopComponent.openAction"/>
-            </file>
-        </folder>
     </folder>
     <folder name="Editors">
         <folder name="text">
