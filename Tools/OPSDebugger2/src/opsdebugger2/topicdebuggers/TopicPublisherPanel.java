@@ -42,8 +42,8 @@ public class TopicPublisherPanel extends javax.swing.JPanel implements Runnable
 
         createTable(obj);
 
-         ScriptEngineManager manager = new ScriptEngineManager();
-         engine = manager.getEngineByExtension("js");
+        ScriptEngineManager manager = new ScriptEngineManager();
+        engine = manager.getEngineByExtension("js");
 
         Thread t = new Thread(this);
         t.start();
@@ -309,7 +309,7 @@ public class TopicPublisherPanel extends javax.swing.JPanel implements Runnable
         });
 
         rateTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        rateTextField1.setText("0");
+        rateTextField1.setText("1");
 
         closeButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/opsdebugger2/resources/closebutton.PNG"))); // NOI18N
         closeButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -340,17 +340,17 @@ public class TopicPublisherPanel extends javax.swing.JPanel implements Runnable
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(scrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                    .add(scrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(jLabel2)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 41, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 101, Short.MAX_VALUE)
                         .add(mouseWheelUnitTextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 152, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
                                 .add(jLabel1)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(rateTextField1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+                                .add(rateTextField1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(startButton)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -415,23 +415,20 @@ private void tableMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIR
         {
             double d = Double.parseDouble((String) table.getModel().getValueAt(table.getSelectedRow(), 1));
             table.getModel().setValueAt("" + (d - evt.getWheelRotation() * Double.parseDouble(mouseWheelUnitTextField.getText())), table.getSelectedRow(), 1);
-        }
-        catch (NumberFormatException numberFormatException)
+        } catch (NumberFormatException numberFormatException)
         {
 
             try
             {
                 boolean boo = Boolean.parseBoolean((String) table.getModel().getValueAt(table.getSelectedRow(), 1));
                 table.getModel().setValueAt("" + !boo, table.getSelectedRow(), 1);
-            }
-            catch (NumberFormatException e)
+            } catch (NumberFormatException e)
             {
                 //Ok we cant change this value with scrollwheel...
             }
 
         }
-    }
-    catch (Exception e)
+    } catch (Exception e)
     {
         //Nothing was selected or unpredicted error..
     }
@@ -449,8 +446,7 @@ private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
                 table.getModel().setValueAt(
                         "" +
                         (0), table.getSelectedRow(), 1);
-            }
-            catch (NumberFormatException numberFormatException)
+            } catch (NumberFormatException numberFormatException)
             {
 
                 try
@@ -459,8 +455,7 @@ private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
                     table.getModel().setValueAt(
                             "" +
                             !boo, table.getSelectedRow(), 1);
-                }
-                catch (NumberFormatException e)
+                } catch (NumberFormatException e)
                 {
                     //Ok we cant change this value with right click...
                 }
@@ -468,8 +463,7 @@ private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event
             }
 
         }
-    }
-    catch (Exception e)
+    } catch (Exception e)
     {
         //Nothing was selected or unpredicted error..
     }
@@ -500,12 +494,10 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
 
                 }
 
-                Thread.sleep(
-                        1000);
+                Thread.sleep(1000);
 
             }
-        }
-        catch (InterruptedException ex)
+        } catch (InterruptedException ex)
         {
             ex.printStackTrace();
         }
@@ -519,22 +511,17 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                 2, 1);
 
         engine.put("__i", publisher.getCurrentPublicationID());
-       
+
 
         Field[] fields = oo.getClass().getFields();
         try
         {
-            readFields(
-                    fields,
-                    oo,
-                    3);
+            readFields(fields, oo, 3);
 
-        }
-        catch (IllegalArgumentException ex)
+        } catch (IllegalArgumentException ex)
         {
             ex.printStackTrace();
-        }
-        catch (IllegalAccessException ex)
+        } catch (IllegalAccessException ex)
         {
             ex.printStackTrace();
         }
@@ -559,69 +546,137 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                     if (typeString.equals("java.lang.Byte"))
                     {
 
-                        byte val = (byte) Double.parseDouble((String) table.getModel().getValueAt(index, 1));
-                        fields[i].setByte(o, val);
+                        try
+                        {
+                            byte d = (byte) Double.parseDouble((String) table.getModel().getValueAt(index, 1));
+                            fields[i].setByte(o, d);
 
-                    }
-                    else
+                        } catch (NumberFormatException numberFormatException)
+                        {
+                            String script = (String) table.getModel().getValueAt(index, 1);
+                            try
+                            {
+                                engine.eval(script);
+                            } catch (ScriptException ex)
+                            {
+                                //ok, dosent work output will be zero
+                            }
+                           byte val = (byte) ((Double) engine.get("__y")).doubleValue();
+                            fields[i].setByte(o, val);
+
+                        }
+
+                    } else
                     {
                         if (typeString.equals("java.lang.Integer"))
                         {
 
-                            int val = (int) Double.parseDouble((String) table.getModel().getValueAt(index, 1));
-                            fields[i].setInt(o, val);
-
-                        }
-                        else
-                        {
-                            if (typeString.equals("java.lang.Double"))
+                            try
                             {
-//                                try
-//                                {
-//                                    Function fu = Function.parseFunction((String) table.getModel().getValueAt(index, 1));
-//                                    double val = fu.eval(currentPubSample); 
-//                                    fields[i].setDouble(o, val);
+                                int d = (int) Double.parseDouble((String) table.getModel().getValueAt(index, 1));
+                                fields[i].setInt(o, d);
+
+                            } catch (NumberFormatException numberFormatException)
+                            {
                                 String script = (String) table.getModel().getValueAt(index, 1);
                                 try
                                 {
                                     engine.eval(script);
-                                }
-                                catch (ScriptException ex)
+                                } catch (ScriptException ex)
                                 {
                                     //ok, dosent work output will be zero
+                                    }
+                                int val = (int) ((Double) engine.get("__y")).doubleValue();
+                                fields[i].setInt(o, val);
+
+                            }
+
+                        } else
+                        {
+                            if (typeString.equals("java.lang.Double"))
+                            {
+//
+                                try
+                                {
+                                    double d = Double.parseDouble((String) table.getModel().getValueAt(index, 1));
+                                    fields[i].setDouble(o, d);
+
+                                } catch (NumberFormatException numberFormatException)
+                                {
+                                    String script = (String) table.getModel().getValueAt(index, 1);
+                                    try
+                                    {
+                                        engine.eval(script);
+                                    } catch (ScriptException ex)
+                                    {
+                                        //ok, dosent work output will be zero
+                                    }
+                                    Double val = (Double) engine.get("__y");
+                                    fields[i].setDouble(o, val);
+
                                 }
-                                Double val = (Double) engine.get("__y");
-                                fields[i].setDouble(o, val);
+
 //                                }
 //                                catch (ParseException e)
 //                                {
 //                                    fields[i].setDouble(o, 0);
 //                                }
 
-                            }
-                            else
+                            } else
                             {
 
 
                                 if (typeString.equals("java.lang.Float"))
                                 {
 
-                                    float val = Float.parseFloat((String) table.getModel().getValueAt(index, 1));
-                                    fields[i].setFloat(o, val);
+                                    try
+                                    {
+                                        float d = (float) Double.parseDouble((String) table.getModel().getValueAt(index, 1));
+                                        fields[i].setFloat(o, d);
 
-                                }
-                                else
+                                    } catch (NumberFormatException numberFormatException)
+                                    {
+                                        String script = (String) table.getModel().getValueAt(index, 1);
+                                        try
+                                        {
+                                            engine.eval(script);
+                                        } catch (ScriptException ex)
+                                        {
+                                            //ok, dosent work output will be zero
+                                        }
+                                        float val = (float) ((Double) engine.get("__y")).doubleValue();
+                                        fields[i].setFloat(o, val);
+
+                                    }
+
+                                } else
                                 {
 
 
                                     if (typeString.equals("java.lang.Long"))
                                     {
 
-                                        long val = (long) Double.parseDouble((String) table.getModel().getValueAt(index, 1));
-                                        fields[i].setLong(o, val);
+                                        try
+                                        {
+                                            long d = (long) Double.parseDouble((String) table.getModel().getValueAt(index, 1));
+                                            fields[i].setLong(o, d);
 
-                                    }
-                                    else
+                                        } catch (NumberFormatException numberFormatException)
+                                        {
+                                            String script = (String) table.getModel().getValueAt(index, 1);
+                                            try
+                                            {
+                                                engine.eval(script);
+                                            } catch (ScriptException ex)
+                                            {
+                                                //ok, dosent work output will be zero
+                                            }
+                                            long val = (long) ((Double) engine.get("__y")).doubleValue();
+                                            fields[i].setLong(o, val);
+
+                                        }
+
+                                    } else
                                     {
                                         if (typeString.equals("java.lang.Boolean"))
                                         {
@@ -629,8 +684,7 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                                             boolean val = Boolean.parseBoolean((String) table.getModel().getValueAt(index, 1));
                                             fields[i].setBoolean(o, val);
 
-                                        }
-                                        else
+                                        } else
                                         {
                                             if (typeString.equals("java.lang.String"))
                                             {
@@ -645,8 +699,7 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                             }
                         }
                     }
-                }
-                else
+                } else
                 {
                     if (fields[i].get(o) instanceof OPSObject)
                     {
@@ -656,8 +709,7 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
 
                     }
                 }
-            }
-            catch (ClassCastException ex)
+            } catch (ClassCastException ex)
             {
                 //ex.printStackTrace();
             }
@@ -697,12 +749,10 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                     oo,
                     3);
 
-        }
-        catch (IllegalArgumentException ex)
+        } catch (IllegalArgumentException ex)
         {
             ex.printStackTrace();
-        }
-        catch (IllegalAccessException ex)
+        } catch (IllegalAccessException ex)
         {
             ex.printStackTrace();
         }
@@ -728,8 +778,7 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                 index++;
 
                 index = printFields(fields[i].get(o).getClass().getFields(), fields[i].get(o), index);
-            }
-            else
+            } else
             {
                 table.getModel().setValueAt(fields[i].getName(), index, 0);
                 table.getModel().setValueAt(
@@ -755,8 +804,7 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                 o instanceof Boolean)
         {
             return true;
-        }
-        else
+        } else
         {
             return false;
         }
