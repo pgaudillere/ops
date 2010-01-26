@@ -4,7 +4,7 @@ OPS is primarily a publish subscribe based middleware which is a specialization 
 
 Most systems however have needs for some kind of request/reply communication in some parts. Middlewares that deals with this kind of communication include Remote Method Invocation (RMI) middlewares and Object Oriented Middlewares (or Object Request Brokers), e.g. CORBA, Java RMI and the Internet Communications Engine (ICE).
 
-Of course, a system can mix technologies and have CORBA and OPS running alongside each other. And if you needs a lot of both request/reply and pub/sub communication, this probably a good idea.   
+Of course, a system can mix technologies and have CORBA and OPS running alongside each other. And if you needs a lot of both request/reply and pub/sub communication, this is probably a good idea.   
 
 OPS however offers a request/reply mechanism built on top of common OPS topics. The idea is simple, and you may already have found yourself implementing the same feature:
 You create two topics, one request topic (this can be seen as the parameters for the request) and one reply topic (the return value of the request), and finally OPS implement some helper classes to help you with matching the reply to the request and timeout if there is no reply in a certain time.
