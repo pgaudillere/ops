@@ -15,4 +15,9 @@ public class __classNameSubscriber extends Subscriber
         super(t);
         
     }
+
+    public __className getData()
+    {
+        return (__className)super.getData();
+    }
 }
