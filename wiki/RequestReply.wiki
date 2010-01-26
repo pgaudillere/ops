@@ -85,9 +85,12 @@ while(true)
 
 	if(reply != NULL)
 	{
-		std::cout << "Reply received: " << reply->helloString  <<  std::endl;
+            if(reply->requestAccepted)
+	        std::cout << "Reply received and request was accepted: " << reply->helloString  <<  std::endl;
+            else
+                std::cout << "request was not accepted." <<  std::endl;
 
-		delete reply;
+	    delete reply;
 	}
 	else
 	{
