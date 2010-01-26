@@ -2,6 +2,7 @@ mkdir C++
 
 mkdir C++\include
 mkdir C++\include\xml
+mkdir C++\include\ops
 mkdir C++\lib
 mkdir C++\source
 mkdir C++\source\xml
@@ -9,6 +10,7 @@ mkdir C++\source\xml
 
 copy "..\C++\include\*.*" "C++\include"
 copy "..\C++\include\xml\*.*" "C++\include\xml"
+copy "..\C++\include\ops\*.*" "C++\include\ops"
 
 copy "..\C++\source\*.*" "C++\source"
 copy "..\C++\source\xml\*.*" "C++\source\xml"
