@@ -1,0 +1,15 @@
+
+
+= Outstanding Issues=
+
+OPS is far from complete. Outstanding Issues and shortcomings include:
+ * C++ Core does only work for Windows (Visual Studio Compilers)
+ * Documentation is Poor, there is no API docs
+ * UDP and TCP Transport are not fully implemented and functional
+ * Java generators does not generate clone methods
+ * C# support has been dropped until API:s stabalize
+ * OPS has no active community (is maintained by one person only a the time being)
+ * OPS need more users
+ * Java Performance could improve, it is now suffering a bit from C++ optimizations, this is especially true for large messages.
+
+
