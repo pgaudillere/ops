@@ -394,10 +394,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\source\RequestReply.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\source\Reservable.cpp"
 				>
 			</File>
@@ -612,14 +608,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\include\Reply.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\include\Request.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\include\RequestReply.h"
 				>
 			</File>
@@ -696,6 +684,18 @@
 				>
 				<File
 					RelativePath="..\..\..\include\xml\xmlParser.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="ops"
+				>
+				<File
+					RelativePath="..\..\..\include\ops\Reply.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\include\ops\Request.h"
 					>
 				</File>
 			</Filter>
