@@ -75,19 +75,21 @@ namespace ops
 		keepRunning(true),
 		aliveTimeout(1000)
 	{
-		objectFactory = new OPSObjectFactoryImpl();
+		
 		ioService = IOService::create();
 		if(!ioService)
 		{
 			//Error, should never happen, throw?
-			return;
+			throw std::exception("Could not dreateIOService");
 		}
 		//Should trow?
 		config = OPSConfig::getConfig();
 		if(!config)
 		{
-			throw 1;
+			throw std::exception("No config on rundirectory");
 		}
+
+		objectFactory = new OPSObjectFactoryImpl();
 		
 		//------------Will be created when need------
 		partInfoPub = NULL;
