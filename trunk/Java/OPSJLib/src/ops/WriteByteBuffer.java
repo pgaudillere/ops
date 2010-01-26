@@ -112,7 +112,7 @@ public class WriteByteBuffer
      * @param start, offset in bytes
      * @param length, the number of bytes to be written starting at @param start
      */
-    private void write(byte[] bytes, int start, int length) throws IOException
+    protected void write(byte[] bytes, int start, int length) throws IOException
     {
         int bytesLeftInSegment = nextSegmentAt - outBuffer.position();
         if (bytesLeftInSegment >= length)
@@ -173,7 +173,7 @@ public class WriteByteBuffer
 
     public void write(int v) throws IOException
     {
-        if (nextSegmentAt - outBuffer.position() < 8)
+        if (nextSegmentAt - outBuffer.position() < 4)
         {
             write(ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(v).array(), 0, 4);
         } else
@@ -197,7 +197,7 @@ public class WriteByteBuffer
 
     public void write(byte v) throws IOException
     {
-        if (nextSegmentAt - outBuffer.position() < 8)
+        if (nextSegmentAt - outBuffer.position() < 1)
         {
 
             write(ByteBuffer.allocate(1).order(ByteOrder.LITTLE_ENDIAN).put(v).array(), 0, 1);

@@ -21,6 +21,7 @@ public class Request extends OPSObject
     public void serialize(ArchiverInOut archive) throws IOException
     {
         super.serialize(archive);
+        requestId = archive.inout("requestId" , requestId);
     }
 
 

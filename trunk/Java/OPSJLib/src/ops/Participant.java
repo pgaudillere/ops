@@ -37,18 +37,18 @@ public class Participant
 
     public static HashMap<String, Participant> instances = new HashMap<String, Participant>();
 
-    public static Participant getInstance(String domainID)
+    public static synchronized Participant getInstance(String domainID)
     {
         return getInstance(domainID, "DEFAULT_PARTICIPANT");
 
     }
 
-    public static Participant getInstance(String domainID, String participantID)
+    public static synchronized Participant getInstance(String domainID, String participantID)
     {
         return getInstance(domainID, participantID, null);
     }
 
-    public static Participant getInstance(String domainID, String participantID, File file)
+    public static synchronized Participant getInstance(String domainID, String participantID, File file)
     {
         if (!instances.containsKey(participantID))
         {
@@ -110,7 +110,7 @@ public class Participant
 
     ///By Singelton, one ReceiveDataHandler per Topic (Name)
     //This instance map should be owned by Participant.
-    ReceiveDataHandler getReceiveDataHandler(Topic top)
+    synchronized ReceiveDataHandler getReceiveDataHandler(Topic top)
     {
         if (!receiveDataHandlers.containsKey(top.getName()))
         {
@@ -120,7 +120,7 @@ public class Participant
         return receiveDataHandlers.get(top.getName());
     }
 
-    SendDataHandler getSendDataHandler(Topic t) throws CommException
+    synchronized SendDataHandler getSendDataHandler(Topic t) throws CommException
     {
         if(t.getTransport().equals(Topic.TRANSPORT_MC))
         {

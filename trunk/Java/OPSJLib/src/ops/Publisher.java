@@ -77,6 +77,12 @@ public class Publisher
         
             archiverOut.inout("message", message);
 
+            //If o has spare bytes, write them to the end of the buf
+            if(o.spareBytes.length > 0)
+            {
+                buf.write(o.spareBytes, 0, o.spareBytes.length);
+            }
+            //Finish will in nrOf segments in all segments.
             buf.finish();
             int sizeToSend = buffer.position();
 
