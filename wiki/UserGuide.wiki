@@ -44,6 +44,6 @@ The User Guide is under construction, please report issues:
     * [PublisherName Using Publisher Name]
     * [AdvancedReferenceHandling Memory Managment]
     * [Threading]
-    * [Data class slicing and spareBytes]
+    * [DataSlicing Data class slicing and spareBytes]
     * [HandlingErrors Error Handling]
     * [RequestReply Request Reply]
