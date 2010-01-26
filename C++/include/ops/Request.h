@@ -25,20 +25,17 @@
 
 namespace ops
 {
-class Reply : public OPSObect
+class Request : public OPSObject
 {
 public:
 	std::string requestId;
-	bool requestAccepted;
-	std::string message;	
 
 	void serialize(ops::ArchiverInOut* archiver)
 	{
-		OPSObect::serialize(archiver);
-		archiver->inout("requestId", requestId);
-		archiver->inout("requestAccepted", requestAccepted);
-		archiver->inout("message", message);
+		OPSObject::serialize(archiver);
+		archiver->inout(std::string("requestId"), requestId);
 	}
+	
 
 };
 }
