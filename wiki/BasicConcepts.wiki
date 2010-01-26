@@ -16,7 +16,10 @@ Presently OPS is available in Java (Windows, Linux, Unix, Mac) and C++ (Win32) p
  * Communication between publishers and subscribers is asynchronous and anonymous.
  * Networking and protocol complexity is hidden from application developers.
  
+
 http://ops.googlecode.com/svn/wiki/pub_sub_overview.jpg
+
+
 
 
 = Domain Model =
@@ -38,12 +41,15 @@ http://ops.googlecode.com/svn/wiki/pub_sub_overview.jpg
  * *Transport* is the communication implementation that sends data as chunks of bytes over  a IP network or other cummunication infrastraucture. Examples of Transoprst include Multicast Transport or a TCP Transport. 
 
 
+
 == UML ==
 The UML diagram below gives a graphical representation of the domain model and should be read as:
 
 _Data_ is sent on _Topics_. _Publishers_ publishes _Data_ on _Topics_. _Subscribers_ subscribes to _Topics_. _Topics_ belong to _Domains_. A _Participant_ participates in _Domains_ by communicating over _Transports_.
 
 http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
+
+
 
 
 = OPS Offers =
