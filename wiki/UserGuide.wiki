@@ -43,7 +43,7 @@ The User Guide is under construction, please report issues:
     * [LargeMessages Sending Large Messages > 60000 bytes]
     * [PublisherName Using Publisher Name]
     * [AdvancedReferenceHandling Memory Managment]
-    * [Threading]
+    * [Threading Threading and Event Callbacks]
     * [DataSlicing Data class slicing and spareBytes]
     * [HandlingErrors Error Handling]
     * [RequestReply Request Reply]
