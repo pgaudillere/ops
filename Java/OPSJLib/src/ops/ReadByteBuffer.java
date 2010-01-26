@@ -123,6 +123,11 @@ public class ReadByteBuffer
         }
         return ret;
     }
+
+    public void readBytes(byte[] bytes)
+    {
+        inBuffer.get(bytes);
+    }
     public int readint() throws IOException
     {
         return inBuffer.getInt();

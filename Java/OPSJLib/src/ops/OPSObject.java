@@ -32,6 +32,7 @@ public class OPSObject implements Serializable
 {
     protected String key = "k";
     protected String typesString = "";
+    public byte[] spareBytes = new byte[0];
 
     public OPSObject()
     {

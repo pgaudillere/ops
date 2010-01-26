@@ -37,7 +37,7 @@ public class Subscriber extends Observable
     private String identity = "";
     private ArrayList<FilterQoSPolicy> filterQoSPolicies = new ArrayList<FilterQoSPolicy>();
     private MessageFilterSet messageFilters = new MessageFilterSet();
-    private ReentrantLock newDataLock = new ReentrantLock(true);
+    private final Object newDataEvent = new Object();
     private OPSObject data;
     private long deadlineTimeout;
     private long lastDeadlineTime;
@@ -47,12 +47,14 @@ public class Subscriber extends Observable
     private ReceiveDataHandler topicHandler;
     private Participant participant;
     private OPSMessage message;
+    private final DeadlineNotifier deadlineNotifier;
 
     public Subscriber(Topic t)
     {
         this.topic = t;
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
         topicHandler = participant.getReceiveDataHandler(t);
+        deadlineNotifier = DeadlineNotifier.getInstance();
     }
 
     public synchronized void setDeadlineQoS(long timeout)
@@ -71,12 +73,14 @@ public class Subscriber extends Observable
         lastDeadlineTime = System.currentTimeMillis();
         timeLastDataForTimeBase = System.currentTimeMillis();
 
+        deadlineNotifier.add(this);
         topicHandler.addSubscriber(this);
 
     }
 
     public synchronized boolean stop()
     {
+        deadlineNotifier.remove(this);
         return topicHandler.removeSubscriber(this);
     }
     public synchronized boolean isDeadlineMissed()
@@ -120,6 +124,10 @@ public class Subscriber extends Observable
                 setChanged();
                 data = o;//(OPSObject) o.clone();
                 notifyObservers(data);
+                synchronized(newDataEvent)
+                {
+                    newDataEvent.notifyAll();
+                }
 
             }
         }
@@ -129,17 +137,17 @@ public class Subscriber extends Observable
     {
         try
         {
-            newDataLock.tryLock(millis, TimeUnit.MILLISECONDS);
+            synchronized(newDataEvent)
+            {
+                newDataEvent.wait(millis);
+            }
             return data;
         }
         catch (InterruptedException ex)
         {
             return null;
         }
-        finally
-        {
-            newDataLock.unlock();
-        }
+       
     }
 
     public synchronized void addFilterQoSPolicy(FilterQoSPolicy qosPolicy)
@@ -193,7 +201,7 @@ public class Subscriber extends Observable
     }
     
 
-    public synchronized OPSObject getData()
+    protected synchronized OPSObject getData()
     {
         return data;
     }

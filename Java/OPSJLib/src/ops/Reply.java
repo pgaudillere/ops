@@ -24,9 +24,9 @@ public class Reply extends OPSObject
     {
         
         super.serialize(archive);
-        archive.inout("requestId", requestId);
-        archive.inout("requestAccepted", requestAccepted);
-        archive.inout("message", message);
+        requestId = archive.inout("requestId", requestId);
+        requestAccepted = archive.inout("requestAccepted", requestAccepted);
+        message = archive.inout("message", message);
     }
 
 
