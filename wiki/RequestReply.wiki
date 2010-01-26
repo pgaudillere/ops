@@ -35,7 +35,7 @@ class HelloData extends ops.Reply
 }
 }}}
 
-And two topics for your data types:
+Also, define two topics to send our data on:
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
