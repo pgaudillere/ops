@@ -62,9 +62,9 @@ public:
 
 		//Create a subscriber on that topic.
 		sub = new ChildDataSubscriber(topic);
-		sub->setDeadlineQoS(10);
+		//sub->setDeadlineQoS(10);
 		//sub->setTimeBasedFilterQoS(1000);
-		sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
+		//sub->addFilterQoSPolicy(new KeyFilterQoSPolicy("key1"));
 		sub->addDataListener(this);
 		sub->deadlineMissedEvent.addDeadlineMissedListener(this);
 		//sub->setHistoryMaxSize(5);

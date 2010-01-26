@@ -17,6 +17,7 @@ class BaseData :
 	public ops::OPSObject
 {
 public:
+   static std::string getTypeName(){return std::string("TestAll.BaseData");}
 	
 	std::string baseText;
 

@@ -9,9 +9,6 @@ import TestAll.ChildData;
 import TestAll.ChildDataSubscriber;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ops.KeyFilterQoSPolicy;
 import ops.Participant;
 import ops.Topic;
 

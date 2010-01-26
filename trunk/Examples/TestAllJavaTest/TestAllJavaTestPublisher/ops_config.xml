@@ -13,13 +13,15 @@
                 <!--optional <timeToLive>1</timeToLive>-->
                 <localInterface>127.0.0.1</localInterface>
                 <!--optional <inSocketBufferSize>16000000</inSocketBufferSize>-->
-                <outSocketBufferSize>16000000</outSocketBufferSize>
+                <!--optional <outSocketBufferSize>16000000</outSocketBufferSize>-->
                 <topics>
                     <element type = "Topic">
                         <name>ChildTopic</name>
                         <port>6689</port>
                         <dataType>TestAll.ChildData</dataType>
                         <sampleMaxSize>2100000</sampleMaxSize>
+                         <inSocketBufferSize>16000000</inSocketBufferSize>
+                         <outSocketBufferSize>16000000</outSocketBufferSize>
                     </element>
                     <element type = "Topic">
                       <name>BaseTopic</name>

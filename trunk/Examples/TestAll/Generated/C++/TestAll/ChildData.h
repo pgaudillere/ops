@@ -20,6 +20,7 @@ class ChildData :
 	public BaseData
 {
 public:
+   static std::string getTypeName(){return std::string("TestAll.ChildData");}
 	
 	bool bo;
 	char b;

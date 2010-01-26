@@ -17,6 +17,7 @@ class TestData :
 	public ops::OPSObject
 {
 public:
+   static std::string getTypeName(){return std::string("TestAll.TestData");}
 	
 	std::string text;
 	double value;
