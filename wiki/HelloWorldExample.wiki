@@ -146,7 +146,7 @@ int main(int argc, const char* args[])
 http://code.google.com/p/ops/source/browse/trunk/Deploy%20Scripts/Examples/HelloWorldWithKeyCppImpl/HelloTopic_pub.cpp
 
 
-Note that this is ALL the code you need to create a simple Publisher. To deeper understand whats going on on each line, have a look at [PublishingOnTopics Publishing On Topics].
+Note that this is ALL the code you need to create a simple Publisher. To deeper understand whats going on on each line, have a look at [PublishingOnTopic Publishing On Topics].
 
 Now let's subscribe to the HelloTopic:
 
