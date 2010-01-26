@@ -65,7 +65,7 @@ if(!participant)
 //Add type support for our types, to make this participant understand what we are talking
 participant->addTypeSupport(new HelloRequestReply::HelloRequestReplyTypeFactory());
 
-//Now, create the Topic we wish to publish on. Might throw ops::NoSuchTopicException if no such Topic exist in ops_config.xml
+//Create topics for the request and reply
 Topic requestTopic = participant->createTopic("RequestHelloTopic");
 Topic replyTopic = participant->createTopic("HelloTopic");
 
