@@ -19,7 +19,7 @@ class ChildData extends BaseData
 
     //TestMore.MoreData more;
 
-    boolean[234] bos;
+    boolean[] bos;
     byte[] bs;
     int[] is;
     long[] ls;

@@ -9,6 +9,7 @@ import TestAll.ChildData;
 import TestAll.ChildDataPublisher;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ops.CommException;
 import ops.Participant;
 import ops.Topic;
 
@@ -23,39 +24,37 @@ public class Main {
      */
     public static void main(String[] args)
     {
-
-        Participant participant = Participant.getInstance("TestAllDomain");
-        participant.addTypeSupport(new TestAll.TestAllTypeFactory());
-
-        Topic topic = participant.createTopic("ChildTopic");
-
-        ChildDataPublisher pub = new ChildDataPublisher(topic);
-
-        ChildData data = new ChildData();
-
-        data.baseText = "Hello from Java";
-        pub.setName("TestAll Java ChildPublisher");
-
-        data.s = "TestString";
-        data.b = 0;
-        data.l = 1;
-        data.f = 2.0f;
-        data.d = 3.0;
-        data.bs.add((byte)4);
-        data.is.add(5);
-        data.ls.add((long)7);
-
-        data.ss.add("TestString in Array.");
-
-        for (int i = 0; i < 50; i++)
+        try
         {
-            data.fs.add((float)i);
-        }
-        while (true)
+            Participant participant = Participant.getInstance("TestAllDomain");
+            participant.addTypeSupport(new TestAll.TestAllTypeFactory());
+            Topic topic = participant.createTopic("ChildTopic");
+            ChildDataPublisher pub = new ChildDataPublisher(topic);
+            ChildData data = new ChildData();
+            data.baseText = "Hello from Java";
+            pub.setName("TestAll Java ChildPublisher");
+            data.s = "TestString";
+            data.b = 0;
+            data.l = 1;
+            data.f = 2.0f;
+            data.d = 3.0;
+            data.bs.add((byte) 4);
+            data.is.add(5);
+            data.ls.add((long) 7);
+            data.ss.add("TestString in Array.");
+            for (int i = 0; i < 50; i++)
+            {
+                data.fs.add((float) i);
+            }
+            while (true)
+            {
+                data.i++;
+                pub.write(data);
+                sleep(1000);
+            }
+        } catch (CommException ex)
         {
-            data.i ++;
-            pub.write(data);
-            sleep(100);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
