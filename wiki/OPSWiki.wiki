@@ -1,6 +1,5 @@
 #labels Featured
-[Installation] [SimpleCpp Examples] [BuildInstructions] [http://n2.nabble.com/OPS-Forum-f3430451.html Forum]
-----
+
 = Welcome to the OPS Wiki=
 
 ==Introduction==
