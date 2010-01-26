@@ -129,4 +129,4 @@ Participant participant = Participant.getInstance("HelloDomain");
             });
 }}}
 
-Thats all thats needed to create request/reply over OPS, and the nice thong is that because it uses normal OPS topics under the hood, you can debug and use them just as normal topics when you want.
+Thats all thats needed to create request/reply over OPS, and what is nice about it is that because it uses normal OPS topics under the hood, you can debug and use them just as normal topics whenever you want.
