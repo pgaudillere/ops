@@ -1,7 +1,7 @@
-
 = Outstanding Issues=
 
 OPS is far from complete. Outstanding Issues and shortcomings include:
+
  * C++ Core does only work for Windows (Visual Studio Compilers)
  * Documentation is Poor, there is no API docs
  * UDP and TCP Transport are not fully implemented and functional
@@ -11,6 +11,6 @@ OPS is far from complete. Outstanding Issues and shortcomings include:
  * OPS need more users
  * Java Performance could improve, it is now suffering a bit from C++ optimizations, this is especially true for large messages.
 
-To solve these Issues and make OPS better help is required, please file Issue reports and send in Patches.
+To solve these and other issues and make OPS better, help is required. Please file Issue reports and send in Patches.
 
-Use the Issue tab above.
+Use the Issues tab above.
