@@ -1,0 +1,7 @@
+package chat;
+
+class ExtendedChatData extends ChatData
+{
+    string[] attachments;
+
+}
