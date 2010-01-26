@@ -6,9 +6,8 @@ The answer is that OPS has chosen to not slice away information in such cases be
 
 Considering the following case:
 
-You have two IDL classes describing some sort of user data:
+You have an IDL class describing some sort of user data:
 
-First you had
 {{{
 package users;
 
