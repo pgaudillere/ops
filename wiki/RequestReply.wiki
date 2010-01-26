@@ -88,13 +88,13 @@ while(true)
             if(reply->requestAccepted)
 	        std::cout << "Reply received and request was accepted: " << reply->helloString  <<  std::endl;
             else
-                std::cout << "request was not accepted." <<  std::endl;
+                std::cout << "Request was not accepted." <<  std::endl;
 
 	    delete reply;
 	}
 	else
 	{
-		std::cout << "No reply." << std::endl;
+	    std::cout << "No reply." << std::endl;
 	}
 	Sleep(1000);
 }
