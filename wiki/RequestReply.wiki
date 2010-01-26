@@ -7,7 +7,7 @@ Most systems however have needs for some kind of request/reply communication in 
 Of course, a system can mix technologies and have CORBA and OPS running alongside each other. And if you needs a lot of both request/reply and pub/sub communication, this is probably a good idea.   
 
 OPS however offers a request/reply mechanism built on top of common OPS topics. The idea is simple, and you may already have found yourself implementing the same feature:
-You create two topics, one request topic (this can be seen as the parameters for the request) and one reply topic (the return value of the request), and finally OPS implement some helper classes to help you with matching the reply to the request and timeout if there is no reply in a certain time.
+You create two topics, one request topic (this can be seen as the parameters for the request) and one reply topic (the return value of the request), and finally OPS implement some helper classes to help you with matching the reply to the request and timeout if there is no reply within a certain timeout.
 
 This is what you need to do to create a simple request/reply case where a requester can request a Hello message:
 
