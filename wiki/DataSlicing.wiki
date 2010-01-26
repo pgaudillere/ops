@@ -2,7 +2,7 @@
 
 As stated earlier, OPS support inheritance between IDL Data classes. This fact raises the question on how OPS handles situation where some parts (components) of a system not fully can understand a datatype. Will information be lost then? 
 
-The answer is that OPS does not slice away information in such cases because components that receive the same data later might understand it better.
+The answer is that OPS has chosen to not slice away information in such cases because components that receive the same data later might understand it better.
 
 Considering the following case:
 
