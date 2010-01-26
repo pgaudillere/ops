@@ -1,5 +1,4 @@
-[Installation] [SimpleCpp Examples] [BuildInstructions]
-----
+
 =OPS – Installation (Windows XP)=
 
 ==Set Up Your Environment==
