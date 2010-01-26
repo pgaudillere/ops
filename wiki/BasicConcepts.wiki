@@ -81,7 +81,7 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
 As stated earlier, OPS primarily targets distributed real-time and embedded (DRE) systems and distributed control systems (DCS).
 
-The following UML diagram shows a typical usage in a DCS. Note the important roles of OPS in the fictive system below: Information availability, Low coupling, Software reuse, Well defined interfaces, Efficient dissemination of high level data, Different hardware configurations → same software.
+The following UML diagram shows a typical usage in a DCS. Note the important features OPS provide in the fictive system below: Information availability, Low coupling, Software reuse, Well defined interfaces, Efficient dissemination of high level data, Different hardware configurations → same software.
 
 The components in the diagram are independent executables running on any number of machines connected to the same embedded network. 
 
