@@ -47,3 +47,4 @@ The User Guide is under construction, please report issues:
     * [DataSlicing Data class slicing and spareBytes]
     * [HandlingErrors Error Handling]
     * [RequestReply Request Reply]
+  * Outstanding Issues
