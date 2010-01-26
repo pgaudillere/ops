@@ -46,7 +46,7 @@ _Data_ is sent on _Topics_. _Publishers_ publishes _Data_ on _Topics_. _Subscrib
 http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
 
-= What Can OPS Offer for Your Distributed Software System =
+= OPS Offers =
 
  * *Information availability* - high level data available across the network.
 
