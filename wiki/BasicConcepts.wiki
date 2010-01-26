@@ -9,7 +9,7 @@ The communication model of OPS is a typed topic publish-subscribe model. That me
 Presently OPS is available in Java (Windows, Linux, Unix, Mac) and C++ (Win32) programming languages. OPS can also be used under Matlab through the Java Matlab bridge available with Matlab. Implemetations for C++ (Linux/GCC) and C# is planned and are being developed.
 
 
-= Principles =
+== Basic Principles ==
 
  * Participants (i.e. applications residing in computer nodes) publish and subscribe on Typed topics
  * Decentralized architecture - there is no central service, each Participant carry enough of the middleware to "participate", i. e. communicate with each other.
