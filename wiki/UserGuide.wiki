@@ -1,22 +1,6 @@
 #summary User guide for OPS.
 
-= Introduction =
-
-This page is the official user guide for OPS 
-
-See also:
-
-http://www.boost.org
-
-http://www.netbeans.org
-
-https://javacc.dev.java.net/
-
-http://java.sun.com/
-
-http://openjdk.org
-
-= Content =
+= User Guide =
 
 The User Guide is under construction, please report issues:
   * [BasicConcepts Concepts]
