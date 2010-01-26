@@ -45,4 +45,11 @@ UserData* data = subscriber.getDataReference();
 std::vector<char> spares = data->spareBytes;
 }}}
 
+and in Java:
+
+{{{
+UserData data = subscriber.getData();
+byte[] spares = data->spareBytes;
+}}}
+
 but normally you do not need to care about them at all.
