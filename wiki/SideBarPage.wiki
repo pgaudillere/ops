@@ -1,11 +1,15 @@
 <wiki:toc max_depth="1" />
+ 
+= User Guide =
+
+The User Guide is under construction, please report issues:
   * [BasicConcepts Concepts]
   * [Installation]
-  * [SimpleCpp Simple Example]
   * [IDLLanguage Defining Data Types in IDL]
   * [OpsConfig Defining Topic and Configuration]
   * [SubscribingToTopic Subscribing to Topics]
   * [PublishingOnTopic Publishing on Topics]
+  * [HelloWorldExample Hello World Example]
   * [UsingKeys Using Keys]
   * [NamingConventions Convenient Naming Conventions]
   * Defining Behavior Through Quality of Services
@@ -23,6 +27,8 @@
     * [LargeMessages Sending Large Messages > 60000 bytes]
     * [PublisherName Using Publisher Name]
     * [AdvancedReferenceHandling Memory Managment]
-    * Threading
+    * [Threading Threading and Event Callbacks]
+    * [DataSlicing Data class slicing and spareBytes]
     * [HandlingErrors Error Handling]
-    * Request Reply
+    * [RequestReply Request Reply]
+  * [OutstandingIssues Outstanding Issues]
