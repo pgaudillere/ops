@@ -1,4 +1,3 @@
-
 = The OPS IDL Language = 
 The OPS IDL language is a language for defining data types (or data classes) in a programming language neutral way. The point is to define data types to be communicated over OPS once in OPS IDL and then ”compile” the IDL code into the desired target programming languages. In addition to a language specific data class it is also necessary to generate additional code to enable type safe and developer friendly communication for the data types.
 
@@ -68,7 +67,7 @@ This yields the following generated code in [SampleDataCpp C++] and [SampleDataJ
 
 == Inheritance ==
 
-In addition to the simple approach above OPS IDL also support inheritance to some extent. A class can extend one other class (multiple inheritance is not supported):
+In addition to the simple approach above, OPS IDL also supports inheritance to some extent. A class can extend one other class (multiple inheritance is not supported):
 
 {{{
 package samples;
@@ -80,7 +79,7 @@ class ChildData extends SampleData
 
 Which in this case makes child data extend all fields from SampleData.
 
-As we saw in the sample above it is possible to declare fields of another user defined type, for example we could declare a field of our new type as follows:
+As we saw in the sample above it is possible to declare fields of another user defined type, for example, we could declare a field of our new type as follows:
 
 {{{ChildData childData;}}}
 
@@ -90,7 +89,7 @@ What we normally would like to do when using inheritance is to have some sort of
 1.
 {{{SampleData childData;}}}
 
-While this is a valid declaration it does not give us the oppertunity to use the field as  a ChildData. This because OPS tries to use static memory allocation as often as possible and this type of declaration will generate code (if allowed by the target language) that allocates the field on the stack rather than on the heap and thus not allow it to change implementation dynamically . 
+While this is a valid declaration it does not give us the opportunity to use the field as  a ChildData. This because OPS tries to use static memory allocation as often as possible and this type of declaration will generate code (if allowed by the target language) that allocates the field on the stack rather than on the heap and thus not allow it to change implementation dynamically . 
 To tell the OPS code generators to allow for dynamic memory allocation and support for polymorfism the keyword virtual is used like this:
 
 2.
@@ -104,17 +103,17 @@ In case 1. The field would be declared the same way in C++ as in IDL:
 
 And thus have its default constructor called on creation of the container class.
 
-Case 2. on the other hand would generate a pointer declaration like this:
+Case 2. on the other hand, would generate a pointer declaration like this:
 
 {{{SampleData* childData;}}}
 
 Which then allows the implemation of the pointer to be decided and changed by the user dynamically. 
 
-Arrays are treated in the same manner, to declare an array of object whos implementation is unknown at compile time use the folloeing approach:
+Arrays are treated in the same manner, to declare an array of object whos implementation is unknown at compile time use the following approach:
 
 {{{virtual SampleData[] childDatas;}}}
 
-To see a useful situation when how and why to use inheritance in OPS, have a look at the WeatherStationExample.
+To see a useful situation when, how and why to use inheritance in OPS, have a look at the WeatherStationExample.
 
 == Comments ==
 
