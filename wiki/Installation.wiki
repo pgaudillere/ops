@@ -1,4 +1,3 @@
-
 =OPS – Installation (Windows XP)=
 
 ==Set Up Your Environment==
@@ -18,9 +17,9 @@
    Go to [http://code.google.com/p/ops/downloads/list Downloads] to get the latest 
    binaries for the languages you want to use OPS with. You will also need the
    latest Tools. Unpack all the zip files you downloaded directly under a common 
-   director (E.g. C:\OPS\, this directory will be refered to as OPS_DIR from here on).
+   directory (E.g. C:\OPS\, this directory will be referred to as OPS_DIR from here on).
 
-   After unpacking the zip files, make sure your directory structure look as follows:
+   After unpacking the zip files, make sure your directory structure looks as follows:
 
       * OPS_DIR
          * C++
@@ -46,7 +45,7 @@
 
    When you build your project, a dos prompt will pop up showing you the progress of 
    building java jar files. This output is quite verbose and it can be hard to see if it 
-   succeds or not. Checkout the following video to se what it should look like. If it does 
+   succeeds or not. Checkout the following video to see what it should look like. If it does 
    not work, it is probably because you have not put your Java JDK on your path correctly 
    and it will output something like "javac is not a command or program".
 
@@ -60,8 +59,8 @@
 
   Open the OPS Debugger (double click OPS_DIR\Tools\OPS Debugger\OPSDebugger2.jar)
   Once open, click "File->Open Project..." and browse to OPS_DIR\Examples\!TestAll\!DebugProject.xml
-  To the right you can now see the a drop down list with topics (!ChildTopic in this case).
-  Drag the Topic from the tree view on Subscribers or Publishers to subscribe to or publish on the topic.
+  To the right you can now see a drop down list with topics (!ChildTopic in this case).
+  Drag the Topic from the tree view on Subscribers or Publishers to subscribe to, or publish on the topic.
   Watch this video to see how to get some action:
 
   <wiki:video url="http://www.youtube.com/watch?v=W3bupBA16VM"/>
@@ -83,7 +82,7 @@
 ==Build and Run Java Examples ==
   ----
   Note, this instruction assumes you have [http://www.netbeans.org Netbeans IDE] installed.
-  if you haven't, you can still use the soucres provided under OPS_DIR\TestAllJavaTest\src
+  if you haven't, you can still use the sources provided under OPS_DIR\TestAllJavaTest\src
   to build with whatever tool you like to use. Just make sure you link 
   OPS_DIR\Java\OPSJLib.jar.
   ----
