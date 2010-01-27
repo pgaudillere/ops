@@ -73,7 +73,7 @@
   TestAll_Subscribe  and
   TestAll_Publish
 
-  Build the solution and make sure tou get no errors (at some installations you will get 
+  Build the solution and make sure you get no errors (at some installations you will get 
   linker warnings, this is a known issue.)
   When build succeds, hit run and both projects should open and start communicating. 
 
