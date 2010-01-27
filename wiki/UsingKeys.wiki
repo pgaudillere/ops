@@ -21,7 +21,7 @@ Topic topic = participant.createTopic("FooTopic");
 
 FooDataSubscriber sub = new FooDataSubscriber(topic);
 
-KeyFilterQoS myKeyFilter = new KeyFilterQoS("my_key")
+KeyFilterQoSPolicy myKeyFilter = new KeyFilterQoSPolicy ("my_key")
 sub.addFilterQoS(myKeyFilter);
 
 sub.start();
