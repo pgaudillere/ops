@@ -3,9 +3,17 @@
 ----
 = Build Instructions =
 
- # ==Checkout==
-   Checkout OPS to a directory of your choice e.g. "C:\OPS", see Source tab.
- # ==Install Boost==
+ # == Checkout OPS ==
+   Use an SVN client of your choice (e.g. [http://tortoisesvn.tigris.org Tortoise]) to
+   checkout OPS to a directory of your choice e.g. "C:\OPS" (OPS_DIR), see Source tab.
+   
+   You can choose to checkout either trunk, a tag or branch of your choice. Tags
+   should be compilable and be deployable right away. Trunk shoul normally build but is 
+   not sure to function properly. Refer to latest commit comments to see if there are 
+   known issues or unfinished work in progress. 
+
+
+ # == Install Boost ==
    Download pre-built binaries for boost 1.38 from http://www.boostpro.com/download
     * Under "Select Default Variants" in the installer choose the build versions of boost you need (depends on how you want to build and link OPS). If you dont know, select all.
     * Under "Choose Components", select at least the following (make sure you only select components for the compiler versions you need):
@@ -16,17 +24,33 @@
       # Boost System
       # Boost Thread
     Hit next, and choose Installation Directory to be for example "C:\Program Files\boost\boost_1_38" and start installation.
- # ==Build OPS Core for C++ with Visual Studio ==
+ # == Build OPS Core for C++ with Visual Studio ==
    Open 
-    "C++\Visual C++\OPSCrossPlatformCppSolution\OPSCrossPlatformCppSolution.sln" 
-   with Visual Studio. If you didn't install boost to "C:\Program Files\boost\boost_1_38" you need to repoint your include directories.
-  Build the solution and verify it compiles alright (you will have some warnings).
+
+    "OPS_DIR\C++\Visual C++\OPSCrossPlatformCppSolution\OPSCrossPlatformCppSolution.sln" 
+   
+   with Visual Studio. If you didn't install boost to "C:\Program Files\boost\boost_1_38" you need to repoint your include directories in the Visual Studio Project (see project properties-linker).
+  
+  Build the solution for configurations:
+  * "Debug" - for compiler setting Multi-threaded Debug
+  * "Debug DLL" - for compiler setting Multi-threaded Debug DLL
+  * "Release" - for compiler setting Multi-threaded Release
+  * "Release DLL" - for compiler setting Multi-threaded Release DLL
+
+  verify it compiles alright (you will have some warnings).
+
  # ==Build OPS Core for Java with Netbeans 6.7 ==
    Open from Netbeans
    "Java\OPSJLib" and "Libs\!ConfigurationLib".
    First build !ConfigurationLib and then OPSJLib. Both should compile without errors.
  # ==Build OPS IDL Builder with Netbeans 6.7 ==
    Open from Netbeans "Tools\OPS IDL Builder NB", make sure you check Open Required Projects and Open as main project. Right click the main project and select "Build All". This will build several projects and output quite a lot of text in the output window. Make sure you scroll to the bottom of the output window and verify it says "BUILD SUCCESSFUL". Try the OPS IDL Builder by choosing "Run" on the main project (OPS IDL Builder NB). 
+
+ # ==Deploy Binaries==
+   Once you have built all the projects, you can run deploy scripts to get them packaged up like the binaries you cna download from the Source tab of this page.
+
+   Under OPS_DIR\DeployScripts, there are three runnable bat files that package Java, C++ and Tools binaries. The deploy script are simple and you an edit them to fit your choices as you like. Just make sure you don't commit changes to them that include absolute directories or personal settings. 
+  
 
  # ==Next==
    Continue to the BuildingExamples page...
