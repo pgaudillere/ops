@@ -58,7 +58,7 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
  * *Information availability* - high level data available across the network.
 
- * *Low coupling* - hides the implementations of publishers and subscribers from each other and introduces no synchronous dependencies between them.
+ * *Low coupling* - hides the implementations of publishers and subscribers from each other and does not introduce any synchronous dependencies between them.
 
  * *Efficient dissemination of high level data* - High performance communication of data with low latency and high throughput.
 
@@ -66,13 +66,13 @@ http://ops.googlecode.com/svn/wiki/domain_model_overview.JPG
 
  * *Task isolation* - Facilitates isolation of e.g. time critical tasks through asynchronous communication and platform and language heterogeneity.
 
- * *Open architecture* - Make your interfaces available to anyone without letting them in to your code.
+ * *Open architecture* - Make your interfaces available to anyone without letting them into your code.
 
  * *Well defined interfaces* – data/hardware abstractions
 
- * *Language and platform heterogeneity* - Create distributed system that span across various operating systems and programming languages using the ones best sited for your particular problem.
+ * *Language and platform heterogeneity* - Create distributed systems that span across various operating systems and programming languages using the ones best suited for your particular problem.
 
- * *Different hardware configurations → same software* - Make your software components independent of where they and their dependencies are physically running.
+ * *Different hardware configurations → same software* - Make your software components independent of where they, and their dependencies, are physically running.
 
  * *Redundancy support* - Makes redundancy simple through use of parallel publishers of same data.
 
