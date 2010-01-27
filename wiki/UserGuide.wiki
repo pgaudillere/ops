@@ -23,6 +23,7 @@
     * [IDLCompilerTutorial IDL Builder]
   * Advanced Concepts and Features
     * [OpsMessage Understanding OPSObject and OPSMessage]
+    * [Serializing]
     * [LargeMessages Sending Large Messages > 60000 bytes]
     * [PublisherName Using Publisher Name]
     * [AdvancedReferenceHandling Memory Managment]
