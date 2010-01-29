@@ -3,8 +3,6 @@
 
 ==Introduction==
 
-= Introduction = 
-
 OPS primarily targets distributed real-time and embedded (DRE) systems and distributed control systems (DCS).
 
 OPS aims to offer asynchronous, efficient and type secure publish-subscribe communication between processes running on multiple platforms written in multiple programming languages.
