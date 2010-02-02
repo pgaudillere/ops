@@ -1,5 +1,5 @@
 #summary User guide for OPS.
-
+#SideBar SideBarPage
 = User Guide =
 
   * [BasicConcepts Concepts]
