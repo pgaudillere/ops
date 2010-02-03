@@ -1,6 +1,6 @@
 <wiki:toc max_depth="1" />
  
-=== User Guide ===
+=== [UserGuide User Guide] ===
   * [BasicConcepts Concepts]
   * [Installation]
   * [IDLLanguage Defining Data Types in IDL]
