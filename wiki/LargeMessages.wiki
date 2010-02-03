@@ -3,6 +3,8 @@
 ----
 *Note*, with topics that specify a sampleMaxSize > 60000 there can only be one publisher publishing at the same time. If two publishers write at the same time, there is a risk that messages will be lost and not delivered to the subscribers as expected.
 
+*Note also*, this feature requires the Topic to use its own port (See OpsConfig).
+
 *Note also*, this feature is NOT fully supported by the Java implementation of OPS.
 ----
 
