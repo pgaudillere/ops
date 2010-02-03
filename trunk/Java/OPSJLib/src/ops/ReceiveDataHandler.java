@@ -40,8 +40,8 @@ public class ReceiveDataHandler
     private boolean hasSubscribers;
     //private boolean hasPublishers;
     //private HashMap<String, MessageBuffer> messageBuffers = new HashMap<String, MessageBuffer>();
-    private Topic topic;
-    private Receiver transport;
+    //private Topic topic;
+    private Receiver receiver;
     private Vector<Subscriber> subscribers = new Vector<Subscriber>();
     private ObserverImpl bytesListener = new ObserverImpl();
     private Participant participant;
@@ -54,16 +54,16 @@ public class ReceiveDataHandler
     //private int byteOffset = 0;
     private static int FRAGMENT_HEADER_SIZE = 14;
 
-    public ReceiveDataHandler(Topic t, Participant part)
+    public ReceiveDataHandler(Topic t, Participant part, Receiver receiver)
     {
         bytes = new byte[t.getSampleMaxSize()];
         headerBytes = new byte[FRAGMENT_HEADER_SIZE];
         //trimmedBytes = new byte[t.getSampleMaxSize()];
         participant = part;
-        topic = t;
-        MulticastDomain domain = (MulticastDomain) participant.getConfig().getDomain(topic.getDomainID());
+        //topic = t;
+        //MulticastDomain domain = (MulticastDomain) participant.getConfig().getDomain(topic.getDomainID());
         fragmentSize = StaticManager.MAX_SIZE;
-        transport = new MulticastReceiver(t.getDomainAddress(), t.getPort(), domain.getLocalInterface(), t.getInSocketBufferSize());
+        this.receiver = receiver; //new MulticastReceiver(t.getDomainAddress(), t.getPort(), domain.getLocalInterface(), t.getInSocketBufferSize());
 
 
     }
@@ -86,7 +86,7 @@ public class ReceiveDataHandler
 
         if (subscribers.size() == 0)
         {
-            transport.getNewBytesEvent().deleteObserver(bytesListener);
+            receiver.getNewBytesEvent().deleteObserver(bytesListener);
             hasSubscribers = false;
         }
 
@@ -138,7 +138,7 @@ public class ReceiveDataHandler
 
     private void addNewBytesEventListener()
     {
-        transport.getNewBytesEvent().addObserver(bytesListener);
+        receiver.getNewBytesEvent().addObserver(bytesListener);
     }
 
     private void sendBytesToSubscribers(ReadByteBuffer readBuf) throws IOException
@@ -206,7 +206,7 @@ public class ReceiveDataHandler
             {
                 while (hasSubscribers)
                 {
-                    boolean recOK = transport.receive(headerBytes, bytes, expectedFragment * (fragmentSize - FRAGMENT_HEADER_SIZE));
+                    boolean recOK = receiver.receive(headerBytes, bytes, expectedFragment * (fragmentSize - FRAGMENT_HEADER_SIZE));
                 }
                 System.out.println("Leaving transport thread...");
 
