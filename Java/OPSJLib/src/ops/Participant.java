@@ -23,9 +23,6 @@ import configlib.SerializableFactory;
 import configlib.exception.FormatException;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import ops.archiver.OPSObjectFactory;
 
 /**
@@ -34,132 +31,159 @@ import ops.archiver.OPSObjectFactory;
  */
 public class Participant
 {
+    //This factory is used through static facade methods getInstance(...)
+    private static ParticipantFactory participantFactory = new ParticipantFactory();
 
-    public static HashMap<String, Participant> instances = new HashMap<String, Participant>();
-
+    /**
+     * Method for retreiving the default Participant instance for the @param domainID
+     * @param domainID
+     * @return a Participant or null if this method fails.
+     */
     public static synchronized Participant getInstance(String domainID)
     {
-        return getInstance(domainID, "DEFAULT_PARTICIPANT");
-
+        return participantFactory.getParticipant(domainID, "DEFAULT_PARTICIPANT");
     }
 
+    /**
+     * Method for retreiving the @param participantID Participant instance for @param domainID
+     * @param domainID
+     * @param participantID
+     * @return a Participant or null if this method fails.
+     */
     public static synchronized Participant getInstance(String domainID, String participantID)
     {
-        return getInstance(domainID, participantID, null);
+        return participantFactory.getParticipant(domainID, participantID, null);
     }
 
+    /**
+     * Method for retreiving the @param participantID Participant instance for
+     * @param domainID using @param file if this participant has not yet been created.
+     * @param domainID
+     * @param participantID
+     * @param file the file to use as configuration. Ignored if a participant for
+     * participantID already exist.
+     * @return a Participant or null if this method fails.
+     */
     public static synchronized Participant getInstance(String domainID, String participantID, File file)
     {
-        if (!instances.containsKey(participantID))
-        {
-            Participant newInst = new Participant(domainID, participantID, file);
-            Domain tDomain = newInst.config.getDomain(domainID);
-
-            if (tDomain != null)
-            {
-                instances.put(participantID, newInst);
-            } else
-            {
-                return null;
-            }
-        }
-        return instances.get(participantID);
+        return participantFactory.getParticipant(domainID, participantID, file);
     }
-    private String domainID;
+    protected String domainID;
     private String participantID;
-    private OPSConfig config;
-    private HashMap<String, ReceiveDataHandler> receiveDataHandlers = new HashMap<String, ReceiveDataHandler>();
-    private HashMap<String, SendDataHandler> sendDataHandlers = new HashMap<String, SendDataHandler>();
+    protected Domain domain;
+    private ErrorService errorService = new ErrorService();
+    
+    private ReceiveDataHandlerFactory receiveDataHandlerFactory = new ReceiveDataHandlerFactory();
+    private SendDataHandlerFactory sendDataHandlerFactory = new SendDataHandlerFactory();
 
-    private Participant(String domainID, String participantID, File configFile)
+    protected Participant(String domainID, String participantID, File configFile)
     {
         this.domainID = domainID;
         this.participantID = participantID;
         try
         {
+            OPSConfig config;
             if (configFile == null)
             {
                 config = OPSConfig.getConfig();
             } else
             {
                 config = OPSConfig.getConfig(configFile);
+                domain = config.getDomain(domainID);
             }
         } catch (IOException ex)
         {
-            config = null;
+            //TODO: rethrow
+            //config = null;
         } catch (FormatException ex)
         {
-            config = null;
+            //config = null;
+            //TODO: rethrow
         }
 
     }
 
+    /**
+     * Remove listener for Error events.
+     * @param listener
+     */
+    public void removeListener(Listener<Error> listener)
+    {
+        errorService.removeListener(listener);
+    }
+
+    /**
+     * Add listener for Error events.
+     * @param listener
+     */
+    public synchronized void addListener(Listener<Error> listener)
+    {
+        errorService.addListener(listener);
+    }
+
+    /**
+     * Report a core Error.
+     * @param className the class in which the error occured.
+     * @param methodName the method in which the error occured.
+     * @param errorMessage a message descriing the error.
+     */
+    void report(String className, String methodName, String errorMessage)
+    {
+        errorService.report(className, methodName, errorMessage);
+    }
+
+    /**
+     * Report a core Error
+     * @param error the Error to report.
+     */
+    void report(Error error)
+    {
+        errorService.report(error);
+    }
+
+    
+    /**
+     * Adds type support in form of a SerializablFactory to this participant.
+     * Normally this is the IDL project generated TypeFactory (e.g. FooProject.FooProjectTypeFactory())
+     * @param typeSupport
+     */
     public void addTypeSupport(SerializableFactory typeSupport)
     {
         OPSObjectFactory.getInstance().add(typeSupport);
     }
 
+    /**
+     * Creates a Topic that can be used to create Publishers and/or Subscribers.
+     * The fields of the Topic returned are fetched from the participants underlying config file.
+     * @param name
+     * @return a new Topic based on the config of this participant.
+     */
     public Topic createTopic(String name)
     {
-        Topic topic = config.getDomain(domainID).getTopic(name);
+        Topic topic = domain.getTopic(name);
         topic.setParticipantID(participantID);
         topic.setDomainID(domainID);
 
         return topic;
     }
 
-    ///By Singelton, one ReceiveDataHandler per Topic (Name)
-    //This instance map should be owned by Participant.
+    ///By modified singelton
     synchronized ReceiveDataHandler getReceiveDataHandler(Topic top)
     {
-        if (!receiveDataHandlers.containsKey(top.getName()))
-        {
-            receiveDataHandlers.put(top.getName(), new ReceiveDataHandler(top, this));
-
-        }
-        return receiveDataHandlers.get(top.getName());
+        return receiveDataHandlerFactory.getReceiveDataHandler(top, this);
+        
     }
 
+    ///By modified singelton
     synchronized SendDataHandler getSendDataHandler(Topic t) throws CommException
     {
-        if(t.getTransport().equals(Topic.TRANSPORT_MC))
-        {
-            try
-            {
-                return new McSendDataHandler(t, config.getDomain(domainID).getLocalInterface());
-            } catch (IOException ex)
-            {
-                throw new CommException("Error creating SendDataHndler. IOException -->" + ex.getMessage());
-            }
-        }
-        throw new CommException("No such Transport " + t.getTransport());
+        return sendDataHandlerFactory.getSendDataHandler(t, this);
+        
     }
 
-    public OPSConfig getConfig()
+    protected Domain getDomain()
     {
-        return config;
+        return domain;
     }
-//     public final Event multicastNotAvailableEvent = new Event();
-//    public final Event networkLostEvent = new Event();
-//    public final Event networkRestoredEvent = new Event();
-//    public final Event badHeaderReceivedEvent = new Event();
-//    public final Event unhandledExceptionEvent = new Event();
-//
-//    protected void handleMulticastNotAvailableError()
-//    {
-//        networkLostEvent.fireEvent("Multicast Error, possible loss of IP address.");
-//    }
-//    protected void handleNoRouteToUDPDestination(String destination)
-//    {
-//        networkLostEvent.fireEvent(destination);
-//    }
-//    protected void handleInvalidHeader(String reason)
-//    {
-//        badHeaderReceivedEvent.fireEvent(reason);
-//    }
-//    protected void handleUnhandledException(Exception e, String threadName)
-//    {
-//        unhandledExceptionEvent.fireEvent("Exception:" + e.getClass().getName() + " Thread:" + threadName);
-//
-//    }
+
 }
