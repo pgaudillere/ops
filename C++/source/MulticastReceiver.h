@@ -70,7 +70,7 @@ namespace ops
 				if(ec != 0 || option.value() != inSocketBufferSizent)
 				{
 					//std::cout << "Socket buffer size could not be set" << std::endl;
-					Participant::reportStaticError(&ops::BasicError("Socket buffer size could not be set"));
+					Participant::reportStaticError(&ops::BasicError("MulticastReceiver", "MulticastReceiver", "Socket buffer size could not be set"));
 				}
 			}
 			//boost::asio::socket_base::receive_buffer_size option(inSocketBufferSizent);
@@ -149,7 +149,7 @@ namespace ops
 			}
 			//notifyNewEvent(data);
 			//printf("___________handleReadError__________\n");
-			Participant::reportStaticError(&ops::BasicError("Error in MulticastReceiver::handleReadError()"));
+			Participant::reportStaticError(&ops::BasicError("MulticastReceiver", "handleReadError", "Error"));
 			
 			sock->async_receive(
 				boost::asio::buffer(data, max_length), 
@@ -173,7 +173,7 @@ namespace ops
 			}
 			catch(...)
 			{
-				Participant::reportStaticError(&ops::BasicError("Exception in MulticastReceiver::receive()"));
+				Participant::reportStaticError(&ops::BasicError("MulticastReceiver", "receive", "Exception in MulticastReceiver::receive()"));
 				return -1;
 			}
 

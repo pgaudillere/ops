@@ -34,7 +34,7 @@ namespace ops
 	{
 		message = NULL;
 		participant = part;
-		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getConfig()->getDomain(top.getDomainID()));
+		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getDomain());
 
 		IOService* ioService = participant->getIOService();
 
@@ -74,12 +74,12 @@ namespace ops
 			
 			if(byteSizePair.size == -5)
 			{
-				BasicError err("Connection was lost but is now reconnected.");
+				BasicError err("ReceiveDataHandler", "onNewEvent", "Connection was lost but is now reconnected.");
 				participant->reportError(&err);
 			}
 			else
 			{
-				BasicError err("Empty message or error.");
+				BasicError err("ReceiveDataHandler", "onNewEvent", "Empty message or error.");
 				participant->reportError(&err);
 			}
 			
@@ -102,7 +102,7 @@ namespace ops
 
 			if(currentFragment != (nrOfFragments - 1) && byteSizePair.size != OPSConstants::PACKET_MAX_SIZE)
 			{
-				BasicError err("Debug: Received broken package.");
+				BasicError err("ReceiveDataHandler", "onNewEvent", "Debug: Received broken package.");
 				participant->reportError(&err);
 			}
 
@@ -112,7 +112,7 @@ namespace ops
 			{//For testing only...
 				if(firstReceived)
 				{
-					BasicError err("Segment Error, sample will be lost.");
+					BasicError err("ReceiveDataHandler", "onNewEvent", "Segment Error, sample will be lost.");
 					participant->reportError(&err);
 					firstReceived = false;
 				}
@@ -160,7 +160,7 @@ namespace ops
 				else
 				{
 					//Inform participant that invalid data is on the network.
-					BasicError err("Unexpected type received. Type creation failed.");
+					BasicError err("ReceiveDataHandler", "onNewEvent", "Unexpected type received. Type creation failed.");
 					participant->reportError(&err);
 					message = oldMessage;
 				}
@@ -174,7 +174,7 @@ namespace ops
 		else
 		{
 			//Inform participant that invalid data is on the network.
-			BasicError err("Protocol ERROR.");
+			BasicError err("ReceiveDataHandler", "onNewEvent", "Protocol ERROR.");
 			participant->reportError(&err);
 			receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 		}

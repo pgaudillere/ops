@@ -64,7 +64,7 @@ namespace ops
 				//connect again
 				connected = false;
 				//std::cout << "connection failed tcp asynch" << std::endl;
-				Participant::reportStaticError(&ops::BasicError("connection failed tcp asynch"));
+				Participant::reportStaticError(&ops::BasicError("TCPClient", "handleConnect", "connection failed tcp asynch"));
 				sock->async_connect(*endpoint, boost::bind(&TCPClient::handleConnect, this, boost::asio::placeholders::error));
 			}
 			else
@@ -78,7 +78,7 @@ namespace ops
 				if(ec != 0 || option.value() != 16000000)
 				{
 					//std::cout << "Socket buffer size could not be set" << std::endl;
-					Participant::reportStaticError(&ops::BasicError("TCPClient::TCPClient(): Socket buffer size could not be set"));
+					Participant::reportStaticError(&ops::BasicError("TCPClient", "TCPClient", "Socket buffer size could not be set"));
 				}
 
 				//Disable Nagle algorithm
@@ -145,7 +145,7 @@ namespace ops
 			{
 				//handleReadError(error);
 				//printf("Error \n");
-				Participant::reportStaticError(&ops::BasicError("Error in receive."));
+				Participant::reportStaticError(&ops::BasicError("TCPClient", "handle_receive_sizeInfo", "Error in receive."));
 				notifyNewEvent(BytesSizePair("", -1));
 				
 				//Close the socket and try to connect again

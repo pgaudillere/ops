@@ -11,9 +11,11 @@ namespace ops
 	{
 	public:
 		static const int ERROR_CODE = 1;
-		BasicError(std::string mess)
+		BasicError(std::string className, std::string method, std::string mess)
 		{
 			message = mess;
+			this->className = className;
+			this-> method = method;
 		}
 		virtual int getErrorCode()
 		{
@@ -21,11 +23,13 @@ namespace ops
 		}
 		virtual std::string getMessage()
 		{
-			return message;
+			return className + "::" + method + "(): " + message;
 		}
 		virtual ~BasicError(){}
 	private:
 		std::string message;
+		std::string className;
+		std::string method;
 	};
 
 

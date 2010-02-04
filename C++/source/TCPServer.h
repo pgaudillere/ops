@@ -137,7 +137,7 @@ namespace ops
 				if(ec != 0 || option.value() != 16000000)
 				{
 					//std::cout << "Socket buffer size could not be set" << std::endl;
-					Participant::reportStaticError(&ops::BasicError("Error in TCPServer::TCPServer(): Socket buffer size could not be set"));
+					Participant::reportStaticError(&ops::BasicError("TCPServer", "TCPServer", "Socket buffer size could not be set"));
 				}
 				std::cout << "accept ok" << std::endl;
 				connectedSockets.push_back(sock);
