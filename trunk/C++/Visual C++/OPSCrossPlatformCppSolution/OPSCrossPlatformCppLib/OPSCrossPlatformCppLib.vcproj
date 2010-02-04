@@ -318,6 +318,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ErrorService.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\IOService.cpp"
 				>
 			</File>
@@ -390,11 +394,35 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ReceiveDataHandlerFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\ReceiveDataHandlerFactory.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Receiver.cpp"
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\ReceiverFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\ReceiverFactory.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\Reservable.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\SendDataHandlerFactory.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\source\SendDataHandlerFactory.h"
 				>
 			</File>
 			<File
@@ -513,6 +541,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\Domain.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\ErrorService.h"
 				>
 			</File>
 			<File

@@ -32,6 +32,7 @@
 #include "OPSObjectFactory.h"
 #include "DeadlineTimer.h"
 #include "Error.h"
+#include "ErrorService.h"
 #include "Publisher.h"
 #include "ParticipantInfoData.h"
 #include "Receiver.h"
@@ -45,11 +46,16 @@ namespace ops
 {
 	//Forward declaration..
 	class ReceiveDataHandler;
+	class ReceiveDataHandlerFactory;
+	class SendDataHandlerFactory;
+	class Domain;
 
-	class Participant : Runnable, Listener<int>, public Notifier<Error*>
+	class Participant : Runnable, Listener<int>
 	{
 		friend class Subscriber;
 		friend class Publisher;
+		friend class ReceiveDataHandlerFactory;
+		friend class SendDataHandlerFactory;
 	public:
 
 		///By Singelton, one Participant per participantID
@@ -85,11 +91,14 @@ namespace ops
 			return ioService;
 		}
 		
-		///Get pointer to config.
-		//TODO: return a copy instead?
-		OPSConfig* getConfig()
+		ErrorService* getErrorService()
 		{
-			return config;
+			return errorService;
+		}
+
+		Domain* getDomain()
+		{
+			return domain;
 		}
 
 		///Get a pointer to the data type factory used in this Participant. 
@@ -99,6 +108,11 @@ namespace ops
 			return objectFactory;
 		}
 
+		///Deprecated, use getErrorService()->addListener instead. Add a listener for OPS core reported Errors
+		void addListener(Listener<Error*>* listener);
+		///Deprecated, use getErrorService()->removeListener instead. Remove a listener for OPS core reported Errors
+		void removeListener(Listener<Error*>* listener);
+
 		//TODO: Review
 		~Participant();
 
@@ -106,12 +120,12 @@ namespace ops
 
 		///Constructor is private instance are aquired through getInstance()
 		Participant(std::string domainID_, std::string participantID_);
-		
-		///Representation of the ops config file used for this Participant
-		OPSConfig* config;
 
 		///The IOService used for this participant, it handles kommunikation and timers for all receivers, subsribers and meber timers of this Participant.
 		IOService* ioService;
+
+		///The ErrorService
+		ErrorService* errorService;
 
 		///The threadPool drives ioService. By default Participant use a SingleThreadPool i.e. only one thread drives ioService.
 		ThreadPool* threadPool;
@@ -124,40 +138,23 @@ namespace ops
 		///The ParticipantInfoData that partInfoPub will publish periodically
 		ParticipantInfoData partInfoData;
 
-		SendDataHandler* udpSendDataHandler;
-
-		std::map<std::string, SendDataHandler*> tcpSendDataHandlers;
-
-		///
-		ParticipantInfoDataListener* partInfoListener;
+		Domain* domain;		
 
 		Subscriber* partInfoSub;
 
-		///Receiver used to get a unigue port/id for this participant on the current machine
-		Receiver* udpRec;
-		ReceiveDataHandler* udpReceiveDataHandler;
+		ReceiveDataHandlerFactory* receiveDataHandlerFactory;
+		SendDataHandlerFactory* sendDataHandlerFactory;
 
-		///By Singelton, one ReceiveDataHandler per Topic (name) on this Participant
-		std::map<std::string, ReceiveDataHandler*> receiveDataHandlerInstances;
-
-		///By Singelton, one ReceiveDataHandler on multicast transport per port
-		std::map<int, ReceiveDataHandler*> multicastReceiveDataHandlerInstances;
-
-		///By Singelton, one ReceiveDataHandler on tcp transport per port
-		std::map<int, ReceiveDataHandler*> tcpReceiveDataHandlerInstances;
-
-		///Garbage vector for ReceiveDataHandlers, these can safely be deleted.
-		std::vector<ReceiveDataHandler*> garbageReceiveDataHandlers;
-		ops::Lockable garbageLock;
-
-		///Visible to friends only
+		//Visible to friends only
+		//TODO: Deprecate and delegate to receiveDataHandlerFactory???
 		ReceiveDataHandler* getReceiveDataHandler(Topic top);
 		void releaseReceiveDataHandler(Topic top);
 
 		///Visible to friends only
+		//TODO: Deprecate and delegate to sendDataHandlerFactory???
 		SendDataHandler* getSendDataHandler(Topic top);
-		void releaseSendDataHandler(Topic top);
-
+		void releaseSendDataHandler(Topic top);		
+		
 		///Mutex for ioService, used to shutdown safely
 		Lockable serviceMutex;
 

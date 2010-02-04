@@ -50,7 +50,7 @@ namespace ops
 			if(ec != 0 || option.value() != outSocketBufferSize)
 			{
 				//std::cout << "Socket buffer size could not be set" << std::endl;
-				Participant::reportStaticError(&ops::BasicError("Error in UDPSender::UDPSender(): Socket buffer size could not be set"));
+				Participant::reportStaticError(&ops::BasicError("UDPSender", "UDPSender", "Socket buffer size could not be set"));
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace ops
         }
         catch (...)
         {
-			Participant::reportStaticError(&ops::BasicError("Exception in UDPSender::sendTo(): Error when sending udp message."));
+			Participant::reportStaticError(&ops::BasicError("UDPSender", "sendTo", "Error when sending udp message."));
             return false;
         }
 

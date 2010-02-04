@@ -79,7 +79,7 @@ namespace ops
 				if(ec != 0 || option.value() != inSocketBufferSizent)
 				{
 					//std::cout << "Socket buffer size could not be set" << std::endl;
-					Participant::reportStaticError(&ops::BasicError("Socket buffer size could not be set"));
+					Participant::reportStaticError(&ops::BasicError("UDPReceiver", "UDPReceiver", "Socket buffer size could not be set"));
 				}
 			}
 
@@ -137,7 +137,7 @@ namespace ops
 				return;
 			}
 
-			Participant::reportStaticError(&ops::BasicError("Error in UDPReceiver::handleReadError()"));
+			Participant::reportStaticError(&ops::BasicError("UDPReceiver", "handleReadError", "Error"));
 			
 			sock->async_receive(
 				boost::asio::buffer(data, max_length), 
@@ -161,7 +161,7 @@ namespace ops
 			}
 			catch(...)
 			{
-				Participant::reportStaticError(&ops::BasicError("Exception in UDPReceiver::receive()"));
+				Participant::reportStaticError(&ops::BasicError("UDPReceiver", "receive", "Exception"));
 				return -1;
 			}
 

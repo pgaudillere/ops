@@ -31,12 +31,12 @@ void ParticipantInfoDataListener::onNewData(DataNotifier* notifier)
 		}
 		else
 		{
-			participant->reportError(&BasicError("ParticipantInfoDataListener::onNewData(): Data could not be cast as expected."));
+			participant->reportError(&BasicError("ParticipantInfoDataListener", "onNewData",  "Data could not be cast as expected."));
 		}
 	}
 	else
 	{
-		participant->reportError(&BasicError("ParticipantInfoDataListener::onNewData(): Subscriber could not be cast as expected."));
+		participant->reportError(&BasicError("ParticipantInfoDataListener", "onNewData", "Subscriber could not be cast as expected."));
 	}
 }
 ParticipantInfoDataListener::~ParticipantInfoDataListener()
