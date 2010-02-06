@@ -23,6 +23,7 @@ package ops;
 import configlib.ArchiverInOut;
 import configlib.Serializable;
 import java.io.IOException;
+import java.util.Vector;
 
 /**
  *
@@ -33,6 +34,7 @@ public class OPSObject implements Serializable
     protected String key = "k";
     protected String typesString = "";
     public byte[] spareBytes = new byte[0];
+    
 
     public OPSObject()
     {
@@ -75,6 +77,8 @@ public class OPSObject implements Serializable
     {
         return getClass().getName();
     }
+
+   
 
    
     
