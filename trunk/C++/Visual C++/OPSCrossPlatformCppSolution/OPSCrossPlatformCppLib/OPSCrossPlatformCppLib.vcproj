@@ -318,6 +318,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Domain.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\ErrorService.cpp"
 				>
 			</File>
@@ -335,10 +339,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\McUdpSendDataHandler.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\source\MulticastDomain.h"
 				>
 			</File>
 			<File

@@ -82,7 +82,7 @@ namespace ops
 		void onNewEvent(Notifier<int>* sender, int message);
 		
 		///Cleans up ReceiveDataHandlers
-		void cleanUpReceiveDataHandlers();
+		//void cleanUpReceiveDataHandlers();
 
 		///Get a pointer to the underlying IOService.
 		//TODO: private?

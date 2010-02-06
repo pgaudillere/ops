@@ -20,62 +20,41 @@
 #ifndef ops_Domain_h
 #define	ops_Domain_h
 
+#include <string>
+#include <vector>
+#include "Topic.h"
 #include "OPSObject.h"
-#include "NoSuchTopicException.h"
 
 namespace ops
 {
 	class Domain : public OPSObject
 	{
-	public:
-		Domain()
-		{
-			appendType(std::string("Domain"));
-		}
-
-		virtual std::vector<Topic* > getTopics()
-		{
-			return topics;
-		}
-		virtual Topic getTopic(std::string name)
-		{
-			for(unsigned int i = 0 ; i < topics.size(); i++)
-			{
-				if(topics[i]->getName() == name)
-				{
-					return *topics[i];
-				}
-			}
-			throw NoSuchTopicException("Topic " + name + " does not exist in ops config file.");
-			
-		}
-		bool existsTopic(std::string name)
-		{
-			for(unsigned int i = 0 ; i < topics.size(); i++)
-			{
-				if(topics[i]->getName() == name)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		std::string getDomainID()
-		{
-			return domainID;
-		}
-
-		void serialize(ArchiverInOut* archiver)
-		{
-			OPSObject::serialize(archiver);
-			archiver->inout(std::string("domainID"), domainID);
-			archiver->inout<Topic>(std::string("topics"), topics);
-		}
-		virtual ~Domain(){}
-
-	protected:
+		std::string domainAddress;
+		int timeToLive;
+		std::string localInterface;
+		int inSocketBufferSize;
+		int outSocketBufferSize;
 		std::vector<Topic* > topics;
 		std::string domainID;
+	public:
+		Domain();
+		std::string getDomainAddress();
+		virtual std::vector<Topic* > getTopics();
+		virtual Topic getTopic(std::string name);
+		bool existsTopic(std::string name);
+		std::string getDomainID();
+
+		
+		void serialize(ArchiverInOut* archiver);
+		int getTimeToLive();
+
+		std::string getLocalInterface();
+
+		int getInSocketBufferSize();
+		int getOutSocketBufferSize();
+		
+		virtual ~Domain();
+
 		
 	};
 
