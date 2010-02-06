@@ -2,7 +2,7 @@
 
 OPS is far from complete. Outstanding Issues and shortcomings include:
 
- * C++ Core does only work for Windows (Visual Studio Compilers)
+ * C++ Core only works for Windows (Visual Studio Compilers)
  * Documentation is Poor, there is no API docs
  * UDP and TCP Transport are not fully implemented and functional
  * C# support has been dropped until API:s stabilize
