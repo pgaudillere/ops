@@ -28,9 +28,12 @@
 
 namespace ops
 {   /*template<class DataType = OPSObject>*/
+	class Participant;
+
 	class Topic : public OPSObject
     {
 		friend class Domain;
+		friend class Participant;
     
 	public:
         Topic(std::string namee, int portt, std::string typeIDd, std::string domainAddresss);
@@ -57,7 +60,10 @@ namespace ops
 		__int64 getInSocketBufferSize();
 		void setInSocketBufferSize(__int64 size);
 
-
+		Participant* getParticipant()
+		{
+			return participant;
+		}
 
 		static std::string TRANSPORT_MC;
 		static std::string TRANSPORT_TCP;
@@ -80,6 +86,8 @@ namespace ops
 		std::string transport;
 		__int64 outSocketBufferSize;
 		__int64 inSocketBufferSize;
+
+		Participant* participant;
         
 
 		

@@ -5,10 +5,15 @@
 #include "McSendDataHandler.h"
 #include "McUdpSendDataHandler.h"
 #include "TCPSendDataHandler.h"
-#include "MulticastDomain.h"
+#include "Domain.h"
 
 namespace ops
 {
+
+	SendDataHandlerFactory::SendDataHandlerFactory()
+	{	
+		udpSendDataHandler = NULL;
+	}
 
 	
 	SendDataHandler* SendDataHandlerFactory::getSendDataHandler(Topic& top, Participant* participant)
@@ -16,7 +21,7 @@ namespace ops
 
 		if(top.getTransport() == Topic::TRANSPORT_MC)
 		{
-			return new McSendDataHandler(top, ((MulticastDomain*)participant->getDomain())->getLocalInterface(), 1); //TODO: make ttl configurable.
+			return new McSendDataHandler(top, participant->getDomain()->getLocalInterface(), 1); //TODO: make ttl configurable.
 		}
 		else if(top.getTransport() == Topic::TRANSPORT_UDP)
 		{
@@ -50,6 +55,10 @@ namespace ops
 		{
 			return NULL;
 		}
+
+	}
+	void SendDataHandlerFactory::releaseSendDataHandler(Topic& top, Participant* participant)
+	{
 
 	}
 

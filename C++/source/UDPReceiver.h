@@ -51,9 +51,19 @@ namespace ops
 				udp::resolver resolver(*ioService);
 				udp::resolver::query query(boost::asio::ip::host_name(),"");
 				udp::resolver::iterator it=resolver.resolve(query);
-				boost::asio::ip::address addr=(it++)->endpoint().address();
-				ipaddress = addr.to_string();
-				localEndpoint = new udp::endpoint(addr, bindPort);
+				udp::resolver::iterator end;
+				while(it != end)
+				{
+					boost::asio::ip::address addr = it->endpoint().address();
+					if(addr.is_v4())
+					{
+						ipaddress = addr.to_string();
+						localEndpoint = new udp::endpoint(addr, bindPort);
+						break;
+					}
+					it++;
+				}
+				
 				
 			}
 			else

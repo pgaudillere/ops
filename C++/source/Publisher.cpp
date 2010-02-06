@@ -20,7 +20,7 @@
 
 #include "Publisher.h"
 #include "Participant.h"
-#include "MulticastDomain.h"
+#include "Domain.h"
 
 namespace ops
 {
@@ -36,6 +36,7 @@ namespace ops
 		sleepOnSendFailed(true)
 	{
 		Participant* participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
+		//Participant* participant = topic.getParticipant();
 
 		sendDataHandler = participant->getSendDataHandler(topic);
 

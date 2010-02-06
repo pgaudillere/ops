@@ -20,6 +20,7 @@ namespace ops
 		ParticipantInfoDataListener* partInfoListener;
 	
 	public:
+		SendDataHandlerFactory();
 		SendDataHandler* getSendDataHandler(Topic& top, Participant* participant);
 		void releaseSendDataHandler(Topic& top, Participant* participant);		
 	};

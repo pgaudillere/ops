@@ -20,9 +20,10 @@
 
 #include "ReceiveDataHandler.h"
 #include "BasicError.h" 
-#include "MulticastDomain.h"
+#include "Domain.h"
 #include "Participant.h"
-
+#include "ReceiverFactory.h"
+#include "CommException.h"
 namespace ops
 {
 	///Constructor.
@@ -34,22 +35,15 @@ namespace ops
 	{
 		message = NULL;
 		participant = part;
-		MulticastDomain* mcDomain = dynamic_cast<MulticastDomain*>(participant->getDomain());
+		
 
-		IOService* ioService = participant->getIOService();
+		receiver = ReceiverFactory::getReceiver(top, participant);
 
-		if(top.getTransport() == Topic::TRANSPORT_MC)
+		if(receiver == NULL)
 		{
-			receiver = Receiver::create(top.getDomainAddress(), top.getPort(), ioService, mcDomain->getLocalInterface(), top.getInSocketBufferSize());
+			throw exceptions::CommException("Could not crete receiver");
 		}
-		else if(top.getTransport() == Topic::TRANSPORT_TCP)
-		{
-			receiver = Receiver::createTCPClient(top.getDomainAddress(), top.getPort(), ioService); 
-		}
-		else if(top.getTransport() == Topic::TRANSPORT_UDP)
-		{
-			receiver = Receiver::createUDPReceiver(0, ioService); 
-		}
+		
 		receiver->addListener(this);
 		receiver->asynchWait(memMap.getSegment(expectedSegment), memMap.getSegmentSize());
 

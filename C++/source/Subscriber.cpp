@@ -40,6 +40,7 @@ namespace ops
 		data = NULL;
 
 		participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
+		//participant = topic.getParticipant();
 		deadlineTimer = DeadlineTimer::create(participant->getIOService());
         filterQoSPolicyMutex = CreateMutex(NULL, false, NULL);
         newDataEvent = CreateEvent(NULL, true, false, NULL);

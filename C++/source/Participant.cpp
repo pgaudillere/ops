@@ -125,7 +125,7 @@ namespace ops
 	}
 	ops::Topic Participant::createParticipantInfoTopic()
 	{
-		ops::Topic infoTopic("ops.bit.ParticipantInfoTopic", 9494, "ops.ParticipantInfoData", ((MulticastDomain*)domain)->getDomainAddress());
+		ops::Topic infoTopic("ops.bit.ParticipantInfoTopic", 9494, "ops.ParticipantInfoData", domain->getDomainAddress());
 		infoTopic.setDomainID(domainID);
 		infoTopic.setParticipantID(participantID);
 		infoTopic.setTransport(Topic::TRANSPORT_MC);
@@ -141,6 +141,7 @@ namespace ops
 		delete errorService;
 		delete domain;
 		delete receiveDataHandlerFactory;
+		delete sendDataHandlerFactory;
 
 
 	}
@@ -169,7 +170,7 @@ namespace ops
 	void Participant::onNewEvent(Notifier<int>* sender, int message)
 	{
 		SafeLock lock(&serviceMutex);
-		cleanUpReceiveDataHandlers();
+		receiveDataHandlerFactory->cleanUpReceiveDataHandlers();
 		aliveDeadlineTimer->start(aliveTimeout);
 		//SafeLock lock2(&garbageLock);
 		if(partInfoPub == NULL)
@@ -194,7 +195,7 @@ namespace ops
 		Topic topic = domain->getTopic(name);
 		topic.setParticipantID(participantID);
 		topic.setDomainID(domainID);
-		
+		topic.participant = this;		
 		
 		return topic;
 	}
