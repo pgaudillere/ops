@@ -24,7 +24,7 @@ import configlib.Serializable;
 import configlib.SerializableCompositeFactory;
 import configlib.SerializableFactory;
 import ops.DefaultOPSConfigImpl;
-import ops.MulticastDomain;
+import ops.Domain;
 import ops.Topic;
 import ops.protocol.OPSMessage;
 
@@ -56,9 +56,13 @@ public class OPSObjectFactory extends SerializableCompositeFactory
                     {
                         return new DefaultOPSConfigImpl();
                     }
-                    if(type.equals("MulticastDomain"))
+                    if(type.equals("Domain"))
                     {
-                        return new MulticastDomain();
+                        return new Domain();
+                    }
+                    if(type.equals("Domain"))
+                    {
+                        return new Domain();
                     }
                     if(type.equals("Topic"))
                     {

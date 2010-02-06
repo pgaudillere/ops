@@ -30,28 +30,15 @@ import java.util.Vector;
  */
 public class Domain extends OPSObject
 {
-    protected Vector<Topic> topics = new Vector<Topic>();
+
+    private String domainAddress = "";
     private String domainID = "";
     private String localInterface = "0.0.0.0";
+    protected Vector<Topic> topics = new Vector<Topic>();
 
     public Domain()
     {
         appendType("Domain");
-    }
-
-    public Vector<Topic> getTopics()
-    {
-        return topics;
-    }
-
-    public String getDomainID()
-    {
-        return domainID;
-    }
-
-    public void setDomainID(String domainID)
-    {
-        this.domainID = domainID;
     }
     
 
@@ -66,34 +53,56 @@ public class Domain extends OPSObject
         }
         return null;
     }
-    public boolean existTopic(String name)
+
+    @Override
+    public void serialize(ArchiverInOut archive) throws IOException
     {
-        for (Topic topic : topics)
-        {
-            if(topic.getName().equals(name))
-            {
+        domainAddress = archive.inout("domainAddress", domainAddress);
+        domainID = archive.inout("domainID", domainID);
+        topics = (Vector<Topic>) archive.inoutSerializableList("topics", topics);
+        localInterface = archive.inout("localInterface", localInterface);
+    }
+
+
+    public Vector<Topic> getTopics() {
+        for (Topic topic : topics) {
+            if (topic.getDomainAddress().equals("")) {
+                topic.setDomainAddress(domainAddress);
+            }
+        }
+        return topics;
+    }
+
+     public boolean existTopic(String name) {
+        for (Topic topic : topics) {
+            if (topic.getName().equals(name)) {
                 return true;
             }
         }
         return false;
     }
 
-    @Override
-    public void serialize(ArchiverInOut archive) throws IOException
-    {
-        super.serialize(archive);
-        domainID = archive.inout("domainID", domainID);
-        topics = (Vector<Topic>) archive.inoutSerializableList("topics", topics);
-        localInterface = archive.inout("localInterface", localInterface);
+    public String getDomainAddress() {
+        return domainAddress;
     }
 
-    public String getLocalInterface()
-    {
+    public String getDomainID() {
+        return domainID;
+    }
+
+    public String getLocalInterface() {
         return localInterface;
     }
 
-    public void setLocalInterface(String localInterface)
-    {
+    public void setDomainAddress(String domainAddress) {
+        this.domainAddress = domainAddress;
+    }
+
+    public void setDomainID(String domainID) {
+        this.domainID = domainID;
+    }
+
+    public void setLocalInterface(String localInterface) {
         this.localInterface = localInterface;
     }
 
