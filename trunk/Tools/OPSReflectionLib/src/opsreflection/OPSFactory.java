@@ -20,7 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Vector;
-import ops.MulticastDomain;
+import ops.Domain;
 import ops.OPSObject;
 import ops.Participant;
 import ops.Publisher;
@@ -82,7 +82,7 @@ public class OPSFactory
 
     public String getDomainAdrress()
     {
-        return ((MulticastDomain)participant.getConfig().getDomain(domainID)).getDomainAddress();
+        return participant.getDomain().getDomainAddress();
     }
 
     public void save(File f) throws FileNotFoundException, IOException
@@ -107,7 +107,7 @@ public class OPSFactory
     {
         ArrayList<String> ret = new ArrayList<String>();
     
-        Vector<Topic> topics = participant.getConfig().getDomain(domainID).getTopics();
+        Vector<Topic> topics = participant.getDomain().getTopics();
         for (Topic topic : topics)
         {
             ret.add(topic.getName());
