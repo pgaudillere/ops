@@ -181,7 +181,7 @@ public class Participant
         
     }
 
-    protected Domain getDomain()
+    public Domain getDomain()
     {
         return domain;
     }
