@@ -18,6 +18,7 @@ namespace ops
 	
 	SendDataHandler* SendDataHandlerFactory::getSendDataHandler(Topic& top, Participant* participant)
 	{
+		SafeLock lock(&mutex);
 
 		if(top.getTransport() == Topic::TRANSPORT_MC)
 		{
@@ -59,6 +60,7 @@ namespace ops
 	}
 	void SendDataHandlerFactory::releaseSendDataHandler(Topic& top, Participant* participant)
 	{
+		SafeLock lock(&mutex);
 
 	}
 

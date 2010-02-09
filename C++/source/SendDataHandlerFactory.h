@@ -3,6 +3,7 @@
 
 #include <map>
 #include "Topic.h"
+#include "Lockable.h"
 namespace ops 
 {
 	class SendDataHandler;
@@ -18,6 +19,8 @@ namespace ops
 		std::map<std::string, SendDataHandler*> tcpSendDataHandlers;
 
 		ParticipantInfoDataListener* partInfoListener;
+
+		Lockable mutex;
 	
 	public:
 		SendDataHandlerFactory();
