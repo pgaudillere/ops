@@ -44,7 +44,7 @@ public class Subscriber extends Observable
     private long timeLastDataForTimeBase;
     private long timeBaseMinSeparationTime;
     private boolean reliable;
-    private ReceiveDataHandler topicHandler;
+    private ReceiveDataHandler receiveDataHandler;
     private Participant participant;
     private OPSMessage message;
     private final DeadlineNotifier deadlineNotifier;
@@ -53,7 +53,7 @@ public class Subscriber extends Observable
     {
         this.topic = t;
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
-        topicHandler = participant.getReceiveDataHandler(t);
+        receiveDataHandler = participant.getReceiveDataHandler(t);
         deadlineNotifier = DeadlineNotifier.getInstance();
     }
 
@@ -74,14 +74,14 @@ public class Subscriber extends Observable
         timeLastDataForTimeBase = System.currentTimeMillis();
 
         deadlineNotifier.add(this);
-        topicHandler.addSubscriber(this);
+        receiveDataHandler.addSubscriber(this);
 
     }
 
     public synchronized boolean stop()
     {
         deadlineNotifier.remove(this);
-        return topicHandler.removeSubscriber(this);
+        return receiveDataHandler.removeSubscriber(this);
     }
     public synchronized boolean isDeadlineMissed()
     {

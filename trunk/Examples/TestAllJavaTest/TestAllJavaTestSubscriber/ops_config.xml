@@ -7,7 +7,7 @@
         <domains>
 
             <!-- First multicast domain -->
-            <element type = "MulticastDomain">
+            <element type = "Domain">
                 <domainID>TestAllDomain</domainID>
                 <domainAddress>234.5.6.8</domainAddress>
                 <!--optional <timeToLive>1</timeToLive>-->
@@ -17,16 +17,18 @@
                 <topics>
                     <element type = "Topic">
                         <name>ChildTopic</name>
+                         <address>127.0.0.1</address>
                         <port>6689</port>
                         <dataType>TestAll.ChildData</dataType>
+                        <transport>tcp</transport>
                         <sampleMaxSize>2100000</sampleMaxSize>
-                         <inSocketBufferSize>16000000</inSocketBufferSize>
-                         <outSocketBufferSize>16000000</outSocketBufferSize>
+                        <inSocketBufferSize>16000000</inSocketBufferSize>
+                        <outSocketBufferSize>16000000</outSocketBufferSize>
                     </element>
                     <element type = "Topic">
-                      <name>BaseTopic</name>
-                      <port>6687</port>
-                      <dataType>TestAll.BaseData</dataType>
+                        <name>BaseTopic</name>
+                        <port>6687</port>
+                        <dataType>TestAll.BaseData</dataType>
                     </element>
                     <!-- TODO: Add more topics here... -->
                 </topics>

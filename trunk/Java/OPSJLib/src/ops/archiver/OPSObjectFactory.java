@@ -60,7 +60,7 @@ public class OPSObjectFactory extends SerializableCompositeFactory
                     {
                         return new Domain();
                     }
-                    if(type.equals("Domain"))
+                    if(type.equals("MulticastDomain"))
                     {
                         return new Domain();
                     }

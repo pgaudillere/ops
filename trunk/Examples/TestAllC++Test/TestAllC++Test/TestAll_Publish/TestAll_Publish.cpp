@@ -18,7 +18,7 @@
 
 int main(int argc, const char* args[])
 {
-	int mainSleep = 1000;
+	int mainSleep = 5000;
 	int nrOfFloats = 500;
 	int sleepEveryNrPackets = 100000;
 	int sendSleepTime = 1;
@@ -177,8 +177,9 @@ int main(int argc, const char* args[])
 	//Publish the data peridically and make a small changes to the data.
 	while(true)
 	{
-		pub.write(dataClone);
 		std::cout << "Writing " << dataClone->i <<  std::endl;
+		pub.write(dataClone);
+		
 		dataClone->i++;
 
 		if(dataClone->i % 20 == 0)
