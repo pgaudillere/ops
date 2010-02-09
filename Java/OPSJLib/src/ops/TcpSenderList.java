@@ -20,42 +20,59 @@
 package ops;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author angr
  */
-public class TcpSenderList
+public class TcpSenderList implements Sender
 {
     Vector<Socket> senders = new Vector<Socket>();
 
-    public boolean remove(Object o)
+    public synchronized  boolean remove(Socket o)
     {
         return senders.remove(o);
     }
 
-    public boolean add(Socket e)
+    public synchronized boolean add(Socket e)
     {
         return senders.add(e);
     }
     
-    public void sendTo(byte[] bytes, String ip, int port) throws IOException
+    public synchronized boolean sendTo(byte[] bytes, String ip, int port)
     {
         
-        for (Socket s : senders)
+        return this.sendTo(bytes, 0, bytes.length, ip, port);
+
+    }
+     public synchronized boolean sendTo(byte[] bytes, int offset, int size, String ip, int port) {
+       for (Socket s : senders)
         {
             if(s.getInetAddress().getHostAddress().equals(ip) && s.getPort() == port)
             {
-                s.getOutputStream().write(bytes);
-            }
-            
-        }
+                try {
+                    s.getOutputStream().write(bytes, offset, size);
 
+                } catch (IOException ex) {
+                    Logger.getLogger(TcpSenderList.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return true;
+            }
+
+        }
+        return false;
     }
 
-    void remove(String ip, int port) throws IOException
+    public synchronized boolean sendTo(byte[] bytes, int offset, int size, InetAddress ipAddress, int port) {
+        return this.sendTo(bytes, offset, size, ipAddress.getHostAddress(), port);
+    }
+
+    public synchronized void remove(String ip, int port) throws IOException
     {
         for (int i = 0 ; i < senders.size() ; i++)
         {
@@ -67,6 +84,10 @@ public class TcpSenderList
             
         }
     }
+
+
+
+
     
     
 }

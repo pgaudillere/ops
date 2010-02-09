@@ -16,9 +16,9 @@ class ParticipantFactory
 {
     private HashMap<String, Participant> instances = new HashMap<String, Participant>();
 
-    Participant getParticipant(String domainID, String string)
+    Participant getParticipant(String domainID, String participantID)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        return getParticipant(domainID, participantID, null);
     }
 
     Participant getParticipant(String domainID, String participantID, File file)

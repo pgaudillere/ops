@@ -14,6 +14,7 @@ import java.util.HashMap;
 class ReceiveDataHandlerFactory
 {
     private HashMap<String, ReceiveDataHandler> multicastReceiveDataHandlers = new HashMap<String, ReceiveDataHandler>();
+    private HashMap<String, ReceiveDataHandler> tcpReceiveDataHandlers = new HashMap<String, ReceiveDataHandler>();
 
     ReceiveDataHandler getReceiveDataHandler(Topic top, Participant participant)
     {
@@ -24,8 +25,21 @@ class ReceiveDataHandlerFactory
                 multicastReceiveDataHandlers.put(top.getName(), new ReceiveDataHandler(top, participant, ReceiverFactory.createReceiver(top, participant.getDomain().getLocalInterface())));
 
             }
+            return multicastReceiveDataHandlers.get(top.getName());
         }
-        return multicastReceiveDataHandlers.get(top.getName());
+        if(top.getTransport().equals(Topic.TRANSPORT_TCP))
+        {
+            if (!tcpReceiveDataHandlers.containsKey(top.getName()))
+            {
+                tcpReceiveDataHandlers.put(top.getName(), new ReceiveDataHandler(top, participant, ReceiverFactory.createReceiver(top, participant.getDomain().getLocalInterface())));
+
+            }
+            return tcpReceiveDataHandlers.get(top.getName());
+            
+        }
+        return null;
+
+        
     }
 
 }

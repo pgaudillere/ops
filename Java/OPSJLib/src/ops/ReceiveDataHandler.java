@@ -93,11 +93,11 @@ public class ReceiveDataHandler
         return result;
     }
 
-    private synchronized void onNewBytes(DatagramPacket p)
+    private synchronized void onNewBytes(Integer size)
     {
         try
         {
-            bytesReceived += p.getLength() - headerBytes.length;
+            bytesReceived += size - headerBytes.length;
 
             //System.arraycopy(bytes, expectedFragment*fragmentSize, by, 0, p.getLength());
 //            ReadByteBuffer readBuf = new ReadByteBuffer(bytes, expectedFragment*fragmentSize, fragmentSize);
@@ -220,7 +220,7 @@ public class ReceiveDataHandler
 
         public void update(Observable o, Object arg)
         {
-            onNewBytes((DatagramPacket) arg);
+            onNewBytes((Integer) arg);
         }
     }
 }

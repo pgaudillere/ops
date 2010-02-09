@@ -29,6 +29,7 @@ import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
 /**
@@ -44,10 +45,9 @@ public class MulticastReceiver implements Receiver
 
     byte[] tempBytes = new byte[StaticManager.MAX_SIZE];
     /** Creates a new instance of MulticastReceiver */
-    public MulticastReceiver(String ip, int port, String localInterface, int receiveBufferSize)
+    public MulticastReceiver(String ip, int port, String localInterface, int receiveBufferSize) throws IOException
     {
-        try
-        {
+        
             ipAddress = InetAddress.getByName(ip);
             SocketAddress mcSocketAddress = new InetSocketAddress(ipAddress, port);
             this.port = port;
@@ -75,14 +75,9 @@ public class MulticastReceiver implements Receiver
             //multicastSocket.bind(new InetSocketAddress(port));
             multicastSocket.setTimeToLive(1);
             multicastSocket.joinGroup(mcSocketAddress, NetworkInterface.getByInetAddress(InetAddress.getByName(localInterface)));
-        }
-        catch (IOException ex)
-        {
-            ex.printStackTrace();
-        }
-        
+       
     }
-    public MulticastReceiver(String ip, int port)
+    public MulticastReceiver(String ip, int port) throws IOException
     {
         this(ip, port, "0.0.0.0", 0);
     }
@@ -123,7 +118,7 @@ public class MulticastReceiver implements Receiver
             nioBuf.get(headerBytes, 0, headerBytes.length);
             nioBuf.get(bytes, offset, p.getLength() - headerBytes.length);
             
-            newBytesEvent.fireEvent(p);
+            newBytesEvent.fireEvent(new Integer(p.getLength()));
             return true;
         }
         catch (SocketTimeoutException ex)
