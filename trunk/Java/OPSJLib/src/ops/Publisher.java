@@ -41,20 +41,29 @@ public class Publisher
     private byte[] bytes;
     private ByteBuffer buffer;
     private Participant participant;
-    private final SendDataHandler sendDataHandler;
+    private  SendDataHandler sendDataHandler;
 
-    public Publisher(Topic topic) throws CommException
+    public Publisher(Topic topic)
     {
         this.topic = topic;
         bytes = new byte[topic.getSampleMaxSize()];
         buffer = ByteBuffer.allocateDirect(topic.getSampleMaxSize());
             
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
-        sendDataHandler = participant.getSendDataHandler(topic);
+        init();
 
     }
     protected void write(OPSObject o)
     {
+        if(sendDataHandler == null)
+        {
+            init();
+        }
+
+        if(sendDataHandler == null)
+            return;
+
+
 
         OPSMessage message = new OPSMessage();
         o.setKey(key);
@@ -167,6 +176,18 @@ public class Publisher
     public void setReliableWriteNrOfResends(int reliableWriteNrOfResends)
     {
         this.reliableWriteNrOfResends = reliableWriteNrOfResends;
+    }
+
+    private void init()
+    {
+        try
+        {
+            sendDataHandler = participant.getSendDataHandler(topic);
+        }
+        catch (CommException ex)
+        {
+            participant.report(this.getClass().getName(), "init", ex.getMessage());
+        }
     }
 
 
