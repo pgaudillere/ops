@@ -13,6 +13,8 @@ public class __classNameSubscriber extends Subscriber
     public __classNameSubscriber(Topic<__className> t) //throws ops.OPSTopicTypeMissmatchException
     {
         super(t);
+
+        participant.addTypeSupport(__className.getTypeFactory());
         
     }
 
