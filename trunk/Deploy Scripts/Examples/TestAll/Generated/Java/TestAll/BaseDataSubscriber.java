@@ -15,4 +15,9 @@ public class BaseDataSubscriber extends Subscriber
         super(t);
         
     }
+
+    public BaseData getData()
+    {
+        return (BaseData)super.getData();
+    }
 }

@@ -2,16 +2,13 @@
 
 package hello;
 
-import ops.CommException;
 import ops.Publisher;
 import ops.OPSObject;
 import ops.Topic;
-import ops.AckData;
-
 
 public class RequestHelloDataPublisher extends Publisher 
 {
-    public RequestHelloDataPublisher(Topic<RequestHelloData> t) throws ops.CommException
+    public RequestHelloDataPublisher(Topic<RequestHelloData> t)
     {
         super(t);
     }

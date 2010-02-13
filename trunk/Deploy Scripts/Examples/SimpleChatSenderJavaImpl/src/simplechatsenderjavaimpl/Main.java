@@ -10,9 +10,6 @@ import chat.ChatDataSubscriber;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ops.CommException;
 import ops.Participant;
 
 /**
@@ -27,51 +24,48 @@ public class Main
      */
     public static void main(String[] args)
     {
-        try
+
+        // TODO code application logic here
+        System.out.println("Please enter your name.");
+        String name;
+        Scanner in = new Scanner(System.in);
+        name = in.nextLine();
+        System.out.println("Name set to " + name);
+        Participant participant = Participant.getInstance("ChatDomain");
+        participant.addTypeSupport(new ChatExample.ChatExampleTypeFactory());
+        ChatDataPublisher publisher = new ChatDataPublisher(participant.createTopic("ChatTopic"));
+
+        ChatDataSubscriber subscriber = new ChatDataSubscriber(participant.createTopic("ChatTopic"));
+        subscriber.addObserver(new Observer()
         {
-            // TODO code application logic here
-            System.out.println("Please enter your name.");
-            String name;
-            Scanner in = new Scanner(System.in);
-            name = in.nextLine();
-            System.out.println("Name set to " + name);
-            Participant participant = Participant.getInstance("ChatDomain");
-            participant.addTypeSupport(new ChatExample.ChatExampleTypeFactory());
-            ChatDataPublisher publisher = new ChatDataPublisher(participant.createTopic("ChatTopic"));
 
-            ChatDataSubscriber subscriber = new ChatDataSubscriber(participant.createTopic("ChatTopic"));
-            subscriber.addObserver(new Observer()
+            public void update(Observable o, Object arg)
             {
-
-                public void update(Observable o, Object arg)
-                {
-                    onNewChatData((ChatData) arg);
-                }
-            });
-
-            subscriber.setDeadlineQoS(1000);
-            subscriber.deadlineEvent.addObserver(new Observer() {
-
-                public void update(Observable o, Object arg)
-                {
-                    System.out.println("Deadline Missed");
-                }
-            });
-            subscriber.start();
-
-
-            ChatData chatData = new ChatData();
-            chatData.sender.name = name;
-            while (true)
-            {
-                chatData.messageData.message = in.nextLine();
-                publisher.write(chatData);
+                onNewChatData((ChatData) arg);
             }
+        });
 
-        } catch (CommException ex)
+        subscriber.setDeadlineQoS(1000);
+        subscriber.deadlineEvent.addObserver(new Observer()
         {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+
+            public void update(Observable o, Object arg)
+            {
+                System.out.println("Deadline Missed");
+            }
+        });
+        subscriber.start();
+
+
+        ChatData chatData = new ChatData();
+        chatData.sender.name = name;
+        while (true)
+        {
+            chatData.messageData.message = in.nextLine();
+            publisher.write(chatData);
         }
+
+
 
 
     }
