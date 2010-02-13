@@ -15,4 +15,9 @@ public class ChildDataSubscriber extends Subscriber
         super(t);
         
     }
+
+    public ChildData getData()
+    {
+        return (ChildData)super.getData();
+    }
 }

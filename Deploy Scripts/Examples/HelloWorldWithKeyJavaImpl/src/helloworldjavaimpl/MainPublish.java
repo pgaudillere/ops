@@ -4,7 +4,6 @@ import hello.HelloData;
 import hello.HelloDataPublisher;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import ops.CommException;
 import ops.Participant;
 
 public class MainPublish
@@ -30,10 +29,7 @@ public class MainPublish
         } catch (InterruptedException ex)
         {
             Logger.getLogger(MainPublish.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (CommException ex)
-        {
-            Logger.getLogger(MainPublish.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } 
 
     }
 }

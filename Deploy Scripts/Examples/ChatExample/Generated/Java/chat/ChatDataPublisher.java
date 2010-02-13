@@ -2,16 +2,13 @@
 
 package chat;
 
-import ops.CommException;
 import ops.Publisher;
 import ops.OPSObject;
 import ops.Topic;
-import ops.AckData;
-
 
 public class ChatDataPublisher extends Publisher 
 {
-    public ChatDataPublisher(Topic<ChatData> t) throws ops.CommException
+    public ChatDataPublisher(Topic<ChatData> t)
     {
         super(t);
     }

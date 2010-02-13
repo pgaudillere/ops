@@ -15,4 +15,9 @@ public class TestDataSubscriber extends Subscriber
         super(t);
         
     }
+
+    public TestData getData()
+    {
+        return (TestData)super.getData();
+    }
 }

@@ -8,8 +8,8 @@
 #include "SerializableFactory.h"
 #include <string>
 
-#include "hello/RequestHelloData.h"
 #include "hello/HelloData.h"
+#include "hello/RequestHelloData.h"
 
 
 namespace HelloRequestReply {
@@ -20,13 +20,13 @@ class HelloRequestReplyTypeFactory : public ops::SerializableFactory
 public:
     ops::Serializable* create(std::string& type)
     {
-		if(type == "hello.RequestHelloData")
-		{
-			return new hello::RequestHelloData();
-		}
 		if(type == "hello.HelloData")
 		{
 			return new hello::HelloData();
+		}
+		if(type == "hello.RequestHelloData")
+		{
+			return new hello::RequestHelloData();
 		}
 		return NULL;
 
