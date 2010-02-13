@@ -45,7 +45,7 @@ public class Subscriber extends Observable
     private long timeBaseMinSeparationTime;
     private boolean reliable;
     private ReceiveDataHandler receiveDataHandler;
-    private Participant participant;
+    protected Participant participant;
     private OPSMessage message;
     private final DeadlineNotifier deadlineNotifier;
 
