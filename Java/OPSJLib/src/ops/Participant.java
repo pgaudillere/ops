@@ -34,6 +34,13 @@ public class Participant
     //This factory is used through static facade methods getInstance(...)
     private static ParticipantFactory participantFactory = new ParticipantFactory();
 
+    protected String domainID;
+    private String participantID;
+    protected Domain domain;
+    private ErrorService errorService = new ErrorService();
+    private ReceiveDataHandlerFactory receiveDataHandlerFactory = new ReceiveDataHandlerFactory();
+    private SendDataHandlerFactory sendDataHandlerFactory = new SendDataHandlerFactory();
+
     /**
      * Method for retreiving the default Participant instance for the @param domainID
      * @param domainID
@@ -68,13 +75,7 @@ public class Participant
     {
         return participantFactory.getParticipant(domainID, participantID, file);
     }
-    protected String domainID;
-    private String participantID;
-    protected Domain domain;
-    private ErrorService errorService = new ErrorService();
     
-    private ReceiveDataHandlerFactory receiveDataHandlerFactory = new ReceiveDataHandlerFactory();
-    private SendDataHandlerFactory sendDataHandlerFactory = new SendDataHandlerFactory();
 
     protected Participant(String domainID, String participantID, File configFile)
     {

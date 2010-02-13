@@ -48,6 +48,10 @@ public class Domain extends OPSObject
         {
             if(topic.getName().equals(name))
             {
+                if(topic.getDomainAddress().equals(""))
+                {
+                    topic.setDomainAddress(domainAddress);
+                }
                 return topic;
             }
         }
