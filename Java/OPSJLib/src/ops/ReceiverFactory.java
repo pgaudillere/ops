@@ -24,7 +24,7 @@ class ReceiverFactory
             }
             else if (topic.getTransport().equals(Topic.TRANSPORT_TCP))
             {
-                return new TcpClient(topic.getDomainAddress(), topic.getPort(), topic.getInSocketBufferSize());
+                return new TcpClientReceiver(topic.getDomainAddress(), topic.getPort(), topic.getInSocketBufferSize());
             }
 
         }

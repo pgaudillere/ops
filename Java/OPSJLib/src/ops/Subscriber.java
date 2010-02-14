@@ -122,11 +122,12 @@ public class Subscriber extends Observable
         {
             if (System.currentTimeMillis() - timeLastDataForTimeBase > timeBaseMinSeparationTime || timeBaseMinSeparationTime == 0)
             {
-                lastDeadlineTime = System.currentTimeMillis();
-                timeLastDataForTimeBase = System.currentTimeMillis();
+                long currentTime = System.currentTimeMillis();
+                lastDeadlineTime = currentTime;
+                timeLastDataForTimeBase = currentTime;
 
                 sampleTime2 = sampleTime1;
-                sampleTime1 = System.currentTimeMillis();
+                sampleTime1 = currentTime;
                 setChanged();
                 data = o;//(OPSObject) o.clone();
                 notifyObservers(data);
