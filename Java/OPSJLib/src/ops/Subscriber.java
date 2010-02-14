@@ -1,22 +1,22 @@
 /**
-*
-* Copyright (C) 2006-2009 Anton Gravestam.
-*
-* This file is part of OPS (Open Publish Subscribe).
-*
-* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
+ *
+ * Copyright (C) 2006-2009 Anton Gravestam.
+ *
+ * This file is part of OPS (Open Publish Subscribe).
+ *
+ * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
 
-* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public License
-* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ops;
 
 import java.util.ArrayList;
@@ -29,10 +29,10 @@ import ops.protocol.OPSMessage;
  *
  * @author Anton Gravestam
  */
-public class Subscriber extends Observable 
+public class Subscriber extends Observable
 {
-    public Event deadlineEvent = new Event();
 
+    public Event deadlineEvent = new Event();
     private Topic topic;
     private String identity = "";
     private ArrayList<FilterQoSPolicy> filterQoSPolicies = new ArrayList<FilterQoSPolicy>();
@@ -48,6 +48,8 @@ public class Subscriber extends Observable
     protected Participant participant;
     private OPSMessage message;
     private final DeadlineNotifier deadlineNotifier;
+    private volatile long sampleTime1;
+    private volatile long sampleTime2;
 
     public Subscriber(Topic t)
     {
@@ -83,6 +85,7 @@ public class Subscriber extends Observable
         deadlineNotifier.remove(this);
         return receiveDataHandler.removeSubscriber(this);
     }
+
     public synchronized boolean isDeadlineMissed()
     {
         if (System.currentTimeMillis() - lastDeadlineTime > deadlineTimeout)
@@ -121,10 +124,13 @@ public class Subscriber extends Observable
             {
                 lastDeadlineTime = System.currentTimeMillis();
                 timeLastDataForTimeBase = System.currentTimeMillis();
+
+                sampleTime2 = sampleTime1;
+                sampleTime1 = System.currentTimeMillis();
                 setChanged();
                 data = o;//(OPSObject) o.clone();
                 notifyObservers(data);
-                synchronized(newDataEvent)
+                synchronized (newDataEvent)
                 {
                     newDataEvent.notifyAll();
                 }
@@ -133,11 +139,27 @@ public class Subscriber extends Observable
         }
     }
 
+    public double getInboundRate()
+    {
+        double sampleRate = 1.0/((sampleTime1 - sampleTime2) / 1000.0);
+        double fakeRate  = 1.0/((System.currentTimeMillis() - sampleTime1) / 1000.0);
+
+        if(sampleRate < fakeRate)
+        {
+            return sampleRate;
+        }
+        else
+        {
+            return fakeRate;
+        }
+         
+    }
+
     public OPSObject waitForNextData(long millis)
     {
         try
         {
-            synchronized(newDataEvent)
+            synchronized (newDataEvent)
             {
                 newDataEvent.wait(millis);
             }
@@ -147,7 +169,7 @@ public class Subscriber extends Observable
         {
             return null;
         }
-       
+
     }
 
     public synchronized void addFilterQoSPolicy(FilterQoSPolicy qosPolicy)
@@ -168,7 +190,7 @@ public class Subscriber extends Observable
 
     synchronized void notifyNewOPSMessage(OPSMessage message)
     {
-        if(messageFilters.applyFilter(message))
+        if (messageFilters.applyFilter(message))
         {
             this.message = message;
             notifyNewOPSObject(message.getData());
@@ -199,7 +221,6 @@ public class Subscriber extends Observable
     {
         return message;
     }
-    
 
     protected synchronized OPSObject getData()
     {
@@ -221,8 +242,10 @@ public class Subscriber extends Observable
         return messageFilters;
     }
 
+    public Topic getTopic()
+    {
+        return topic;
+    }
 
-
-
-
+    
 }

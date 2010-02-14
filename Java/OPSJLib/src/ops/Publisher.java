@@ -1,22 +1,22 @@
 /**
-*
-* Copyright (C) 2006-2009 Anton Gravestam.
-*
-* This file is part of OPS (Open Publish Subscribe).
-*
-* OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
+ *
+ * Copyright (C) 2006-2009 Anton Gravestam.
+ *
+ * This file is part of OPS (Open Publish Subscribe).
+ *
+ * OPS (Open Publish Subscribe) is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
 
-* OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public License
-* along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * OPS (Open Publish Subscribe) is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
+ */
 package ops;
 
 import java.io.IOException;
@@ -30,8 +30,9 @@ import ops.protocol.OPSMessage;
  *
  * @author Anton Gravestam
  */
-public class Publisher 
+public class Publisher
 {
+
     private Topic topic;
     private int currentPublicationID = 1;
     private String name = "";
@@ -41,28 +42,35 @@ public class Publisher
     private byte[] bytes;
     private ByteBuffer buffer;
     private Participant participant;
-    private  SendDataHandler sendDataHandler;
+    private SendDataHandler sendDataHandler;
+    private long lastPublishTime;
+    private volatile long sampleTime1;
+    private volatile long sampleTime2;
 
     public Publisher(Topic topic)
     {
         this.topic = topic;
         bytes = new byte[topic.getSampleMaxSize()];
         buffer = ByteBuffer.allocateDirect(topic.getSampleMaxSize());
-            
+
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
         init();
 
     }
+
     protected void write(OPSObject o)
     {
-        if(sendDataHandler == null)
+        if (sendDataHandler == null)
         {
             init();
         }
 
-        if(sendDataHandler == null)
+        if (sendDataHandler == null)
+        {
             return;
-
+        }
+        sampleTime2 = sampleTime1;
+        sampleTime1 = System.currentTimeMillis();
 
 
         OPSMessage message = new OPSMessage();
@@ -83,11 +91,11 @@ public class Publisher
 
             buffer.position(0);
             OPSArchiverOut archiverOut = new OPSArchiverOut(buf);
-        
+
             archiverOut.inout("message", message);
 
             //If o has spare bytes, write them to the end of the buf
-            if(o.spareBytes.length > 0)
+            if (o.spareBytes.length > 0)
             {
                 buf.write(o.spareBytes, 0, o.spareBytes.length);
             }
@@ -98,7 +106,7 @@ public class Publisher
             //transport.send(archiverOut.getBytes());
             buffer.position(0);
             buffer.get(bytes);
-            sendDataHandler.sendData(bytes,sizeToSend, topic);
+            sendDataHandler.sendData(bytes, sizeToSend, topic);
             //sendDataHandler.sendData(buffer.array(), buf.position(), topic);
 
         }
@@ -108,10 +116,12 @@ public class Publisher
             ex.printStackTrace();
         }
         incCurrentPublicationID();
-        
-        
+
+
     }
+
     
+
     public void writeAsOPSObject(OPSObject o)
     {
         write(o);
@@ -119,10 +129,14 @@ public class Publisher
 
     private void incCurrentPublicationID()
     {
-        if(currentPublicationID < 10000)
-            currentPublicationID ++;
+        if (currentPublicationID < 10000)
+        {
+            currentPublicationID++;
+        }
         else
+        {
             currentPublicationID = 1;
+        }
     }
 
     public String getName()
@@ -154,19 +168,34 @@ public class Publisher
     {
         return currentPublicationID;
     }
-    
-    
 
     public int getReliableWriteTimeout()
     {
         return reliableWriteTimeout;
     }
 
+    public double getOutboundRate()
+    {
+        double sampleRate = 1.0/((sampleTime1 - sampleTime2) / 1000.0);
+        double fakeRate  = 1.0/((System.currentTimeMillis() - sampleTime1) / 1000.0);
+
+        if(sampleRate < fakeRate)
+        {
+            return sampleRate;
+        }
+        else
+        {
+            return fakeRate;
+        }
+    }
+
+    
+    
+
     public void setReliableWriteTimeout(int reliableWriteTimeout)
     {
         this.reliableWriteTimeout = reliableWriteTimeout;
     }
-        
 
     public int getReliableWriteNrOfResends()
     {
@@ -189,6 +218,4 @@ public class Publisher
             participant.report(this.getClass().getName(), "init", ex.getMessage());
         }
     }
-
-
 }
