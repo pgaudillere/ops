@@ -163,6 +163,10 @@ public class Participant
     public Topic createTopic(String name)
     {
         Topic topic = domain.getTopic(name);
+        
+        if(topic == null)
+            return null;
+
         topic.setParticipantID(participantID);
         topic.setDomainID(domainID);
 
