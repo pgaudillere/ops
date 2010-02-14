@@ -37,7 +37,9 @@ class MulticastSender implements Sender
         {
             multicastSocket.setSendBufferSize(outSocketBufferSize);
         }
-        multicastSocket.setTimeToLive(1);
+        multicastSocket.setTimeToLive(ttl);
+
+
 
 
     }
