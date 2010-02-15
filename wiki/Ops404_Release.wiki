@@ -6,7 +6,7 @@ When applicable, file Issues for the bullets on this page and tag them 4.0.4.
 
 
 === API Changes ===
-  * participant.addTypSupport(myTypeSupport) will be removed from normal use case and will be handled automatically by generated subscribers as needed.
+  * participant.addTypeSupport() will be removed from normal usage and will be handled automatically by generated subscribers as needed.
   * We will add methods getInboundRate and get outboundRate to subscribers and publishers.
   * clone methods in java
   * object printers based on configuration lib
