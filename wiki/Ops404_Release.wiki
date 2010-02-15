@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 
-This page is intended to be a place where developers can summarize what is going to change in OPS 4.0.4
+This page is intended to be a place where developers can summarize what they want to change in OPS 4.0.4
 
 
 === API ===
