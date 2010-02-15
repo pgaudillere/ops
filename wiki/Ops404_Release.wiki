@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#sidebar page
 
 This page is intended to be a place where developers can summarize what they want to change in OPS 4.0.4
 
