@@ -36,6 +36,7 @@ public class TcpSenderList implements Sender
 {
 
     Vector<Socket> senders = new Vector<Socket>();
+    private static final String sizeHeader = "opsp_tcp_size_info";
 
     public synchronized boolean remove(Socket o)
     {
@@ -63,7 +64,7 @@ public class TcpSenderList implements Sender
                 try
                 {
                     //First, prepare and send a package of fixed length 22 with information about the size of the data package
-                    String sizeHeader = "opsp_tcp_size_info";
+                    
                     s.getOutputStream().write(sizeHeader.getBytes());
                     ByteBuffer bb = ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(size);
                     s.getOutputStream().write(bb.array());
