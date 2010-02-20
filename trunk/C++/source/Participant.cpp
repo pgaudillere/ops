@@ -30,6 +30,7 @@
 #include "McUdpSendDataHandler.h"
 #include "McSendDataHandler.h"
 #include "TCPSendDataHandler.h"
+#include "CommException.h"
 //#include "ParticipantInfoDataSubscriber.h"
 
 
@@ -83,7 +84,7 @@ namespace ops
 		if(!ioService)
 		{
 			//Error, should never happen, throw?
-                        std::exception ex(/*"Could not dreateIOService"*/);
+            exceptions::CommException ex("No config on rundirectory");
 			throw ex;
 		}
 
@@ -93,7 +94,7 @@ namespace ops
 		if(!config)
 		{
 			
-                        std::exception ex(/*"No config on rundirectory"*/);
+			exceptions::CommException ex("No config on rundirectory");
 			throw ex;
 		}
 
