@@ -334,6 +334,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Lockable.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\source\McSendDataHandler.h"
 				>
 			</File>
@@ -609,6 +613,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\include\OPSObjectFactory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\include\OPSTypeDefs.h"
 				>
 			</File>
 			<File
