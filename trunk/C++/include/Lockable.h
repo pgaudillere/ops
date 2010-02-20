@@ -20,12 +20,17 @@
 
 #ifndef ops_LockableH
 #define ops_LockableH
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+
+
+namespace boost
+{
+    class mutex;
+}
 
 namespace ops
 {
 class SafeLock;
+
 
 //TODO: Make this class platform independant
 class Lockable
@@ -33,47 +38,23 @@ class Lockable
 	friend class SafeLock;
 
 private:
-	HANDLE mutex;
+
+        boost::mutex* mutex;
+
 public:
 
-	Lockable()
-	{
-		mutex = CreateMutex(NULL, false, NULL);
-	}
-	Lockable(const Lockable& l)
-	{
-		mutex = CreateMutex(NULL, false, NULL);
-	}
-	Lockable & operator = (const Lockable& l)
-	{
-		mutex = CreateMutex(NULL, false, NULL);
-		return *this;
-	}
+	Lockable();
+	Lockable(const Lockable& l);
+	Lockable & operator = (const Lockable& l);
 	/*Lockable& Lockable::operator=(const Lockable& l) 
 	{
 	  CopyObj(rhs);
 	  return *this;
 	}*/
 
-	bool lock()
-	{
-		if(WaitForSingleObject(mutex, INFINITE) != WAIT_FAILED)
-		{
-			return true;
-		}
-		return false;
-	}
-	void unlock()
-	{
-		ReleaseMutex(mutex);
-    }
-	virtual ~Lockable()
-	{
-    	CloseHandle(mutex);  
-		
-		
-
-    }
+	bool lock();
+	void unlock();
+	virtual ~Lockable();
 
 };
 

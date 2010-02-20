@@ -17,6 +17,10 @@ namespace ops
 		{
 			return message.c_str();
 		}
+                ~NoSuchTopicException() throw()
+                {
+                    
+                }
 	private:
 		std::string message;
 

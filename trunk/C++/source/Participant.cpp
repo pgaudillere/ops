@@ -17,7 +17,7 @@
 * You should have received a copy of the GNU Lesser General Public License
 * along with OPS (Open Publish Subscribe).  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include "OPSTypeDefs.h"
 #include "Participant.h"
 #include "SingleThreadPool.h"
 #include "MultiThreadPool.h"
@@ -83,7 +83,8 @@ namespace ops
 		if(!ioService)
 		{
 			//Error, should never happen, throw?
-			throw std::exception("Could not dreateIOService");
+                        std::exception ex(/*"Could not dreateIOService"*/);
+			throw ex;
 		}
 
 
@@ -91,7 +92,9 @@ namespace ops
 		OPSConfig* config = OPSConfig::getConfig();
 		if(!config)
 		{
-			throw std::exception("No config on rundirectory");
+			
+                        std::exception ex(/*"No config on rundirectory"*/);
+			throw ex;
 		}
 
 		//Get the domain from config.

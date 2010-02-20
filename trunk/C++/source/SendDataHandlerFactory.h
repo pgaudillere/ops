@@ -4,29 +4,28 @@
 #include <map>
 #include "Topic.h"
 #include "Lockable.h"
-namespace ops 
+namespace ops
 {
-	class SendDataHandler;
-	class ParticipantInfoDataListener;
-	class Participant;
+    class SendDataHandler;
+    class ParticipantInfoDataListener;
+    class Participant;
 
+    class SendDataHandlerFactory
+    {
+    private:
+        SendDataHandler* udpSendDataHandler;
 
-	class SendDataHandlerFactory
-	{
-	private:
-		SendDataHandler* udpSendDataHandler;
+        std::map<std::string, SendDataHandler*> tcpSendDataHandlers;
 
-		std::map<std::string, SendDataHandler*> tcpSendDataHandlers;
+        ParticipantInfoDataListener* partInfoListener;
 
-		ParticipantInfoDataListener* partInfoListener;
+        Lockable mutex;
 
-		Lockable mutex;
-	
-	public:
-		SendDataHandlerFactory();
-		SendDataHandler* getSendDataHandler(Topic& top, Participant* participant);
-		void releaseSendDataHandler(Topic& top, Participant* participant);		
-	};
+    public:
+        SendDataHandlerFactory();
+        SendDataHandler* getSendDataHandler(Topic& top, Participant* participant);
+        void releaseSendDataHandler(Topic& top, Participant* participant);
+    };
 
 }
 

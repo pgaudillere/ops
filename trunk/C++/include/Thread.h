@@ -40,7 +40,7 @@ namespace ops
 		bool join();
 		virtual void run() = 0;
 		//boost::thread* GetThreadHandle();
-		static void Thread::EntryPoint(void* pthis);
+		static void EntryPoint(void* pthis);
     
     protected:
         bool started;
