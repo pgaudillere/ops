@@ -1,4 +1,6 @@
 
+
+#include "OPSTypeDefs.h"
 #include "Topic.h"
 #include "OPSConstants.h"
 #include "Participant.h"

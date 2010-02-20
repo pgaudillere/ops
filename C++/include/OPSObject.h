@@ -46,7 +46,7 @@ namespace ops
         //char publicationPriority;
         std::string typesString;
 
-		void appendType(std::string& type)
+		void appendType(const std::string& type)
 		{
 			typesString = type + " " + typesString;
 		}

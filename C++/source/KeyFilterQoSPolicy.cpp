@@ -1,4 +1,4 @@
-
+#include "OPSTypeDefs.h"
 #include "KeyFilterQoSPolicy.h"
 #include "OPSObject.h"
 namespace ops
