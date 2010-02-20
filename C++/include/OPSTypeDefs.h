@@ -8,7 +8,7 @@
 #ifndef _OPSTYPEDEFS_H
 #define	_OPSTYPEDEFS_H
 
-#ifndef WIN_32
+#ifndef WIN32
 
 #define OPS_LINUX
 
@@ -17,6 +17,8 @@
 #ifdef OPS_LINUX
 
 #include "inttypes.h"
+
+#define NETWORK_BYTE_ORDER
 
 
 
