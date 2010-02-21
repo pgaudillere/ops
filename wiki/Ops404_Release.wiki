@@ -14,3 +14,7 @@ When applicable, file Issues for the bullets on this page and tag them 4.0.4.
 === Transports ===
   * tcp and mc-udp transport implemented in both c++ and java 
   * automatically chosen "in process" transport for java when applicable
+
+=== Platform Support ===
+  * Support for OPS C++ under linux.
+  * Support for development under linux (OPS IDL Builder may need tweeks to work well under linux).
