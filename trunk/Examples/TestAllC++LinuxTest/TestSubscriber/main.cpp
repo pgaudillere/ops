@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include "Receiver.h"
+#include "PrintArchiverOut.h"
 
 //Create a class to act as a listener for OPS data and deadlines
 
@@ -87,8 +88,11 @@ public:
             {
                 packagesLost++;
             }
-            lastPacket = data.i;
-            std::cout << data.baseText << " " << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl; // << std::endl;
+            //lastPacket = data.i;
+            //std::cout << data.baseText << " " << " " << sub->getMessage()->getPublicationID() << " From: " << sub->getMessage()->getPublisherName() << ". Lost messages: " << packagesLost << std::endl; // << std::endl;
+
+            ops::PrintArchiverOut printer(std::cout);
+            printer.printObject("childData", &data);
 
         }
         else
@@ -97,7 +101,9 @@ public:
             TestAll::BaseData* data;
             data = (TestAll::BaseData*)baseSub->getMessage()->getData();
             if (data == NULL) return;
-            std::cout << data->baseText << " " << baseSub->getMessage()->getPublicationID() << " From: " << baseSub->getMessage()->getPublisherName() << std::endl;
+            //std::cout << data->baseText << " " << baseSub->getMessage()->getPublicationID() << " From: " << baseSub->getMessage()->getPublisherName() << std::endl;
+            ops::PrintArchiverOut printer(std::cout);
+            printer.printObject("baseData", data);
         }
     }
     ///Override from ops::DeadlineMissedListener, called if no new data has arrived within deadlineQoS.
