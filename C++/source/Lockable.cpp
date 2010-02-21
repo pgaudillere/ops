@@ -42,7 +42,7 @@ namespace ops
 
     Lockable::~Lockable()
     {
-        mutex->unlock();
+        //mutex->unlock();
         delete mutex;
 
 
