@@ -22,13 +22,12 @@
 
 
 
-namespace ops
-{
+
     typedef  int64_t __int64;
-    typedef  short int __int16;
+    typedef  int16_t __int16;
 
 
-}
+
 
 #endif
 
