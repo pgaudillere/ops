@@ -49,6 +49,7 @@
         <itemPath>../../include/Participant.h</itemPath>
         <itemPath>../../include/ParticipantInfoData.h</itemPath>
         <itemPath>../../include/ParticipantInfoDataListener.h</itemPath>
+        <itemPath>../../include/PrintArchiverOut.h</itemPath>
         <itemPath>../../include/Publisher.h</itemPath>
         <itemPath>../../include/ReceiveDataHandler.h</itemPath>
         <itemPath>../../include/ReceiveTransport.h</itemPath>
@@ -167,6 +168,7 @@
             <pElem>../../include</pElem>
             <pElem>../../../../boost/boost_1_42_0/include</pElem>
           </incDir>
+          <commandLine>-pthread</commandLine>
         </ccTool>
         <archiverTool>
         </archiverTool>
