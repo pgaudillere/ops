@@ -11,6 +11,7 @@
 #include "TestAll/TestData.h"
 #include "TestData.h"
 #include "BaseData.h"
+#include "Fruit.h"
 
 
 namespace TestAll {
@@ -32,6 +33,7 @@ public:
 	std::string s;
 	TestData test2;
 	TestAll::TestData* testPointer;
+	Fruit fruit;
 	std::vector<bool> bos;
 	std::vector<char> bs;
 	std::vector<int> is;
@@ -85,6 +87,7 @@ public:
 		archive->inout(std::string("s"), s);
 		archive->inout(std::string("test2"), test2);
 		testPointer = (TestAll::TestData*) archive->inout(std::string("testPointer"), testPointer);
+		archive->inout(std::string("fruit"), fruit);
 		archive->inout(std::string("bos"), bos);
 		archive->inout(std::string("bs"), bs);
 		archive->inout(std::string("is"), is);
@@ -120,6 +123,7 @@ public:
 		narrRet->test2 = test2;
 		if(narrRet->testPointer) delete narrRet->testPointer;
 		narrRet->testPointer = (TestAll::TestData*)testPointer->clone();
+		narrRet->fruit = fruit;
 		narrRet->bos = bos;
 		narrRet->bs = bs;
 		narrRet->is = is;
