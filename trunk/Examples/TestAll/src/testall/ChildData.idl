@@ -17,6 +17,7 @@ class ChildData extends BaseData
     TestData test2;
     virtual TestAll.TestData testPointer;
 
+    Fruit fruit;
     //TestMore.MoreData more;
 
     boolean[] bos;

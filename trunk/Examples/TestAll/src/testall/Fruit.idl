@@ -1,0 +1,8 @@
+package TestAll;
+
+enum Fruit
+{
+    APPLE,
+    BANANA,
+    PEAR
+}
