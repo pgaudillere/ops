@@ -154,11 +154,13 @@ public class OPSIDLProject implements Project
             {
                 try
                 {
-                    int size = fileObject.getInputStream().available();
-                    byte[] textBytes = new byte[size];
-                    fileObject.getInputStream().read(textBytes);
-                    projectIDLParser.parse(fileObject.getName(), new String(textBytes), io);
-                    fileObject.getInputStream().close();
+                    //int size = fileObject.getInputStream().available();
+
+                    //byte[] textBytes = new byte[size];
+                    //fileObject.getInputStream().read(textBytes);
+                    projectIDLParser.parse(fileObject.getName(), fileObject.asText()/*new String(textBytes)*/, io);
+                    //fileObject.getInputStream().close();
+
                     
                 } catch (IOException ex)
                 {
@@ -166,6 +168,7 @@ public class OPSIDLProject implements Project
                 }
             }
         }
+
     }
     public void build()
     {
@@ -190,6 +193,7 @@ public class OPSIDLProject implements Project
         {
             //io.getErr().println("Build failed.");
         }
+
 
     }
 

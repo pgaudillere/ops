@@ -17,10 +17,17 @@ import java.util.ArrayList;
  */
 public class IDLClass
 {
+    private static final int CLASS_TYPE = 0;
+    public static final int ENUM_TYPE = 1;
+
+
+    private int type = CLASS_TYPE;
     private String packageName;
     private String className;
     private String baseClassName;
     private ArrayList<IDLField> fields;
+
+    private ArrayList<String> enumNames = new ArrayList<String>();
     /** Creates a new instance of IDLClass */
     public IDLClass(String className, String packageName, ArrayList<IDLField> fields)
     {
@@ -80,5 +87,31 @@ public class IDLClass
     {
         return baseClassName;
     }
+
+    public int getType()
+    {
+        return type;
+    }
+
+    public void setType(int type)
+    {
+        this.type = type;
+    }
+
+    public ArrayList<String> getEnumNames()
+    {
+        return enumNames;
+    }
+
+    public void setEnumNames(ArrayList<String> enumNames)
+    {
+        this.enumNames = enumNames;
+    }
+
+    
+
+
+
+
     
 }

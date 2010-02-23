@@ -62,7 +62,10 @@ public class FileParser implements IDLFileParser
 
             public void onEvent(String eventData, ParserEvent e)
             {
-                System.out.println("enums are ignored.");
+                System.out.println("enum declare");
+                idlClass.setClassName(eventData);
+                idlClass.setType(IDLClass.ENUM_TYPE);
+                pendingComment = "";
             }
         });
         parser.enumCloseEvent.add(new ParserEventCallback<String>()
@@ -70,7 +73,9 @@ public class FileParser implements IDLFileParser
 
             public void onEvent(String eventData, ParserEvent e)
             {
-                System.out.println("enums are ignored.");
+                 System.out.println("enum close");
+                parseComplete = true;
+                pendingComment = "";
             }
         });
         parser.enumElementEvent.add(new ParserEventCallback<String>()
@@ -78,7 +83,9 @@ public class FileParser implements IDLFileParser
 
             public void onEvent(String eventData, ParserEvent e)
             {
-                System.out.println("enums are ignored.");
+                 System.out.println("enum element = " + eventData);
+                idlClass.getEnumNames().add(eventData);
+                pendingComment = "";
             }
         });
         parser.fieldDeclareEvent.add(new ParserEventCallback<IDLField>()
@@ -113,6 +120,7 @@ public class FileParser implements IDLFileParser
         try
         {
             parser.specification();
+            System.out.println("Parsing complete");
             return idlClass;
         } 
         catch (parsing.javaccparser.ParseException parseException)
