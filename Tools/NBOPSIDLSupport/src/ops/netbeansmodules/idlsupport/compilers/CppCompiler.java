@@ -53,9 +53,17 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
             this.projectDirectory = projectDirectory;
             for (IDLClass iDLClass : idlClasses)
             {
-                compileDataClass(iDLClass);
-                compileSubscriber(iDLClass);
-                compilePublisher(iDLClass);
+                if (iDLClass.getType() == IDLClass.ENUM_TYPE)
+                {
+                    System.out.println("Compile enum");
+                    compileEnum(iDLClass);
+                }
+                else
+                {
+                    compileDataClass(iDLClass);
+                    compileSubscriber(iDLClass);
+                    compilePublisher(iDLClass);
+                }
 //            compileHelper(iDLClass);
             }
             compileTypeSupport(idlClasses, extractProjectName(projectDirectory));
@@ -122,6 +130,47 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         createdFiles += "\"" + getOutputFileName() + "\"\n";
 
     }
+     private void compileEnum(IDLClass idlClass) throws IOException
+    {
+        String className = idlClass.getClassName();
+
+        String packageName = idlClass.getPackageName();
+        String packageFilePart = packageName.replace(".", "/");
+        setOutputFileName(projectDirectory + Cpp_DIR + "/" + packageFilePart + "/" + className + ".h");
+
+        String resource = "/ops/netbeansmodules/idlsupport/templates/cppenumtemplate.tpl";
+        setTemplateTextFromResource(resource);
+        //setTemplateFileName("templates/javatemplate.tpl");
+        setTabString("    "); //Default is "\t"
+        setEndlString("\n"); //Default is "\r\n"
+        //Get the template file as a String
+        String templateText = getTemplateText();
+        //Replace regular expressions in the template file.
+        templateText = templateText.replace(CLASS_NAME_REGEX, className);
+        templateText = templateText.replace(CLASS_COMMENT_REGEX, "");
+        templateText = templateText.replace(PACKAGE_DECLARATION_REGEX, getPackageDeclaration(packageName));
+        templateText = templateText.replace(PACKAGE_CLOSER_REGEX, getPackageCloser(packageName));
+        templateText = templateText.replace(PACKAGE_NAME_REGEX, packageName);
+
+        templateText = templateText.replace(DECLARATIONS_REGEX, getEnumDeclarations(idlClass));
+
+        //Save the modified text to the output file.
+        saveOutputText(templateText);
+        createdFiles += "\"" + getOutputFileName() + "\"\n";
+    }
+
+    private String getEnumDeclarations(IDLClass idlClass)
+    {
+        String ret = "";
+        for (int i = 0; i < idlClass.getEnumNames().size(); i++)
+        {
+            ret += tab(1) + "const static int " + idlClass.getEnumNames().get(i) + " = " + i + ";" + endl();
+            
+        }
+        ret += tab(1) + "const static int UNDEFINED = " + idlClass.getEnumNames().size() + ";" + endl();
+        return ret;
+    }
+
 
     public String getName()
     {

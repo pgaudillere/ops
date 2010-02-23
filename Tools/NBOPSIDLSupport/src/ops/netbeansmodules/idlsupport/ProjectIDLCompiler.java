@@ -4,12 +4,14 @@
  */
 package ops.netbeansmodules.idlsupport;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 import ops.netbeansmodules.idlsupport.compilers.CppCompiler;
 import ops.netbeansmodules.idlsupport.compilers.DebugProjectCompiler;
 import ops.netbeansmodules.idlsupport.compilers.JavaCompiler;
 import ops.netbeansmodules.idlsupport.compilers.VisualStudio2008CppExampleCompiler;
+import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
 import parsing.IDLClass;
 
@@ -32,8 +34,44 @@ public class ProjectIDLCompiler
         this.project = project;
     }
 
+    void recursiveDelete(FileObject fileObject)
+    {
+        for (FileObject childFileObject : fileObject.getChildren())
+        {
+            if(!childFileObject.getName().equals(".svn") && !childFileObject.getName().equals(".cvs"))
+            {
+                if(childFileObject.isFolder())
+                {
+                    recursiveDelete(childFileObject);
+                }
+                else
+                {
+                    try
+                    {
+                        childFileObject.delete();
+                    }
+                    catch (IOException ex)
+                    {
+                        Exceptions.printStackTrace(ex);
+                    }
+                }
+
+            }
+        }
+    }
+
     public void compile(Vector<IDLClass> idlClasses)
     {
+        FileObject projectDirectory = project.getProjectDirectory();
+        for (FileObject fileObject : projectDirectory.getChildren())
+        {
+            if(fileObject.getName().equals("Generated"))
+            {
+                recursiveDelete(fileObject);
+            }
+        }
+        
+        
         if (project.getProperties().generateCpp)
         {
             cppCompiler.compileDataClasses(idlClasses, project.getProjectDirectory().getPath() + "/Generated/");
