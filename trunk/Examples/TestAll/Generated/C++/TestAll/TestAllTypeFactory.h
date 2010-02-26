@@ -8,10 +8,10 @@
 #include "SerializableFactory.h"
 #include <string>
 
-#include "TestAll/TestData.h"
-#include "TestAll/ChildData.h"
-#include "TestAll/Fruit.h"
 #include "TestAll/BaseData.h"
+#include "TestAll/ChildData.h"
+#include "TestAll/TestData.h"
+#include "TestAll/Fruit.h"
 
 
 namespace TestAll {
@@ -22,21 +22,21 @@ class TestAllTypeFactory : public ops::SerializableFactory
 public:
     ops::Serializable* create(std::string& type)
     {
-		if(type == "TestAll.TestData")
+		if(type == "TestAll.BaseData")
 		{
-			return new TestAll::TestData();
+			return new TestAll::BaseData();
 		}
 		if(type == "TestAll.ChildData")
 		{
 			return new TestAll::ChildData();
 		}
+		if(type == "TestAll.TestData")
+		{
+			return new TestAll::TestData();
+		}
 		if(type == "TestAll.Fruit")
 		{
 			return new TestAll::Fruit();
-		}
-		if(type == "TestAll.BaseData")
-		{
-			return new TestAll::BaseData();
 		}
 		return NULL;
 

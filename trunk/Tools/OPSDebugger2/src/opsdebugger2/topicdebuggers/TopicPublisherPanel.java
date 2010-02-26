@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import ops.OPSEnum;
 import ops.OPSObject;
 import ops.Publisher;
 
@@ -561,7 +562,7 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                             {
                                 //ok, dosent work output will be zero
                             }
-                           byte val = (byte) ((Double) engine.get("__y")).doubleValue();
+                            byte val = (byte) ((Double) engine.get("__y")).doubleValue();
                             fields[i].setByte(o, val);
 
                         }
@@ -692,6 +693,20 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                                                 String val = (String) table.getModel().getValueAt(index, 1);
                                                 fields[i].set(o, val);
 
+                                            } else
+                                            {
+                                                if (fields[i].get(o) instanceof ops.OPSEnum)
+                                                {
+
+
+                                                    String val = (String) table.getModel().getValueAt(index + 1, 1);
+                                                    ((OPSEnum)fields[i].get(o)).setByValueString(val);
+                                                    Object oe = fields[i].get(o);
+                                                    fields[i].set(o, fields[i].get(o));
+                                                    System.out.println("");
+                                                    //fields[i].set(o, val);
+                                                }
+
                                             }
                                         }
                                     }
@@ -709,9 +724,9 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
 
                     }
                 }
-            } catch (ClassCastException ex)
+            } catch (Exception ex)
             {
-                //ex.printStackTrace();
+                ex.printStackTrace();
             }
             index++;
 
@@ -802,6 +817,9 @@ private void publishOnceButtonActionPerformed(java.awt.event.ActionEvent evt) {/
                 o instanceof Double ||
                 o instanceof Long ||
                 o instanceof Boolean)
+        {
+            return true;
+        } else if (o instanceof ops.OPSEnum)
         {
             return true;
         } else

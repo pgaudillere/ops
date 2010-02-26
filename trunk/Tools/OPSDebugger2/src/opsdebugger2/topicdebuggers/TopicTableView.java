@@ -752,7 +752,8 @@ public class TopicTableView extends javax.swing.JPanel implements Observer
                 o instanceof Float ||
                 o instanceof Double ||
                 o instanceof Long ||
-                o instanceof Boolean)
+                o instanceof Boolean ||
+                o instanceof Enum)
         {
             return true;
         } else
