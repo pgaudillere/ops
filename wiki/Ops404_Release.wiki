@@ -18,3 +18,6 @@ When applicable, file Issues for the bullets on this page and tag them 4.0.4.
 === Platform Support ===
   * Support for OPS C++ under linux.
   * Support for development under linux (OPS IDL Builder may need tweeks to work well under linux).
+
+=== IDL ===
+  * Enums
