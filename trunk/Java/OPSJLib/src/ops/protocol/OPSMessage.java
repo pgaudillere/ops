@@ -173,5 +173,22 @@ public class OPSMessage extends OPSObject
         data = (OPSObject) archive.inout("data", data);
 
     }
+
+    @Override
+    public Object clone()
+    {
+        OPSMessage cloneResult = (OPSMessage) super.clone();
+        cloneResult.messageType = messageType;
+        cloneResult.publisherPriority = publisherPriority;
+        cloneResult.publicationID = publicationID;
+        cloneResult.publisherName = publisherName;
+        cloneResult.topicName = topicName;
+        cloneResult.topLevelKey = topLevelKey;
+        cloneResult.address = address;
+        cloneResult.data = (OPSObject)data.clone();
+        return cloneResult;
+    }
+    
+
     
 }
