@@ -31,6 +31,7 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
     final static String DECLARATIONS_REGEX = "__declarations";
     final static String SERIALIZE_REGEX = "__serialize";
     final static String DESERIALIZE_REGEX = "__deserialize";
+    final static String CLONE_BODY_REGEX = "__cloneBody";
     final static String SIZE_REGEX = "__size";
     final static String JAVA_DIR = "Java";
     Vector<IDLClass> idlClasses;
@@ -138,6 +139,7 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         templateText = templateText.replace(CONSTRUCTOR_BODY_REGEX, getConstructorBody(idlClass));
         templateText = templateText.replace(DECLARATIONS_REGEX, getDeclarations(idlClass));
         templateText = templateText.replace(SERIALIZE_REGEX, getSerialize(idlClass));
+        templateText = templateText.replace(CLONE_BODY_REGEX, getCloneBody(idlClass));
         //Save the modified text to the output file.
         saveOutputText(templateText);
         createdFiles += "\"" + getOutputFileName() + "\"\n";
@@ -257,6 +259,43 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
         String ret = "";
         return ret;
     }
+    
+    private String getCloneBody(IDLClass idlClass)
+    {
+        String ret = "";
+        for (IDLField field : idlClass.getFields())
+        {
+            if (field.isIdlType())
+            {
+                if (!field.isArray())
+                {
+                    ret += tab(2) + "cloneResult." +  field.getName() + " = (" + field.getType() + ")this." + field.getName() + ".clone();" + endl();
+                }
+                else
+                {
+                    ret += tab(2) + "java.util.Collections.copy(" + "cloneResult." +  field.getName() + ", this." + field.getName() + ");" + endl();
+
+                }
+            }
+
+            //"Arrays.copyOf(original, newLength)";
+            else if (field.isArray())
+            {
+
+                ret += tab(2) + "java.util.Collections.copy(" + "cloneResult." +  field.getName() + ", this." + field.getName() + ");" + endl();
+
+            }
+            else
+            {
+                ret += tab(2) + "cloneResult." +  field.getName() + " = this." + field.getName() + ";" + endl();
+            }
+
+        }
+        return ret;
+        
+    }
+
+
 
     private String getEnumDeclarations(IDLClass idlClass)
     {

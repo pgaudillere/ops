@@ -32,6 +32,13 @@ __constructorBody
         super.serialize(archive);
 __serialize
     }
+    @Override
+    public Object clone()
+    {
+        __className cloneResult = (__className)super.clone();
+__cloneBody
+        return cloneResult;
+    }
 
     private static class TypeFactory implements SerializableFactory
     {

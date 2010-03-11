@@ -23,6 +23,7 @@ package ops;
 import configlib.ArchiverInOut;
 import configlib.Serializable;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Vector;
 
 /**
@@ -62,9 +63,13 @@ public class OPSObject implements Serializable
     }
 
     @Override
-    protected Object clone() 
+    public Object clone()
     {
-        return null;
+        OPSObject cloneResult = new OPSObject();
+        cloneResult.typesString = this.typesString;
+        cloneResult.key = this.key;
+        cloneResult.spareBytes = Arrays.copyOf(this.spareBytes, this.spareBytes.length);
+        return cloneResult;
     }
 
     public void serialize(ArchiverInOut archive) throws IOException

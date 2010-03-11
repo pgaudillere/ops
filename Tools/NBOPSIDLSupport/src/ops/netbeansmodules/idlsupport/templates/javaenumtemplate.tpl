@@ -32,6 +32,13 @@ public final class __className extends ops.OPSObject implements ops.OPSEnum
         super.serialize(archive);
         value = fromInt(archive.inout("value", toInt(value)));
     }
+    @Override
+    public Object clone()
+    {
+        __className cloneResult = new __className();
+        cloneResult.value = this.value;
+        return cloneResult;
+    }
     static Value fromInt(int i)
     {
         if(i < Value.values().length)
