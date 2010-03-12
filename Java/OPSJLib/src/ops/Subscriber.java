@@ -69,6 +69,13 @@ public class Subscriber extends Observable
         timeBaseMinSeparationTime = minSeparationTime;
     }
 
+    public long getTimeBaseFilterQos()
+    {
+        return timeBaseMinSeparationTime;
+    }
+
+
+
     public synchronized void start()
     {
 
