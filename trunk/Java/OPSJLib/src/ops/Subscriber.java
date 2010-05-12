@@ -24,6 +24,7 @@ import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import ops.protocol.OPSMessage;
+import ops.transport.inprocess.InProcessTransport;
 
 /**
  *
@@ -50,6 +51,7 @@ public class Subscriber extends Observable
     private final DeadlineNotifier deadlineNotifier;
     private volatile long sampleTime1;
     private volatile long sampleTime2;
+    private final InProcessTransport inProcessTransport;
 
     public Subscriber(Topic t)
     {
@@ -57,6 +59,7 @@ public class Subscriber extends Observable
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
         receiveDataHandler = participant.getReceiveDataHandler(t);
         deadlineNotifier = DeadlineNotifier.getInstance();
+        inProcessTransport = participant.getInProcessTransport();
     }
 
     public synchronized void setDeadlineQoS(long timeout)
@@ -84,6 +87,7 @@ public class Subscriber extends Observable
 
         deadlineNotifier.add(this);
         receiveDataHandler.addSubscriber(this);
+        inProcessTransport.addSubscriber(this);
 
     }
 
@@ -122,7 +126,7 @@ public class Subscriber extends Observable
         return identity;
     }
 
-    protected synchronized void notifyNewOPSObject(OPSObject o)
+    synchronized void notifyNewOPSObject(OPSObject o)
     {
 
         if (applyFilterQoSPolicies(o))
@@ -196,7 +200,7 @@ public class Subscriber extends Observable
         }
     }
 
-    synchronized void notifyNewOPSMessage(OPSMessage message)
+    public synchronized void notifyNewOPSMessage(OPSMessage message)
     {
         if (messageFilters.applyFilter(message))
         {

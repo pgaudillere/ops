@@ -20,19 +20,24 @@
 
 package ops.transport.inprocess;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import ops.Subscriber;
 import ops.protocol.OPSMessage;
 
 /**
  *
  * @author Anton Gravestam
  */
-public class InProcessTransport
+public class InProcessTransport extends Thread
 {
     BlockingQueue<OPSMessage> blockingQueue = new LinkedBlockingQueue<OPSMessage>();
+    private volatile boolean keepRunning;
+    private List<Subscriber> subscribers = new ArrayList<Subscriber>();
 
     /**
      * 
@@ -80,5 +85,38 @@ public class InProcessTransport
             return null;
         }
     }
+
+    @Override
+    public void run()
+    {
+        while(keepRunning)
+        {
+            OPSMessage newMessage = takeMessage();
+            notifySubscribers(newMessage);
+        }
+    }
+
+    public synchronized void addSubscriber(Subscriber subscriber)
+    {
+        subscribers.add(subscriber);
+    }
+    public synchronized void removeSubscriber(Subscriber subscriber)
+    {
+        subscribers.remove(subscriber);
+    }
+
+    public void stopTransport()
+    {
+        keepRunning = false;
+    }
+
+    private synchronized void notifySubscribers(OPSMessage newMessage)
+    {
+        for (Subscriber subscriber : subscribers)
+        {
+            subscriber.notifyNewOPSMessage(newMessage);
+        }
+    }
+
 
 }
