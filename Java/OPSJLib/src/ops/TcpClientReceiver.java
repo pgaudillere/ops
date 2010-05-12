@@ -52,7 +52,7 @@ public class TcpClientReceiver implements Receiver
         this.serverIp = serverIP;
         this.receiveBufferSize = receiveBufferSize;
         setupSocket(serverIP, serverPort, receiveBufferSize);
-        
+
         sizePackBuffer = ByteBuffer.wrap(sizePackBytes).order(ByteOrder.LITTLE_ENDIAN);
     }
 

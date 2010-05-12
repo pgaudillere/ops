@@ -24,6 +24,7 @@ import configlib.exception.FormatException;
 import java.io.File;
 import java.io.IOException;
 import ops.archiver.OPSObjectFactory;
+import ops.transport.inprocess.InProcessTransport;
 
 /**
  *
@@ -40,6 +41,7 @@ public class Participant
     private ErrorService errorService = new ErrorService();
     private ReceiveDataHandlerFactory receiveDataHandlerFactory = new ReceiveDataHandlerFactory();
     private SendDataHandlerFactory sendDataHandlerFactory = new SendDataHandlerFactory();
+    private InProcessTransport inProcessTransport = new InProcessTransport();
 
     /**
      * Method for retreiving the default Participant instance for the @param domainID
@@ -75,6 +77,7 @@ public class Participant
     {
         return participantFactory.getParticipant(domainID, participantID, file);
     }
+
     
 
     protected Participant(String domainID, String participantID, File configFile)
@@ -102,6 +105,7 @@ public class Participant
             //config = null;
             //TODO: rethrow
         }
+        inProcessTransport.start();
 
     }
 
@@ -190,6 +194,11 @@ public class Participant
     public Domain getDomain()
     {
         return domain;
+    }
+
+    public InProcessTransport getInProcessTransport()
+    {
+        return inProcessTransport;
     }
 
 }
