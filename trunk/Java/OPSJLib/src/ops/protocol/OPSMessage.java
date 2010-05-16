@@ -177,7 +177,17 @@ public class OPSMessage extends OPSObject
     @Override
     public Object clone()
     {
-        OPSMessage cloneResult = (OPSMessage) super.clone();
+        OPSMessage cloneResult = new OPSMessage();
+        fillClone(cloneResult);
+        return cloneResult;
+    }
+
+    @Override
+    public void fillClone(OPSObject cloneO)
+    {
+        super.fillClone(cloneO);
+        OPSMessage cloneResult = (OPSMessage) cloneO;
+        cloneResult.setKey(this.getKey());
         cloneResult.messageType = messageType;
         cloneResult.publisherPriority = publisherPriority;
         cloneResult.publicationID = publicationID;
@@ -186,8 +196,9 @@ public class OPSMessage extends OPSObject
         cloneResult.topLevelKey = topLevelKey;
         cloneResult.address = address;
         cloneResult.data = (OPSObject)data.clone();
-        return cloneResult;
     }
+
+
     
 
     

@@ -52,7 +52,7 @@ public class MulticastReceiver implements Receiver
             SocketAddress mcSocketAddress = new InetSocketAddress(ipAddress, port);
             this.port = port;
             //multicastSocket = new MulticastSocket();
-            multicastSocket = new MulticastSocket(port);
+            multicastSocket = MulticastSocketCreator.getMulticastSocket(port);
 
 
             if(!localInterface.equals("0.0.0.0"))
@@ -113,6 +113,11 @@ public class MulticastReceiver implements Receiver
         {
 
             multicastSocket.receive(p);
+            if(p.getSocketAddress().equals(multicastSocket.getLocalSocketAddress()))
+            {
+                System.out.println("Ingnoring packaege from my self");
+                return false;
+            }
             
             ByteBuffer nioBuf = ByteBuffer.wrap(tempBytes);
             nioBuf.get(headerBytes, 0, headerBytes.length);

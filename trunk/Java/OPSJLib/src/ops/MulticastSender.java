@@ -25,7 +25,8 @@ class MulticastSender implements Sender
 
     public MulticastSender(int port, String localInterface, int ttl, int outSocketBufferSize) throws IOException
     {
-        multicastSocket = new MulticastSocket(port);
+        //multicastSocket = new MulticastSocket(port);
+        multicastSocket = MulticastSocketCreator.getMulticastSocket(port);
 
 
         if (!localInterface.equals("0.0.0.0"))

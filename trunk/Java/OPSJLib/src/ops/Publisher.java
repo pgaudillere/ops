@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import ops.archiver.OPSArchiverOut;
 import ops.protocol.OPSMessage;
+import ops.transport.inprocess.InProcessTransport;
 
 /**
  *
@@ -43,6 +44,7 @@ public class Publisher
     private ByteBuffer buffer;
     private Participant participant;
     private SendDataHandler sendDataHandler;
+    private InProcessTransport inProcessTransport;
     private long lastPublishTime;
     private volatile long sampleTime1;
     private volatile long sampleTime2;
@@ -54,6 +56,7 @@ public class Publisher
         buffer = ByteBuffer.allocateDirect(topic.getSampleMaxSize());
 
         this.participant = Participant.getInstance(topic.getDomainID(), topic.getParticipantID());
+        inProcessTransport = participant.getInProcessTransport();
         init();
 
     }
@@ -79,6 +82,8 @@ public class Publisher
         message.setPublicationID(currentPublicationID);
         message.setTopicName(topic.getName());
         message.setPublisherName(name);
+
+        //inProcessTransport.copyAndPutMessage(message);
 
         WriteByteBuffer buf = new WriteByteBuffer(buffer, StaticManager.MAX_SIZE);
         try

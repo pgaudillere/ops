@@ -89,9 +89,11 @@ public class InProcessTransport extends Thread
     @Override
     public void run()
     {
+        keepRunning = true;
         while(keepRunning)
         {
             OPSMessage newMessage = takeMessage();
+            newMessage.setQosMask(1);
             notifySubscribers(newMessage);
         }
     }
@@ -114,7 +116,10 @@ public class InProcessTransport extends Thread
     {
         for (Subscriber subscriber : subscribers)
         {
-            subscriber.notifyNewOPSMessage(newMessage);
+            if(subscriber.getTopic().getName().equals(newMessage.getTopicName()))
+            {
+                subscriber.notifyNewOPSMessage(newMessage);
+            }
         }
     }
 
