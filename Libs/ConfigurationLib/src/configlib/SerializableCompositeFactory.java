@@ -15,19 +15,19 @@ public class SerializableCompositeFactory implements SerializableFactory
 
     ArrayList<SerializableFactory> childFactories = new ArrayList<SerializableFactory>();
 
-    public boolean remove(Object o)
+    public synchronized boolean remove(Object o)
     {
         return childFactories.remove(o);
     }
 
-    public boolean add(SerializableFactory e)
+    public synchronized boolean add(SerializableFactory e)
     {
         return childFactories.add(e);
     }
 
 
 
-    public Serializable create(String type)
+    public synchronized Serializable create(String type)
     {
         Serializable obj = null;
         for (SerializableFactory inOutableFactory : childFactories)

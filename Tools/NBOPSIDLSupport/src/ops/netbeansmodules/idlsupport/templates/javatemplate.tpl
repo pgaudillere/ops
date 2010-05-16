@@ -35,9 +35,17 @@ __serialize
     @Override
     public Object clone()
     {
-        __className cloneResult = (__className)super.clone();
-__cloneBody
+        __className cloneResult = new __className();
+        fillClone(cloneResult);
         return cloneResult;
+    }
+
+    @Override
+    public void fillClone(OPSObject cloneO)
+    {
+        super.fillClone(cloneO);
+        __className cloneResult = (__className)cloneO;
+        __cloneBody
     }
 
     private static class TypeFactory implements SerializableFactory

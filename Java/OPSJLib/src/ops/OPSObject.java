@@ -66,10 +66,15 @@ public class OPSObject implements Serializable
     public Object clone()
     {
         OPSObject cloneResult = new OPSObject();
+        fillClone(cloneResult);
+        return cloneResult;
+    }
+
+    public void fillClone(OPSObject cloneResult)
+    {
         cloneResult.typesString = this.typesString;
         cloneResult.key = this.key;
         cloneResult.spareBytes = Arrays.copyOf(this.spareBytes, this.spareBytes.length);
-        return cloneResult;
     }
 
     public void serialize(ArchiverInOut archive) throws IOException
