@@ -151,6 +151,7 @@ public class CppCompiler extends AbstractTemplateBasedIDLCompiler//implements ID
         templateText = templateText.replace(PACKAGE_DECLARATION_REGEX, getPackageDeclaration(packageName));
         templateText = templateText.replace(PACKAGE_CLOSER_REGEX, getPackageCloser(packageName));
         templateText = templateText.replace(PACKAGE_NAME_REGEX, packageName);
+        templateText = templateText.replace(UNDERSCORED_PACK_NAME_REGEX, getUnderscoredPackName(packageName));
 
         templateText = templateText.replace(DECLARATIONS_REGEX, getEnumDeclarations(idlClass));
 
