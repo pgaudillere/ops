@@ -32,7 +32,7 @@ __declarations
     void serialize(ops::ArchiverInOut* archive)
     {
         ops::OPSObject::serialize(archive);
-        archive.inout("value", value);
+        archive->inout(std::string("value"), value);
     }
 
 
