@@ -27,7 +27,9 @@ When applicable, file Issues for the bullets on this page and tag them 4.0.4.
        MyType myType;
    }
    }}}
-   could yield e.g.
+
+could yield e.g.
+
    {{{
        int hash = ("i" + "s" + "d" + MyType.hashString()).hashCode()
 
