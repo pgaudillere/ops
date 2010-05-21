@@ -29,7 +29,7 @@ When applicable, file Issues for the bullets on this page and tag them 4.0.4.
    }}}
    could yield e.g.
    {{{
-   int hash = ("i" + s + "d" + MyType.hashString()).hashCode()
+       int hash = ("i" + "s" + "d" + MyType.hashString()).hashCode()
 
    }}}
 
