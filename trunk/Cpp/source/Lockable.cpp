@@ -28,11 +28,13 @@ namespace ops
 
     bool Lockable::lock()
     {
-        if (mutex->try_lock())
+		mutex->lock();
+		return true;
+        /*if (mutex->lock())
         {
             return true;
         }
-        return false;
+        return false;*/
     }
 
     void Lockable::unlock()
