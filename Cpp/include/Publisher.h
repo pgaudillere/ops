@@ -71,6 +71,8 @@ private:
  
     Topic topic;
 
+	Participant* participant;
+
     __int64 currentPublicationID;
     std::string name;
     std::string key;

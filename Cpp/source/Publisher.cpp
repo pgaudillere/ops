@@ -36,7 +36,7 @@ namespace ops
     sendSleepTime(1),
     sleepOnSendFailed(true)
     {
-        Participant* participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
+        participant = Participant::getInstance(topic.getDomainID(), topic.getParticipantID());
         //Participant* participant = topic.getParticipant();
 
         sendDataHandler = participant->getSendDataHandler(topic);
@@ -65,7 +65,7 @@ namespace ops
 
     Publisher::~Publisher()
     {
-        delete sendDataHandler;
+		participant->releaseSendDataHandler(topic);
         //delete bytes;
     }
 
