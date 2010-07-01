@@ -41,4 +41,25 @@ class ParticipantFactory
         }
         return instances.get(hashKey);
     }
+
+    Participant getParticipant(Domain domain, String participantID)
+    {
+        String hashKey = domain.getDomainID() + " " + participantID;
+
+        if (!instances.containsKey(hashKey))
+        {
+            Participant newInst = new Participant(domain, participantID);
+            Domain tDomain = newInst.getDomain();
+
+            if (tDomain != null)
+            {
+                instances.put(hashKey, newInst);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return instances.get(hashKey);
+    }
 }
