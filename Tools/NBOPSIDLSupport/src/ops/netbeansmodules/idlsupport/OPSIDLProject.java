@@ -191,7 +191,8 @@ public class OPSIDLProject implements Project
             io.getOut().println("Build finished.");
         } catch (Exception ex)
         {
-            //io.getErr().println("Build failed.");
+            
+            Exceptions.printStackTrace(ex);
         }
 
 

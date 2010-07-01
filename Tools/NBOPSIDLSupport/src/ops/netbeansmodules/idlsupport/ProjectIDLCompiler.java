@@ -4,12 +4,16 @@
  */
 package ops.netbeansmodules.idlsupport;
 
+import configlib.exception.FormatException;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
+import ops.OPSConfig;
 import ops.netbeansmodules.idlsupport.compilers.CppCompiler;
 import ops.netbeansmodules.idlsupport.compilers.DebugProjectCompiler;
 import ops.netbeansmodules.idlsupport.compilers.JavaCompiler;
+import ops.netbeansmodules.idlsupport.compilers.JavaOPSConfigCompiler;
 import ops.netbeansmodules.idlsupport.compilers.VisualStudio2008CppExampleCompiler;
 import org.openide.filesystems.FileObject;
 import org.openide.util.Exceptions;
@@ -23,6 +27,7 @@ public class ProjectIDLCompiler
 {
 
     JavaCompiler javaCompiler = new JavaCompiler();
+    JavaOPSConfigCompiler javaOPSConfigCompiler = new JavaOPSConfigCompiler();
     CppCompiler cppCompiler = new CppCompiler();
     DebugProjectCompiler debugProjectCompiler = new DebugProjectCompiler();
     VisualStudio2008CppExampleCompiler cppExampleCompiler = new VisualStudio2008CppExampleCompiler();
@@ -80,6 +85,24 @@ public class ProjectIDLCompiler
         {
             javaCompiler.compileDataClasses(idlClasses, project.getProjectDirectory().getPath() + "/Generated/");
 
+            OPSConfig opsConfig;
+            try
+            {
+                opsConfig = OPSConfig.getConfig(new File(project.getProjectDirectory().getPath() + "/" + project.getProperties().defaultOPSTopicConfigFile));
+                ArrayList<String> generatedFiles = javaOPSConfigCompiler.compileConfig(opsConfig, project.getProjectDirectory().getPath() + "/Generated/");
+
+                javaCompiler.appendFileToBuild(generatedFiles);
+
+            } catch (IOException ex)
+            {
+                ex.printStackTrace();
+                Exceptions.printStackTrace(ex);
+            } catch (FormatException ex)
+            {
+                ex.printStackTrace();
+                Exceptions.printStackTrace(ex);
+            }
+
             if (project.getProperties().buildJava)
             {
                 try
@@ -94,6 +117,10 @@ public class ProjectIDLCompiler
                     Exceptions.printStackTrace(ex);
                 }
             }
+            
+            
+
+
         }
         if(project.getProperties().buildDebugProject)
         {

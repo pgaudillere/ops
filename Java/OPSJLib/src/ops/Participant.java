@@ -78,6 +78,12 @@ public class Participant
         return participantFactory.getParticipant(domainID, participantID, file);
     }
 
+
+    public static synchronized Participant getInstance(Domain domain, String participantID)
+    {
+        return participantFactory.getParticipant(domain, participantID);
+    }
+
     
 
     protected Participant(String domainID, String participantID, File configFile)
@@ -105,6 +111,17 @@ public class Participant
             //config = null;
             //TODO: rethrow
         }
+        inProcessTransport.start();
+
+    }
+
+    protected Participant(Domain domain, String participantID)
+    {
+        this.domainID = domain.getDomainID();
+        this.participantID = participantID;
+        
+        this.domain = domain;
+
         inProcessTransport.start();
 
     }

@@ -11,6 +11,7 @@ package ops.netbeansmodules.idlsupport.compilers;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import ops.netbeansmodules.idlsupport.projectproperties.JarDependency;
@@ -533,5 +534,14 @@ public class JavaCompiler extends AbstractTemplateBasedIDLCompiler//implements I
 //            p_in.close();
 //            p_out.close();
 //            p_err.close();
+    }
+
+    public void appendFileToBuild(List<String> file)
+    {
+        for (String string : file)
+        {
+            createdFiles += "\"" + string + "\"\n";
+        }
+        
     }
 }

@@ -168,12 +168,12 @@ public class Topic<T> extends OPSObject
 
     }
 
-    void setDomainID(String domainID)
+    public void setDomainID(String domainID)
     {
         this.domainID = domainID;
     }
 
-    void setParticipantID(String participantID)
+    public void setParticipantID(String participantID)
     {
         this.participantID = participantID;
     }
