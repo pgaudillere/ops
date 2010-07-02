@@ -157,7 +157,9 @@
                     </run-dependency>
                 </dependency>
             </module-dependencies>
-            <public-packages/>
+            <public-packages>
+                <package>ops.netbeansmodules.idlsupport.godegenerator</package>
+            </public-packages>
         </data>
     </configuration>
 </project>
