@@ -84,7 +84,7 @@ public class Subscriber extends Observable
 
         lastDeadlineTime = System.currentTimeMillis();
         timeLastDataForTimeBase = System.currentTimeMillis();
-
+        // Potential risk of deadlock? Start is synch add and underlying add is also synched. deadlineNotifier is singleton.
         deadlineNotifier.add(this);
         receiveDataHandler.addSubscriber(this);
         inProcessTransport.addSubscriber(this);

@@ -53,9 +53,12 @@ public class ReceiveDataHandler
     //private byte[] trimmedBytes;
     //private int byteOffset = 0;
     private static int FRAGMENT_HEADER_SIZE = 14;
+    private final Topic topic;
+    private static int THREAD_COUNTER = 1;
 
     public ReceiveDataHandler(Topic t, Participant part, Receiver receiver)
     {
+        topic = t;
         bytes = new byte[t.getSampleMaxSize()];
         headerBytes = new byte[FRAGMENT_HEADER_SIZE];
         //trimmedBytes = new byte[t.getSampleMaxSize()];
@@ -145,6 +148,9 @@ public class ReceiveDataHandler
     {
         OPSArchiverIn archiverIn = new OPSArchiverIn(readBuf);
         OPSMessage message = null;
+
+        // If the proper typesupport has not been added, the message may have content, but some fields may be null. How do we handle this
+        // How do we make the user realize that he needs to add typesupport?
         message = (OPSMessage) archiverIn.inout("message", message);
 
         //readBuf.inBuffer.asCharBuffer().
@@ -212,6 +218,9 @@ public class ReceiveDataHandler
 
             }
         });
+
+        thread.setName("TransportThread_" + topic.getTransport()+"_" +THREAD_COUNTER);
+        THREAD_COUNTER++;
         thread.start();
     }
 
