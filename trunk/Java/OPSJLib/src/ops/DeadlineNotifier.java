@@ -31,10 +31,12 @@ public class DeadlineNotifier extends Thread
 
     public DeadlineNotifier()
     {
+        setName("DeadlineNotifierThread");
     }
 
     public synchronized boolean remove(Subscriber o)
     {
+   
         boolean result = subscribers.remove(o);
         if (subscribers.size() == 0)
         {
