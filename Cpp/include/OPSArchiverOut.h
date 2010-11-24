@@ -85,6 +85,13 @@ namespace ops
             buf->WriteString(value);
         }
 
+///LA
+		void inout(const std::string& name, char* buffer, int bufferSize)
+		{
+			buf->WriteChars(buffer, bufferSize);
+		}
+///LA
+
         void inout(const std::string& name, Serializable& value)
         {
             std::string typeS = ((OPSObject&) value).getTypeString();

@@ -210,6 +210,13 @@ namespace ops
             }
         }
 
+///LA
+		virtual void inout(const std::string& name, char* buffer, int bufferSize)
+		{
+			///TODO
+		}
+///LA
+
         virtual Serializable* inout(const std::string& name, Serializable* value, int element)
         {
             opsXML::XMLNode tempNode = currentNode;
