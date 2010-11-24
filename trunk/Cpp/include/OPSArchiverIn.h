@@ -94,7 +94,14 @@ namespace ops
             value = buf->ReadString();
         }
 
-        void inout(const std::string& name, Serializable& value)
+///LA
+		void inout(const std::string& name, char* buffer, int bufferSize)
+		{
+			buf->ReadChars(buffer, bufferSize);
+		}
+///LA
+
+		void inout(const std::string& name, Serializable& value)
         {
             std::string types = buf->ReadString();
             value.serialize(this);

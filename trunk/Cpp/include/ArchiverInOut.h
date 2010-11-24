@@ -51,7 +51,11 @@ namespace ops
         virtual void inout(const std::string& name, std::string& value) = 0;
         virtual void inout(const std::string& name, Serializable& value) = 0;
 
-        virtual Serializable* inout(const std::string& name, Serializable* value) = 0;
+///LA
+		virtual void inout(const std::string& name, char* buffer, int bufferSize) = 0;
+///LA
+
+		virtual Serializable* inout(const std::string& name, Serializable* value) = 0;
 
         virtual Serializable* inout(const std::string& name, Serializable* value, int element) = 0;
 
