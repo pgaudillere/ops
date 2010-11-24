@@ -139,7 +139,7 @@ namespace ops
                 TimeHelper::sleep(sendSleepTime);
                 sendDataHandler->sendData(buf.getSegment(i), segSize, topic);
             }
-            else if (i % sleepEverySendPacket == 0)
+			else if ((i > 0) && (i % sleepEverySendPacket == 0))
             {
                 TimeHelper::sleep(sendSleepTime);
             }
