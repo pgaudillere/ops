@@ -1,0 +1,7 @@
+package chat;
+
+class ChatData
+{
+    virtual UserData sender;
+    virtual MessageData messageData;
+}
