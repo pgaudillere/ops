@@ -1,0 +1,7 @@
+package chat;
+
+class MessageData
+{
+    string message;
+    long timeStamp;
+}
